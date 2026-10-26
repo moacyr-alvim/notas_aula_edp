@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Método das características — mapa de conceitos</title>
+  <meta name="description" content="EDPs pelo método das características: leitura não linear, demos interativas e Python no navegador.">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html">Método das características</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="wide">
+    <section class="hero">
+      <h1>Equações de derivadas parciais, seguindo as características</h1>
+      <p>Um texto que não precisa ser lido em ordem. Escolha um nó do mapa, ou um percurso, e comece por aí.</p>
+      <p>Páginas com borda azul já existem. As tracejadas ainda vão ser escritas.</p>
+    </section>
+
+    <div class="chips" id="chips" role="group" aria-label="Percursos de leitura"></div>
+    <div class="mapwrap" id="mapa"></div>
+    <p class="mapinfo" id="info" aria-live="polite">Passe o mouse (ou use Tab) sobre um nó para ver do que ele trata. As setas vão do que ajuda a ler antes para o que vem depois.</p>
+    <div id="trail-list"></div>
+
+    <h2>Disponível agora</h2>
+    <ul class="pages">
+      <li><a href="paginas/burgers.html"><b>Burgers, quebra e choques</b><span>Arraste o tempo e veja as características se cruzarem, o choque nascer e a condição de Rankine–Hugoniot funcionar.</span></a></li>
+      <li><a href="paginas/upwind.html"><b>Upwind</b><span>Complete três esquemas de diferenças finitas, rode no navegador e descubra por que só um deles funciona.</span></a></li>
+      <li><a href="paginas/cfl.html"><b>Condição CFL</b><span>Implemente o esquema da onda, viole a condição de estabilidade e compare os cones de dependência.</span></a></li>
+    </ul>
+  </div>
+
+  <script src="assets/mapa.js"></script>
+  <script>
+    Mapa.mount({ map: "mapa", chips: "chips", info: "info", list: "trail-list" });
+  </script>
+</body>
+</html>

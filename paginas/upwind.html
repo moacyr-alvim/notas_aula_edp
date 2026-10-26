@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Upwind — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Upwind: olhar para onde a informação vem</h1>
+        <p class="lede">Para $u_t+c\,u_x=0$ com $c>0$ a informação anda para a direita. Um esquema que olha para o lado errado não é só impreciso: explode.</p>
+        <p class="meta">Ajuda ler antes: equação de transporte <small>(página em breve)</small>. Tem código Python para completar e rodar aqui mesmo.</p>
+      </header>
+
+      <h2 id="caracteristica">O que a característica diz</h2>
+      <p>As características de $u_t+c\,u_x=0$ são as retas $x=x_0+ct$, e $u$ é constante em cada uma. Logo
+      $$u(x_i,t+\Delta t)=u(x_i-c\Delta t,\,t).$$
+      Para calcular o valor novo em $x_i$ basta ir <em>para trás</em> ao longo da característica, até o pé dela, em $x_i-c\Delta t$, e ler o valor lá. Como $c>0$, o pé fica à esquerda de $x_i$.</p>
+
+      <h2 id="tres-esquemas">Três esquemas</h2>
+      <p>Aplicando Euler no tempo, $u_i^{j+1}=u_i^j-c\Delta t\,(u_x)_i^j$, resta aproximar $u_x$. Para a condição inicial de onda quadrada, $f=1$ em $(0{,}5;\,0{,}7)$ e zero fora, vamos comparar:</p>
+      <ol>
+        <li>diferença à direita: $\;u_i^{j+1}=u_i^j-c\Delta t\,\dfrac{u_{i+1}^j-u_i^j}{\Delta x}$;</li>
+        <li>diferença à esquerda: $\;u_i^{j+1}=u_i^j-c\Delta t\,\dfrac{u_i^j-u_{i-1}^j}{\Delta x}$;</li>
+        <li>diferença central: $\;u_i^{j+1}=u_i^j-c\Delta t\,\dfrac{u_{i+1}^j-u_{i-1}^j}{2\Delta x}$.</li>
+      </ol>
+      <p>Como aproximação isolada de $u_x$, a central tem erro local menor. Isso não garante que o esquema completo, com Euler no tempo, funcione bem. Aposte: qual dos três vai dar certo?</p>
+
+      <h2 id="sua-vez">Sua vez</h2>
+      <p>O código abaixo tem três lacunas, marcadas com <code>complete a próxima linha</code>. Preencha, aperte <b>Rodar</b> (ou Ctrl+Enter) e olhe os gráficos e o resumo numérico impresso. A primeira execução baixa o Python para o navegador e leva alguns segundos; depois fica rápido.</p>
+
+      <div class="pycell" data-title="Três esquemas para a equação de transporte"
+           data-starter="../py/transporte_lacunas.py"
+           data-solution="../py/transporte_solucao.py"></div>
+
+      <aside class="box">
+        <p class="tag">Dica para as lacunas</p>
+        <p>Em cada linha, compare com a fórmula acima. O fator comum é $c\,\Delta t/\Delta x$, que no código fica <code>c * dt / dx</code>. Os índices à esquerda do vetor são <code>u[i-1]</code>, à direita <code>u[i+1]</code>.</p>
+      </aside>
+
+      <p>Os gráficos usam um eixo vertical limitado, que esconde o que acontece nos esquemas instáveis. Por isso o código imprime o mínimo e o máximo de cada resultado: valores como $10^{21}$ aparecem ali e não no desenho.</p>
+
+      <h2 id="por-que">Por que só um funciona</h2>
+      <p>O esquema à esquerda é o <b>upwind</b> (contra o vento) para $c>0$. Existe uma explicação pelas características: o pé fica em $x_i-c\Delta t$, entre $x_{i-1}$ e $x_i$ quando $0\le\lambda\le 1$, com
+      $$\lambda=\frac{c\,\Delta t}{\Delta x}.$$
+      Estimando $u$ no pé por interpolação linear entre $u_{i-1}$ e $u_i$,
+      $$u_i^{j+1}\approx(1-\lambda)\,u_i^j+\lambda\,u_{i-1}^j=u_i^j-\lambda\,(u_i^j-u_{i-1}^j),$$
+      que é exatamente o esquema à esquerda. Ele constrói o valor novo a partir de onde a informação realmente vem.</p>
+
+      <details>
+        <summary>Estabilidade: três contas curtas</summary>
+        <div class="body">
+          <p><b>Upwind.</b> Se $0\le\lambda\le1$, o valor novo é uma média ponderada (combinação convexa) de $u_i^j$ e $u_{i-1}^j$. Então o máximo nunca cresce e o mínimo nunca diminui: o esquema é estável, e para o degrau não cria oscilações.</p>
+          <p><b>Downwind (à direita).</b> $u_i^{j+1}=(1+\lambda)u_i^j-\lambda u_{i+1}^j$ tem coeficiente negativo e soma dos módulos $1+2\lambda>1$. Para a oscilação mais rápida da malha, $u_i=(-1)^i$, cada passo multiplica a amplitude por $1+2\lambda$, para qualquer $\lambda>0$. Isso é instabilidade.</p>
+          <p><b>Central.</b> Para uma onda $u_i^j=G^j e^{\mathrm i\theta i}$, o fator de amplificação é $G=1-\mathrm i\lambda\sin\theta$, com $|G|^2=1+\lambda^2\sin^2\theta>1$. Euler com diferença central amplifica toda onda não constante, para qualquer $\lambda$, mesmo que lentamente.</p>
+        </div>
+      </details>
+
+      <h2 id="lambda">Explore $\lambda$</h2>
+      <p>No upwind, o que muda quando $\lambda$ varia? Aqui está uma versão vetorizada que roda o mesmo esquema para vários $\lambda$ e compara com a solução exata. Esta célula já está completa: mude a lista <code>lams</code> e rode.</p>
+
+      <div class="pycell" data-title="Upwind para vários λ"
+           data-starter="../py/transporte_lambda.py"></div>
+
+      <aside class="box exercicio">
+        <p class="tag">Perguntas</p>
+        <ol>
+          <li>Com $\lambda=1$ o resultado é exato. Por quê? (Pense onde cai o pé da característica.)</li>
+          <li>Com $\lambda=0{,}5$ o degrau fica "borrado" e o pico cai. Que fenômeno é esse?</li>
+          <li>Passe $\lambda$ de $1$ para $1{,}2$. O que acontece, e como a característica explica?</li>
+        </ol>
+      </aside>
+
+      <details>
+        <summary>Respostas</summary>
+        <div class="body">
+          <p><b>1.</b> Com $\lambda=1$ o pé cai exatamente em $x_{i-1}$ e o esquema vira $u_i^{j+1}=u_{i-1}^j$: cada passo desloca o perfil uma célula, sem erro.</p>
+          <p><b>2.</b> Difusão numérica. A interpolação do pé entre duas células suaviza o degrau a cada passo. Com $\lambda=0{,}5$ o pico da onda quadrada cai de $1$ para cerca de $0{,}75$.</p>
+          <p><b>3.</b> Com $\lambda>1$ o pé $x_i-c\Delta t$ fica além de $x_{i-1}$, fora do trecho que o esquema consulta. O esquema deixa de interpolar e passa a extrapolar, a combinação deixa de ser convexa e o erro cresce a cada passo (da ordem de $10^{17}$ no resultado impresso). É a condição CFL, que a <a href="cfl.html">próxima página</a> discute em detalhe.</p>
+        </div>
+      </details>
+
+      <p>Os valores padrão da primeira célula têm $\lambda=c\Delta t/\Delta x\approx0{,}997$, muito perto de $1$. Por isso o upwind lá parece quase perfeito. Com $\lambda=0{,}5$ ele mostraria a difusão.</p>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li class="soon">Equação de transporte (em breve)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="cfl.html">Condição CFL</a></li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

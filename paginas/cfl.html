@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Condição CFL — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Condição CFL: o cone do esquema precisa conter o da equação</h1>
+        <p class="lede">Um esquema explícito para a equação da onda só funciona se, em cada passo, a informação numérica andar pelo menos tão depressa quanto a informação física.</p>
+        <p class="meta">Ajuda ler antes: <a href="upwind.html">Upwind</a> e características da equação da onda <small>(página em breve)</small>. Tem código Python para completar e rodar aqui.</p>
+      </header>
+
+      <h2 id="onda">A equação da onda e o que ela usa</h2>
+      <p>A equação $u_{tt}-c^2u_{xx}=0$ tem duas famílias de características, $x\pm ct=\text{const}$. Pela fórmula de d'Alembert,
+      $$u(x,t)=\tfrac12\big[f(x-ct)+f(x+ct)\big]+\frac1{2c}\int_{x-ct}^{x+ct}g(w)\,dw,$$
+      o valor em $(x,t)$ depende dos dados iniciais apenas no intervalo $[x-ct,\,x+ct]$. Esse é o <b>domínio de dependência</b> do ponto.</p>
+
+      <h2 id="esquema">O esquema explícito</h2>
+      <p>Com diferenças centrais nas duas derivadas,
+      $$u_{tt}\approx\frac{u_i^{j+1}-2u_i^j+u_i^{j-1}}{\Delta t^2},\qquad u_{xx}\approx\frac{u_{i+1}^j-2u_i^j+u_{i-1}^j}{\Delta x^2}.$$</p>
+
+      <aside class="box exercicio">
+        <p class="tag">Questão 1</p>
+        <p>Combine as duas aproximações em $u_{tt}=c^2u_{xx}$ e isole $u_i^{j+1}$. E como começar, se só temos o tempo $j=0$ e $u_t(x,0)=0$?</p>
+      </aside>
+      <details>
+        <summary>Resposta</summary>
+        <div class="body">
+          <p>Com $\lambda=c\Delta t/\Delta x$,
+          $$u_i^{j+1}=2u_i^j-u_i^{j-1}+\lambda^2\big(u_{i+1}^j-2u_i^j+u_{i-1}^j\big).$$
+          Para o primeiro passo, a série de Taylor dá $u_i^1\approx u_i^0+\Delta t\,u_t+\tfrac12\Delta t^2u_{tt}$. Com $u_t(x,0)=0$ e $u_{tt}=c^2u_{xx}$,
+          $$u_i^1=u_i^0+\tfrac12\lambda^2\big(u_{i+1}^0-2u_i^0+u_{i-1}^0\big).$$
+          O código já traz esse primeiro passo.</p>
+        </div>
+      </details>
+
+      <h2 id="cones">Dois cones</h2>
+      <p>No esquema, $u_i^{j+1}$ lê $u_{i-1}^j,u_i^j,u_{i+1}^j$. Depois de $N$ passos, o valor em $P$ depende dos dados iniciais em no máximo $N$ células para cada lado: esse é o domínio de dependência <b>numérico</b>. Na equação, a informação anda $c\Delta t$ por passo, ou seja, $\lambda$ células. Em $N$ passos, a equação usa $\lambda N$ células para cada lado.</p>
+      <p>Se $\lambda>1$, a solução verdadeira depende de dados que o esquema nunca lê. Ele não tem como acertar, e (veremos) o erro cresce. A condição Courant–Friedrichs–Lewy pede
+      $$\boxed{\,c\,\frac{\Delta t}{\Delta x}\le 1\,}$$
+      isto é, o domínio de dependência numérico precisa conter o da equação.</p>
+
+      <div class="demo">
+        <div class="controls">
+          <label>λ = cΔt/Δx
+            <input type="range" id="cfl-lam" min="0.2" max="1.6" step="0.01" value="0.5" aria-label="Razão lambda">
+            <output id="cfl-lamv">0,50</output>
+          </label>
+        </div>
+        <canvas id="cfl-canvas" role="img" aria-label="Cone de dependência do esquema e da equação" style="height:260px"></canvas>
+        <div class="readout" id="cfl-read" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>cone do esquema (a malha)</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink)"></i>características da equação</span>
+          <span><i style="border-color:var(--choque)"></i>dados que o esquema não vê</span>
+        </div>
+      </div>
+
+      <h2 id="sua-vez">Sua vez</h2>
+      <p>No código, o laço principal tem uma linha a completar, o próprio esquema. A condição inicial é uma gaussiana com velocidade inicial nula, e o programa roda duas vezes: com $\lambda=0{,}5$ e com $\lambda=1{,}025$, só um pouco acima do limite.</p>
+
+      <div class="pycell" data-title="Equação da onda: CFL satisfeita e violada"
+           data-starter="../py/cfl_lacunas.py"
+           data-solution="../py/cfl_solucao.py"></div>
+
+      <aside class="box">
+        <p class="tag">Dica</p>
+        <p>A linha tem a forma $u_{\text{futuro}}=2u_{\text{presente}}-u_{\text{passado}}+\lambda^2(\dots)$. No código, $\lambda^2$ é <code>CFL_sq</code> e o "presente" é <code>u_present</code>. O valor provisório <code>u_present[i]+0.005</code> deixado ali só serve de marcador.</p>
+      </aside>
+
+      <h2 id="comparar">O que olhar nas duas saídas</h2>
+      <p>Com o código completo, o resumo impresso mostra o maior valor de $|u|$ em cada caso:</p>
+      <ul>
+        <li>$\lambda=0{,}5$: $\max|u|=0{,}5$. A gaussiana de altura 1 se divide em duas, uma indo para cada lado, cada uma com metade da altura, como d'Alembert prevê com $g=0$.</li>
+        <li>$\lambda=1{,}025$: $\max|u|\approx 27$ depois de 97 passos, e a curva vermelha é cheia de oscilações em alta frequência que cresceram a partir do ruído de arredondamento.</li>
+      </ul>
+
+      <aside class="box exercicio">
+        <p class="tag">Questão 3</p>
+        <p>Por que o método falha quando a CFL é violada, mesmo por pouco? Qual é a principal diferença no comportamento da solução? Como as características e o domínio de dependência explicam os dois casos?</p>
+      </aside>
+      <details>
+        <summary>Resposta</summary>
+        <div class="body">
+          <p><b>Domínio de dependência.</b> Com $\lambda>1$, em cada passo a informação física percorre mais de uma célula, mas o esquema só consulta os vizinhos imediatos. O valor numérico em $P$ depende de menos dados do que a solução exata. Nenhum esquema com essa propriedade pode convergir para todos os dados iniciais: basta alterar o dado fora do domínio numérico, e a solução exata muda enquanto a numérica não.</p>
+          <p><b>Comportamento.</b> Com $\lambda\le1$ a solução é limitada e reproduz o movimento das características: dois pulsos que se afastam com velocidade $\pm c$. Com $\lambda>1$ os modos de frequência mais alta da malha (os que alternam de sinal de uma célula para a próxima) têm fator de amplificação de módulo maior que 1 e crescem a cada passo. Para o modo que alterna de sinal a cada célula, o fator satisfaz $G+1/G=2-4\lambda^2$; com $\lambda=1{,}025$ isso dá $|G|\approx1{,}56$, ou seja, cerca de 56% de crescimento por passo. Esse modo parte de ruído de arredondamento, perto de $10^{-16}$, mas em 97 passos já chega a dezenas. Com $\lambda\le1$ todos os fatores têm módulo 1 e nada cresce.</p>
+          <p><b>O limite é exato aqui.</b> Para este esquema, a análise de Fourier dá estabilidade exatamente quando $|\lambda|\le1$, o mesmo limite do cone. Em geral a condição CFL é só necessária: ela impede o que é impossível, mas não garante, sozinha, que um esquema seja estável.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="upwind.html">Upwind</a></li>
+            <li class="soon">Onda e d'Alembert (em breve)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+            <li class="soon">Modelo LWR de trânsito (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/cfl-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

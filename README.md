@@ -1,0 +1,95 @@
+# Método das características — site
+
+Protótipo do "livro como site": um mapa de conceitos na página inicial, páginas curtas com demos
+interativas e células de Python que rodam **no navegador** (Pyodide), sem servidor.
+
+## Ver no seu computador
+
+O Python no navegador usa um Web Worker, que não funciona abrindo o arquivo direto do disco.
+Sirva a pasta com um servidor local:
+
+```bash
+cd site
+python3 -m http.server 8000
+# abra http://localhost:8000
+```
+
+## Publicar no GitHub Pages
+
+1. Crie um repositório e envie esta pasta (o conteúdo de `site/` na raiz do repositório):
+
+   ```bash
+   git init && git add . && git commit -m "Primeira versão do site"
+   git branch -M main
+   git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+   git push -u origin main
+   ```
+
+2. No GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+   O arquivo `.github/workflows/pages.yml` roda os testes e publica a cada `push` na `main`.
+   (Alternativa mais simples: Source = "Deploy from a branch", branch `main`, pasta `/ (root)`.
+   Nesse caso os testes não rodam automaticamente.)
+
+3. O endereço fica `https://SEU-USUARIO.github.io/SEU-REPOSITORIO/`.
+
+O site é 100% estático. A primeira execução de Python em cada visita baixa o Pyodide
+(cerca de 10 a 20 MB, depois fica no cache do navegador). Fórmulas (KaTeX) e Pyodide vêm do CDN jsDelivr;
+sem internet, nem fórmulas nem Python aparecem.
+
+## Estrutura
+
+```
+index.html            mapa de conceitos (página inicial)
+paginas/              uma página por tópico (HTML escrito à mão)
+py/                   os códigos Python das células (edite aqui; o site carrega esses arquivos)
+assets/
+  style.css           visual (claro/escuro automático)
+  site.js             tema, índice lateral, fórmulas
+  mapa.js             dados e desenho do mapa (nós, setas, percursos)
+  pyrunner.js         células de Python editáveis
+  pyworker.js         Web Worker com Pyodide (versão do Pyodide definida aqui)
+  burgers-core.js     matemática da demo de Burgers (Hopf–Lax), testável em Node
+  burgers-demo.js     desenho da demo de Burgers
+  cfl-demo.js         demo dos cones de dependência
+tests/                testes (veja abaixo)
+```
+
+## Como acrescentar
+
+**Uma célula de Python** em qualquer página:
+
+```html
+<div class="pycell" data-title="Título da célula"
+     data-starter="../py/meu_codigo.py"
+     data-solution="../py/meu_codigo_solucao.py"></div>
+...
+<script src="../assets/pyrunner.js"></script>
+```
+
+`data-solution` é opcional (vira o bloco "Ver solução"). Use `numpy` e `matplotlib`; `plt.show()` mostra a
+figura embaixo da célula. Outros pacotes do Pyodide podem ser acrescentados em `assets/pyworker.js`
+(`pyodide.loadPackage([...])`).
+
+**Uma página nova**: copie uma página de `paginas/`, escreva, e no `assets/mapa.js` troque `href: null`
+do nó correspondente pelo caminho da página. O índice lateral é gerado dos `<h2 id="...">`.
+
+**Fórmulas**: `$...$` (na linha) e `$$...$$` (em bloco). Dentro do HTML, escreva `&lt;` no lugar de `<` nas fórmulas
+(`$t &lt; 2$`), senão o navegador entende como início de tag.
+
+## Testes
+
+```bash
+node tests/burgers-core.test.js     # matemática da demo (comparada com fórmulas exatas e com Godunov)
+python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
+node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado
+python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
+```
+
+O que **não** é coberto por esses testes: a renderização real no navegador (aparência, canvas) e o carregamento
+do Pyodide pelo CDN. Vale abrir cada página uma vez em um navegador depois de publicar.
+
+## Sobre os códigos Python
+
+`py/transporte_*` e `py/cfl_*` vêm dos seus arquivos, com duas diferenças: um resumo numérico impresso antes dos
+gráficos (mínimo e máximo, porque os gráficos cortam o eixo e escondem valores como 1e21) e o comentário
+"CFL = 1.5" corrigido para 1.025, que é o valor usado. `py/transporte_lambda.py` é novo.
