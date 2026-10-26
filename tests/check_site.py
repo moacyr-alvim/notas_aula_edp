@@ -62,6 +62,7 @@ for p in pages:
 # ids exigidos pelos scripts
 need = {
     "paginas/burgers.html": ["demo-burgers", "b-ic", "b-t", "b-tv", "b-play", "b-readout", "b-prof", "b-xt", "tema", "toc"],
+    "paginas/leis-conservacao.html": ["demo-lei", "l-fluxo", "l-uL", "l-uR", "l-uLv", "l-uRv", "l-t", "l-tv", "l-play", "l-alt", "l-readout", "l-flux", "l-prof", "l-xt", "tema", "toc"],
     "paginas/cfl.html": ["cfl-canvas", "cfl-lam", "cfl-lamv", "cfl-read", "tema", "toc"],
     "paginas/upwind.html": ["tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],

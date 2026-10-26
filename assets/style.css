@@ -252,7 +252,7 @@ html[data-theme="dark"] .chips button[aria-pressed="true"] { color: #0b1020; }
 .hero h1 { font-size: clamp(2.2rem, 5vw, 3.3rem); line-height: 1.08; margin: 0 0 .8rem; letter-spacing: -.015em; }
 .hero p { font-size: 1.2rem; color: var(--ink-soft); margin: .4rem 0; }
 .pages { display: grid; gap: 1rem; margin: 1rem 0 0; padding: 0; list-style: none; font-family: var(--sans); }
-@media (min-width: 760px) { .pages { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 760px) { .pages { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); } }
 .pages li { margin: 0; }
 .pages a { display: block; height: 100%; padding: .9rem 1rem; border: 1px solid var(--rule); border-left: 5px solid var(--carac); border-radius: 4px; background: var(--box-bg); text-decoration: none; color: var(--ink); }
 .pages a:hover { border-color: var(--carac); }
@@ -260,3 +260,9 @@ html[data-theme="dark"] .chips button[aria-pressed="true"] { color: #0b1020; }
 .pages span { font-size: .9rem; color: var(--ink-soft); line-height: 1.45; display: block; }
 .wide { max-width: 1180px; margin: 0 auto; padding: 0 1.2rem 4rem; }
 .wide h2 { font-size: 1.4rem; margin: 2.4rem 0 .6rem; }
+
+/* ---------- figuras ---------- */
+.fig { margin: 1.6rem 0; }
+.fig figcaption { font-family: var(--sans); font-size: .9rem; color: var(--ink-soft); text-align: center; margin-top: .4rem; }
+.demo .panels > .wide-panel { grid-column: 1 / -1; }
+.demo label.check { gap: .4rem; }

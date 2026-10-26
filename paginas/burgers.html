@@ -98,7 +98,7 @@
       </ul>
 
       <h2 id="rankine-hugoniot">Depois da quebra: o choque e Rankine–Hugoniot</h2>
-      <p>Depois de $t^*$ precisamos aceitar soluções com saltos. O jeito de fazer isso é a forma integral (solução fraca), que a página de leis de conservação vai apresentar. O que precisamos aqui é uma consequência: se a solução tem um salto sobre a curva $x=x^*(t)$, com limites laterais $u_-$ e $u_+$, o salto se move com velocidade
+      <p>Depois de $t^*$ precisamos aceitar soluções com saltos. O jeito de fazer isso é a forma integral (solução fraca), apresentada na página de <a href="leis-conservacao.html#solucao-fraca">leis de conservação</a>. O que precisamos aqui é uma consequência: se a solução tem um salto sobre a curva $x=x^*(t)$, com limites laterais $u_-$ e $u_+$, o salto se move com velocidade
       $$\boxed{\,\sigma = \frac{dx^*}{dt}=\frac{F(u_-)-F(u_+)}{u_--u_+}\,}$$
       Para Burgers, $F(u)=u^2/2$ e a conta simplifica para a média:
       $$\sigma=\frac{u_-+u_+}{2}.$$</p>
@@ -119,7 +119,7 @@
       com $u=2$ à esquerda e $u=1$ à direita. Na demo, a linha de leitura mostra a média $(u_-+u_+)/2$ ao lado da velocidade medida do choque, e as duas coincidem.</p>
 
       <h2 id="hopf-lax">Qual solução com choque? Entropia e Hopf–Lax</h2>
-      <p>A condição de Rankine–Hugoniot sozinha não escolhe a solução. No degrau para cima ($u_-=0$, $u_+=1$) a função
+      <p>A condição de Rankine–Hugoniot sozinha não escolhe a solução (a página de <a href="leis-conservacao.html#nao-unicidade">leis de conservação</a> mostra que há infinitas soluções fracas). No degrau para cima ($u_-=0$, $u_+=1$) a função
       $$u=\begin{cases}0,&x&lt;t/2\\1,&x>t/2\end{cases}$$
       também é solução fraca, com $\sigma=1/2$, mas é artificial: as características saem do salto em vez de entrar nele, e uma perturbação mínima já a desfaz no leque $u=x/t$. A condição que descarta esses saltos, para fluxo convexo como o de Burgers, é a de Lax: $u_->u_+$, ou seja, as características dos dois lados precisam <em>entrar</em> no choque.</p>
 
@@ -197,7 +197,7 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
-            <li class="soon">Leis de conservação e solução fraca (em breve)</li>
+            <li><a href="leis-conservacao.html">Leis de conservação e solução fraca</a></li>
             <li class="soon">Modelo LWR de trânsito (em breve)</li>
             <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
             <li><a href="upwind.html">Upwind: seguir a característica</a></li>

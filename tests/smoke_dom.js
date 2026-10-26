@@ -35,7 +35,7 @@ const calls = {};
 const ctx = new Proxy({}, { get: (t, k) => (k === "measureText" ? () => ({ width: 10 }) : (...a) => { calls[k] = (calls[k] || 0) + 1; }), set: () => true });
 
 function makeEnv(ids, pycells) {
-  const byId = {}; ids.forEach((i) => (byId[i] = new El(i.startsWith("b-prof") || i.endsWith("canvas") || i === "b-xt" ? "canvas" : "div")));
+  const byId = {}; ids.forEach((i) => (byId[i] = new El(["b-prof", "b-xt", "l-flux", "l-prof", "l-xt"].includes(i) || i.endsWith("canvas") ? "canvas" : "div")));
   const doc = {
     readyState: "complete", currentScript: { src: "http://x/assets/pyrunner.js" }, body: new El("body"), documentElement: new El("html"),
     getElementById: (i) => byId[i] || null, querySelectorAll: (s) => (s === ".pycell" ? pycells : []),
@@ -96,6 +96,26 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     check("cfl-demo: λ=0,5 → CFL vale", env.byId["cfl-read"].innerHTML.includes("a condição CFL vale"));
     env.byId["cfl-lam"].value = "1.2"; env.byId["cfl-lam"].fire("input");
     check("cfl-demo: λ=1,2 → CFL violada", env.byId["cfl-read"].innerHTML.includes("CFL violada"));
+  }
+  /* ---- leis de conservação ---- */
+  {
+    const env = makeEnv(["demo-lei", "l-fluxo", "l-uL", "l-uR", "l-uLv", "l-uRv", "l-t", "l-tv", "l-play", "l-alt", "l-readout", "l-flux", "l-prof", "l-xt"], []);
+    run(env, "lei-core.js"); env.sandbox.window.LeiCore = env.sandbox.LeiCore || vm.runInContext("LeiCore", env.sandbox);
+    let err = null; try { run(env, "lei-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("lei-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["l-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("lei-demo: Burgers 1→0 é choque admissível", rd().includes("Choque admissível"), rd().slice(0, 90));
+    env.byId["l-uL"].value = "0"; env.byId["l-uR"].value = "1"; env.byId["l-uL"].fire("input"); await wait(30);
+    check("lei-demo: Burgers 0→1 é leque (Lax violada)", rd().includes("leque de rarefação") && rd().includes("viola Lax"));
+    check("lei-demo: caixa do salto não admissível liberada no leque", env.byId["l-alt"].disabled === false);
+    env.byId["l-alt"].checked = true; env.byId["l-alt"].fire("change"); await wait(30);
+    check("lei-demo: desenha o salto não admissível sem erro", rd().includes("leque"));
+    env.byId["l-fluxo"].value = "transito"; env.byId["l-fluxo"].fire("change"); await wait(30);
+    check("lei-demo: trânsito traz uL=0,5 e uR=0,8 e σ = −0,30", env.byId["l-uL"].value === 0.5 && rd().includes("σ (corda de F) = −0,30"), rd().slice(0, 90));
+    env.byId["l-t"].value = "3"; env.byId["l-t"].fire("input"); await wait(30);
+    check("lei-demo: muda t sem erro", rd().includes("t = 3,00"));
+    env.byId["l-fluxo"].value = "transporte"; env.byId["l-fluxo"].fire("change"); await wait(30);
+    check("lei-demo: transporte é contato", rd().includes("só é transportado"));
   }
   /* ---- mapa ---- */
   {
