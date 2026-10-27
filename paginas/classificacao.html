@@ -27,11 +27,17 @@
       </header>
 
       <h2 id="contando" data-toc="Contando direções">Contando direções</h2>
-      <p>Na página anterior, uma curva é característica quando sua direção $(\dot x,\dot y)$ satisfaz
-      $$C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.$$
-      É uma equação quadrática homogênea para a direção. Escrevendo a inclinação $m=\dot y/\dot x$ (quando $\dot x\ne0$), fica $A\,m^2-2B\,m+C=0$, com discriminante proporcional a
-      $$\Delta=B^2-AC.$$
-      Em cada ponto $P$, o número de direções características reais é $2$, $1$ ou $0$, conforme o sinal de $\Delta$:</p>
+      <p>Na página anterior, uma curva $\gamma(s)=(x(s),y(s))$ é característica quando sua velocidade $\dot\gamma=(\dot x,\dot y)$ satisfaz
+      $$Q(\dot\gamma)=C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.$$
+      Olhe para $Q$ como uma <b>forma quadrática</b> agindo no vetor velocidade, com matriz simétrica
+      $$\begin{pmatrix}C&-B\\-B&A\end{pmatrix},\qquad\text{de determinante }AC-B^2=-\Delta,\quad\Delta=B^2-AC.$$
+      A pergunta "quantas direções características reais há em $P$?" vira: quantas direções $v\ne0$ têm $Q(v)=0$? Uma forma quadrática em $\mathbb R^2$ só se anula em algum $v\ne0$ se não for definida. Pelos autovalores $\lambda_1,\lambda_2$ da matriz (cujo produto é $-\Delta$):</p>
+      <ul>
+        <li>autovalores de sinais <b>opostos</b> ($\Delta>0$): $Q$ é indefinida e se anula em duas retas, um "X" no plano das velocidades. São duas direções características;</li>
+        <li>um autovalor <b>nulo</b> ($\Delta=0$): $Q$ é semidefinida, $Q=\lambda\,(\text{uma coordenada})^2$, e se anula só na direção do autovetor nulo. Uma direção característica;</li>
+        <li>autovalores de <b>mesmo sinal</b> ($\Delta&lt;0$): $Q$ é positiva definida ou negativa definida, e só se anula em $v=0$. Nenhuma direção.</li>
+      </ul>
+      <p>(Na forma mais concreta: com $m=\dot y/\dot x$, $Q=0$ vira $A\,m^2-2B\,m+C=0$, uma equação do segundo grau cujo discriminante é proporcional a $\Delta$.) Em cada ponto $P$, então, o número de direções características reais é $2$, $1$ ou $0$ conforme o sinal de $\Delta$:</p>
       <table class="tabela">
         <thead><tr><th>$\Delta=B^2-AC$</th><th>Direções reais por $P$</th><th>Nome</th><th>Exemplo</th></tr></thead>
         <tbody>
