@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Autovalores nulos e pequenos — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Autovalores nulos e pequenos</h1>
+        <p class="lede">O que sobra no fim e quão depressa chegamos lá dependem dos menores autovalores de $L$. E eles contam coisas sobre a forma da rede: quantos pedaços tem, onde estão os gargalos.</p>
+        <p class="meta">Continuação de <a href="difusao-grafos.html">Difusão em grafos</a>.</p>
+      </header>
+
+      <h2 id="zero" data-toc="Autovalor zero">Autovalor zero: componentes conexas</h2>
+      <p>Se $Lu=0$, então $0=u^\top Lu=\sum_{i\sim j}(u_i-u_j)^2$. Uma soma de quadrados só se anula se cada parcela se anula: $u_i=u_j$ em toda aresta. Logo $u$ é constante em cada componente conexa. Conclusão:
+      $$\text{multiplicidade do autovalor }0\;=\;\text{número de componentes conexas.}$$
+      Na dinâmica, cada componente é um mundo à parte. A quantidade se conserva em cada uma, nada passa de uma para outra, e o estado final é a <em>média de cada componente</em>.</p>
+
+      <h2 id="pequeno" data-toc="Autovalor quase zero">Autovalor quase zero: quase desconectado</h2>
+      <p>Agora ligue duas componentes por uma aresta fraca, de condutância $\varepsilon$ pequena. Os autovalores variam continuamente com $\varepsilon$, então o segundo autovalor sai de $0$ para um número positivo pequeno, o $\lambda_2$ (a "conectividade algébrica", ou valor de Fiedler).</p>
+      <p>Pense em dois salões ligados por uma porta estreita. Dentro de cada salão a temperatura se iguala depressa. Entre os salões, devagar, pela porta. O tempo para o conjunto todo se equilibrar é da ordem de
+      $$\frac{1}{c\,\lambda_2}.$$
+      Para dois blocos completos de $k$ vértices ligados por uma única aresta de condutância $\varepsilon$, $\lambda_2\approx 2\varepsilon/k$: duas vezes a condutância da porta, dividida pelo tamanho do bloco.</p>
+
+      <details>
+        <summary>De onde vem $2\varepsilon/k$</summary>
+        <div class="body">
+          <p>Tome $u=+1$ num bloco e $-1$ no outro. Esse $u$ é ortogonal ao vetor constante, então $\lambda_2\le\dfrac{u^\top Lu}{u^\top u}$ (quociente de Rayleigh). Só a porta contribui para $u^\top Lu$: $\varepsilon\,(1-(-1))^2=4\varepsilon$. Já $u^\top u=2k$. Logo $\lambda_2\le 2\varepsilon/k$, e para $\varepsilon$ pequeno o vetor de Fiedler é muito parecido com esse $u$, de modo que vale quase a igualdade.</p>
+        </div>
+      </details>
+
+      <h2 id="demo">Veja os dois salões</h2>
+      <p>Dois blocos de 5 vértices. A quantidade começa toda no vértice 0 (o mais avermelhado no início). Ao lado do grafo, as curvas $u_i(t)$, com o tempo em escala logarítmica. O contorno de cada vértice mostra o sinal do <b>vetor de Fiedler</b>, o autovetor de $\lambda_2$: contorno cheio azul para positivo, tracejado cinza para negativo.</p>
+
+      <div class="demo" id="demo-grafo">
+        <div class="controls">
+          <label>condutância da porta ε <input type="range" id="g-eps" min="-2.5" max="0" step="0.05" value="-1.5" aria-label="Condutância da porta, em escala logarítmica"> <output id="g-epsv">0,032</output></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="g-t" min="-1.5" max="3" step="0.01" value="-0.5" aria-label="Tempo, em escala logarítmica"> <output id="g-tv">0,32</output></label>
+          <button id="g-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="g-grafo-canvas" role="img" aria-label="Grafo de dois blocos de cinco vértices ligados por uma aresta, colorido por u"></canvas>
+          <canvas id="g-curvas-canvas" role="img" aria-label="Curvas de u em cada vértice contra o tempo em escala logarítmica"></canvas>
+        </div>
+        <div class="readout" id="g-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>vértices do bloco A</span>
+          <span><i style="border-color:var(--choque)"></i>vértices do bloco B</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li>Com $\varepsilon$ grande ($\approx1$), tudo se iguala numa só escala de tempo. Diminua $\varepsilon$: as curvas se juntam <em>dentro</em> de cada bloco depressa, e a distância entre os blocos fica ali, um patamar, até o tempo $1/\lambda_2$.</li>
+        <li>A leitura mostra $\lambda_2$ ao lado de $2\varepsilon/k$ e o tempo $1/(c\lambda_2)$: dividir $\varepsilon$ por 10 multiplica esse tempo por 10, e é aproximadamente quando as curvas dos dois blocos terminam de se juntar.</li>
+        <li>O vetor de Fiedler separa os dois blocos mesmo sem que a gente diga quais são.</li>
+      </ol>
+
+      <h2 id="redes" data-toc="Uso em redes">Para que serve em análise de redes</h2>
+      <ul>
+        <li><b>Contar pedaços:</b> a multiplicidade do autovalor $0$.</li>
+        <li><b>Medir gargalos e robustez:</b> $\lambda_2$ pequeno significa rede quase partida. Retirar uma aresta e ver quanto $\lambda_2$ cai mede o quanto ela é crítica.</li>
+        <li><b>Achar comunidades:</b> o sinal do vetor de Fiedler divide a rede em dois grupos com poucas arestas entre eles (a <em>bisseção espectral</em>). Para mais grupos, olham-se os primeiros autovetores.</li>
+        <li><b>Velocidade de espalhamento:</b> consenso, boato, calor, em tempo da ordem de $1/(c\lambda_2)$.</li>
+      </ul>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Monte o laplaciano ponderado dos dois blocos e veja $\lambda_2$ cair junto com $\varepsilon$. Depois separe os blocos pelo sinal do vetor de Fiedler.</p>
+
+      <div class="pycell" data-title="λ₂ e o vetor de Fiedler de dois blocos"
+           data-starter="../py/redes_lacunas.py"
+           data-solution="../py/redes_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Contando pedaços</p>
+        <p>Um grafo tem as arestas $\{1,2\}$, $\{2,3\}$, $\{4,5\}$ e o vértice $6$ isolado. Quantos autovalores nulos tem $L$? Para onde converge $u$ se $u_0=(3,0,0,2,0,5)$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Há três componentes, $\{1,2,3\}$, $\{4,5\}$ e $\{6\}$, então $L$ tem três autovalores nulos. Cada componente converge para a sua média: $1$ em $\{1,2,3\}$, $1$ em $\{4,5\}$ e $5$ em $\{6\}$. O vértice isolado não troca nada com ninguém.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A porta estreita</p>
+        <p>Dois blocos completos de $k$ vértices ligados por uma aresta de condutância $\varepsilon$. Mostre que $\lambda_2\le2\varepsilon/k$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>É o cálculo do quociente de Rayleigh feito acima: $u=+1$ num bloco e $-1$ no outro é ortogonal a $\mathbf 1$, $u^\top Lu=4\varepsilon$ e $u^\top u=2k$. Como $\lambda_2=\min_{v\perp\mathbf 1}\dfrac{v^\top Lv}{v^\top v}$, segue $\lambda_2\le4\varepsilon/(2k)=2\varepsilon/k$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="calor-anel.html">O anel e o limite contínuo</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/grafo-core.js"></script>
+  <script src="../assets/grafo-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

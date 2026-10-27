@@ -12,6 +12,7 @@
     { id: "carac",   label: "Características\nclássicas" },
     { id: "choques", label: "Choques\ne tráfego" },
     { id: "var",     label: "Variacional e\nviscosidade" },
+    { id: "calor",   label: "Calor e\ndifusão" },
     { id: "num",     label: "Métodos\nnuméricos" },
     { id: "seg",     label: "Segunda\nordem" }
   ];
@@ -20,6 +21,7 @@
     { id: "basico",      label: "Primeiro contato" },
     { id: "choques",     label: "Choques e tráfego" },
     { id: "variacional", label: "Variacional e viscosidade" },
+    { id: "calor",       label: "Calor e difusão" },
     { id: "numerico",    label: "Numérico" },
     { id: "segunda",     label: "Segunda ordem" }
   ];
@@ -48,6 +50,14 @@
       desc: "A solução como mínimo; é ela que a demo de Burgers usa depois do choque." },
     { id: "visc", lane: "var", col: 4, label: "Soluções de\nviscosidade", href: null, trails: ["variacional"],
       desc: "Sub e supersoluções testadas com funções suaves que tocam u." },
+    { id: "grafo", lane: "calor", col: 1, label: "Difusão em\ngrafos", href: "paginas/difusao-grafos.html", trails: ["calor"],
+      desc: "Tanques ligados por canos: u' = −cLu com L = BᵀB. Com Python editável." },
+    { id: "spec", lane: "calor", col: 2, label: "Autovalores nulos\ne pequenos", href: "paginas/autovalores-redes.html", trails: ["calor"],
+      desc: "Componentes conexas, gargalos e o vetor de Fiedler. Com demo interativa e Python." },
+    { id: "anel", lane: "calor", col: 3, label: "O anel e o\nlimite contínuo", href: "paginas/calor-anel.html", trails: ["calor", "numerico"],
+      desc: "Modos de Fourier no anel e o limite N → ∞, que dá u_t = k u_xx. Com demo e Python." },
+    { id: "fourier", lane: "calor", col: 4, label: "Calor na reta:\nFourier e núcleo", href: null, trails: ["calor"],
+      desc: "A equação do calor em ℝ: séries de Fourier, núcleo gaussiano e propagação com velocidade infinita." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -68,6 +78,7 @@
     ["burgers", "lc"], ["lc", "weak"], ["weak", "rh"], ["rh", "lwr"],
     ["hj", "el"], ["el", "hl"], ["hl", "visc"],
     ["char2", "class"], ["char2", "wave2"], ["char2", "ma"],
+    ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 

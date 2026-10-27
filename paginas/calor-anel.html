@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O anel e o limite contínuo — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O anel e o limite contínuo</h1>
+        <p class="lede">Se os vértices formam um anel, a difusão fica tão regular que dá para resolver à mão. E quando o anel ganha cada vez mais vértices, cada vez mais juntinhos, sai a equação do calor.</p>
+        <p class="meta">Continuação de <a href="difusao-grafos.html">Difusão em grafos</a>; usa os autovalores da página anterior.</p>
+      </header>
+
+      <h2 id="anel" data-toc="O anel">O anel: cada um conversa com dois vizinhos</h2>
+      <p>Coloque $N$ vértices num círculo, cada um ligado ao anterior e ao seguinte (o último liga ao primeiro). Cada vértice tem grau $2$, e a equação $u_t=-cLu$ fica
+      $$u_j'=c\,\big(u_{j+1}-2u_j+u_{j-1}\big),\qquad j=0,\dots,N-1,\ \ \text{índices módulo }N.$$
+      Cada vértice puxa a quantidade para a <em>média dos dois vizinhos</em>: $u_j'=2c\,\big(\tfrac{u_{j+1}+u_{j-1}}2-u_j\big)$. $L$ tem $2$ na diagonal, $-1$ nas duas diagonais vizinhas e $-1$ nos cantos (o fecho do anel).</p>
+
+      <h2 id="modos" data-toc="Os modos são ondas">Os modos são ondas</h2>
+      <p>Como todos os vértices são iguais, os autovetores são ondas:
+      $$q_m(j)=e^{2\pi i\,mj/N},\qquad \lambda_m=2-2\cos\frac{2\pi m}{N}=4\sin^2\frac{\pi m}{N}.$$</p>
+      <details>
+        <summary>Conferindo</summary>
+        <div class="body">
+          <p>Com $\theta=2\pi m/N$: $(Lq_m)(j)=-e^{i\theta(j+1)}+2e^{i\theta j}-e^{i\theta(j-1)}=(2-2\cos\theta)\,e^{i\theta j}$. O fecho do anel funciona porque $e^{i\theta N}=1$.</p>
+        </div>
+      </details>
+      <p>$m=0$ é o vetor constante ($\lambda=0$, e só ele: o anel é conexo). Os modos $m$ e $N-m$ têm o mesmo autovalor (são o cosseno e o seno da mesma onda). Para $m$ pequeno a onda é suave e decai devagar. Perto de $m=N/2$ os vizinhos alternam de sinal e $\lambda$ chega ao máximo, $4$. Resolver o anel é fazer análise de Fourier discreta.</p>
+
+      <h2 id="limite" data-toc="O limite N → ∞">Aumentando $N$</h2>
+      <p>Ponha o anel num círculo de comprimento $\ell$, com os vértices em $x_j=jh$, $h=\ell/N$, e escreva $u_j(t)=u(x_j,t)$ para uma função suave $u(x,t)$. Por Taylor,
+      $$u_{j+1}-2u_j+u_{j-1}=h^2\,u_{xx}(x_j)+O(h^4),$$
+      então a equação do anel vira $u_t=c\,h^2\,u_{xx}+\cdots$. Para o limite $h\to0$ ter sentido, $ch^2$ precisa ficar fixo. Chame $k=ch^2$, isto é, $c=k/h^2$:
+      $$\boxed{\,u_t=k\,u_{xx},\qquad u(x+\ell,t)=u(x,t).\,}$$
+      A intuição é boa: canos mais curtos conduzem mais. Se você divide o anel em pedaços menores, a condutância de cada cano tem que crescer como $1/h^2$ para o calor continuar atravessando o círculo na mesma escala de tempo.</p>
+
+      <h3 id="espectro">E os modos?</h3>
+      <p>Fixe $m$ e faça $N\to\infty$:
+      $$c\,\lambda_m=\frac{k}{h^2}\,4\sin^2\!\frac{\pi m h}{\ell}\;\longrightarrow\;k\Big(\frac{2\pi m}{\ell}\Big)^2,$$
+      e os vetores $q_m$ viram as ondas $e^{i\kappa x}$, $\kappa=2\pi m/\ell$. Cada onda decai como $e^{-k\kappa^2t}$: é a mesma história da página anterior, agora com infinitos modos. As suaves ($\kappa$ pequeno) duram, as rápidas somem depressa. O que a malha não enxerga: o autovalor do anel nunca passa de $4c=4k/h^2$, e ondas mais curtas que $2h$ não existem nele.</p>
+
+      <h2 id="demo">Veja o limite</h2>
+      <p>O anel com $N$ vértices, partindo de uma gaussiana. Os pontos são a solução do anel; a curva preta é a solução exata de $u_t=ku_{xx}$ (com $k=0{,}2$). Aumente $N$ e veja os pontos assentarem na curva.</p>
+
+      <div class="demo" id="demo-anel">
+        <div class="controls">
+          <label>N <input type="range" id="a-N" min="4" max="120" step="1" value="8" aria-label="Número de vértices do anel"> <output id="a-Nv">8</output></label>
+          <label>t <input type="range" id="a-t" min="0" max="3" step="0.01" value="0.6" aria-label="Tempo t"> <output id="a-tv">0,60</output></label>
+          <button id="a-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="a-anel-canvas" role="img" aria-label="Anel de N vértices colorido por u"></canvas>
+          <canvas id="a-perfil-canvas" role="img" aria-label="Solução do anel (pontos) e solução exata do calor (curva)"></canvas>
+        </div>
+        <div class="readout" id="a-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>exata de $u_t=ku_{xx}$</span>
+          <span><i style="border-color:var(--choque)"></i>pontos: anel com $N$ vértices</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial</span>
+        </div>
+      </div>
+
+      <p>Para explorar: com $N=8$ já se vê o formato certo, mas os pontos erram um pouco a altura do pico. A diferença cai por um fator de cerca de $4$ cada vez que $N$ dobra, porque o erro de Taylor é de ordem $h^2$. Observe também o valor de $c$ na leitura: ele cresce como $N^2$.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Monte o laplaciano do anel, compare os autovalores com $k(2\pi m/\ell)^2$ para $N=8,16,64,256$ e depois compare as soluções. O $c$ certo é o que deixa $k=ch^2$ fixo.</p>
+
+      <div class="pycell" data-title="Do anel à equação do calor"
+           data-starter="../py/anel_lacunas.py"
+           data-solution="../py/anel_solucao.py"></div>
+
+      <aside class="box">
+        <p class="tag">O que vem depois</p>
+        <p>Com $u_t=ku_{xx}$ em mãos, a solução por séries de Fourier na reta e o núcleo do calor continuam a história. <small>(Em breve.)</small></p>
+      </aside>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Um autovetor à mão</p>
+        <p>Para o anel com $N=4$, escreva $L$ e verifique que $q=(1,-1,1,-1)$ é autovetor. Qual é o autovalor, e que modo $m$ é esse?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$L=\begin{pmatrix}2&-1&0&-1\\-1&2&-1&0\\0&-1&2&-1\\-1&0&-1&2\end{pmatrix}$ e $Lq=4q$: em cada coordenada, $2q_j-q_{j+1}-q_{j-1}=2q_j+q_j+q_j=4q_j$, porque os dois vizinhos têm sinal oposto ao de $q_j$. É $m=N/2=2$, o modo mais ondulado, $\lambda=4\sin^2(\pi/2)=4$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O passo de tempo do Euler explícito</p>
+        <p>O esquema $u^{n+1}=u^n-c\,\Delta t\,Lu^n$ é estável quando $|1-c\,\Delta t\,\lambda|\le1$ para todo autovalor $\lambda$. Mostre que, no anel, isso pede $\Delta t\le h^2/(2k)$. O que acontece se você dobrar $N$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$|1-c\Delta t\lambda|\le1\iff c\Delta t\lambda\le2$, e o pior caso é $\lambda_{\max}=4$ (para $N$ par). Então $\Delta t\le\dfrac{2}{4c}=\dfrac{1}{2c}=\dfrac{h^2}{2k}$. Dobrar $N$ divide $h$ por $2$ e exige um passo de tempo <em>quatro vezes</em> menor: é a versão para o calor da condição CFL.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+            <li><a href="autovalores-redes.html">Autovalores nulos e pequenos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/grafo-core.js"></script>
+  <script src="../assets/anel-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

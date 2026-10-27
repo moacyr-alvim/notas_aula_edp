@@ -117,13 +117,43 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["l-fluxo"].value = "transporte"; env.byId["l-fluxo"].fire("change"); await wait(30);
     check("lei-demo: transporte é contato", rd().includes("só é transportado"));
   }
+  /* ---- calor em grafos: dois blocos ---- */
+  {
+    const env = makeEnv(["demo-grafo", "g-eps", "g-epsv", "g-t", "g-tv", "g-play", "g-readout", "g-grafo-canvas", "g-curvas-canvas"], []);
+    run(env, "grafo-core.js"); env.sandbox.window.GrafoCore = env.sandbox.GrafoCore || vm.runInContext("GrafoCore", env.sandbox);
+    let err = null; try { run(env, "grafo-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("grafo-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["g-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("grafo-demo: leitura traz λ₂ e o tempo 1/(cλ₂)", rd().includes("λ₂ =") && rd().includes("1/(cλ₂)"), rd().slice(0, 90));
+    const l2a = parseFloat(rd().match(/λ₂ = (\d+,\d+)/)[1].replace(",", "."));
+    env.byId["g-eps"].value = "-2.5"; env.byId["g-eps"].fire("input"); await wait(30);
+    const l2b = parseFloat(rd().match(/λ₂ = (\d+,\d+)/)[1].replace(",", "."));
+    check("grafo-demo: porta mais estreita → λ₂ menor", l2b < l2a, l2a + " → " + l2b);
+    env.byId["g-t"].value = "2"; env.byId["g-t"].fire("input"); await wait(30);
+    check("grafo-demo: muda t sem erro", rd().includes("t = 100"), rd().slice(0, 40));
+    env.byId["g-play"].click(); env.byId["g-play"].click();
+    check("grafo-demo: botão animar alterna", env.byId["g-play"].textContent.includes("Animar"));
+  }
+  /* ---- calor: anel e limite contínuo ---- */
+  {
+    const env = makeEnv(["demo-anel", "a-N", "a-Nv", "a-t", "a-tv", "a-play", "a-readout", "a-anel-canvas", "a-perfil-canvas"], []);
+    run(env, "grafo-core.js"); env.sandbox.window.GrafoCore = env.sandbox.GrafoCore || vm.runInContext("GrafoCore", env.sandbox);
+    let err = null; try { run(env, "anel-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("anel-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["a-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    const errOf = () => parseFloat(rd().match(/contínuo: ([\d,e−-]+)/)[1].replace(",", ".").replace("−", "-"));
+    check("anel-demo: N = 8 na leitura", rd().includes("N = 8"), rd().slice(0, 80));
+    const e8 = errOf();
+    env.byId["a-N"].value = "64"; env.byId["a-N"].fire("input"); await wait(30);
+    check("anel-demo: mais vértices → mais perto do contínuo", errOf() < e8 / 10, e8 + " → " + errOf());
+  }
   /* ---- mapa ---- */
   {
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 17 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 17);
-    check("mapa: botões de trilha criados", env.byId["chips"].children.length === 6);
+    check("mapa: SVG gerado com os 21 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 21);
+    check("mapa: botões de trilha criados", env.byId["chips"].children.length === 7);
   }
   /* ---- executor de Python ---- */
   {
