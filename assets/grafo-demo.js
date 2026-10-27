@@ -13,7 +13,7 @@
   var cache = { eps: null, g: null, eig: null, sig: null, curves: null };
 
   function fmt(n, d) { return n.toFixed(d == null ? 2 : d).replace(".", ",").replace("-", "−"); }
-  function fmtG(x) { return x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x >= 0.1 ? x.toFixed(2) : x.toExponential(1); }
+  function fmtG(x) { return (x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x >= 0.1 ? x.toFixed(2) : x.toExponential(1)).replace(".", ","); }
   function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
   function colors() { return { ink: css("--ink"), soft: css("--ink-soft"), rule: css("--rule"), carac: css("--carac"), choque: css("--choque"), paper: css("--paper") }; }
   function setup(canvas) {

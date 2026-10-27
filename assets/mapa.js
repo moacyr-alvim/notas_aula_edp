@@ -12,8 +12,8 @@
     { id: "carac",   label: "Características\nclássicas" },
     { id: "choques", label: "Choques\ne tráfego" },
     { id: "var",     label: "Variacional e\nviscosidade" },
-    { id: "calor",   label: "Calor e\ndifusão" },
     { id: "num",     label: "Métodos\nnuméricos" },
+    { id: "calor",   label: "Calor e\ndifusão" },
     { id: "seg",     label: "Segunda\nordem" }
   ];
 
