@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Leis de conservação e solução fraca — Método das características</title>
+  <title>Leis de conservação — Método das características</title>
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="../assets/site.js"></script>
@@ -21,8 +21,8 @@
     <nav class="toc" id="toc" aria-label="Nesta página"></nav>
     <main>
       <header>
-        <h1>Leis de conservação e solução fraca</h1>
-        <p class="lede">Uma lei de conservação diz que a quantidade dentro de um intervalo só muda pelo que entra e sai pelas bordas. Dessa frase saem a EDP, as características e, quando as características se cruzam, a ideia de solução fraca.</p>
+        <h1>Leis de conservação</h1>
+        <p class="lede">Uma lei de conservação diz que a quantidade dentro de um intervalo só muda pelo que entra e sai pelas bordas. Dessa frase saem a EDP e as características, e também o motivo pelo qual, depois que as características se cruzam, a EDP deixa de ser o lugar certo para definir solução.</p>
         <p class="meta">Pode ser lida junto com <a href="burgers.html">Burgers, quebra e choques</a>, em qualquer ordem. Ajuda ler antes: características de 1ª ordem <small>(página em breve)</small>.</p>
       </header>
 
@@ -61,7 +61,7 @@
       <ul>
         <li><b>transporte:</b> $F(u)=u$, ou $F(u)=cu$ com velocidade $c$;</li>
         <li><b>Burgers:</b> $F(u)=u^2/2$;</li>
-        <li><b>trânsito</b> (modelo LWR, na página seguinte): $F(u)=u\,v(u)$, densidade vezes velocidade, com $F(u)=v_{\max}\,u\,(1-u/L)$.</li>
+        <li><b>trânsito</b> (modelo LWR, página em breve): $F(u)=u\,v(u)$, densidade vezes velocidade, com $F(u)=v_{\max}\,u\,(1-u/L)$.</li>
       </ul>
 
       <h2 id="caracteristicas">Características</h2>
@@ -83,96 +83,9 @@
         <p>Se $F''>0$ (Burgers), quebram os dados <em>decrescentes</em>: o valor maior, que anda mais depressa, está atrás. Se $F''&lt;0$ (trânsito), quebram os dados <em>crescentes</em>: carros mais densos andam mais devagar, então o trecho denso à frente é alcançado pelo trecho menos denso que vem atrás. Se $F''=0$ (transporte) nunca há quebra.</p>
       </aside>
 
-      <h2 id="solucao-fraca" data-toc="Solução fraca">Quando as características se cruzam: solução fraca</h2>
-      <p>Depois de $t^*$ a solução clássica não existe mais, e a pergunta é: como definir "solução" de uma EDP para uma função que nem é derivável? O truque é passar as derivadas para funções auxiliares.</p>
-      <p>Considere o problema de valor inicial
-      $$u_t+(F(u))_x=0,\qquad u(x,0)=f(x).$$
-      Seja $v(x,t)$ uma função infinitamente derivável com suporte compacto em $\mathbb R\times[0,\infty)$ (a <b>função-teste</b>; ela pode ser diferente de zero em $t=0$). Multiplicando a EDP por $v$ e integrando no semiplano,
-      $$\int_0^\infty\!\!\int_{-\infty}^{\infty} v\,\big[u_t+(F(u))_x\big]\,dx\,dt=0.$$
-      Integrando por partes, cada derivada passa para $v$, e o dado inicial aparece como termo de borda em $t=0$:
-      $$\boxed{\,\int_0^\infty\!\!\int_{-\infty}^{\infty}\big[u\,v_t+F(u)\,v_x\big]\,dx\,dt+\int_{-\infty}^{\infty}f(x)\,v(x,0)\,dx=0.\,}$$</p>
 
-      <details>
-        <summary>A integração por partes, passo a passo</summary>
-        <div class="body">
-          <p>Em $t$: $\displaystyle\int_0^\infty v\,u_t\,dt=\big[v\,u\big]_{t=0}^{t=\infty}-\int_0^\infty u\,v_t\,dt=-v(x,0)\,f(x)-\int_0^\infty u\,v_t\,dt$, porque $v$ tem suporte compacto (anula-se para $t$ grande) e $u(x,0)=f(x)$.</p>
-          <p>Em $x$: $\displaystyle\int_{-\infty}^{\infty}v\,(F(u))_x\,dx=-\int_{-\infty}^{\infty}F(u)\,v_x\,dx$, pelo mesmo motivo.</p>
-          <p>Somando e trocando o sinal de tudo, chega-se à identidade acima.</p>
-        </div>
-      </details>
-
-      <p>Uma função $u$ que satisfaz essa igualdade para <b>toda</b> função-teste $v$ é uma <b>solução fraca</b> do problema. Três observações:</p>
-      <ol>
-        <li>Toda solução clássica é fraca: basta reverter as integrações por partes.</li>
-        <li>Uma solução fraca de classe $C^1$ é clássica: revertendo, $\iint v\,[u_t+(F(u))_x]=0$ para todo $v$, e então o colchete é zero.</li>
-        <li>O conjunto de candidatos é maior, porque as derivadas ficam todas em $v$. Funções com saltos podem ser soluções fracas.</li>
-      </ol>
-
-      <h3 id="rankine-hugoniot-fraca">Um salto numa solução fraca obedece a Rankine–Hugoniot</h3>
-      <p>Suponha que $u$ seja suave dos dois lados de uma curva $x=s(t)$, com limites laterais $u_\mp$, e solução fraca. Então
-      $$s'(t)=\frac{F(u_-)-F(u_+)}{u_--u_+}.$$
-      Esta é a mesma condição que a página de Burgers deduziu pelo balanço em um intervalo que encolhe. Aqui ela sai da forma fraca.</p>
-
-      <details>
-        <summary>A dedução com funções-teste</summary>
-        <div class="body">
-          <p>Tome $v$ com suporte em $t>0$, para o termo inicial sumir, e cruzando a curva. Em cada lado a EDP vale, então $u\,v_t+F\,v_x=(uv)_t+(Fv)_x$ lá.</p>
-          <p>À esquerda da curva, a regra de Leibniz dá $0=\int s'\,u_-\,v\,dt+\iint_{x&lt;s}(uv)_t$ (derivada total de $\int_{-\infty}^{s(t)}uv\,dx$, que integra a zero). Logo $\iint_{x&lt;s}(uv)_t=-\int s'u_-v\,dt$. Por outro lado, $\iint_{x&lt;s}(Fv)_x=\int F_-v\,dt$. A contribuição esquerda é
-          $$\int\big(F_--s'u_-\big)\,v\,dt.$$
-          Do lado direito, com os sinais trocados, a contribuição é $\int\big(-F_++s'u_+\big)\,v\,dt$. A soma tem que ser zero para todo $v$:
-          $$\int\big[F_--F_+-s'(u_--u_+)\big]\,v\,dt=0\ \Longrightarrow\ s'(u_--u_+)=F_--F_+.$$</p>
-        </div>
-      </details>
-
-      <h2 id="nao-unicidade" data-toc="Fracas demais">Soluções fracas demais</h2>
-      <p>O custo de aceitar saltos é perder a unicidade. Considere Burgers com $u(x,0)=0$ para $x&lt;0$ e $u(x,0)=1$ para $x>0$. Duas soluções fracas:</p>
-      <ul>
-        <li>o <b>leque de rarefação</b> $u=0$ para $x&lt;0$, $u=x/t$ para $0&lt;x&lt;t$, $u=1$ para $x>t$ (contínuo, clássico fora da origem);</li>
-        <li>o <b>salto</b> $u=0$ para $x&lt;t/2$ e $u=1$ para $x>t/2$, que satisfaz Rankine–Hugoniot com $\sigma=\tfrac12(0+1)$.</li>
-      </ul>
-      <p>E há mais: para qualquer $m$ (até negativo), dois saltos de $0$ para $m$ e de $m$ para $1$, com velocidades $m/2&lt;(m+1)/2$, deixam entre eles uma faixa de valor $m$, e também são soluções fracas. Existem infinitas. Precisamos de um critério para escolher a solução fisicamente correta.</p>
-
-      <h3 id="entropia">A condição de Lax</h3>
-      <p>Para um salto com velocidade $\sigma$ entre $u_-$ e $u_+$, o critério é
-      $$\lambda(u_-)>\sigma>\lambda(u_+),$$
-      isto é, as características dos dois lados <em>entram</em> no salto (como na rampa de Burgers, onde elas colidem). Se elas saem do salto, uma perturbação mínima o desmancha em um leque, e ele é descartado. Para fluxo convexo, $F''>0$, isso se resume a $u_->u_+$; para fluxo côncavo, $F''&lt;0$, a $u_-&lt;u_+$.</p>
-      <p>Há uma leitura geométrica no gráfico de $F$. A velocidade de Rankine–Hugoniot $\sigma$ é a inclinação da <b>corda</b> entre $(u_-,F(u_-))$ e $(u_+,F(u_+))$, e $\lambda$ é a inclinação da <b>tangente</b>. A condição de Lax diz que a corda tem inclinação entre as das tangentes nas duas pontas, na ordem certa.</p>
-      <p>Sob hipóteses adequadas, a solução escolhida é a mesma que se obtém como limite de $u_t+(F(u))_x=\varepsilon u_{xx}$ quando $\varepsilon\to0$ (viscosidade evanescente), e no caso de Burgers é a fornecida pela fórmula de Hopf–Lax, que a <a href="burgers.html#hopf-lax">página de Burgers</a> usa.</p>
-
-      <h2 id="demo">Veja o problema de Riemann</h2>
-      <p>O <b>problema de Riemann</b> é o caso mais simples com salto: $u=u_L$ para $x&lt;0$ e $u=u_R$ para $x>0$. Escolha o fluxo, mexa em $u_L$ e $u_R$ e leia o resultado em três painéis: o gráfico de $F$ com a corda (vermilion) e as tangentes (azul tracejado), o perfil de $u$ no instante $t$ e o plano $(x,t)$.</p>
-
-      <div class="demo" id="demo-lei">
-        <div class="controls">
-          <label>Fluxo <select id="l-fluxo" aria-label="Fluxo"></select></label>
-          <label>uL <input type="range" id="l-uL" min="0" max="1" step="0.01" value="1" aria-label="Valor à esquerda"> <output id="l-uLv">1,00</output></label>
-          <label>uR <input type="range" id="l-uR" min="0" max="1" step="0.01" value="0" aria-label="Valor à direita"> <output id="l-uRv">0,00</output></label>
-        </div>
-        <div class="controls">
-          <label>t <input type="range" id="l-t" min="0" max="4" step="0.01" value="1.5" aria-label="Tempo t"> <output id="l-tv">1,50</output></label>
-          <button id="l-play" type="button">▶ Animar</button>
-          <label class="check"><input type="checkbox" id="l-alt"> mostrar também o salto não admissível (quando há leque)</label>
-        </div>
-        <div class="panels two">
-          <canvas id="l-flux" role="img" aria-label="Gráfico do fluxo F de u, com a corda e as tangentes"></canvas>
-          <canvas id="l-prof" role="img" aria-label="Perfil da solução u em função de x no instante t"></canvas>
-          <canvas id="l-xt" class="wide-panel" role="img" aria-label="Plano x, t com características e choque ou leque"></canvas>
-        </div>
-        <div class="readout" id="l-readout" aria-live="polite"></div>
-        <div class="legend">
-          <span><i style="border-color:var(--ink)"></i>solução admissível</span>
-          <span><i style="border-color:var(--choque)"></i>choque / corda de F (σ)</span>
-          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>salto não admissível</span>
-          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>tangentes de F (λ) / características</span>
-        </div>
-      </div>
-
-      <p>Para explorar:</p>
-      <ol>
-        <li><b>Burgers</b> com $u_L=1$, $u_R=0$: choque. A corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque. Marque a caixa para ver o salto que também seria solução fraca, mas que a condição de Lax descarta.</li>
-        <li><b>Trânsito</b> com $u_L=0{,}5$, $u_R=0{,}8$: o choque anda para <em>trás</em> ($\sigma&lt;0$), contra o fluxo dos carros. Com $u_L=1$, $u_R=0$ (engarrafamento total e pista livre à frente) aparece um leque.</li>
-        <li><b>Transporte:</b> $F$ é uma reta, a corda coincide com as tangentes, e o salto só é transportado.</li>
-      </ol>
+      <h2 id="depois-da-quebra" data-toc="Depois da quebra">E depois de t*?</h2>
+      <p>Depois de $t^*$ não existe solução clássica, mas a lei de conservação continua fazendo sentido: a igualdade $\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t))$ nunca precisou de derivadas de $u$, e um engarrafamento ou uma onda de choque são fenômenos reais, com $u$ descontínua. O que quebrou foi a <em>EDP</em>, não o balanço. Redefinir "solução" para que ela admita saltos é o assunto da página <a href="solucao-fraca.html">Solução fraca</a>.</p>
 
       <h2 id="exercicios">Exercícios</h2>
 
@@ -191,48 +104,15 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">2. Clássica implica fraca</p>
-        <p>Mostre que se $u$ é uma solução clássica de $u_t+(F(u))_x=0$ com $u(x,0)=f(x)$, então $u$ satisfaz a forma fraca para toda função-teste $v$.</p>
+        <p class="tag">2. Quando o trânsito quebra</p>
+        <p>Para $F(u)=u(1-u)$ e densidade inicial $f(x)=0{,}2+\dfrac{0{,}6}{1+e^{-x}}$ (crescente, de $0{,}2$ a $0{,}8$), calcule $t^*$.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Multiplique a EDP por $v$ e integre no semiplano: $\iint v\,[u_t+(F(u))_x]=0$. As integrações por partes mostradas acima (válidas porque $u$ é $C^1$ e $v$ tem suporte compacto) transformam essa integral em $-\iint[u\,v_t+F(u)\,v_x]-\int f(x)v(x,0)\,dx$. Como o total é zero, a forma fraca vale.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">3. Infinitas soluções fracas</p>
-        <p>Em Burgers com $u_L=0$ e $u_R=1$, mostre que, para cada $m\in\mathbb R$, a função com $u=0$ para $x&lt;\tfrac m2t$, $u=m$ para $\tfrac m2t&lt;x&lt;\tfrac{m+1}2t$ e $u=1$ para $x>\tfrac{m+1}2t$ satisfaz Rankine–Hugoniot nos dois saltos. Por que a condição de Lax descarta todas?</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>Em Burgers, $\sigma=(u_-+u_+)/2$. O primeiro salto, de $0$ para $m$, tem $\sigma_1=m/2$; o segundo, de $m$ para $1$, tem $\sigma_2=(m+1)/2$. Cada um coincide com a posição onde a função muda de valor, então R–H vale nos dois. Como $\sigma_1&lt;\sigma_2$, a faixa intermediária se alarga com o tempo.</p>
-          <p>Lax para Burgers pede $u_->u_+$ em cada salto. Aqui $0$ vs $m$ e $m$ vs $1$ exigiriam $0>m>1$, impossível. Então nenhum deles é admissível, e sobra o leque, que não tem saltos.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">4. O fluxo do trânsito</p>
-        <p>Para $F(u)=u(1-u)$, mostre que $\sigma=1-(u_-+u_+)$ e que a condição de Lax equivale a $u_-&lt;u_+$. Interprete.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>$\sigma=\dfrac{u_--u_-^2-u_++u_+^2}{u_--u_+}=1-(u_-+u_+)$. E $\lambda(u)=1-2u$. Então $\lambda(u_-)>\sigma\iff 1-2u_->1-u_--u_+\iff u_+>u_-$, e $\sigma>\lambda(u_+)\iff 1-u_--u_+>1-2u_+\iff u_+>u_-$. Os dois lados da condição dão a mesma desigualdade.</p>
-          <p>Interpretação: um choque só se forma quando a densidade <em>aumenta</em> no sentido do fluxo, isto é, quando carros mais rápidos (menos densos) alcançam os mais lentos (mais densos) à frente. É o início de um engarrafamento. O caso contrário, a densidade diminuindo, é um leque: o engarrafamento se desfaz.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">5. O leque do trânsito</p>
-        <p>Com $F(u)=u(1-u)$, $u_L=1$ e $u_R=0$, mostre que $u=\tfrac12(1-x/t)$ para $-t&lt;x&lt;t$ (com $u=1$ à esquerda e $u=0$ à direita) é solução.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>No leque, $\lambda(u)=1-2u=x/t$, que é o que $u=\tfrac12(1-x/t)$ diz. Verificando na EDP $u_t+(1-2u)u_x=0$: $u_t=\dfrac{x}{2t^2}$, $u_x=-\dfrac{1}{2t}$ e $1-2u=\dfrac xt$, então $u_t+(1-2u)u_x=\dfrac{x}{2t^2}-\dfrac{x}{2t^2}=0$. Nas bordas $x=\mp t$ a função vale $1$ e $0$, de modo que a solução é contínua.</p>
+          <p>$F''=-2$, então $t^*=-1/\min_x[-2f'(x)]=1/\big(2\max_x f'(x)\big)$. A derivada de $1/(1+e^{-x})$ é máxima em $x=0$, onde vale $1/4$, então $\max f'=0{,}6\cdot\tfrac14=0{,}15$ e
+          $$t^*=\frac{1}{2\cdot0{,}15}=\frac{10}{3}\approx3{,}33.$$
+          A densidade cresce, como a caixa acima diz que precisa para o trânsito quebrar.</p>
         </div>
       </details>
 
@@ -247,16 +127,12 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
+            <li><a href="solucao-fraca.html">Solução fraca</a></li>
             <li class="soon">Modelo LWR de trânsito (em breve)</li>
-            <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
-            <li><a href="burgers.html#hopf-lax">Hopf–Lax (na página de Burgers)</a></li>
           </ul>
         </div>
       </nav>
     </main>
   </div>
-
-  <script src="../assets/lei-core.js"></script>
-  <script src="../assets/lei-demo.js"></script>
 </body>
 </html>

@@ -52,7 +52,8 @@ assets/
   burgers-demo.js     desenho da demo de Burgers
   cfl-demo.js         demo dos cones de dependência
   lei-core.js         problema de Riemann para u_t + F(u)_x = 0 (fluxos quadráticos), testável em Node
-  lei-demo.js         desenho da demo de leis de conservação
+  lei-demo.js         desenho da demo do problema de Riemann (hoje fora das páginas; ver rascunhos/)
+rascunhos/            material guardado para páginas futuras (não está ligado ao mapa)
 tests/                testes (veja abaixo)
 ```
 
@@ -82,7 +83,7 @@ do nó correspondente pelo caminho da página. O índice lateral é gerado dos `
 
 ```bash
 node tests/burgers-core.test.js     # matemática da demo de Burgers (fórmulas exatas e Godunov)
-node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot
+node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot (para a futura página de Hamilton–Jacobi)
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
 node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
