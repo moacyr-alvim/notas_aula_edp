@@ -134,18 +134,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["g-play"].click(); env.byId["g-play"].click();
     check("grafo-demo: botão animar alterna", env.byId["g-play"].textContent.includes("Animar"));
   }
-  /* ---- calor: anel e limite contínuo ---- */
+  /* ---- calor: grafo em anel e limite contínuo ---- */
   {
     const env = makeEnv(["demo-anel", "a-N", "a-Nv", "a-t", "a-tv", "a-play", "a-readout", "a-anel-canvas", "a-perfil-canvas"], []);
     run(env, "grafo-core.js"); env.sandbox.window.GrafoCore = env.sandbox.GrafoCore || vm.runInContext("GrafoCore", env.sandbox);
     let err = null; try { run(env, "anel-demo.js"); await wait(30); } catch (e) { err = e; }
-    check("anel-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    check("anel-demo (grafo em anel): carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
     const rd = () => env.byId["a-readout"].innerHTML.replace(/<[^>]+>/g, "");
     const errOf = () => parseFloat(rd().match(/contínuo: ([\d,e−-]+)/)[1].replace(",", ".").replace("−", "-"));
-    check("anel-demo: N = 8 na leitura", rd().includes("N = 8"), rd().slice(0, 80));
+    check("anel-demo (grafo em anel): N = 8 na leitura", rd().includes("N = 8"), rd().slice(0, 80));
     const e8 = errOf();
     env.byId["a-N"].value = "64"; env.byId["a-N"].fire("input"); await wait(30);
-    check("anel-demo: mais vértices → mais perto do contínuo", errOf() < e8 / 10, e8 + " → " + errOf());
+    check("anel-demo (grafo em anel): mais vértices → mais perto do contínuo", errOf() < e8 / 10, e8 + " → " + errOf());
   }
   /* ---- convolução: zeros x periódico ---- */
   {

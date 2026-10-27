@@ -1,5 +1,5 @@
-/* Demo: anel de N vértices contra a equação do calor u_t = k u_xx (limite contínuo).  Depende de grafo-core.js.
- * Esquerda: o anel (cor = u). Direita: u_j (pontos) e a solução exata do limite contínuo (curva). */
+/* Demo: grafo em anel de N vértices contra a equação do calor u_t = k u_xx (limite contínuo).  Depende de grafo-core.js.
+ * Esquerda: o grafo (cor = u). Direita: u_j (pontos) e a solução exata do limite contínuo (curva). */
 (function () {
   "use strict";
   var K = window.GrafoCore, root = document.getElementById("demo-anel");
@@ -39,7 +39,7 @@
       ctx.fillStyle = mix(col.paper, col.choque, f); ctx.strokeStyle = col.ink; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.arc(px, py, dot, 0, 6.2832); ctx.fill(); ctx.stroke();
     }
-    ctx.fillStyle = col.soft; ctx.font = "12px sans-serif"; ctx.textAlign = "center"; ctx.fillText("anel com N = " + R.N + " vértices", cx, P.h - 6);
+    ctx.fillStyle = col.soft; ctx.font = "12px sans-serif"; ctx.textAlign = "center"; ctx.fillText("grafo em anel com N = " + R.N + " vértices", cx, P.h - 6);
   }
 
   function drawProfile(R, col) {

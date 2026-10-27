@@ -1,5 +1,5 @@
 /* Núcleo das páginas de calor e difusão: difusão em grafos  u' = −c L u,  L = Bᵀ C B,
- * e o anel de N vértices (que, quando N → ∞, vira u_t = k u_xx).  Sem DOM: roda no navegador e no Node (testes).
+ * e o grafo em anel de N vértices (que, quando N → ∞, vira u_t = k u_xx).  Sem DOM: roda no navegador e no Node (testes).
  *
  *   arestas: [i, j] ou [i, j, w]  (w = condutância relativa da aresta, 1 por padrão); índices a partir de 0
  *   B (m × n):  linha da aresta i→j tem −1 na coluna i e +1 na coluna j,  então (B u)_e = u_j − u_i
@@ -88,11 +88,11 @@
     return { n: n, edges: edges, pos: pos, grupo: grupo, ponte: [k - 1, k] };
   }
 
-  /* ---------- o anel de N vértices ---------- */
+  /* ---------- o grafo em anel de N vértices ---------- */
   function ringEdges(N) { var e = [], i; for (i = 0; i < N; i++) e.push([i, (i + 1) % N, 1]); return e; }
-  function ringLambda(N, m) { var s = Math.sin(Math.PI * m / N); return 4 * s * s; }   // autovalores de L do anel
+  function ringLambda(N, m) { var s = Math.sin(Math.PI * m / N); return 4 * s * s; }   // autovalores de L do grafo em anel
 
-  /* solução exata do anel: u0 amostrado em N pontos, taxa c;  u_j(t) = Σ_m ĉ_m e^{−c λ_m t} e^{2πi m j/N} */
+  /* solução exata do grafo em anel: u0 amostrado em N pontos, taxa c;  u_j(t) = Σ_m ĉ_m e^{−c λ_m t} e^{2πi m j/N} */
   function ringSolve(u0, c, t) {
     var N = u0.length, out = new Array(N).fill(0), m, j, a, b, th, e;
     for (m = 0; m < N; m++) {

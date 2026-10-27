@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>O calor no anel, com Fourier — Método das características</title>
+  <title>O calor no grafo em anel, com Fourier — Método das características</title>
   <link rel="stylesheet" href="../assets/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
   <script src="../assets/site.js"></script>
@@ -21,21 +21,21 @@
     <nav class="toc" id="toc" aria-label="Nesta página"></nav>
     <main>
       <header>
-        <h1>O calor no anel, com Fourier</h1>
-        <p class="lede">O anel da página de difusão tinha uma simetria que não exploramos: o laplaciano dele é uma matriz circulante. Com a transformada de Fourier discreta, o sistema acoplado de EDOs se separa em $N$ equações independentes, e resolver o calor vira três passos: transformar, multiplicar, voltar.</p>
-        <p class="meta">Junta <a href="calor-anel.html">O anel e o limite contínuo</a> com <a href="dft.html">Transformada de Fourier discreta</a>.</p>
+        <h1>O calor no grafo em anel, com Fourier</h1>
+        <p class="lede">O grafo em anel das páginas anteriores tinha uma simetria que não exploramos: o laplaciano dele é uma matriz circulante. Com a transformada de Fourier discreta, o sistema acoplado de EDOs se separa em $N$ equações independentes, e resolver o calor vira três passos: transformar, multiplicar, voltar.</p>
+        <p class="meta">Junta <a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a> com <a href="dft.html">Transformada de Fourier discreta</a>.</p>
       </header>
 
-      <h2 id="circulante" data-toc="L é circulante">O laplaciano do anel é uma convolução</h2>
-      <p>No anel com $N$ vértices, $(Lu)_j=2u_j-u_{j+1}-u_{j-1}$. Com o shift $S$ da página anterior ($Su$ desloca uma casa, $S^{-1}=S^{N-1}$ desloca para o outro lado):
+      <h2 id="circulante" data-toc="L é circulante">O laplaciano do grafo em anel é uma convolução</h2>
+      <p>No grafo em anel com $N$ vértices, $(Lu)_j=2u_j-u_{j+1}-u_{j-1}$. Com o shift $S$ da página anterior ($Su$ desloca uma casa, $S^{-1}=S^{N-1}$ desloca para o outro lado):
       $$L=2I-S-S^{-1}=\ell(S),\qquad \ell=(2,-1,0,\dots,0,-1).$$
-      Então $Lu=\ell\circledast u$: a matriz é circulante, com primeira coluna $\ell$. A equação do calor no anel é
+      Então $Lu=\ell\circledast u$: a matriz é circulante, com primeira coluna $\ell$. A equação do calor no grafo em anel é
       $$u_t=-c\,\ell\circledast u.$$</p>
 
       <h2 id="desacopla" data-toc="Fourier desacopla">Fourier desacopla</h2>
       <p>Pela página anterior, $L$ tem autovetores $f_k$ e autovalores
       $$\lambda_k=\ell(\omega^{-k})=2-\omega^{-k}-\omega^{k}=2-2\cos\frac{2\pi k}{N}=4\sin^2\frac{\pi k}{N}.$$
-      É daí que vinham os autovetores e autovalores que apareceram sem demonstração na página do anel. Agora aplique $F^*$ à equação. Como $F^*LF=\Lambda$,
+      É daí que vinham os autovetores e autovalores que apareceram sem demonstração na página do grafo em anel. Agora aplique $F^*$ à equação. Como $F^*LF=\Lambda$,
       $$\frac{d}{dt}\hat u=-c\,\Lambda\,\hat u\quad\Longleftrightarrow\quad \frac{d}{dt}\hat u_k=-c\lambda_k\,\hat u_k,\quad k=0,\dots,N-1.$$
       São $N$ EDOs <b>independentes</b>, cada uma de uma variável, com solução $\hat u_k(t)=e^{-c\lambda_kt}\,\hat u_k(0)$. Voltando,
       $$\boxed{\,u(t)=F\,e^{-c\Lambda t}\,F^*u_0=\sum_k e^{-c\lambda_kt}\,\hat u_k(0)\,f_k.\,}$$
@@ -44,7 +44,7 @@
       <h2 id="nucleo" data-toc="O núcleo do calor">A solução também é uma convolução</h2>
       <p>A matriz $e^{-cLt}=F\,e^{-c\Lambda t}F^*$ é função de $L$, que é função de $S$, então também é circulante. Sua primeira coluna é $K_t=e^{-cLt}e_0$ (o que sai de um impulso unitário), e
       $$u(t)=K_t\circledast u_0.$$
-      O calor num instante $t$ é o dado inicial <em>suavizado</em> pelo núcleo $K_t$, cada vez mais largo com o tempo. É a mesma ideia do filtro de média móvel da primeira página, só que com um filtro que cresce com o tempo. Esse núcleo, quando o anel virar uma reta, será o núcleo gaussiano do calor.</p>
+      O calor num instante $t$ é o dado inicial <em>suavizado</em> pelo núcleo $K_t$, cada vez mais largo com o tempo. É a mesma ideia do filtro de média móvel da primeira página, só que com um filtro que cresce com o tempo. Esse núcleo, quando o círculo virar uma reta, será o núcleo gaussiano do calor.</p>
 
       <h2 id="custo" data-toc="Por que vale a pena">Por que vale a pena</h2>
       <ul>
@@ -54,9 +54,9 @@
       </ul>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
-      <p>Resolva o anel com a FFT, confira com a decomposição de matriz e verifique que a solução é uma convolução com $K_t$.</p>
+      <p>Resolva o calor no grafo em anel com a FFT, confira com a decomposição de matriz e verifique que a solução é uma convolução com $K_t$.</p>
 
-      <div class="pycell" data-title="O calor no anel, via FFT"
+      <div class="pycell" data-title="O calor no grafo em anel, via FFT"
            data-starter="../py/calor_fourier_lacunas.py"
            data-solution="../py/calor_fourier_solucao.py"></div>
 
@@ -74,8 +74,8 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">2. O upwind no anel (von Neumann, por outro caminho)</p>
-        <p>O esquema upwind para $u_t+u_x=0$ num anel é $u^{n+1}=u^n-\lambda\,(u^n-Su^n)$, com $\lambda=c\,\Delta t/\Delta x$. A matriz é circulante. Ache seus autovalores $G_k$ e mostre que $|G_k|\le1$ para todo $k$ se e somente se $0\le\lambda\le1$.</p>
+        <p class="tag">2. O upwind no grafo em anel (von Neumann, por outro caminho)</p>
+        <p>O esquema upwind para $u_t+u_x=0$ num grafo em anel é $u^{n+1}=u^n-\lambda\,(u^n-Su^n)$, com $\lambda=c\,\Delta t/\Delta x$. A matriz é circulante. Ache seus autovalores $G_k$ e mostre que $|G_k|\le1$ para todo $k$ se e somente se $0\le\lambda\le1$.</p>
       </aside>
       <details>
         <summary>Solução</summary>
@@ -101,7 +101,7 @@
         <div>
           <h4>Ajuda ler antes</h4>
           <ul>
-            <li><a href="calor-anel.html">O anel e o limite contínuo</a></li>
+            <li><a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a></li>
             <li><a href="dft.html">Transformada de Fourier discreta</a></li>
           </ul>
         </div>

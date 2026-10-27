@@ -77,9 +77,9 @@ for (let it = 0; it < 50; it++) {
   // DFT = avaliação do polinômio u(x) = Σ u_l x^l em x = ω^{−k}
   let ok4 = true; for (let k = 0; k < N; k++) { let re = 0, im = 0; u.forEach((c, l) => { re += c * Math.cos(-2 * Math.PI * l * k / N); im += c * Math.sin(-2 * Math.PI * l * k / N); }); if (Math.abs(re - U[k][0]) > 1e-9 || Math.abs(im - U[k][1]) > 1e-9) ok4 = false; }
   check("DFT(u)_k = u(ω^{−k}) (polinômio avaliado nas raízes de x^N − 1)", ok4);
-  // laplaciano do anel: primeira coluna (2, −1, 0, …, 0, −1), autovalores 2 − 2cos(2πk/N)
+  // laplaciano do grafo em anel: primeira coluna (2, −1, 0, …, 0, −1), autovalores 2 − 2cos(2πk/N)
   const l0 = [2, -1].concat(new Array(N - 3).fill(0), [-1]), Lh = dft(l0);
-  check("L do anel é circulante: autovalores = DFT(2,−1,0,…,−1) = 2 − 2cos(2πk/N)", Lh.every((c, k) => Math.abs(c[0] - (2 - 2 * Math.cos(2 * Math.PI * k / N))) < 1e-9 && Math.abs(c[1]) < 1e-9));
+  check("L do grafo em anel é circulante: autovalores = DFT(2,−1,0,…,−1) = 2 − 2cos(2πk/N)", Lh.every((c, k) => Math.abs(c[0] - (2 - 2 * Math.cos(2 * Math.PI * k / N))) < 1e-9 && Math.abs(c[1]) < 1e-9));
 }
 
 console.log(fails ? "\n" + fails + " falha(s)" : "\ntodos os testes passaram");

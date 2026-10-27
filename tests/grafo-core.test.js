@@ -69,18 +69,18 @@ check("autovetor de λ=3 é ∝ (1,−2,1)", near(Math.abs(eg.vectors[2][0] * Ma
   }
 }
 
-// ---- anel
+// ---- grafo em anel
 {
   for (const N of [5, 8, 12]) {
     const e = G.eigSym(G.laplacian(N, G.ringEdges(N))), teo = []; for (let m = 0; m < N; m++) teo.push(G.ringLambda(N, m));
     teo.sort((a, b) => a - b);
-    check(`anel N=${N}: autovalores 4 sin²(πm/N)`, maxAbs(e.values, teo) < 1e-9);
+    check(`grafo em anel N=${N}: autovalores 4 sin²(πm/N)`, maxAbs(e.values, teo) < 1e-9);
   }
   const N = 10, u0 = Array.from({ length: N }, (_, j) => Math.exp(-((j - 5) ** 2) / 3)), c = 0.7, t = 1.3;
   const e = G.eigSym(G.laplacian(N, G.ringEdges(N)));
-  check("anel: ringSolve (DFT) = autodecomposição", maxAbs(G.ringSolve(u0, c, t), G.evolve(e, u0, c, t)) < 1e-9);
-  check("anel: modo m tem multiplicidade 2 (λ_m = λ_{N−m})", near(G.ringLambda(N, 3), G.ringLambda(N, N - 3), 1e-12));
-  check("anel: λ_max = 4 (N par)", near(G.ringLambda(12, 6), 4, 1e-12));
+  check("grafo em anel: ringSolve (DFT) = autodecomposição", maxAbs(G.ringSolve(u0, c, t), G.evolve(e, u0, c, t)) < 1e-9);
+  check("grafo em anel: modo m tem multiplicidade 2 (λ_m = λ_{N−m})", near(G.ringLambda(N, 3), G.ringLambda(N, N - 3), 1e-12));
+  check("grafo em anel: λ_max = 4 (N par)", near(G.ringLambda(12, 6), 4, 1e-12));
 
   // limite contínuo: c = k/h², erro máximo → 0
   const ell = 2 * Math.PI, k = 0.2, s = 0.5, T = 1.0, errs = [];

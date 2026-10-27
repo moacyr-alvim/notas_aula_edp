@@ -53,9 +53,9 @@ assets/
   cfl-demo.js         demo dos cones de dependência
   lei-core.js         problema de Riemann para u_t + F(u)_x = 0 (fluxos quadráticos), testável em Node
   lei-demo.js         desenho da demo do problema de Riemann (hoje fora das páginas; ver rascunhos/)
-  grafo-core.js       difusão em grafos (L = BᵀCB, autovalores, dois blocos) e o anel de N vértices, testável em Node
+  grafo-core.js       difusão em grafos (L = BᵀCB, autovalores, dois blocos) e o grafo em anel de N vértices, testável em Node
   grafo-demo.js       demo dos dois blocos (λ₂ e o vetor de Fiedler)
-  anel-demo.js        demo do anel contra a equação do calor (limite contínuo)
+  anel-demo.js        demo do grafo em anel contra a equação do calor (limite contínuo)
   conv-core.js        convolução linear e circular (e a regra dos índices que somam), testável em Node
   conv-demo.js        demo da convolução: zeros fora da janela × cópias periódicas
 rascunhos/            material guardado para páginas futuras (não está ligado ao mapa)
@@ -88,7 +88,7 @@ do nó correspondente pelo caminho da página. O índice lateral é gerado dos `
 
 ```bash
 node tests/burgers-core.test.js     # matemática da demo de Burgers (fórmulas exatas e Godunov)
-node tests/grafo-core.test.js       # difusão em grafos e anel: L = BᵀB, evolução contra Runge–Kutta, limite contínuo O(h²)
+node tests/grafo-core.test.js       # difusão em grafos e grafo em anel: L = BᵀB, evolução contra Runge–Kutta, limite contínuo O(h²)
 node tests/conv-core.test.js        # convolução, matriz circulante, shift S, DFT e teorema da convolução
 node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot (para a futura página de Hamilton–Jacobi)
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
