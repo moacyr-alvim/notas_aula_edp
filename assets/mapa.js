@@ -30,8 +30,8 @@
 
   // href: null  =>  "em breve"
   var NODES = [
-    { id: "carac1", lane: "carac", col: 0, label: "Características\nde 1ª ordem", href: null, trails: ["basico", "choques", "variacional"],
-      desc: "O sistema de EDOs ao longo de curvas: x, z e p caminham juntos." },
+    { id: "carac1", lane: "carac", col: 0, label: "Características\nde 1ª ordem", href: "paginas/caracteristicas-1a-ordem.html", trails: ["basico", "choques", "variacional"],
+      desc: "O sistema de EDOs ao longo de curvas: x, z e p caminham juntos. Com exercícios: quase linear, Evans, Hamilton–Jacobi, eikonal e a prova de existência local." },
     { id: "transp", lane: "carac", col: 1, label: "Equação de\ntransporte", href: null, trails: ["basico", "numerico"],
       desc: "O caso mais simples: retas paralelas e u(x,t) = f(x − ct)." },
     { id: "burgers", lane: "choques", col: 1, label: "Burgers, quebra\ne choques", href: "paginas/burgers.html", trails: ["basico", "choques", "variacional"],
@@ -42,8 +42,8 @@
       desc: "Usar só o balanço em intervalos para admitir saltos; dele sai Rankine–Hugoniot." },
     { id: "rh", lane: "choques", col: 4, label: "Rankine–Hugoniot", href: "paginas/burgers.html#rankine-hugoniot", trails: ["choques"],
       desc: "A velocidade do choque a partir da conservação. Está dentro da página de Burgers." },
-    { id: "lwr", lane: "choques", col: 5, label: "Modelo LWR\n(trânsito)", href: null, trails: ["choques"],
-      desc: "Engarrafamentos como choques e o sinal verde como rarefação." },
+    { id: "lwr", lane: "choques", col: 5, label: "Modelo LWR\n(trânsito)", href: "paginas/modelo-lwr.html", trails: ["choques"],
+      desc: "Engarrafamentos como choques que andam para trás e o sinal verde como rarefação. Com os exercícios e o carro que acompanha a onda." },
     { id: "hj", lane: "var", col: 1, label: "Hamilton–Jacobi", href: null, trails: ["variacional"],
       desc: "u_t + H(Du,x) = 0, as equações de Hamilton como características e a escolha da solução física entre as fracas (condição de Lax)." },
     { id: "el", lane: "var", col: 2, label: "Euler–Lagrange\ne Legendre", href: null, trails: ["variacional"],

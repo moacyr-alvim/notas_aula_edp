@@ -1,4 +1,4 @@
-<!doctype html>
+&lt;!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -73,11 +73,11 @@
       <ul>
         <li>Onda, $u_{yy}-c^2u_{xx}=0$: $A=-c^2$, $B=0$, $C=1$, então $\Delta=c^2>0$.</li>
         <li>Calor, $u_{xx}=u_y$: só a derivada segunda em $x$ conta na parte principal, $A=1$, $B=C=0$, então $\Delta=0$. ($u_y$ é de primeira ordem e não entra.)</li>
-        <li>Laplace, $u_{xx}+u_{yy}=0$: $A=C=1$, $B=0$, então $\Delta=-1<0$.</li>
+        <li>Laplace, $u_{xx}+u_{yy}=0$: $A=C=1$, $B=0$, então $\Delta=-1&lt;0$.</li>
       </ul>
 
       <h2 id="muda" data-toc="O tipo pode mudar">O tipo pode mudar de ponto a ponto</h2>
-      <p>Quando $A,B,C$ dependem de $(x,y)$, o tipo também depende. O exemplo clássico é a equação de Tricomi, $y\,u_{xx}+u_{yy}=0$ (que aparece em escoamento perto da velocidade do som): $A=y$, $B=0$, $C=1$, logo $\Delta=-y$. É elíptica para $y>0$, hiperbólica para $y<0$ e parabólica sobre a reta $y=0$.</p>
+      <p>Quando $A,B,C$ dependem de $(x,y)$, o tipo também depende. O exemplo clássico é a equação de Tricomi, $y\,u_{xx}+u_{yy}=0$ (que aparece em escoamento perto da velocidade do som): $A=y$, $B=0$, $C=1$, logo $\Delta=-y$. É elíptica para $y>0$, hiperbólica para $y&lt;0$ e parabólica sobre a reta $y=0$.</p>
 
       <h2 id="calor-laplace" data-toc="Calor e Laplace">Por que calor e Laplace não se rendem</h2>
       <p>A equação da onda cai com facilidade no método das características: duas famílias de retas, uma informação viajando em cada uma, e acabou (próxima página). Vejamos o que acontece com as outras duas.</p>
@@ -139,8 +139,8 @@
         <div class="body">
           <p>(a) $A=1$, $B=1$, $C=1$: $\Delta=1-1=0$, <b>parabólica</b>. A direção característica é $\dot x^2-2\dot x\dot y+\dot y^2=(\dot x-\dot y)^2=0$, isto é, as retas $y=x+k$.</p>
           <p>(b) $A=1$, $B=2$, $C=4$: $\Delta=4-4=0$, <b>parabólica</b>. $4\dot x^2-4\dot x\dot y+\dot y^2=(2\dot x-\dot y)^2=0$, as retas $y=2x+k$.</p>
-          <p>(c) $A=1$, $B=0$, $C=e^{-x}$: $\Delta=-e^{-x}<0$ em todo ponto, <b>elíptica</b>.</p>
-          <p>(d) Não é semilinear: a parte principal depende de $u$. Pela condição geral, $F=u_{xx}u_{yy}-u_{xy}^2-1$ tem $F_{u_{xx}}=u_{yy}$, $F_{u_{xy}}=-2u_{xy}$ e $F_{u_{yy}}=u_{xx}$, e a equação das características é $u_{xx}\dot x^2+2u_{xy}\dot x\dot y+u_{yy}\dot y^2=0$. Aqui o "$\Delta$" é $u_{xy}^2-u_{xx}u_{yy}=-1<0$, para toda solução: <b>elíptica</b>. Em outras palavras, a equação diz $\det D^2u=1>0$, a hessiana é definida e a forma quadrática acima nunca se anula. (Com $u_{xx}u_{yy}-u_{xy}^2=-c^2$ seria hiperbólica.)</p>
+          <p>(c) $A=1$, $B=0$, $C=e^{-x}$: $\Delta=-e^{-x}&lt;0$ em todo ponto, <b>elíptica</b>.</p>
+          <p>(d) Não é semilinear: a parte principal depende de $u$. Pela condição geral, $F=u_{xx}u_{yy}-u_{xy}^2-1$ tem $F_{u_{xx}}=u_{yy}$, $F_{u_{xy}}=-2u_{xy}$ e $F_{u_{yy}}=u_{xx}$, e a equação das características é $u_{xx}\dot x^2+2u_{xy}\dot x\dot y+u_{yy}\dot y^2=0$. Aqui o "$\Delta$" é $u_{xy}^2-u_{xx}u_{yy}=-1&lt;0$, para toda solução: <b>elíptica</b>. Em outras palavras, a equação diz $\det D^2u=1>0$, a hessiana é definida e a forma quadrática acima nunca se anula. (Com $u_{xx}u_{yy}-u_{xy}^2=-c^2$ seria hiperbólica.)</p>
         </div>
       </details>
 

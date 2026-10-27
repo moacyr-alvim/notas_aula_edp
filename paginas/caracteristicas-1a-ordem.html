@@ -1,0 +1,230 @@
+&lt;!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Características de 1ª ordem — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Características de 1ª ordem</h1>
+        <p class="lede">Uma EDP de primeira ordem, ao longo de curvas escolhidas a dedo, vira um sistema de EDOs. A escolha é uma só: a tangente tem que ser $\nabla_p F$.</p>
+        <p class="meta">Ponto de partida para <a href="burgers.html">Burgers</a>, <a href="leis-conservacao.html">leis de conservação</a>, Hamilton–Jacobi e <a href="caracteristicas-2a-ordem.html">segunda ordem</a>.</p>
+      </header>
+
+      <h2 id="ideia" data-toc="A ideia">Andar por um caminho onde a EDP fica sozinha</h2>
+      <p>Queremos $u(\vec x)$ com $F(\vec x,u,Du)=0$. Vamos andar por um caminho $\vec x(s)$ carregando, junto, o valor $z(s)=u(\vec x(s))$ e o gradiente $\vec p(s)=Du(\vec x(s))$. O sonho é um caminho em que a EDP, reduzida a ele, seja <em>autossuficiente</em>: $z$ e $\vec p$ dependam só do caminho e deles mesmos, sem precisar saber como $u$ se comporta nos lados. A EDP vira então um sistema de EDOs.</p>
+
+      <h2 id="truque" data-toc="O truque">O truque</h2>
+      <p>Derivando $z$ e $\vec p$ em $s$ saem as equações de contato:
+      $$z_s=\vec p\cdot\vec x_s,\qquad \vec p_s=D^2u\;\vec x_s.$$
+      A segunda tem um problema: envolve a hessiana $D^2u$, que não conhecemos. Mas conhecemos uma identidade com ela: derive $F(\vec x,u,Du)=0$ em $\vec x$,
+      $$\nabla_{\vec x}F+F_z\,\vec p+D^2u\;\nabla_{\vec p}F=0.$$
+      Agora é só escolher o caminho para que a hessiana apareça do mesmo jeito: se $\vec x_s=\nabla_{\vec p}F$, então $\vec p_s=D^2u\,\nabla_{\vec p}F=-\nabla_{\vec x}F-F_z\vec p$, e a hessiana some. Resultado:</p>
+      <aside class="box">
+        <p><b>Equações características.</b>
+        $$\boxed{\;\vec x_s=\nabla_{\vec p}F,\qquad \vec p_s=-\nabla_{\vec x}F-F_z\,\vec p,\qquad z_s=\vec p\cdot\vec x_s.\;}$$
+        São EDOs: dados $\vec x(0)$, $\vec p(0)$ e $z(0)$, o sistema constrói o caminho, o gradiente e o valor de $u$ ao longo dele. Em particular, $F(\vec x,z,\vec p)=0$ continua valendo em todos os pontos do caminho se valer no primeiro.</p>
+      </aside>
+      <p>Em duas variáveis, $(x,t)$, escreve-se $\vec p=(p,q)=(u_x,u_t)$ e a EDP como $F(x,t,z,p,q)=0$; o sistema acima tem cinco equações (exercício 1).</p>
+
+      <h2 id="receita" data-toc="A receita">A receita para um problema de valor inicial</h2>
+      <p>Para $F(x,t,u,u_x,u_t)=0$ com $u(x,0)=f(x)$:</p>
+      <ol>
+        <li>Escolha um ponto de partida $x_0$ no eixo e imponha $x(0)=x_0$, $t(0)=0$, $z(0)=f(x_0)$, $p(0)=f'(x_0)$.</li>
+        <li>Escolha $q(0)=q_0$ de modo que a EDP valha ali: $F(x_0,0,f(x_0),f'(x_0),q_0)=0$.</li>
+        <li>Resolva as EDOs. Isso dá $x(x_0,s)$, $t(x_0,s)$, $z(x_0,s)$.</li>
+        <li>Se for possível inverter $(x_0,s)\mapsto(x,t)$, escreva $x_0$ e $s$ em função de $(x,t)$ e então $u(x,t)=z(x_0,s)$.</li>
+      </ol>
+      <p>O passo 4 é onde as coisas podem dar errado: quando duas características se cruzam, a inversão falha. É o que acontece em Burgers (<a href="burgers.html">próxima parada</a>).</p>
+
+      <h2 id="onde" data-toc="Onde isso aparece">Casos que vamos usar</h2>
+      <ul>
+        <li><b>Transporte</b> $u_t+cu_x=0$: características retas e paralelas, $u$ constante nelas (exercício 3).</li>
+        <li><b>Burgers e leis de conservação</b> $u_t+F(u)_x=0$: $u$ constante, mas a inclinação das retas depende de $u$ (<a href="burgers.html">Burgers</a> e <a href="leis-conservacao.html">leis de conservação</a>).</li>
+        <li><b>Hamilton–Jacobi</b> $u_t+H(u_x)=0$: o gradiente se conserva e $z$ cresce linearmente, com uma Legendre à espreita (exercício 5).</li>
+        <li><b>Eikonal</b> $|Du|=1$: raios de luz, retas perpendiculares às frentes de onda (exercício 6).</li>
+        <li><b>Segunda ordem</b>: a mesma ideia, com outra pergunta (<a href="caracteristicas-2a-ordem.html">próxima trilha</a>).</li>
+      </ul>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. As características em duas variáveis</p>
+        <p>Exiba as equações diferenciais características do problema de valor inicial $\left\{\begin{array}{l}F(u,u_t,u_x,x,t)=0\\u(x,0)=f(x)\end{array}\right.$, onde $u$ depende apenas de duas variáveis $(x,t)$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $z=u$, $p=u_x$, $q=u_t$, escreva a EDP como $F(x,t,z,p,q)=0$. Pelas equações características,
+          $$x_s=F_p,\quad t_s=F_q,\quad z_s=p\,x_s+q\,t_s=pF_p+qF_q,\quad p_s=-F_x-pF_z,\quad q_s=-F_t-qF_z.$$
+          Os dados iniciais são $x(0)=x_0$, $t(0)=0$, $z(0)=f(x_0)$, $p(0)=f'(x_0)$ e $q(0)=q_0$, com $q_0$ escolhido de modo que $F(x_0,0,f(x_0),f'(x_0),q_0)=0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. EDP quase linear</p>
+        <p>Considere $\left\{\begin{array}{l}a(x,t,u)\,u_x+b(x,t,u)\,u_t=c(x,t,u),\\u(x,0)=f(x).\end{array}\right.$ Determine as equações características e os dados iniciais associados.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Escrevendo $z=u$, $p=u_x$, $q=u_t$: $F(x,t,z,p,q)=a(x,t,z)\,p+b(x,t,z)\,q-c(x,t,z)=0$. Como $F_p=a$ e $F_q=b$, as duas primeiras características são $x_s=a$ e $t_s=b$. Além disso, usando a própria EDP na equação de contato,
+          $$z_s=p\,x_s+q\,t_s=ap+bq=c.$$
+          Então não precisamos acompanhar $p$ e $q$: basta resolver
+          $$x_s=a(x,t,z),\qquad t_s=b(x,t,z),\qquad z_s=c(x,t,z),$$
+          com $x(0)=x_0$, $t(0)=0$, $z(0)=f(x_0)$. As informações de $p$ e $q$ no início seriam $p(0)=f'(x_0)$ e, quando $b\ne0$, $q(0)=\dfrac{c-a\,f'(x_0)}{b}$ (calculados em $(x_0,0,f(x_0))$). Depois de resolver, inverte-se $(x_0,s)\mapsto(x,t)$ e substitui-se em $z(x_0,s)$ para obter $u(x,t)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Transporte</p>
+        <p>Calcule as características de $\left\{\begin{array}{l}u_t+c\,u_x=0\\u(x,0)=f(x)\end{array}\right.$ e encontre a solução para todo $x\in\mathbb R$ e $t\ge0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>As características são
+          $$z_s=p\,x_s+q\,t_s,\quad p_s=0,\quad q_s=0,\quad x_s=c,\quad t_s=1.$$
+          Com a EDP, $z_s=pc+q=0$, então $z=z_0=f(x_0)$: o valor inicial é carregado pela característica. As equações $x_s=c$ e $t_s=1$ dão $x=x_0+cs$ e $t=s$ (a característica sai do eixo, $t(0)=0$), de modo que o parâmetro é o próprio tempo. As características são as retas paralelas $x=x_0+ct$.</p>
+          <figure class="fig">
+<svg viewBox="0 0 360 190" role="img" aria-labelledby="fgtr" style="width:100%;height:auto;max-width:380px;display:block;margin:0 auto">
+  <title id="fgtr">No plano x–t, retas paralelas de inclinação 1/c. A reta que passa por P chega ao eixo x no ponto x − ct, de onde vem o valor de u em P.</title>
+  <g font-family="sans-serif" font-size="12" style="fill:var(--ink)">
+    <line x1="20" y1="160" x2="345" y2="160" style="stroke:var(--ink-soft)" stroke-width="1.4"/>
+    <line x1="20" y1="160" x2="20" y2="12" style="stroke:var(--ink-soft)" stroke-width="1.4"/>
+    <text x="345" y="178" text-anchor="end">x</text><text x="30" y="20">t</text>
+    <g style="stroke:var(--carac)" stroke-width="1.8" fill="none" opacity="0.55">
+      <line x1="40" y1="160" x2="130" y2="22"/><line x1="90" y1="160" x2="180" y2="22"/><line x1="190" y1="160" x2="280" y2="22"/><line x1="240" y1="160" x2="330" y2="22"/>
+    </g>
+    <line x1="140" y1="160" x2="230" y2="22" style="stroke:var(--carac)" stroke-width="2.8"/>
+    <circle cx="140" cy="160" r="4.5" style="fill:var(--carac)"/>
+    <circle cx="196" cy="74" r="5" style="fill:var(--ink)"/>
+    <text x="206" y="72" font-weight="bold">P = (x, t)</text>
+    <text x="140" y="178" text-anchor="middle">x − ct</text>
+  </g>
+</svg>
+            <figcaption>As características do transporte são retas paralelas; o valor em $P$ vem do ponto $x-ct$ do eixo.</figcaption>
+          </figure>
+
+          <p>Para achar $u$ em $P=(x,t)$, percorra a característica que passa por $P$ até o eixo $x$: ela parte de $x_0=x-ct$. Logo
+          $$u(x,t)=f(x-ct).$$</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Um exemplo do livro do Evans</p>
+        <p>Resolva $\left\{\begin{array}{l}x\,u_t-t\,u_x=u\\u(x,0)=f(x)\end{array}\right.$ para $x\ge0$, $t\ge0$: determine $u(x,t)$ para todo $(x,t)$ no primeiro quadrante.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>É do tipo do exercício 2, com $a=-t$, $b=x$, $c=u$. As características são
+          $$x_s=-t,\qquad t_s=x,\qquad z_s=z,\qquad x(0)=x_0,\ t(0)=0,\ z(0)=f(x_0).$$
+          As duas primeiras dão $x_{ss}=-t_s=-x$, ou seja, $x=x_0\cos s$ e $t=x_0\sin s$: as características são círculos em torno da origem, $x^2+t^2=x_0^2$, percorridos com velocidade angular $1$. E $z=f(x_0)\,e^{s}$.</p>
+          <p>No primeiro quadrante, dado $(x,t)$: $x_0=\sqrt{x^2+t^2}$ e $s=\arctan(t/x)\in[0,\pi/2]$ (o ângulo do ponto; em $x=0$, $s=\pi/2$). Então
+          $$u(x,t)=f\big(\sqrt{x^2+t^2}\big)\;e^{\arctan(t/x)}.$$
+          Conferindo: com $r=\sqrt{x^2+t^2}$ e $\theta=\arctan(t/x)$, $\theta_x=-t/r^2$ e $\theta_t=x/r^2$, e as parcelas com $f'$ se cancelam em $xu_t-tu_x$, sobrando $f\,e^\theta\,(x^2+t^2)/r^2=u$.</p>
+        </div>
+      </details>
+
+      <aside class="box">
+        <p><b>Já feitos em outras páginas.</b> As características de Burgers com a rampa e os cinco instantes estão no exercício 1 de <a href="burgers.html#exercicios">Burgers</a>. As características de uma lei de conservação $u_t+(F(u))_x=0$ estão no exercício 1 de <a href="leis-conservacao.html#exercicios">Leis de conservação</a>.</p>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Hamilton–Jacobi</p>
+        <p>Descreva as equações características de $\left\{\begin{array}{l}u_t+H(u_x)=0\\u(x,0)=f(x)\end{array}\right.$</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$F(x,t,z,p,q)=q+H(p)$, com $F_p=H'(p)$, $F_q=1$ e $F_x=F_t=F_z=0$. Então
+          $$x_s=H'(p),\quad t_s=1,\quad p_s=0,\quad q_s=0,\quad z_s=p\,H'(p)+q=p\,H'(p)-H(p),$$
+          usando $q=-H(p)$ (a própria EDP). Como $p_s=0$, $p=f'(x_0)$ é constante: as características são retas $x=x_0+t\,H'(f'(x_0))$, e
+          $$z=f(x_0)+t\,\big[p\,H'(p)-H(p)\big]_{p=f'(x_0)}.$$
+          O colchete é a transformada de Legendre de $H$ calculada em $v=H'(p)$; é ela que aparece na fórmula de Hopf–Lax. Para $H(p)=p^2/2$ são as retas de Burgers para $v=u_x$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Eikonal</p>
+        <p>Considere $\left\{\begin{array}{ll}u_x^2+u_y^2=1\\u(x,y)=0&\text{quando }x^2+y^2=4.\end{array}\right.$ Note que a circunferência é a curva de nível $0$ de $u$. Assuma que a função cresce quando se afasta do círculo inicial (o gradiente aponta para fora do círculo). Encontre a solução $u(x,y)$ em todo o plano $xy$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$F(x,y,z,p,q)=p^2+q^2-1$ dá $x_s=2p$, $y_s=2q$, $z_s=px_s+qy_s=2(p^2+q^2)=2$, $p_s=q_s=0$. Então $(p,q)$ é constante em cada característica, que é uma reta com a direção do gradiente, percorrida com $z_s=2$.</p>
+          <p>Em um ponto do círculo, $(x_0,y_0)=2(\cos\theta,\sin\theta)$. Como $u=0$ no círculo, o gradiente é perpendicular a ele, isto é, $(p,q)=\pm(\cos\theta,\sin\theta)$, e a escolha "para fora" é o sinal $+$. Logo
+          $$(x,y)=2(1+s)(\cos\theta,\sin\theta),\qquad z=2s.$$
+          Com $r=\sqrt{x^2+y^2}=2(1+s)$ temos $s=r/2-1$ e
+          $$u(x,y)=\sqrt{x^2+y^2}-2.$$
+          A solução é a distância com sinal ao círculo (negativa dentro). Ela vale em todo o plano, exceto na origem: para $s&lt;0$ as características caminham para dentro e todas se encontram em $s=-1$, no centro, onde $u$ tem uma ponta de cone e não é derivável.</p>
+          <p>(Se a frase "o gradiente aponta para fora" valesse só do lado de fora, e dentro do disco a função crescesse em direção ao centro, a parte de dentro seria $2-r$, um cone com a ponta em $u=2$. A parte de fora, $r-2$, é a mesma nos dois casos.)</p>
+        </div>
+      </details>
+
+      <h2 id="existencia" data-toc="Por que funciona">Por que funciona: existência e unicidade local</h2>
+      <p>Um roteiro para mostrar que a receita dá, perto do eixo, uma solução, e que é a única. Considere o problema $u_t+F(u,u_x,x,t)=0$, $u(x,0)=f(x)$, com $F$ infinitamente diferenciável em todas as variáveis e $f\in C^\infty(\mathbb R)$. Suponha que em certo ponto $(x_0,0)$ temos $F_p(z,p,x_0,0)\neq0$ e também $F(f(x_0),f'(x_0),x_0,0)\neq0$.</p>
+
+      <aside class="box exercicio">
+        <p class="tag">7. Existência e unicidade local</p>
+        <ol type="a">
+          <li>Explique por que existe uma função $q(\bar x)$ definida em pontos $\bar x$ numa vizinhança de $x_0$ tal que $q(\bar x)+F(f(\bar x),f'(\bar x),\bar x,0)=0$.</li>
+          <li>Explique por que, para $\bar x$ suficientemente próximo de $x_0$, o sistema de equações diferenciais que definem a característica tem solução única e as soluções variam continuamente com $\bar x$. As características envolvem a "característica projetada" $\gamma(s)=(x(s),t(s))$ mais as informações complementares $p(s)$, $q(s)$, $z(s)$, com dados iniciais $\gamma(0)=(\bar x,0)$, $z(0)=f(\bar x)$, $p(0)=f'(\bar x)$ e $q(0)=-F(f(\bar x),f'(\bar x),\bar x,0)$.</li>
+          <li>Seja $x(\bar x,s)$ e $t(\bar x,s)$ o ponto correspondente à característica projetada que se inicia em $x=\bar x$ e $t=0$. Mostre que, numa vizinhança de $(x_0,0)$, existe uma mudança de coordenadas (aplicação diferenciável invertível com inversa diferenciável) $T(x,t)=(\bar x,s)$ (claro que $T(x_0,0)=(x_0,0)$). Ou seja, mostre que para qualquer ponto $(x,t)$ numa vizinhança de $(x_0,0)$ podemos encontrar o ponto de partida $\bar x$ e o parâmetro da característica $s$ de modo que $(x,t)=\gamma(\bar x,s)$.</li>
+          <li>Mostre que nessa vizinhança, as funções $u(x,t)=z(\bar x,s)$, $P(x,t)=p(\bar x,s)$ e $Q(x,t)=q(\bar x,s)$ satisfazem $Q(x,t)+F(u,P,x,t)=0$.</li>
+          <li>Mostre que $P(x,t)=u_x(x,t)$ e $Q(x,t)=u_t(x,t)$.</li>
+        </ol>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Escreva $\Phi(x,t,z,p,q)=q+F(z,p,x,t)$, de modo que a EDP é $\Phi=0$, com $\Phi_x=F_x$, $\Phi_t=F_t$, $\Phi_z=F_z$, $\Phi_p=F_p$, $\Phi_q=1$.</p>
+          <p><b>(a)</b> Basta tomar $q(\bar x)=-F(f(\bar x),f'(\bar x),\bar x,0)$: composição de funções infinitamente diferenciáveis, então é infinitamente diferenciável. (Como $u_t$ aparece isolada na EDP, não é preciso o teorema da função implícita.)</p>
+          <p><b>(b)</b> As características são
+          $$x_s=F_p,\quad t_s=1,\quad z_s=pF_p+q,\quad p_s=-F_x-pF_z,\quad q_s=-F_t-qF_z,$$
+          com lado direito infinitamente diferenciável em $(x,t,z,p,q)$. Pelo teorema de existência e unicidade para EDOs (Picard–Lindelöf), cada dado inicial dá uma solução única, definida em um intervalo $|s|&lt;\delta$, e a solução depende de modo diferenciável do dado inicial. Os dados dependem diferenciavelmente de $\bar x$, e $\delta$ pode ser tomado o mesmo para todos os $\bar x$ de uma vizinhança de $x_0$.</p>
+          <p><b>(c)</b> A aplicação $(\bar x,s)\mapsto(x,t)$ é diferenciável, com $t_s=1$, $t(\bar x,0)=0$ (logo $t_{\bar x}=0$ em $s=0$) e $x(\bar x,0)=\bar x$ (logo $x_{\bar x}=1$). A jacobiana em $s=0$ é $\begin{pmatrix}x_{\bar x}&x_s\\t_{\bar x}&t_s\end{pmatrix}=\begin{pmatrix}1&F_p\\0&1\end{pmatrix}$, de determinante $1\ne0$. Pelo teorema da função inversa, a aplicação é um difeomorfismo local, e $T$ é a inversa. (Observe que as hipóteses $F_p\ne0$ e $F\ne0$ não foram usadas: aqui $t_s=F_q=1$ já garante o determinante. Para uma $F$ geral o análogo é $F_q\neq0$ no ponto.)</p>
+          <p><b>(d)</b> Ao longo de cada característica, $\dfrac{d}{ds}\Phi=\Phi_xx_s+\Phi_tt_s+\Phi_zz_s+\Phi_pp_s+\Phi_qq_s=F_xF_p+F_t+F_z(pF_p+q)+F_p(-F_x-pF_z)+(-F_t-qF_z)=0.$ Em $s=0$, $\Phi=q(\bar x)+F(f,f',\bar x,0)=0$ pela escolha de $q$. Logo $\Phi\equiv0$ ao longo da característica, isto é, $Q+F(u,P,x,t)=0$ nas coordenadas $(x,t)$ da vizinhança.</p>
+          <p><b>(e)</b> Defina $a(\bar x,s)=z_{\bar x}-p\,x_{\bar x}-q\,t_{\bar x}$. Em $s=0$: $z_{\bar x}=f'(\bar x)$, $p=f'(\bar x)$, $x_{\bar x}=1$ e $t_{\bar x}=0$, então $a(\bar x,0)=0$. Derivando em $s$, usando $z_s=px_s+qt_s$ (que vale porque $x_s=F_p$, $t_s=F_q$) para trocar a ordem das derivadas,
+          $$a_s=p_{\bar x}x_s+q_{\bar x}t_s-p_sx_{\bar x}-q_st_{\bar x}=p_{\bar x}\Phi_p+q_{\bar x}\Phi_q+(\Phi_x+p\Phi_z)x_{\bar x}+(\Phi_t+q\Phi_z)t_{\bar x}.$$
+          Por outro lado, derivando $\Phi(x,t,z,p,q)=0$ em $\bar x$ (vale pelo item d): $\Phi_xx_{\bar x}+\Phi_tt_{\bar x}+\Phi_zz_{\bar x}+\Phi_pp_{\bar x}+\Phi_qq_{\bar x}=0$. Subtraindo, $a_s=-\Phi_z\,z_{\bar x}+\Phi_z(p\,x_{\bar x}+q\,t_{\bar x})=-\Phi_z\,a$. Uma EDO linear com $a(\bar x,0)=0$ tem solução $a\equiv0$. Então $z_{\bar x}=px_{\bar x}+qt_{\bar x}$ e $z_s=px_s+qt_s$, ou seja, $dz=p\,dx+q\,dt$ em coordenadas $(\bar x,s)$. Mudando para $(x,t)$ (item c), $du=P\,dx+Q\,dt$, isto é, $u_x=P$ e $u_t=Q$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Só cálculo de várias variáveis e EDOs</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+            <li><a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a></li>
+            <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

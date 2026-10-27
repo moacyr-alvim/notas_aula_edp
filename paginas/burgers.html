@@ -187,11 +187,77 @@
         </div>
       </details>
 
+      <h3 id="exercicios-hj">Hamilton–Jacobi</h3>
+      <p>Estes usam a equação $u_t+H(u_x)=0$ e a fórmula de Hopf–Lax, $u(x,t)=\min_y\big\{t\,L\big(\tfrac{x-y}{t}\big)+f(y)\big\}$, onde $L$ é a transformada de Legendre de $H$, $L(v)=\sup_p\{pv-H(p)\}$. (Nos exercícios, a solução de Hamilton–Jacobi se chama $u$ e o dado, $f$; no texto acima eram $w$ e $F_0$.) Voltam quando a página de Hamilton–Jacobi existir.</p>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Legendre</p>
+        <p>Calcule a transformada de Legendre dos hamiltonianos $H(p)=\dfrac{p^2}{2}$ e $H(p)=\dfrac{p^2}{2m}+V$, onde $m>0$ e $V$ é constante.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $H=p^2/2$: $pv-p^2/2$ tem máximo em $p=v$, e $L(v)=v^2/2$.</p>
+          <p>Para $H=p^2/(2m)+V$: $pv-p^2/(2m)-V$ tem máximo em $p=mv$, e $L(v)=mv^2-\dfrac{mv^2}{2}-V=\dfrac{mv^2}{2}-V$. A constante $V$ do hamiltoniano entra com sinal trocado no lagrangiano.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. Hopf–Lax com dois dados</p>
+        <p>Use a fórmula de Hopf–Lax para determinar explicitamente as soluções de $u_t+\dfrac{u_x^2}{2}=0$, $u(x,0)=f(x)$, para (a) $f(x)=x$ se $x\le0$ e $f(x)=0$ se $x>0$; (b) $f(x)=0$ se $x\le0$ e $f(x)=x$ se $x>0$. Determine também as regiões onde as soluções são diferenciáveis e interprete $u_x$ em termos de choques ou rarefações.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $L(v)=v^2/2$, $u(x,t)=\min_y G(y)$, $G(y)=f(y)+\dfrac{(x-y)^2}{2t}$.</p>
+          <p>(a) Para $y\le0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ (válido se $x\le t$), com valor $x-t/2$. Para $y\ge0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ (se $x\ge0$). Para $x&lt;0$ o ramo $y\ge0$ só dá $x^2/(2t)$, que supera $x-t/2$ (porque $x^2/(2t)-x+t/2=(x-t)^2/(2t)\ge0$). Para $0\le x\le t$ os dois ramos competem, e o primeiro vence quando $x-t/2&lt;0$. Resultado:
+          $$u(x,t)=\begin{cases}x-t/2,&x&lt;t/2,\\0,&x\ge t/2.\end{cases}$$
+          É derivável em todo ponto, exceto na reta $x=t/2$. Ali $u_x$ salta de $1$ (à esquerda) para $0$ (à direita): para baixo, então é um <b>choque</b>, com velocidade $\tfrac{1+0}2=\tfrac12$ (é o degrau do exercício 5).</p>
+          <p>(b) Para $y\le0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ se $x\le0$, e $x^2/(2t)$ em $y=0$ se $x>0$. Para $y\ge0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ se $x\ge t$ (valor $x-t/2$) e em $y=0$ se $x\le t$ (valor $x^2/(2t)$). Comparando,
+          $$u(x,t)=\begin{cases}0,&x\le0,\\x^2/(2t),&0&lt;x&lt;t,\\x-t/2,&x\ge t.\end{cases}$$
+          Aqui $u_x=0$, $x/t$, $1$: contínua. É um <b>leque de rarefação</b>, e $u$ é derivável em todo ponto com $t>0$ (a derivada segunda é que salta, em $x=0$ e $x=t$).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">8. A derivada resolve uma lei de conservação</p>
+        <p>Suponha que $u$ seja uma solução clássica de $u_t+H(u_x)=0$. Mostre que $v=u_x$ satisfaz $v_t+[H(v)]_x=0$. Explique por que esse cálculo deixa de ser suficiente quando $u$ não é diferenciável.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Derive a EDP em $x$: $u_{tx}+H'(u_x)\,u_{xx}=0$, isto é, $v_t+H'(v)\,v_x=0$, que é $v_t+[H(v)]_x=0$. A conta usa $u_{tx}$ e $u_{xx}$, que existem se $u\in C^2$. Nas dobras de $u$ (como a reta $x=t/2$ do exercício 7a) $v$ tem salto e essas derivadas não existem. Daí só resta a forma fraca da lei de conservação, e já vimos que ela admite várias soluções (o exercício 4 mostra isso em Burgers, com a rarefação e o choque "ao contrário"). É preciso outro critério para escolher a boa: Hopf–Lax, entropia ou, depois, soluções de viscosidade.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">9. Por que a reta minimiza</p>
+        <p>Use a desigualdade de Jensen para mostrar que, entre todas as curvas $\gamma$ tais que $\gamma(0)=y$ e $\gamma(t)=x$, a reta $\gamma(s)=y+\dfrac st(x-y)$ minimiza $\int_0^tL(\dot\gamma(s))\,ds$ quando $L$ é convexa.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Jensen para a média, com $L$ convexa: $L\Big(\dfrac1t\displaystyle\int_0^t\dot\gamma\,ds\Big)\le\dfrac1t\displaystyle\int_0^tL(\dot\gamma)\,ds$. A média de $\dot\gamma$ é $\dfrac{\gamma(t)-\gamma(0)}t=\dfrac{x-y}t$, então $\displaystyle\int_0^tL(\dot\gamma)\,ds\ge t\,L\Big(\dfrac{x-y}t\Big)$. Para a reta, $\dot\gamma=(x-y)/t$ é constante e vale a igualdade: $\int_0^tL(\dot\gamma)\,ds=t\,L\big(\tfrac{x-y}t\big)$. Logo nenhuma curva faz menos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">10. Quando as características de Hamilton–Jacobi não se cruzam</p>
+        <p>Considere $H(p)=p^2/2$ e uma função inicial $f\in C^2(\mathbb R)$. Mostre que as características clássicas são $x(t)=x_0+t\,f'(x_0)$. Determine uma condição em termos de $f''$ que garanta que elas não se cruzem até um tempo $T>0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $H'(p)=p$ e $p$ constante em cada característica (exercício 5 da página de <a href="caracteristicas-1a-ordem.html#exercicios">características de 1ª ordem</a>), $p=f'(x_0)$ e $x(t)=x_0+t\,f'(x_0)$.</p>
+          <p>Duas características não se cruzam em $[0,T]$ quando, para cada $t\in[0,T]$, a aplicação $x_0\mapsto x_0+tf'(x_0)$ é injetiva. Basta que ela seja estritamente crescente: $1+t\,f''(x_0)>0$ para todo $x_0$ e todo $t\in[0,T]$. Como é linear em $t$, isso vale se e só se $f''(x_0)>-1/T$ para todo $x_0$ (em $t=T$ é a condição mais exigente). Se $f''\ge0$ nunca há cruzamento; se $\inf f''&lt;0$, o primeiro cruzamento é em $t^*=-1/\inf f''$ (é a mesma conta do tempo de quebra de Burgers, com $u=u_x$).</p>
+        </div>
+      </details>
+
       <nav class="nextprev" aria-label="Navegação">
         <div>
           <h4>Ajuda ler antes</h4>
           <ul>
-            <li class="soon">Características de 1ª ordem (em breve)</li>
+            <li><a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a></li>
           </ul>
         </div>
         <div>
@@ -199,7 +265,7 @@
           <ul>
             <li><a href="leis-conservacao.html">Leis de conservação</a></li>
             <li><a href="solucao-fraca.html">Solução fraca</a></li>
-            <li class="soon">Modelo LWR de trânsito (em breve)</li>
+            <li><a href="modelo-lwr.html">Modelo LWR de trânsito</a></li>
             <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
             <li><a href="upwind.html">Upwind: seguir a característica</a></li>
           </ul>

@@ -1,0 +1,281 @@
+&lt;!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modelo LWR (trânsito) — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Modelo LWR: engarrafamento e sinal verde</h1>
+        <p class="lede">Carros numa avenida como se fossem um fluido: a densidade obedece a uma lei de conservação. O engarrafamento é um choque, que anda para trás; o sinal que abre é uma rarefação.</p>
+        <p class="meta">Ajuda ler antes: <a href="leis-conservacao.html">Leis de conservação</a> e <a href="solucao-fraca.html">Solução fraca</a>.</p>
+      </header>
+
+      <h2 id="modelo" data-toc="O modelo">Carros como um fluido</h2>
+      <p>O modelo de Lighthill–Whitham–Richards (LWR) descreve o trânsito em uma avenida como se os carros fossem um fluido. A incógnita $u(x,t)$ é a densidade de carros (carros por quilômetro) na posição $x$ e no instante $t$. Três suposições:</p>
+      <ul>
+        <li>A velocidade dos carros decresce linearmente com a densidade. A avenida suporta uma densidade máxima $L$, de modo que
+        $$v(u)=v_{\max}\Big(1-\frac uL\Big),$$
+        onde $v_{\max}$ é a velocidade máxima.</li>
+        <li>O fluxo de carros é o produto da densidade pela velocidade:
+        $$F(u)=u\,v(u)=v_{\max}\,u\Big(1-\frac uL\Big).$$</li>
+        <li>O número de carros se conserva. Portanto, a taxa de variação da quantidade de carros em cada trecho da avenida é igual ao saldo entre o fluxo que entra e o fluxo que sai.</li>
+      </ul>
+      <p>É exatamente o balanço de <a href="leis-conservacao.html">Leis de conservação</a>, com este $F$. Daí para a frente é o que já vimos: características, quebra e Rankine–Hugoniot (<a href="solucao-fraca.html">Solução fraca</a>).</p>
+
+      <h2 id="edp" data-toc="Descrevendo a EDP">Descrevendo a EDP</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A lei de conservação</p>
+        <p>Escreva a lei de conservação correspondente a este modelo de trânsito.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$$u_t+\big[F(u)\big]_x=0,\qquad F(u)=v_{\max}\,u\Big(1-\frac uL\Big),$$
+          ou, desenvolvendo, $u_t+v_{\max}\big(1-\tfrac{2u}{L}\big)u_x=0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Pouco trânsito</p>
+        <p>Sem fazer cálculos detalhados, qual deve ser o comportamento da solução para tempos pequenos se $u(x,0)=f(x)$ e $f(x)\ll L$? Dica: aproxime o fluxo para densidades pequenas e identifique uma EDP conhecida.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $u\ll L$, $F(u)\approx v_{\max}\,u$ (o termo $u^2/L$ é desprezível). A EDP vira $u_t+v_{\max}\,u_x=0$, a equação de transporte: o perfil de densidade apenas anda para a direita com velocidade $v_{\max}$, sem mudar de forma, $u\approx f(x-v_{\max}t)$. Com a avenida quase vazia, os carros praticamente não se atrapalham e cada um anda na velocidade máxima.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Características retas</p>
+        <p>Mostre que, enquanto a solução for suave, as curvas características são linhas retas e a densidade $u(x,t)$ é constante ao longo delas.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $u_t+F(u)_x=0$, as características são $\dot x=F'(u)$, $\dot t=1$, $\dot z=0$ (exercício 1 de <a href="leis-conservacao.html#exercicios">Leis de conservação</a>). Como $z=u$ é constante, $F'(u)=v_{\max}(1-2u/L)$ também é, então $\dot x$ é constante: a característica que sai de $x_0$ é a reta $x=x_0+v_{\max}\big(1-2f(x_0)/L\big)\,t$.</p>
+        </div>
+      </details>
+
+      <h2 id="engarrafamento" data-toc="Choque: o engarrafamento">Choque: propagação de um engarrafamento</h2>
+      <p>Considere o problema de Riemann (um degrau na densidade)
+      $$u(x,0)=\begin{cases}L/2,&x\le0,\\4L/5,&x>0.\end{cases}$$
+      À esquerda o trânsito está moderado; à direita, mais denso. Os carros vêm da esquerda para a direita, e batem no trecho mais lento.</p>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A velocidade do choque</p>
+        <p>Determine a velocidade do ponto de choque usando a condição de Rankine–Hugoniot.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\sigma=\dfrac{F(u_-)-F(u_+)}{u_--u_+}$, com $F(u)=v_{\max}\,(u-u^2/L)$. Então $F(u_-)-F(u_+)=v_{\max}\Big[(u_--u_+)-\dfrac{u_-^2-u_+^2}{L}\Big]=v_{\max}(u_--u_+)\Big(1-\dfrac{u_-+u_+}{L}\Big)$ e
+          $$\sigma=v_{\max}\Big(1-\frac{u_-+u_+}L\Big)=v_{\max}\Big(1-\frac12-\frac45\Big)=-\frac3{10}\,v_{\max}.$$</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Para que lado o engarrafamento anda?</p>
+        <p>O ponto de choque se move na direção do fluxo dos carros ou na direção contrária? Interprete o resultado em termos da propagação de um engarrafamento.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\sigma&lt;0$: o choque anda <b>para trás</b>, contra o sentido dos carros, que se movem para a frente com velocidade $v(u)>0$. É o que se vê numa estrada: os carros avançam, mas a "frente" do engarrafamento (o ponto onde a densidade sobe) vai para trás, e o engarrafamento cresce para o lado de onde os carros vêm. Quem chega pela esquerda enxerga, de repente, o trânsito parado ou lento à frente.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Três gráficos</p>
+        <p>Considerando $L=1$ e $v_{\max}=1$, faça três gráficos, que podem ser desenhados à mão: $u(x,0)$, $u(x,1)$ e $u(x,2)$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $L=v_{\max}=1$, $\sigma=-0{,}3$ e a solução é um degrau que anda para trás:
+          $$u(x,t)=\begin{cases}0{,}5,&x&lt;-0{,}3\,t,\\0{,}8,&x>-0{,}3\,t.\end{cases}$$
+          Em $t=0$ o degrau está em $x=0$; em $t=1$, em $x=-0{,}3$; em $t=2$, em $x=-0{,}6$. Os três gráficos são o mesmo degrau, de $0{,}5$ a $0{,}8$, cada vez mais à esquerda.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. O carro que chega ao engarrafamento</p>
+        <p>Considere um carro inicialmente localizado em $x=-1$. Descreva como sua velocidade varia com o tempo. Para acompanhar o carro, use a equação $\dfrac{dX}{dt}=v\big(u(X(t),t)\big)$, $X(0)=-1$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>À esquerda do choque, $u=0{,}5$ e $v=1-0{,}5=0{,}5$. O carro anda com $X=-1+0{,}5\,t$ até encontrar o choque, que está em $x=-0{,}3\,t$: $-1+0{,}5t=-0{,}3t$ dá $t=1{,}25$, em $x=-0{,}375$. Ao cruzar, o carro entra na região com $u=0{,}8$, onde $v=0{,}2$, e passa a andar a $0{,}2$:
+          $$X(t)=\begin{cases}-1+0{,}5\,t,&t\le1{,}25,\\-0{,}375+0{,}2\,(t-1{,}25),&t\ge1{,}25.\end{cases}$$
+          A velocidade do carro vale $0{,}5$ e cai, de uma vez só, para $0{,}2$ no instante $1{,}25$. (No modelo o choque é um salto; na vida real a frenagem é rápida, mas não instantânea.)</p>
+          <figure class="fig">
+<svg viewBox="0 0 400 260" role="img" aria-labelledby="fgsh" style="width:100%;height:auto;max-width:400px;display:block;margin:0 auto">
+  <title id="fgsh">Plano x–t do engarrafamento: características azuis entrando no choque, que anda para trás, e o carro que parte de x = −1 e desacelera ao cruzar o choque.</title>
+  <g font-family="sans-serif" font-size="11" style="fill:var(--ink-soft)">
+    <line x1="69.6" y1="10" x2="69.6" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="69.6" y="249" text-anchor="middle">−2</text>
+    <line x1="140.8" y1="10" x2="140.8" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="140.8" y="249" text-anchor="middle">−1</text>
+    <line x1="212.0" y1="10" x2="212.0" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="212.0" y="249" text-anchor="middle">0</text>
+    <line x1="283.2" y1="10" x2="283.2" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="283.2" y="249" text-anchor="middle">1</text>
+    <line x1="354.4" y1="10" x2="354.4" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="354.4" y="249" text-anchor="middle">2</text>
+    <line x1="34" y1="234.0" x2="390" y2="234.0" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="238.0" text-anchor="end">0</text>
+    <line x1="34" y1="159.3" x2="390" y2="159.3" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="163.3" text-anchor="end">1</text>
+    <line x1="34" y1="84.7" x2="390" y2="84.7" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="88.7" text-anchor="end">2</text>
+    <line x1="34" y1="10.0" x2="390" y2="10.0" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="14.0" text-anchor="end">3</text>
+    <text x="390" y="258" text-anchor="end" style="fill:var(--ink)">x</text><text x="39" y="20" style="fill:var(--ink)">t</text>
+  </g>
+  <clipPath id="fgshc"><rect x="34" y="10" width="356" height="224"/></clipPath>
+  <g clip-path="url(#fgshc)" fill="none">
+    <line x1="55.4" y1="234.0" x2="153.3" y2="28.7" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="83.8" y1="234.0" x2="163.9" y2="66.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="112.3" y1="234.0" x2="174.6" y2="103.3" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="140.8" y1="234.0" x2="185.3" y2="140.7" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="169.3" y1="234.0" x2="196.0" y2="178.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="197.8" y1="234.0" x2="206.7" y2="215.3" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="226.2" y1="234.0" x2="197.8" y2="184.2" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="254.7" y1="234.0" x2="169.3" y2="84.7" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="283.2" y1="234.0" x2="155.0" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="311.7" y1="234.0" x2="183.5" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="340.2" y1="234.0" x2="212.0" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="368.6" y1="234.0" x2="240.5" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="212.0" y1="234.0" x2="147.9" y2="10.0" style="stroke:var(--choque)" stroke-width="2.8" opacity="1"/>
+    <line x1="140.8" y1="234.0" x2="185.3" y2="140.7" style="stroke:var(--ink)" stroke-width="2.6" opacity="1"/>
+    <line x1="185.3" y1="140.7" x2="210.2" y2="10.0" style="stroke:var(--ink)" stroke-width="2.6" opacity="1"/>
+    <circle cx="140.8" cy="234.0" r="4" style="fill:var(--ink)"/>
+  </g>
+</svg>
+            <figcaption>Plano $x$–$t$ do engarrafamento. Em azul, as características entram no choque (vermelho), que anda para trás. O carro de $x=-1$ (preto) desacelera ao cruzar o choque.</figcaption>
+          </figure>
+
+        </div>
+      </details>
+
+      <h2 id="verde" data-toc="Rarefação: o sinal verde">Rarefação: o sinal fica verde</h2>
+      <p>Agora o problema de Riemann
+      $$u(x,0)=\begin{cases}L,&x\le0,\\0,&x>0.\end{cases}$$
+      À esquerda, uma fila de carros parados no sinal vermelho, com densidade máxima ($v=0$). À direita, a avenida vazia. No instante $0$ o sinal abre.</p>
+
+      <aside class="box exercicio">
+        <p class="tag">8. Três gráficos, de novo</p>
+        <p>Considerando $L=1$ e $v_{\max}=1$, faça três gráficos, que podem ser desenhados à mão: $u(x,0)$, $u(x,1)$ e $u(x,2)$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Agora $F(u)=u(1-u)$ e $F'(u)=1-2u$, que vale $-1$ em $u=1$ e $+1$ em $u=0$. As características de cada lado se afastam (a da esquerda, para a esquerda; a da direita, para a direita), e fica um vazio entre elas, preenchido por um leque de rarefação: a solução é contínua, com $F'(u)=x/t$, isto é,
+          $$u(x,t)=\begin{cases}1,&x\le-t,\\\dfrac12\Big(1-\dfrac xt\Big),&-t&lt;x&lt;t,\\0,&x\ge t.\end{cases}$$
+          Em $t=0$ é o degrau de $1$ para $0$. Em $t=1$, $u$ vale $1$ até $x=-1$, desce em linha reta até $0$ em $x=1$ e fica em $0$. Em $t=2$ é o mesmo, com o trecho inclinado entre $x=-2$ e $x=2$ (mais largo e mais suave).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">9. O carro da fila</p>
+        <p>Considere um carro inicialmente localizado em $x=-1$ e descreva como sua velocidade varia com o tempo.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Enquanto $u=1$ ($x\le-t$), $v=0$: o carro fica parado, até o leque chegar a ele em $t=1$ (em $x=-1$). Depois, $u=\tfrac12(1-X/t)$ e
+          $$\dot X=v(u)=1-u=\frac12\Big(1+\frac Xt\Big).$$
+          É uma EDO linear, $\dot X-\dfrac{X}{2t}=\dfrac12$. Com o fator integrante $t^{-1/2}$, $(Xt^{-1/2})'=\tfrac12t^{-1/2}$, então $X=t+C\sqrt t$. Em $t=1$, $X=-1$, logo $C=-2$ e
+          $$X(t)=\begin{cases}-1,&t\le1,\\t-2\sqrt t,&t\ge1.\end{cases}$$
+          A velocidade é $\dot X=1-1/\sqrt t$: vale $0$ em $t=1$, cresce continuamente e tende a $v_{\max}$ quando $t\to\infty$ (sem nunca chegar a ela). Diferente do caso do engarrafamento, a aceleração é suave: o carro não parte de uma vez, vai acelerando conforme a onda de partida passa por ele.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">10. As características e o leque</p>
+        <p>Desenhe as curvas características no semiplano $(x,t)$, com $t\ge0$. Não se esqueça do leque de rarefação. Interprete esse leque no contexto dos carros que começam a se mover depois que o sinal fica verde.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <figure class="fig">
+<svg viewBox="0 0 400 260" role="img" aria-labelledby="fgfa" style="width:100%;height:auto;max-width:400px;display:block;margin:0 auto">
+  <title id="fgfa">Plano x–t do sinal que fica verde: características azuis com velocidade −1 à esquerda e +1 à direita, o leque de rarefação saindo da origem, e o carro que parte de x = −1 parado e só começa a andar quando o leque chega até ele.</title>
+  <g font-family="sans-serif" font-size="11" style="fill:var(--ink-soft)">
+    <line x1="45.1" y1="10" x2="45.1" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="45.1" y="249" text-anchor="middle">−3</text>
+    <line x1="100.8" y1="10" x2="100.8" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="100.8" y="249" text-anchor="middle">−2</text>
+    <line x1="156.4" y1="10" x2="156.4" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="156.4" y="249" text-anchor="middle">−1</text>
+    <line x1="212.0" y1="10" x2="212.0" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="212.0" y="249" text-anchor="middle">0</text>
+    <line x1="267.6" y1="10" x2="267.6" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="267.6" y="249" text-anchor="middle">1</text>
+    <line x1="323.2" y1="10" x2="323.2" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="323.2" y="249" text-anchor="middle">2</text>
+    <line x1="378.9" y1="10" x2="378.9" y2="234" style="stroke:var(--rule)" stroke-width="1"/><text x="378.9" y="249" text-anchor="middle">3</text>
+    <line x1="34" y1="234.0" x2="390" y2="234.0" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="238.0" text-anchor="end">0</text>
+    <line x1="34" y1="159.3" x2="390" y2="159.3" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="163.3" text-anchor="end">1</text>
+    <line x1="34" y1="84.7" x2="390" y2="84.7" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="88.7" text-anchor="end">2</text>
+    <line x1="34" y1="10.0" x2="390" y2="10.0" style="stroke:var(--rule)" stroke-width="1"/><text x="29" y="14.0" text-anchor="end">3</text>
+    <text x="390" y="258" text-anchor="end" style="fill:var(--ink)">x</text><text x="39" y="20" style="fill:var(--ink)">t</text>
+  </g>
+  <clipPath id="fgfac"><rect x="34" y="10" width="356" height="224"/></clipPath>
+  <g clip-path="url(#fgfac)" fill="none">
+    <line x1="78.5" y1="234.0" x2="-88.4" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="100.8" y1="234.0" x2="-66.1" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="123.0" y1="234.0" x2="-43.9" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="145.2" y1="234.0" x2="-21.6" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="167.5" y1="234.0" x2="0.6" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="189.8" y1="234.0" x2="22.9" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="234.2" y1="234.0" x2="401.1" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="256.5" y1="234.0" x2="423.4" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="278.8" y1="234.0" x2="445.6" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="301.0" y1="234.0" x2="467.9" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="323.2" y1="234.0" x2="490.1" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="345.5" y1="234.0" x2="512.4" y2="10.0" style="stroke:var(--carac)" stroke-width="1.3" opacity="0.75"/>
+    <line x1="212.0" y1="234.0" x2="78.5" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="111.9" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="145.2" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="178.6" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="212.0" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="245.4" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="278.8" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="312.1" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="212.0" y1="234.0" x2="345.5" y2="10.0" style="stroke:var(--choque)" stroke-width="1.3" opacity="0.85"/>
+    <line x1="156.4" y1="234.0" x2="156.4" y2="159.3" style="stroke:var(--ink)" stroke-width="2.6" opacity="1"/>
+    <polyline points="156.4,159.3 156.4,155.6 156.5,151.9 156.7,148.1 156.9,144.4 157.1,140.7 157.5,136.9 157.8,133.2 158.2,129.5 158.7,125.7 159.2,122.0 159.7,118.3 160.3,114.5 160.9,110.8 161.5,107.1 162.2,103.3 162.9,99.6 163.6,95.9 164.3,92.1 165.1,88.4 165.9,84.7 166.7,80.9 167.6,77.2 168.5,73.5 169.4,69.7 170.3,66.0 171.2,62.3 172.2,58.5 173.2,54.8 174.1,51.1 175.2,47.3 176.2,43.6 177.2,39.9 178.3,36.1 179.4,32.4 180.5,28.7 181.6,24.9 182.7,21.2 183.9,17.5 185.0,13.7 186.2,10.0" style="stroke:var(--ink)" stroke-width="2.6"/>
+    <circle cx="156.4" cy="234.0" r="4" style="fill:var(--ink)"/>
+  </g>
+</svg>
+            <figcaption>Características do sinal que fica verde. Para $x_0&lt;0$ (densidade $1$): retas de velocidade $-1$. Para $x_0>0$ (densidade $0$): retas de velocidade $+1$. Saindo da origem, o leque (vermelho): cada reta $x=kt$ com $-1&lt;k&lt;1$ leva a densidade $u=(1-k)/2$. O carro de $x=-1$ (preto) espera parado e vai acelerando.</figcaption>
+          </figure>
+
+          <p>Para $x_0&lt;0$, $u=1$ e a velocidade característica é $F'(1)=-1$: retas $x=x_0-t$. Para $x_0>0$, $u=0$ e $F'(0)=1$: retas $x=x_0+t$. Entre $x=-t$ e $x=t$ não passa característica saída do eixo, e o espaço é preenchido por retas que saem da origem, $x=kt$ com $-1&lt;k&lt;1$, cada uma com $u=(1-k)/2$.</p>
+          <p>O leque é a onda de partida. O primeiro carro da fila (em $x=0$) arranca no instante $0$. A frente do leque, $x=-t$, anda para trás com velocidade $v_{\max}$ e mostra até onde a notícia "abriu o sinal" já chegou. O carro que está a distância $d$ do sinal só começa a se mover quando a frente chega, em $t=d/v_{\max}$ (ex.: em $t=1$ para $d=1$). Os carros vão partindo um depois do outro, e não todos de uma vez.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="leis-conservacao.html">Leis de conservação</a></li>
+            <li><a href="solucao-fraca.html">Solução fraca</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>
