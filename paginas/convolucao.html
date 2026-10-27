@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Convolução — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Convolução</h1>
+        <p class="lede">Deslizar um vetor sobre o outro e somar produtos. A mesma operação aparece quando multiplicamos polinômios, somamos variáveis aleatórias e filtramos um áudio. A diferença entre as versões está num único detalhe: o que supor sobre o sinal fora da janela.</p>
+        <p class="meta">Primeira página da trilha <em>Fourier discreto</em>. Só precisa de somatórios e de um pouco de matrizes.</p>
+      </header>
+
+      <h2 id="operacao" data-toc="A operação">A operação</h2>
+      <p>Dados dois vetores $u$ e $v$, a convolução $z=u\ast v$ é
+      $$z_j=\sum_{m}u_m\,v_{j-m}.$$
+      Há duas formas de ler essa fórmula, e vamos usar as duas:</p>
+      <ul>
+        <li><b>Os índices somam.</b> Cada produto $u_m v_l$ vai para a posição $m+l$ de $z$. É a leitura mais fácil de calcular à mão.</li>
+        <li><b>Inverter e deslizar.</b> Para cada $j$, vire $v$ de trás para a frente, encaixe-o sobre $u$ com a ponta em $j$, multiplique o que se sobrepõe e some. É a leitura da demo mais abaixo.</li>
+      </ul>
+
+      <h2 id="exemplos" data-toc="Três exemplos">Três lugares onde ela aparece</h2>
+
+      <h3 id="polinomios">Produto de polinômios</h3>
+      <p>Se $a(x)=\sum_m a_mx^m$ e $b(x)=\sum_l b_lx^l$, o coeficiente de $x^k$ em $a(x)b(x)$ é a soma dos $a_mb_l$ com $m+l=k$. Ou seja, <em>os coeficientes do produto são a convolução dos coeficientes</em>:
+      $$(1+2x+3x^2)(4+5x)=4+13x+22x^2+15x^3\quad\Longleftrightarrow\quad(1,2,3)\ast(4,5)=(4,13,22,15).$$</p>
+
+      <h3 id="probabilidade">Soma de variáveis aleatórias independentes</h3>
+      <p>Se $X$ e $Y$ são independentes e inteiras, $P(X+Y=k)=\sum_m P(X=m)\,P(Y=k-m)$: a distribuição da soma é a convolução das distribuições. Para dois dados honestos, convoluir $(\tfrac16,\dots,\tfrac16)$ com ele mesmo dá a distribuição triangular da soma, com pico $6/36$ em $7$.</p>
+
+      <h3 id="audio">Filtros de áudio</h3>
+      <p>Um áudio é um vetor de amostras $x_j$. Um filtro é um vetor curto $h$, e a saída é $y=h\ast x$. O filtro é "o que sai quando entra um impulso": se $x=(1,0,0,\dots)$, então $y=h$. Três exemplos:</p>
+      <ul>
+        <li><b>média móvel</b>, $h=(\tfrac13,\tfrac13,\tfrac13)$: suaviza, tira o ruído rápido;</li>
+        <li><b>diferença</b>, $h=(1,-1)$: realça as variações, some onde o sinal é constante;</li>
+        <li><b>eco</b>, $h=(1,0,0,0,0.6)$: o som mais uma cópia atrasada e mais fraca.</li>
+      </ul>
+      <p>A operação é sempre a mesma. Só muda $h$.</p>
+
+      <h2 id="fora" data-toc="E fora da janela?">E fora da janela?</h2>
+      <p>Um vetor de verdade é finito: $u$ tem índices $0,\dots,N-1$, e a fórmula $z_j=\sum_l v_l\,u_{j-l}$ vai pedir $u$ em índices fora disso. Precisamos <em>chutar</em> o que o sinal vale lá. Dois chutes naturais:</p>
+
+      <aside class="box">
+        <p class="tag">Dois chutes, duas convoluções</p>
+        <p><b>Zeros</b> (<i>padding</i>): fora da janela o sinal vale $0$. Resulta a convolução <b>linear</b> (a "usual", também chamada aperiódica), e a saída tem $N+M-1$ valores. É a dos polinômios, dos dados e do áudio acima.</p>
+        <p><b>Periódico</b> (ladrilhamento): o sinal se repete, $\tilde u_i=u_{i\bmod N}$. Resulta a convolução <b>circular</b>, e a saída tem $N$ valores, porque os índices "dão a volta": $z_k=\sum_{m+l\equiv k\ (\mathrm{mod}\ N)}u_mv_l$. É a natural quando o sinal vive num círculo (um ângulo, as horas do dia, o anel da página de difusão).</p>
+      </aside>
+
+      <p>As duas se parecem mais do que parece:</p>
+      <ul>
+        <li>A circular é a linear <em>dobrada</em>: o que passa do índice $N-1$ volta para o começo (e soma).</li>
+        <li>Se o sinal for completado com zeros até um tamanho $N'\ge N+M-1$, não há o que dobrar, e a circular coincide com a linear.</li>
+        <li>Em polinômios, a circular é o produto <em>módulo $x^N-1$</em>: como $x^N=1$, o expoente que passa de $N-1$ volta para o começo.</li>
+      </ul>
+
+      <h2 id="demo">Veja o chute</h2>
+      <p>Escolha um sinal, um núcleo e o chute. A faixa vermelha é a janela do instante $j$: o núcleo invertido está encaixado nela, e a saída $z$ vai sendo construída embaixo. No modo periódico, as cópias claras fora da janela original (entre as linhas tracejadas) são as cópias do sinal.</p>
+
+      <div class="demo" id="demo-conv">
+        <div class="controls">
+          <label>sinal <select id="c-sinal" aria-label="Sinal"></select></label>
+          <label>núcleo <select id="c-nucleo" aria-label="Núcleo"></select></label>
+          <label>fora da janela <select id="c-modo" aria-label="O que supor fora da janela"></select></label>
+        </div>
+        <div class="controls">
+          <label>j <input type="range" id="c-j" min="0" max="9" step="1" value="3" aria-label="Posição j"> <output id="c-jv">3</output></label>
+          <button id="c-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels">
+          <canvas id="c-conv-canvas" class="wide-panel" style="height:340px" role="img" aria-label="Sinal estendido com a janela, núcleo invertido e saída da convolução"></canvas>
+        </div>
+        <div class="readout" id="c-readout" aria-live="polite"></div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li>Rampa com média de 3. No modo <b>zeros</b> as bordas da saída caem (a janela pega zeros) e a saída tem $10$ valores. No modo <b>periódico</b> a rampa vira um dente de serra, e a média na borda mistura o fim com o começo.</li>
+        <li>Pulso com qualquer núcleo: a saída é uma cópia do núcleo, centrada no pulso. É a "resposta ao impulso".</li>
+        <li>Rampa com eco, nos dois modos: compare as últimas posições da saída.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Implemente as duas convoluções pela regra "os índices somam" (a diferença é um <code>% N</code>) e use-as nos três exemplos. Compare com <code>np.convolve</code>.</p>
+
+      <div class="pycell" data-title="Convolução linear e circular na unha"
+           data-starter="../py/conv_lacunas.py"
+           data-solution="../py/conv_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Linear e circular</p>
+        <p>Calcule $(1,2,3)\ast(1,1)$ como convolução linear e como circular com $N=3$. Relacione os dois resultados.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Linear: $(1,\,3,\,5,\,3)$, com $N+M-1=4$ valores. Circular: $z_k=u_k+u_{k-1}$ (com índices módulo $3$): $z_0=1+3=4$, $z_1=2+1=3$, $z_2=3+2=5$, isto é, $(4,3,5)$. É a linear dobrada: o último valor, $3$, volta para o índice $0$ e soma com o $1$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Dois dados</p>
+        <p>Qual é a probabilidade de a soma de dois dados ser $10$? Obtenha pela convolução.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Somar $10$ pede $m+l=10$ com faces de $1$ a $6$: $(4,6),(5,5),(6,4)$. São três pares, cada um com probabilidade $\tfrac1{36}$, total $\tfrac{3}{36}=\tfrac1{12}$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Impulsos</p>
+        <p>Mostre que a convolução circular de $u$ com $e_0=(1,0,\dots,0)$ devolve $u$, e que com $e_1=(0,1,0,\dots,0)$ desloca $u$ uma posição.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$z_j=\sum_m u_{j-m}(e_0)_m=u_j$, porque só $m=0$ contribui. Com $e_1$, só $m=1$ contribui: $z_j=u_{j-1}$, e o índice $-1$ vale $N-1$. Cada componente anda uma casa e a última volta para o começo. Esse deslocamento é o protagonista da próxima página.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Somatórios e matrizes: nada além disso</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="dft.html">Transformada de Fourier discreta</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/conv-core.js"></script>
+  <script src="../assets/conv-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

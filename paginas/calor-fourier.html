@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O calor no anel, com Fourier — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O calor no anel, com Fourier</h1>
+        <p class="lede">O anel da página de difusão tinha uma simetria que não exploramos: o laplaciano dele é uma matriz circulante. Com a transformada de Fourier discreta, o sistema acoplado de EDOs se separa em $N$ equações independentes, e resolver o calor vira três passos: transformar, multiplicar, voltar.</p>
+        <p class="meta">Junta <a href="calor-anel.html">O anel e o limite contínuo</a> com <a href="dft.html">Transformada de Fourier discreta</a>.</p>
+      </header>
+
+      <h2 id="circulante" data-toc="L é circulante">O laplaciano do anel é uma convolução</h2>
+      <p>No anel com $N$ vértices, $(Lu)_j=2u_j-u_{j+1}-u_{j-1}$. Com o shift $S$ da página anterior ($Su$ desloca uma casa, $S^{-1}=S^{N-1}$ desloca para o outro lado):
+      $$L=2I-S-S^{-1}=\ell(S),\qquad \ell=(2,-1,0,\dots,0,-1).$$
+      Então $Lu=\ell\circledast u$: a matriz é circulante, com primeira coluna $\ell$. A equação do calor no anel é
+      $$u_t=-c\,\ell\circledast u.$$</p>
+
+      <h2 id="desacopla" data-toc="Fourier desacopla">Fourier desacopla</h2>
+      <p>Pela página anterior, $L$ tem autovetores $f_k$ e autovalores
+      $$\lambda_k=\ell(\omega^{-k})=2-\omega^{-k}-\omega^{k}=2-2\cos\frac{2\pi k}{N}=4\sin^2\frac{\pi k}{N}.$$
+      É daí que vinham os autovetores e autovalores que apareceram sem demonstração na página do anel. Agora aplique $F^*$ à equação. Como $F^*LF=\Lambda$,
+      $$\frac{d}{dt}\hat u=-c\,\Lambda\,\hat u\quad\Longleftrightarrow\quad \frac{d}{dt}\hat u_k=-c\lambda_k\,\hat u_k,\quad k=0,\dots,N-1.$$
+      São $N$ EDOs <b>independentes</b>, cada uma de uma variável, com solução $\hat u_k(t)=e^{-c\lambda_kt}\,\hat u_k(0)$. Voltando,
+      $$\boxed{\,u(t)=F\,e^{-c\Lambda t}\,F^*u_0=\sum_k e^{-c\lambda_kt}\,\hat u_k(0)\,f_k.\,}$$
+      A receita tem três passos: <b>transformar</b> o dado inicial, <b>multiplicar</b> cada modo por $e^{-c\lambda_kt}$ (as ondas rápidas, com $\lambda$ grande, murcham depressa) e <b>voltar</b>. Em numpy: <code>ifft(exp(-c*lam*t) * fft(u0))</code>.</p>
+
+      <h2 id="nucleo" data-toc="O núcleo do calor">A solução também é uma convolução</h2>
+      <p>A matriz $e^{-cLt}=F\,e^{-c\Lambda t}F^*$ é função de $L$, que é função de $S$, então também é circulante. Sua primeira coluna é $K_t=e^{-cLt}e_0$ (o que sai de um impulso unitário), e
+      $$u(t)=K_t\circledast u_0.$$
+      O calor num instante $t$ é o dado inicial <em>suavizado</em> pelo núcleo $K_t$, cada vez mais largo com o tempo. É a mesma ideia do filtro de média móvel da primeira página, só que com um filtro que cresce com o tempo. Esse núcleo, quando o anel virar uma reta, será o núcleo gaussiano do calor.</p>
+
+      <h2 id="custo" data-toc="Por que vale a pena">Por que vale a pena</h2>
+      <ul>
+        <li><b>Sem diagonalizar matriz.</b> Calcular autovetores de $L$ custa da ordem de $N^3$. Aqui os autovetores são conhecidos, e a transformada em si (a FFT) custa da ordem de $N\log N$.</li>
+        <li><b>Conservação.</b> $\lambda_0=0$ e $\hat u_0=\sum_ju_j/\sqrt N$ não muda: a soma de $u$ se conserva. Os demais modos decaem, e o que sobra é a média.</li>
+        <li><b>Ponte para o contínuo.</b> A discussão modo a modo ($e^{-c\lambda_kt}$, com $c\lambda_k\to k\kappa^2$) é a mesma que, com $N\to\infty$, leva à série de Fourier e à equação $u_t=ku_{xx}$.</li>
+      </ul>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Resolva o anel com a FFT, confira com a decomposição de matriz e verifique que a solução é uma convolução com $K_t$.</p>
+
+      <div class="pycell" data-title="O calor no anel, via FFT"
+           data-starter="../py/calor_fourier_lacunas.py"
+           data-solution="../py/calor_fourier_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Um modo puro</p>
+        <p>Se $u_0(j)=\cos(2\pi jm/N)$, mostre que $u(t)=e^{-c\lambda_mt}\,u_0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\cos(2\pi jm/N)=\tfrac12(\omega^{jm}+\omega^{-jm})=\tfrac{\sqrt N}2\,(f_m+f_{N-m})$. Os dois autovetores têm o mesmo autovalor, $\lambda_m=\lambda_{N-m}$ (porque $\cos\frac{2\pi(N-m)}N=\cos\frac{2\pi m}N$), então os dois decaem com $e^{-c\lambda_mt}$, e a combinação inteira também.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O upwind no anel (von Neumann, por outro caminho)</p>
+        <p>O esquema upwind para $u_t+u_x=0$ num anel é $u^{n+1}=u^n-\lambda\,(u^n-Su^n)$, com $\lambda=c\,\Delta t/\Delta x$. A matriz é circulante. Ache seus autovalores $G_k$ e mostre que $|G_k|\le1$ para todo $k$ se e somente se $0\le\lambda\le1$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>A matriz é $(1-\lambda)I+\lambda S$, e $Sf_k=\omega^{-k}f_k$, então $G_k=1-\lambda+\lambda e^{-i\theta_k}$ com $\theta_k=2\pi k/N$. Daí
+          $$|G_k|^2=(1-\lambda)^2+\lambda^2+2\lambda(1-\lambda)\cos\theta_k=1-2\lambda(1-\lambda)(1-\cos\theta_k).$$
+          Como $1-\cos\theta_k\ge0$ (e $>0$ para $\theta_k\ne0$), $|G_k|\le1$ para todo $k$ se e somente se $\lambda(1-\lambda)\ge0$, isto é, $0\le\lambda\le1$. É a condição CFL da página de upwind, agora obtida pela DFT.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. O estado final</p>
+        <p>Use a solução em Fourier para mostrar que, quando $t\to\infty$, $u(t)$ tende ao vetor constante igual à média de $u_0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $k\ne0$, $\lambda_k=4\sin^2(\pi k/N)>0$, então $e^{-c\lambda_kt}\to0$. Só sobra o modo $k=0$, $\hat u_0f_0$, com $f_0=\mathbf 1/\sqrt N$ e $\hat u_0=\sum_ju_j/\sqrt N$. Então $u(\infty)=\hat u_0f_0=\big(\tfrac1N\sum_ju_j\big)\mathbf 1$, a média.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="calor-anel.html">O anel e o limite contínuo</a></li>
+            <li><a href="dft.html">Transformada de Fourier discreta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -147,13 +147,27 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["a-N"].value = "64"; env.byId["a-N"].fire("input"); await wait(30);
     check("anel-demo: mais vértices → mais perto do contínuo", errOf() < e8 / 10, e8 + " → " + errOf());
   }
+  /* ---- convolução: zeros x periódico ---- */
+  {
+    const env = makeEnv(["demo-conv", "c-sinal", "c-nucleo", "c-modo", "c-j", "c-jv", "c-play", "c-readout", "c-conv-canvas"], []);
+    run(env, "conv-core.js"); env.sandbox.window.ConvCore = env.sandbox.ConvCore || vm.runInContext("ConvCore", env.sandbox);
+    let err = null; try { run(env, "conv-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("conv-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["c-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("conv-demo: modo zeros tem 10 saídas (N+M−1)", rd().includes("10") && rd().includes("N + M − 1"), rd().slice(0, 100));
+    env.byId["c-modo"].value = "periodico"; env.byId["c-modo"].fire("change"); await wait(30);
+    check("conv-demo: modo periódico tem 8 saídas (N)", rd().includes("8") && rd().includes("dão a volta"), rd().slice(0, 100));
+    check("conv-demo: o controle j fica limitado a N−1", String(env.byId["c-j"].max) === "7", String(env.byId["c-j"].max));
+    env.byId["c-j"].value = "0"; env.byId["c-j"].fire("input"); await wait(30);
+    check("conv-demo: z0 circular da rampa com média de 3 mistura o fim e o começo ((1+8+7)/3)", rd().includes("z0 = Σ") && rd().includes("5,33"), rd().slice(0, 60));
+  }
   /* ---- mapa ---- */
   {
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 21 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 21);
-    check("mapa: botões de trilha criados", env.byId["chips"].children.length === 7);
+    check("mapa: SVG gerado com os 24 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 24);
+    check("mapa: botões de trilha criados", env.byId["chips"].children.length === 8);
   }
   /* ---- executor de Python ---- */
   {

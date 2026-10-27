@@ -14,6 +14,7 @@
     { id: "var",     label: "Variacional e\nviscosidade" },
     { id: "num",     label: "Métodos\nnuméricos" },
     { id: "calor",   label: "Calor e\ndifusão" },
+    { id: "disc",    label: "Fourier\ndiscreto" },
     { id: "seg",     label: "Segunda\nordem" }
   ];
 
@@ -22,6 +23,7 @@
     { id: "choques",     label: "Choques e tráfego" },
     { id: "variacional", label: "Variacional e viscosidade" },
     { id: "calor",       label: "Calor e difusão" },
+    { id: "fdiscreto",   label: "Convolução e Fourier discreto" },
     { id: "numerico",    label: "Numérico" },
     { id: "segunda",     label: "Segunda ordem" }
   ];
@@ -58,6 +60,12 @@
       desc: "Modos de Fourier no anel e o limite N → ∞, que dá u_t = k u_xx. Com demo e Python." },
     { id: "fourier", lane: "calor", col: 4, label: "Calor na reta:\nFourier e núcleo", href: null, trails: ["calor"],
       desc: "A equação do calor em ℝ: séries de Fourier, núcleo gaussiano e propagação com velocidade infinita." },
+    { id: "conv", lane: "disc", col: 2, label: "Convolução", href: "paginas/convolucao.html", trails: ["fdiscreto"],
+      desc: "Polinômios, probabilidade e áudio; o que supor fora da janela: zeros (linear) ou periódico (circular). Com demo e Python." },
+    { id: "dft", lane: "disc", col: 3, label: "Transformada de\nFourier discreta", href: "paginas/dft.html", trails: ["fdiscreto"],
+      desc: "O shift S, a base de Fourier e a convolução circular virando produto ponto a ponto. Com Python editável." },
+    { id: "calorf", lane: "disc", col: 4, label: "O calor no anel,\ncom Fourier", href: "paginas/calor-fourier.html", trails: ["fdiscreto", "calor"],
+      desc: "O laplaciano do anel é circulante: Fourier desacopla as EDOs e a solução é uma convolução. Com Python editável." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -79,6 +87,7 @@
     ["hj", "el"], ["el", "hl"], ["hl", "visc"],
     ["char2", "class"], ["char2", "wave2"], ["char2", "ma"],
     ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"],
+    ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 
