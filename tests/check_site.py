@@ -79,6 +79,9 @@ need = {
     "paginas/onda-dalembert.html": ["demo-onda", "w-preset", "w-c", "w-cv", "w-t", "w-tv", "w-x", "w-xv", "w-play", "w-readout", "w-diag-canvas", "w-perfil-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],
 }
+for f in sorted(root.rglob("*.html")):
+    if ".git" in f.parts or "rascunhos" in f.parts: continue
+    check(f"{f.relative_to(root)}: começa com <!doctype html> (senão o KaTeX não funciona)", f.read_text(encoding="utf-8").lstrip().lower().startswith("<!doctype html>"))
 for f, ids in need.items():
     miss = [i for i in ids if i not in parsed[root / f].ids]
     check(f"{f}: ids exigidos pelos scripts", not miss, f"faltam {miss}" if miss else "")

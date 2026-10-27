@@ -1,4 +1,4 @@
-&lt;!doctype html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
@@ -179,7 +179,7 @@
       </details>
 
       <h2 id="existencia" data-toc="Por que funciona">Por que funciona: existência e unicidade local</h2>
-      <p>Um roteiro para mostrar que a receita dá, perto do eixo, uma solução, e que é a única. Considere o problema $u_t+F(u,u_x,x,t)=0$, $u(x,0)=f(x)$, com $F$ infinitamente diferenciável em todas as variáveis e $f\in C^\infty(\mathbb R)$. Como $u_t$ aparece isolada, não é preciso nenhuma hipótese extra sobre $F$ no ponto $(x_0,0)$. (Para uma EDP geral, $F(x,t,u,u_x,u_t)=0$, a hipótese que faz o papel certo é $F_q\neq0$ no dado inicial: a curva inicial não pode ser característica.)</p>
+      <p>Um roteiro para mostrar que a receita dá, perto do eixo, uma solução, e que é a única. Considere o problema $u_t+F(u,u_x,x,t)=0$, $u(x,0)=f(x)$, com $F$ infinitamente diferenciável em todas as variáveis e $f\in C^\infty(\mathbb R)$. Suponha que em certo ponto $(x_0,0)$ temos $F_p(z,p,x_0,0)\neq0$ e também $F(f(x_0),f'(x_0),x_0,0)\neq0$.</p>
 
       <aside class="box exercicio">
         <p class="tag">7. Existência e unicidade local</p>
@@ -199,7 +199,7 @@
           <p><b>(b)</b> As características são
           $$x_s=F_p,\quad t_s=1,\quad z_s=pF_p+q,\quad p_s=-F_x-pF_z,\quad q_s=-F_t-qF_z,$$
           com lado direito infinitamente diferenciável em $(x,t,z,p,q)$. Pelo teorema de existência e unicidade para EDOs (Picard–Lindelöf), cada dado inicial dá uma solução única, definida em um intervalo $|s|&lt;\delta$, e a solução depende de modo diferenciável do dado inicial. Os dados dependem diferenciavelmente de $\bar x$, e $\delta$ pode ser tomado o mesmo para todos os $\bar x$ de uma vizinhança de $x_0$.</p>
-          <p><b>(c)</b> A aplicação $(\bar x,s)\mapsto(x,t)$ é diferenciável, com $t_s=1$, $t(\bar x,0)=0$ (logo $t_{\bar x}=0$ em $s=0$) e $x(\bar x,0)=\bar x$ (logo $x_{\bar x}=1$). A jacobiana em $s=0$ é $\begin{pmatrix}x_{\bar x}&x_s\\t_{\bar x}&t_s\end{pmatrix}=\begin{pmatrix}1&F_p\\0&1\end{pmatrix}$, de determinante $1\ne0$. Pelo teorema da função inversa, a aplicação é um difeomorfismo local, e $T$ é a inversa. (Note que $F_p$ pode ser qualquer coisa: o determinante vale $1$ porque $t_s=F_q=1$. Numa $F$ geral, o determinante em $s=0$ seria $x_{\bar x}t_s-x_st_{\bar x}=F_q$, e aí sim $F_q\ne0$ é a hipótese necessária.)</p>
+          <p><b>(c)</b> A aplicação $(\bar x,s)\mapsto(x,t)$ é diferenciável, com $t_s=1$, $t(\bar x,0)=0$ (logo $t_{\bar x}=0$ em $s=0$) e $x(\bar x,0)=\bar x$ (logo $x_{\bar x}=1$). A jacobiana em $s=0$ é $\begin{pmatrix}x_{\bar x}&x_s\\t_{\bar x}&t_s\end{pmatrix}=\begin{pmatrix}1&F_p\\0&1\end{pmatrix}$, de determinante $1\ne0$. Pelo teorema da função inversa, a aplicação é um difeomorfismo local, e $T$ é a inversa. (Observe que as hipóteses $F_p\ne0$ e $F\ne0$ não foram usadas: aqui $t_s=F_q=1$ já garante o determinante. Para uma $F$ geral o análogo é $F_q\neq0$ no ponto.)</p>
           <p><b>(d)</b> Ao longo de cada característica, $\dfrac{d}{ds}\Phi=\Phi_xx_s+\Phi_tt_s+\Phi_zz_s+\Phi_pp_s+\Phi_qq_s=F_xF_p+F_t+F_z(pF_p+q)+F_p(-F_x-pF_z)+(-F_t-qF_z)=0.$ Em $s=0$, $\Phi=q(\bar x)+F(f,f',\bar x,0)=0$ pela escolha de $q$. Logo $\Phi\equiv0$ ao longo da característica, isto é, $Q+F(u,P,x,t)=0$ nas coordenadas $(x,t)$ da vizinhança.</p>
           <p><b>(e)</b> Defina $a(\bar x,s)=z_{\bar x}-p\,x_{\bar x}-q\,t_{\bar x}$. Em $s=0$: $z_{\bar x}=f'(\bar x)$, $p=f'(\bar x)$, $x_{\bar x}=1$ e $t_{\bar x}=0$, então $a(\bar x,0)=0$. Derivando em $s$, usando $z_s=px_s+qt_s$ (que vale porque $x_s=F_p$, $t_s=F_q$) para trocar a ordem das derivadas,
           $$a_s=p_{\bar x}x_s+q_{\bar x}t_s-p_sx_{\bar x}-q_st_{\bar x}=p_{\bar x}\Phi_p+q_{\bar x}\Phi_q+(\Phi_x+p\Phi_z)x_{\bar x}+(\Phi_t+q\Phi_z)t_{\bar x}.$$
