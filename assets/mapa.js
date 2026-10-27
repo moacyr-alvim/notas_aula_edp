@@ -35,7 +35,7 @@
     { id: "lc", lane: "choques", col: 2, label: "Leis de\nconservação", href: "paginas/leis-conservacao.html", trails: ["basico", "choques"],
       desc: "u_t + F(u)_x = 0 como balanço de fluxo, características e o tempo de quebra conforme o sinal de F″." },
     { id: "weak", lane: "choques", col: 3, label: "Solução fraca", href: "paginas/solucao-fraca.html", trails: ["choques"],
-      desc: "Passar as derivadas para funções-teste para admitir soluções descontínuas; dela sai Rankine–Hugoniot." },
+      desc: "Usar só o balanço em intervalos para admitir saltos; dele sai Rankine–Hugoniot." },
     { id: "rh", lane: "choques", col: 4, label: "Rankine–Hugoniot", href: "paginas/burgers.html#rankine-hugoniot", trails: ["choques"],
       desc: "A velocidade do choque a partir da conservação. Está dentro da página de Burgers." },
     { id: "lwr", lane: "choques", col: 5, label: "Modelo LWR\n(trânsito)", href: null, trails: ["choques"],

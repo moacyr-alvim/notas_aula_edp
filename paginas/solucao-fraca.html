@@ -22,51 +22,26 @@
     <main>
       <header>
         <h1>Solução fraca</h1>
-        <p class="lede">Depois que as características se cruzam, a EDP não tem solução clássica. A solução fraca troca a EDP por uma igualdade que só pede integrais, e com isso admite saltos. Dela sai a condição de Rankine–Hugoniot.</p>
+        <p class="lede">Depois que as características se cruzam, a EDP não tem solução clássica, mas o balanço em intervalos continua valendo para funções com saltos. Só com ele sai a velocidade do salto, a condição de Rankine–Hugoniot.</p>
         <p class="meta">Desdobramento de <a href="leis-conservacao.html">Leis de conservação</a>. Ajuda ler antes: <a href="burgers.html">Burgers, quebra e choques</a>.</p>
       </header>
 
       <h2 id="motivacao" data-toc="Por que mudar">Por que mudar a definição de solução</h2>
       <p>Para $u_t+(F(u))_x=0$ com $u(x,0)=f(x)$, as características dão uma solução clássica só até $t^*$. Depois disso duas características se encontram carregando valores diferentes de $u$, e nenhuma função derivável serve. Mas a situação física continua: um engarrafamento se forma, uma onda de choque avança.</p>
-      <p>O balanço $\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t))$ continua válido para $u$ descontínua. A EDP, que usa $u_t$ e $u_x$, não. A ideia é reescrever a EDP de um jeito que exija da $u$ apenas ser integrável, passando as derivadas para uma função auxiliar suave.</p>
+      <p>A forma integral da lei de conservação,
+      $$\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t)),$$
+      não usa $u_t$ nem $u_x$, e continua fazendo sentido para $u$ descontínua. É ela que passa a ser a definição: uma <b>solução fraca</b> é uma função que satisfaz o balanço em todo intervalo $[a,b]$ (e o dado inicial). A EDP vale onde $u$ é suave, e o balanço cuida dos saltos.</p>
 
-      <h2 id="forma-fraca" data-toc="A forma fraca">A forma fraca</h2>
-      <p>Considere o problema de valor inicial
-      $$u_t+(F(u))_x=0,\qquad u(x,0)=f(x).$$
-      Seja $v(x,t)$ uma função infinitamente derivável com suporte compacto em $\mathbb R\times[0,\infty)$ (a <b>função-teste</b>; ela pode ser diferente de zero em $t=0$). Multiplicando a EDP por $v$ e integrando no semiplano,
-      $$\int_0^\infty\!\!\int_{-\infty}^{\infty} v\,\big[u_t+(F(u))_x\big]\,dx\,dt=0.$$
-      Integrando por partes, cada derivada passa para $v$, e o dado inicial aparece como termo de borda em $t=0$:
-      $$\boxed{\,\int_0^\infty\!\!\int_{-\infty}^{\infty}\big[u\,v_t+F(u)\,v_x\big]\,dx\,dt+\int_{-\infty}^{\infty}f(x)\,v(x,0)\,dx=0.\,}$$</p>
+      <h2 id="rankine-hugoniot" data-toc="Rankine–Hugoniot">A velocidade do salto: Rankine–Hugoniot</h2>
+      <p>Suponha que $u$ seja suave dos dois lados de uma curva $x=s(t)$, com limites laterais $u_-$ (à esquerda) e $u_+$ (à direita), e satisfaça o balanço. Então a curva se move com velocidade
+      $$\boxed{\,s'(t)=\sigma=\frac{F(u_-)-F(u_+)}{u_--u_+}.\,}$$</p>
 
-      <details>
-        <summary>A integração por partes, passo a passo</summary>
+      <details open>
+        <summary>De onde vem a fórmula</summary>
         <div class="body">
-          <p>Em $t$: $\displaystyle\int_0^\infty v\,u_t\,dt=\big[v\,u\big]_{t=0}^{t=\infty}-\int_0^\infty u\,v_t\,dt=-v(x,0)\,f(x)-\int_0^\infty u\,v_t\,dt$, porque $v$ tem suporte compacto (anula-se para $t$ grande) e $u(x,0)=f(x)$.</p>
-          <p>Em $x$: $\displaystyle\int_{-\infty}^{\infty}v\,(F(u))_x\,dx=-\int_{-\infty}^{\infty}F(u)\,v_x\,dx$, pelo mesmo motivo.</p>
-          <p>Somando e trocando o sinal de tudo, chega-se à identidade acima.</p>
-        </div>
-      </details>
-
-      <p>Uma função $u$ que satisfaz essa igualdade para <b>toda</b> função-teste $v$ é uma <b>solução fraca</b> do problema. Três observações:</p>
-      <ol>
-        <li>Toda solução clássica é fraca: basta reverter as integrações por partes.</li>
-        <li>Uma solução fraca de classe $C^1$ é clássica: revertendo, $\iint v\,[u_t+(F(u))_x]=0$ para todo $v$, e então o colchete é zero.</li>
-        <li>O conjunto de candidatos é maior, porque as derivadas ficam todas em $v$. Funções com saltos podem ser soluções fracas.</li>
-      </ol>
-
-      <h2 id="rankine-hugoniot" data-toc="Rankine–Hugoniot">Um salto obedece a Rankine–Hugoniot</h2>
-      <p>Suponha que $u$ seja suave dos dois lados de uma curva $x=s(t)$, com limites laterais $u_-$ (à esquerda) e $u_+$ (à direita), e seja solução fraca. Então a curva se move com velocidade
-      $$s'(t)=\sigma=\frac{F(u_-)-F(u_+)}{u_--u_+}.$$
-      É a mesma condição que a <a href="burgers.html#rankine-hugoniot">página de Burgers</a> deduziu pelo balanço em um intervalo que encolhe. Aqui ela sai direto da forma fraca.</p>
-
-      <details>
-        <summary>A dedução com funções-teste</summary>
-        <div class="body">
-          <p>Tome $v$ com suporte em $t>0$, para o termo inicial sumir, e cruzando a curva. Em cada lado a EDP vale, então $u\,v_t+F\,v_x=(uv)_t+(Fv)_x$ lá.</p>
-          <p>À esquerda da curva, a regra de Leibniz dá $0=\int s'\,u_-\,v\,dt+\iint_{x&lt;s}(uv)_t$ (derivada total de $\int_{-\infty}^{s(t)}uv\,dx$, que integra a zero). Logo $\iint_{x&lt;s}(uv)_t=-\int s'u_-v\,dt$. Por outro lado, $\iint_{x&lt;s}(Fv)_x=\int F_-v\,dt$. A contribuição esquerda é
-          $$\int\big(F_--s'u_-\big)\,v\,dt.$$
-          Do lado direito, com os sinais trocados, a contribuição é $\int\big(-F_++s'u_+\big)\,v\,dt$. A soma tem que ser zero para todo $v$:
-          $$\int\big[F_--F_+-s'(u_--u_+)\big]\,v\,dt=0\ \Longrightarrow\ s'(u_--u_+)=F_--F_+.$$</p>
+          <p>Tome $[a,b]$ contendo $s(t)$. Dividindo a integral no ponto do salto e derivando (regra de Leibniz),
+          $$\frac{d}{dt}\int_a^b u\,dx = s'\,u_- + \int_a^{s}u_t\,dx - s'\,u_+ + \int_{s}^b u_t\,dx.$$
+          Igualando ao balanço e fazendo $a\to s^-$, $b\to s^+$, as duas integrais tendem a zero (o integrando é limitado de cada lado) e o lado direito do balanço tende a $F(u_-)-F(u_+)$. Sobra $s'(u_--u_+)=F(u_-)-F(u_+)$.</p>
         </div>
       </details>
 
@@ -82,10 +57,50 @@
         <p>Aceitar saltos custa a unicidade: o mesmo dado inicial pode ter mais de uma solução fraca. Rankine–Hugoniot diz como um salto se move, mas não diz se aquele salto deve existir. Escolher a solução fisicamente correta entre as fracas é assunto da página de Hamilton–Jacobi <small>(em breve)</small>.</p>
       </aside>
 
+
+      <details>
+        <summary>Para ir além: a forma fraca com funções-teste (opcional)</summary>
+        <div class="body">
+          <p>Em textos mais avançados a solução fraca é definida de outro jeito, equivalente ao balanço, que não menciona intervalos. Aqui vai o esboço.</p>
+      <p>Considere o problema de valor inicial
+          $$u_t+(F(u))_x=0,\qquad u(x,0)=f(x).$$
+          Seja $v(x,t)$ uma função infinitamente derivável com suporte compacto em $\mathbb R\times[0,\infty)$ (a <b>função-teste</b>; ela pode ser diferente de zero em $t=0$). Multiplicando a EDP por $v$ e integrando no semiplano,
+          $$\int_0^\infty\!\!\int_{-\infty}^{\infty} v\,\big[u_t+(F(u))_x\big]\,dx\,dt=0.$$
+          Integrando por partes, cada derivada passa para $v$, e o dado inicial aparece como termo de borda em $t=0$:
+          $$\boxed{\,\int_0^\infty\!\!\int_{-\infty}^{\infty}\big[u\,v_t+F(u)\,v_x\big]\,dx\,dt+\int_{-\infty}^{\infty}f(x)\,v(x,0)\,dx=0.\,}$$</p>
+
+          <details>
+            <summary>A integração por partes, passo a passo</summary>
+            <div class="body">
+              <p>Em $t$: $\displaystyle\int_0^\infty v\,u_t\,dt=\big[v\,u\big]_{t=0}^{t=\infty}-\int_0^\infty u\,v_t\,dt=-v(x,0)\,f(x)-\int_0^\infty u\,v_t\,dt$, porque $v$ tem suporte compacto (anula-se para $t$ grande) e $u(x,0)=f(x)$.</p>
+              <p>Em $x$: $\displaystyle\int_{-\infty}^{\infty}v\,(F(u))_x\,dx=-\int_{-\infty}^{\infty}F(u)\,v_x\,dx$, pelo mesmo motivo.</p>
+              <p>Somando e trocando o sinal de tudo, chega-se à identidade acima.</p>
+            </div>
+          </details>
+
+          <p>Uma função $u$ que satisfaz essa igualdade para <b>toda</b> função-teste $v$ é uma <b>solução fraca</b> do problema. Três observações:</p>
+          <ol>
+            <li>Toda solução clássica é fraca: basta reverter as integrações por partes.</li>
+            <li>Uma solução fraca de classe $C^1$ é clássica: revertendo, $\iint v\,[u_t+(F(u))_x]=0$ para todo $v$, e então o colchete é zero.</li>
+            <li>O conjunto de candidatos é maior, porque as derivadas ficam todas em $v$. Funções com saltos podem ser soluções fracas.</li>
+          </ol>
+      <details>
+            <summary>A dedução com funções-teste</summary>
+            <div class="body">
+              <p>Tome $v$ com suporte em $t>0$, para o termo inicial sumir, e cruzando a curva. Em cada lado a EDP vale, então $u\,v_t+F\,v_x=(uv)_t+(Fv)_x$ lá.</p>
+              <p>À esquerda da curva, a regra de Leibniz dá $0=\int s'\,u_-\,v\,dt+\iint_{x&lt;s}(uv)_t$ (derivada total de $\int_{-\infty}^{s(t)}uv\,dx$, que integra a zero). Logo $\iint_{x&lt;s}(uv)_t=-\int s'u_-v\,dt$. Por outro lado, $\iint_{x&lt;s}(Fv)_x=\int F_-v\,dt$. A contribuição esquerda é
+              $$\int\big(F_--s'u_-\big)\,v\,dt.$$
+              Do lado direito, com os sinais trocados, a contribuição é $\int\big(-F_++s'u_+\big)\,v\,dt$. A soma tem que ser zero para todo $v$:
+              $$\int\big[F_--F_+-s'(u_--u_+)\big]\,v\,dt=0\ \Longrightarrow\ s'(u_--u_+)=F_--F_+.$$</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
       <h2 id="exercicios">Exercícios</h2>
 
       <aside class="box exercicio">
-        <p class="tag">1. Clássica implica fraca</p>
+        <p class="tag">1. Clássica implica fraca (usa a forma com funções-teste)</p>
         <p>Mostre que se $u$ é uma solução clássica de $u_t+(F(u))_x=0$ com $u(x,0)=f(x)$, então $u$ satisfaz a forma fraca para toda função-teste $v$.</p>
       </aside>
       <details>
