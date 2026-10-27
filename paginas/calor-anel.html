@@ -80,6 +80,85 @@
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
       <p>Monte o laplaciano do anel, compare os autovalores com $k(2\pi m/\ell)^2$ para $N=8,16,64,256$ e depois compare as soluções. O $c$ certo é o que deixa $k=ch^2$ fixo.</p>
 
+      <figure class="fig">
+<svg viewBox="0 0 540 216" role="img" aria-labelledby="fg4t" style="width:100%;height:auto;max-width:560px;display:block;margin:0 auto">
+  <title id="fg4t">Anel de oito vértices numerados de 0 a 7, em t = 0 (gaussiana centrada no vértice 4) e em t = 1. A cor mostra u.</title>
+  <g transform="translate(0,0)">
+    <text x="135" y="16" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" style="fill:var(--ink)">t = 0</text>
+    <circle cx="135" cy="112" r="62" fill="none" style="stroke:var(--ink-soft)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="50.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="50.0" r="14" style="fill:var(--choque)" fill-opacity="0.00"/>
+    <text x="135.0" y="54.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">0</text>
+    <text x="135.0" y="28.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,00</text>
+    <circle cx="178.8" cy="68.2" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="178.8" cy="68.2" r="14" style="fill:var(--choque)" fill-opacity="0.00"/>
+    <text x="178.8" y="72.7" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">1</text>
+    <text x="196.5" y="54.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,00</text>
+    <circle cx="197.0" cy="112.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="197.0" cy="112.0" r="14" style="fill:var(--choque)" fill-opacity="0.05"/>
+    <text x="197.0" y="116.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">2</text>
+    <text x="222.0" y="115.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,01</text>
+    <circle cx="178.8" cy="155.8" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="178.8" cy="155.8" r="14" style="fill:var(--choque)" fill-opacity="0.48"/>
+    <text x="178.8" y="160.3" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">3</text>
+    <text x="196.5" y="177.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,29</text>
+    <circle cx="135.0" cy="174.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="174.0" r="14" style="fill:var(--choque)" fill-opacity="1.00"/>
+    <text x="135.0" y="178.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">4</text>
+    <text x="135.0" y="202.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">1,00</text>
+    <circle cx="91.2" cy="155.8" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="91.2" cy="155.8" r="14" style="fill:var(--choque)" fill-opacity="0.48"/>
+    <text x="91.2" y="160.3" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">5</text>
+    <text x="73.5" y="177.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,29</text>
+    <circle cx="73.0" cy="112.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="73.0" cy="112.0" r="14" style="fill:var(--choque)" fill-opacity="0.05"/>
+    <text x="73.0" y="116.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">6</text>
+    <text x="48.0" y="115.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,01</text>
+    <circle cx="91.2" cy="68.2" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="91.2" cy="68.2" r="14" style="fill:var(--choque)" fill-opacity="0.00"/>
+    <text x="91.2" y="72.7" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">7</text>
+    <text x="73.5" y="54.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,00</text>
+  </g>
+  <g transform="translate(270,0)">
+    <text x="135" y="16" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" style="fill:var(--ink)">t = 1</text>
+    <circle cx="135" cy="112" r="62" fill="none" style="stroke:var(--ink-soft)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="50.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="50.0" r="14" style="fill:var(--choque)" fill-opacity="0.03"/>
+    <text x="135.0" y="54.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">0</text>
+    <text x="135.0" y="28.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,00</text>
+    <circle cx="178.8" cy="68.2" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="178.8" cy="68.2" r="14" style="fill:var(--choque)" fill-opacity="0.07"/>
+    <text x="178.8" y="72.7" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">1</text>
+    <text x="196.5" y="54.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,01</text>
+    <circle cx="197.0" cy="112.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="197.0" cy="112.0" r="14" style="fill:var(--choque)" fill-opacity="0.23"/>
+    <text x="197.0" y="116.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">2</text>
+    <text x="222.0" y="115.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,09</text>
+    <circle cx="178.8" cy="155.8" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="178.8" cy="155.8" r="14" style="fill:var(--choque)" fill-opacity="0.54"/>
+    <text x="178.8" y="160.3" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">3</text>
+    <text x="196.5" y="177.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,36</text>
+    <circle cx="135.0" cy="174.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="135.0" cy="174.0" r="14" style="fill:var(--choque)" fill-opacity="0.80"/>
+    <text x="135.0" y="178.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">4</text>
+    <text x="135.0" y="202.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,68</text>
+    <circle cx="91.2" cy="155.8" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="91.2" cy="155.8" r="14" style="fill:var(--choque)" fill-opacity="0.54"/>
+    <text x="91.2" y="160.3" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">5</text>
+    <text x="73.5" y="177.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,36</text>
+    <circle cx="73.0" cy="112.0" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="73.0" cy="112.0" r="14" style="fill:var(--choque)" fill-opacity="0.23"/>
+    <text x="73.0" y="116.5" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">6</text>
+    <text x="48.0" y="115.5" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,09</text>
+    <circle cx="91.2" cy="68.2" r="14" style="fill:var(--paper);stroke:var(--ink)" stroke-width="1.8"/>
+    <circle cx="91.2" cy="68.2" r="14" style="fill:var(--choque)" fill-opacity="0.07"/>
+    <text x="91.2" y="72.7" text-anchor="middle" font-family="sans-serif" font-size="13" style="fill:var(--ink)">7</text>
+    <text x="73.5" y="54.0" text-anchor="middle" font-family="sans-serif" font-size="10" style="fill:var(--ink-soft)">0,01</text>
+  </g>
+</svg>
+<figcaption>O anel com $N=8$ da célula abaixo: o vértice $j$ fica em $x_j=jh$ e fala com $j-1$ e $j+1$ (o $7$ com o $0$). O dado inicial é uma gaussiana com o pico no vértice $4$ ($x=\pi$); à direita, o anel em $t=1$, calculado com $c=k/h^2$. Não há setas: no anel a difusão é simétrica por construção.</figcaption>
+</figure>
+
       <div class="pycell" data-title="Do anel à equação do calor"
            data-starter="../py/anel_lacunas.py"
            data-solution="../py/anel_solucao.py"></div>
