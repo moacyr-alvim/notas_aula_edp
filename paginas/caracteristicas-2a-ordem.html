@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Características de 2ª ordem — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Características de 2ª ordem</h1>
+        <p class="lede">Em primeira ordem a característica é a curva onde a EDP vira uma EDO. Em segunda ordem ela aparece onde os dados sobre uma curva deixam de determinar as derivadas de segunda ordem.</p>
+        <p class="meta">Ajuda ler antes: Características de 1ª ordem <small>(página em breve)</small>.</p>
+      </header>
+
+      <h2 id="pergunta" data-toc="A pergunta">A pergunta que muda</h2>
+      <p>Em primeira ordem, característica era uma curva ao longo da qual a EDP vira uma EDO. Em segunda ordem vale a mesma ideia, mas o caminho até ela é outro. Você conhece $u$ e as derivadas primeiras, $p=u_x$ e $q=u_y$, sobre uma curva $\Gamma$ do plano (a curva inicial). Dá para descobrir as derivadas de segunda ordem sobre $\Gamma$?</p>
+      <p>Se der, dá para sair da curva passo a passo, com Taylor. Se não der, a curva é especial. Esse é o critério.</p>
+
+      <h2 id="contato" data-toc="O que a curva já conta">O que a curva já nos conta</h2>
+      <p>Parametrize $\Gamma$ por $(x(\tau),y(\tau))$ e chame de $z$, $p$, $q$ os valores de $u$, $u_x$, $u_y$ sobre ela. Um ponto indica $d/d\tau$. Pela regra da cadeia,
+      $$\dot z=p\,\dot x+q\,\dot y,\qquad \dot p=u_{xx}\dot x+u_{xy}\dot y,\qquad \dot q=u_{xy}\dot x+u_{yy}\dot y.$$
+      São as <b>equações de contato</b>. A primeira só confere os dados. As duas últimas importam: o lado esquerdo ($\dot p$ e $\dot q$) é conhecido, porque $p$ e $q$ são dados sobre $\Gamma$, e o lado direito traz as três incógnitas $u_{xx}$, $u_{xy}$, $u_{yy}$. São duas equações para três incógnitas. A terceira vem da própria EDP.</p>
+
+      <h2 id="sistema" data-toc="O sistema 3×3">Um sistema 3×3</h2>
+      <p>Vamos trabalhar com a EDP semilinear mais geral em duas variáveis,
+      $$A\,u_{xx}+2B\,u_{xy}+C\,u_{yy}=G(x,y,u,u_x,u_y),$$
+      com $A,B,C$ funções de $(x,y)$. Sobre $\Gamma$ o lado direito é conhecido. Juntando as três equações:
+      $$\begin{pmatrix}\dot x&\dot y&0\\0&\dot x&\dot y\\A&2B&C\end{pmatrix}\begin{pmatrix}u_{xx}\\u_{xy}\\u_{yy}\end{pmatrix}=\begin{pmatrix}\dot p\\\dot q\\G\end{pmatrix}.$$
+      Quando a matriz é invertível, as três derivadas de segunda ordem ficam determinadas, e derivando a EDP de novo saem as de terceira ordem, e assim por diante. Quando a matriz é singular, não: o sistema não tem solução ou tem infinitas, e os dados sobre $\Gamma$ deixam de mandar na solução. O determinante é
+      $$\det=\dot x\,(C\dot x-2B\dot y)-\dot y\,(0-A\dot y)=C\dot x^2-2B\,\dot x\dot y+A\,\dot y^2.$$</p>
+      <aside class="box">
+        <p><b>Curva característica.</b> $\Gamma$ é característica quando em cada ponto dela
+        $$\boxed{\,C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.\,}$$
+        É uma equação só para a <em>direção</em> $(\dot x,\dot y)$ da curva, em cada ponto.</p>
+      </aside>
+      <p>Para uma EDP qualquer, $F(x,y,u,u_x,u_y,u_{xx},u_{xy},u_{yy})=0$, vale a mesma conta: a última linha da matriz passa a ser $(F_{u_{xx}},F_{u_{xy}},F_{u_{yy}})$ e a condição fica $\dot x^2F_{u_{yy}}-\dot x\dot y\,F_{u_{xy}}+\dot y^2F_{u_{xx}}=0$. Na semilinear $F_{u_{xx}}=A$, $F_{u_{xy}}=2B$, $F_{u_{yy}}=C$ e recai na caixa acima.</p>
+
+      <h2 id="recado" data-toc="O que a característica carrega">O recado que anda pela característica</h2>
+      <p>Num ponto de uma característica o sistema é singular, mas continua precisando de uma solução (estamos supondo que existe uma solução). Isso só acontece se o lado direito $(\dot p,\dot q,G)$ satisfizer uma condição de compatibilidade, e essa condição é uma relação entre $\dot p$ e $\dot q$, ou seja, uma lei de transporte ao longo da curva. É o análogo do $\dot z=\dots$ do caso de primeira ordem.</p>
+      <p>O exemplo mais limpo é a equação da onda $u_{yy}-c^2u_{xx}=0$, em que $A=-c^2$, $B=0$, $C=1$. A equação das características fica $\dot x^2-c^2\dot y^2=0$, isto é, $\dot x=\pm c\,\dot y$: duas famílias de retas, $x\mp cy=\text{const}$.</p>
+      <details>
+        <summary>O recado, na família $\dot x=c,\ \dot y=1$</summary>
+        <div class="body">
+          <p>Com $\dot x=c$ e $\dot y=1$ as duas últimas equações de contato são $\dot p=c\,u_{xx}+u_{xy}$ e $\dot q=c\,u_{xy}+u_{yy}$. A EDP diz $u_{yy}=c^2u_{xx}$, então
+          $$\dot q=c\,u_{xy}+c^2u_{xx}=c\,(u_{xy}+c\,u_{xx})=c\,\dot p.$$
+          Ou seja, $\dfrac{d}{d\tau}\,(cp-q)=0$: a combinação $cp-q$ é constante ao longo de cada reta dessa família. Na outra família, $\dot x=-c$, sai do mesmo jeito que $cp+q$ é constante.</p>
+        </div>
+      </details>
+      <p>Guarde essa conclusão: duas famílias de retas, uma combinação das derivadas primeiras viajando por cada uma. A <a href="onda-dalembert.html">página da onda</a> transforma isso na fórmula de d'Alembert.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Achando as características</p>
+        <p>Escreva a equação das características e encontre as curvas, para
+        (a) $u_{xx}-4u_{yy}=0$; (b) $u_{xx}-2u_{xy}-3u_{yy}=0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $A=1$, $B=0$, $C=-4$. A condição é $-4\dot x^2+\dot y^2=0$, ou seja, $\dot y=\pm2\dot x$. As curvas são as retas $y=2x+k$ e $y=-2x+k$.</p>
+          <p>(b) $A=1$, $2B=-2$ (logo $B=-1$), $C=-3$. A condição é $-3\dot x^2+2\dot x\dot y+\dot y^2=0$, que fatora como $(\dot y-\dot x)(\dot y+3\dot x)=0$. As curvas são as retas $y=x+k$ e $y=-3x+k$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Uma curva característica não pode ser dado inicial livre</p>
+        <p>Para $u_{xx}-u_{yy}=0$ (que tem $\dot x=\pm\dot y$), tome a reta $y=x$ e dê sobre ela $u=0$, $p=-\sin x$ e $q=\sin x$ (conferindo: $\dot z=p\dot x+q\dot y=0$, como deve ser). Mostre que não existe solução com esses dados.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $\dot x=\dot y=1$, as equações de contato dão $\dot p=u_{xx}+u_{xy}$ e $\dot q=u_{xy}+u_{yy}$. Pela EDP, $u_{yy}=u_{xx}$, então $\dot q=\dot p$ ao longo da reta, e $q-p$ é constante (é o recado, com $c=1$). Com os dados dados, $q-p=2\sin x$ não é constante. Logo nenhuma solução tem esses dados: sobre uma característica os dados não são livres.</p>
+          <p>E se o recado for respeitado, o problema perde a unicidade. Com $u=p=q=0$ sobre a reta, tanto $u=0$ quanto $u=(x-y)^2$ servem.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li class="soon">Características de 1ª ordem (em breve)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+            <li><a href="onda-dalembert.html">A equação da onda e d'Alembert</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

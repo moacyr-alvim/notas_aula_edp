@@ -266,3 +266,10 @@ html[data-theme="dark"] .chips button[aria-pressed="true"] { color: #0b1020; }
 .fig figcaption { font-family: var(--sans); font-size: .9rem; color: var(--ink-soft); text-align: center; margin-top: .4rem; }
 .demo .panels > .wide-panel { grid-column: 1 / -1; }
 .demo label.check { gap: .4rem; }
+
+/* tabelas simples (resumos de classificação etc.) */
+table.tabela { width: 100%; border-collapse: collapse; margin: 1.1rem 0; font-size: .95rem; }
+table.tabela th, table.tabela td { text-align: left; padding: .45rem .7rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+table.tabela thead th { font-family: var(--sans); font-size: .85rem; color: var(--ink-soft); border-bottom: 2px solid var(--rule); }
+table.tabela td:first-child { white-space: nowrap; }
+@media (max-width: 640px) { table.tabela { display: block; overflow-x: auto; } }

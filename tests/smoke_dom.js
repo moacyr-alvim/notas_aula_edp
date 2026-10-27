@@ -147,6 +147,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["a-N"].value = "64"; env.byId["a-N"].fire("input"); await wait(30);
     check("anel-demo (grafo em anel): mais vértices → mais perto do contínuo", errOf() < e8 / 10, e8 + " → " + errOf());
   }
+  /* ---- onda: d'Alembert ---- */
+  {
+    const env = makeEnv(["demo-onda", "w-preset", "w-c", "w-cv", "w-t", "w-tv", "w-x", "w-xv", "w-play", "w-readout", "w-diag-canvas", "w-perfil-canvas"], []);
+    run(env, "onda-core.js"); env.sandbox.window.OndaCore = env.sandbox.OndaCore || vm.runInContext("OndaCore", env.sandbox);
+    env.byId["w-preset"].value = "parado"; env.byId["w-c"].value = "1"; env.byId["w-x"].value = "0.6";
+    let err = null; try { run(env, "onda-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("onda-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["w-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("onda-demo: leitura traz o domínio de dependência [−0,60; 1,80] em t = 1,2", rd().includes("−0,60") && rd().includes("1,80"), rd().slice(0, 120));
+    env.byId["w-preset"].value = "martelada"; env.byId["w-preset"].fire("input"); env.byId["w-x"].value = "0"; env.byId["w-x"].fire("input"); await wait(30);
+    check("onda-demo: martelada em x = 0 e t = 1,2 dá u = 1,000 (patamar 1/c)", rd().includes("u(P) = 1,000"), rd().slice(0, 120));
+  }
   /* ---- convolução: zeros x periódico ---- */
   {
     const env = makeEnv(["demo-conv", "c-sinal", "c-nucleo", "c-modo", "c-j", "c-jv", "c-play", "c-readout", "c-conv-canvas"], []);

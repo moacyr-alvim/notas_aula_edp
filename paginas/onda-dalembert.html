@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Onda e d'Alembert — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A equação da onda e a fórmula de d'Alembert</h1>
+        <p class="lede">A corda esticada, deduzida de dois jeitos (fatorando o operador e seguindo as características) que acabam sendo o mesmo. Com demo e Python.</p>
+        <p class="meta">Ajuda ler antes: <a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a>. Vale também: <a href="classificacao.html">Hiperbólica, parabólica, elíptica</a>.</p>
+      </header>
+
+      <h2 id="problema" data-toc="O problema">A corda e a fórmula</h2>
+      <p>Uma corda esticada, com deslocamento $u(x,t)$ no ponto $x$ e instante $t$, obedece (para pequenos deslocamentos) a
+      $$u_{tt}=c^2u_{xx},\qquad u(x,0)=f(x),\qquad u_t(x,0)=g(x).$$
+      O número $c>0$ é uma velocidade (veremos qual). Como a equação é de segunda ordem no tempo, são dois dados: $f$ é a foto da corda em $t=0$ e $g$ é a velocidade de cada pontinho nesse instante.</p>
+      <p>A resposta, antes de qualquer conta, é a <b>fórmula de d'Alembert</b>:
+      $$\boxed{\,u(x,t)=\frac12\Big[f(x-ct)+f(x+ct)\Big]+\frac1{2c}\int_{x-ct}^{x+ct}g(w)\,dw.\,}$$
+      Vamos deduzi-la de dois jeitos. Depois vamos ver que, no fundo, é o mesmo jeito.</p>
+
+      <h2 id="fatoracao" data-toc="Jeito 1: fatorar">Jeito 1: fatorando o operador</h2>
+      <p>Lembra de $a^2-b^2=(a-b)(a+b)$? Com derivadas funciona igual, porque derivadas parciais comutam:
+      $$\partial_t^2-c^2\partial_x^2=(\partial_t-c\,\partial_x)(\partial_t+c\,\partial_x).$$
+      (Conferindo: $(\partial_t-c\partial_x)(u_t+cu_x)=u_{tt}+c\,u_{tx}-c\,u_{xt}-c^2u_{xx}$.) Então, chamando
+      $$v=u_t+c\,u_x,$$
+      a equação da onda vira duas equações de primeira ordem, uma depois da outra:
+      $$v_t-c\,v_x=0,\qquad u_t+c\,u_x=v.$$
+      <b>Passo 1.</b> A primeira é uma equação de transporte com velocidade $-c$: $v$ é constante ao longo das retas $x+ct=\text{const}$, ou seja, $v(x,t)=v_0(x+ct)$, com
+      $$v_0(x)=v(x,0)=u_t(x,0)+c\,u_x(x,0)=g(x)+c\,f'(x).$$
+      <b>Passo 2.</b> A segunda é um transporte com velocidade $+c$ e um termo do lado direito. Siga a característica que sai de $(x_0,0)$, isto é, $x=x_0+cs$, $t=s$. Ao longo dela $\dfrac{d}{ds}u(x_0+cs,s)=u_t+cu_x=v=v_0(x_0+2cs)$. Integrando de $0$ a $t$ e chamando $w=x_0+2cs$,
+      $$u(x_0+ct,t)=f(x_0)+\int_0^tv_0(x_0+2cs)\,ds=f(x_0)+\frac1{2c}\int_{x_0}^{x_0+2ct}v_0(w)\,dw.$$
+      Para chegar a um ponto $(x,t)$ qualquer, basta $x_0=x-ct$:
+      $$u(x,t)=f(x-ct)+\frac1{2c}\int_{x-ct}^{x+ct}\big[g(w)+c\,f'(w)\big]dw.$$
+      A parte com $f'$ integra sozinha: $\frac12[f(x+ct)-f(x-ct)]$. Somando com $f(x-ct)$ sai exatamente a fórmula de d'Alembert. (Precisamos $f\in C^2$ e $g\in C^1$ para as contas valerem.)</p>
+
+      <h2 id="caracteristicas" data-toc="Jeito 2: características">Jeito 2: seguindo as características</h2>
+      <p>Pela <a href="caracteristicas-2a-ordem.html">página anterior</a>, as características da equação da onda são as retas $x=x_0\pm ct$, e ao longo delas anda um recado. Com $p=u_x$ e $q=u_t$:</p>
+      <ul>
+        <li>ao longo de $\dot x=+c$ (retas $x-ct=\text{const}$): $\;c\,p-q$ é constante;</li>
+        <li>ao longo de $\dot x=-c$ (retas $x+ct=\text{const}$): $\;c\,p+q$ é constante.</li>
+      </ul>
+      <details>
+        <summary>De onde saem essas duas conservações</summary>
+        <div class="body">
+          <p>Em $\dot x=c,\ \dot t=1$, as equações de contato são $\dot p=c\,u_{xx}+u_{xt}$ e $\dot q=c\,u_{xt}+u_{tt}$. Com $u_{tt}=c^2u_{xx}$ sai $\dot q=c\,(u_{xt}+c\,u_{xx})=c\,\dot p$, isto é, $\frac{d}{d\tau}(cp-q)=0$. Em $\dot x=-c$, $\dot t=1$: $\dot p=-c\,u_{xx}+u_{xt}$ e $\dot q=-c\,u_{xt}+u_{tt}=-c\,(u_{xt}-c\,u_{xx})=-c\,\dot p$, isto é, $\frac{d}{d\tau}(cp+q)=0$.</p>
+        </div>
+      </details>
+      <p>Agora tome um ponto $P=(x_p,t_p)$ e olhe para as duas características que chegam a ele, vindas do eixo $t=0$ nos pontos
+      $$x_i=x_p-c\,t_p\quad(\text{reta }\dot x=+c),\qquad x_f=x_p+c\,t_p\quad(\text{reta }\dot x=-c).$$
+      Em $t=0$ sabemos $p=f'$ e $q=g$, então cada conservação leva o valor lá de baixo até $P$:
+      $$c\,p(P)-q(P)=c\,f'(x_i)-g(x_i),\qquad c\,p(P)+q(P)=c\,f'(x_f)+g(x_f).$$
+      Duas equações para duas incógnitas, e saem $u_x$ e $u_t$ em todo ponto:
+      $$u_x=\tfrac12\Big[f'(x_i)+f'(x_f)+\tfrac1c\big(g(x_f)-g(x_i)\big)\Big],\qquad u_t=\tfrac12\Big[c\big(f'(x_f)-f'(x_i)\big)+g(x_f)+g(x_i)\Big].$$
+      Falta o valor de $u$. Ao longo da característica $\phi_i(\tau)=(x_i+c\tau,\tau)$, a primeira equação de contato diz
+      $$\dot z=p\,\dot x+q\,\dot t=c\,p+q,$$
+      e o lado direito já sabemos: em cada ponto $(x_i+c\tau,\tau)$ de $\phi_i$, a combinação $cp+q$ vem da outra característica que passa por ali, que sai de $x_i+2c\tau$ no eixo. Ou seja, $\dot z=c\,f'(x_i+2c\tau)+g(x_i+2c\tau)$. Integrando de $\tau=0$ (onde $z=f(x_i)$) até $\tau=t_p$:
+      $$u(P)=f(x_i)+\int_0^{t_p}\!\!\big[c\,f'(x_i+2c\tau)+g(x_i+2c\tau)\big]d\tau=\tfrac12\big[f(x_i)+f(x_f)\big]+\frac1{2c}\int_{x_i}^{x_f}g(w)\,dw,$$
+      porque $x_i+2ct_p=x_f$. Com $x_i=x_p-ct_p$ e $x_f=x_p+ct_p$, é d'Alembert de novo.</p>
+      <aside class="box">
+        <p><b>Os dois jeitos são o mesmo.</b> A quantidade $c\,p+q=c\,u_x+u_t$ é o $v$ do Jeito 1. Dizer que $v$ é constante ao longo de $x+ct=\text{const}$ é dizer que $cp+q$ é constante ao longo de $\dot x=-c$. E a combinação $cp-q=-(u_t-cu_x)$ é o $v$ que aparece quando se fatora na outra ordem, $(\partial_t+c\partial_x)(\partial_t-c\partial_x)$.</p>
+      </aside>
+
+      <h2 id="coordenadas" data-toc="As características viram coordenadas">As características viram coordenadas</h2>
+      <p>Há um terceiro jeito, que mostra por que as características são tão boas: use-as como coordenadas. Faça
+      $$\xi=x-ct,\qquad \eta=x+ct,\qquad u(x,t)=w(\xi,\eta).$$
+      Pela regra da cadeia, $u_x=w_\xi+w_\eta$ e $u_t=-c\,w_\xi+c\,w_\eta$, e
+      $$u_{xx}=w_{\xi\xi}+2w_{\xi\eta}+w_{\eta\eta},\qquad u_{tt}=c^2\big(w_{\xi\xi}-2w_{\xi\eta}+w_{\eta\eta}\big).$$
+      Então $u_{tt}-c^2u_{xx}=-4c^2\,w_{\xi\eta}$, e a equação da onda vira
+      $$w_{\xi\eta}=0.$$
+      Derivar em $\eta$ e obter zero diz que $w_\xi$ não depende de $\eta$; integrar em $\xi$ dá $w=M(\xi)+N(\eta)$. Toda solução é a soma de uma onda que anda para a direita, $M(x-ct)$, e uma que anda para a esquerda, $N(x+ct)$.</p>
+      <p>Resta casar com os dados. Em $t=0$ temos $\xi=\eta=x$, e
+      $$M(x)+N(x)=f(x),\qquad -c\,M'(x)+c\,N'(x)=g(x).$$
+      Chame de $G$ uma primitiva de $g$. A segunda equação integrada dá $N-M=G/c$ (mais uma constante, que se absorve). Resolvendo, $M=\tfrac12(f-G/c)$ e $N=\tfrac12(f+G/c)$, e então
+      $$u=M(\xi)+N(\eta)=\tfrac12\big[f(\xi)+f(\eta)\big]+\frac1{2c}\big[G(\eta)-G(\xi)\big],$$
+      que é a fórmula de d'Alembert, já que $G(\eta)-G(\xi)=\int_\xi^\eta g$.</p>
+
+      <h2 id="leitura" data-toc="O que a fórmula diz">O que a fórmula diz</h2>
+      <ul>
+        <li><b>Ondas viajantes.</b> $f(x-ct)$ é o gráfico de $f$ andando para a direita com velocidade $c$, sem mudar de forma. $f(x+ct)$ anda para a esquerda. Uma foto inicial com $g=0$ se divide em duas metades, cada uma com metade da altura.</li>
+        <li><b>O papel de $g$.</b> O termo da integral acumula a velocidade inicial: é a área sob $g$ entre $x-ct$ e $x+ct$, dividida por $2c$.</li>
+        <li><b>Domínio de dependência.</b> $u(x,t)$ só depende dos dados no intervalo $[x-ct,\,x+ct]$ do eixo $t=0$: o trecho entre as duas características que chegam em $(x,t)$.</li>
+        <li><b>Velocidade finita.</b> Se os dados valem zero fora de $[a,b]$, então $u=0$ fora de $[a-ct,\,b+ct]$: nada se move mais rápido que $c$. (No calor não é assim: veja <a href="classificacao.html#calor">Hiperbólica, parabólica, elíptica</a>.)</li>
+      </ul>
+
+      <h2 id="demo">Veja acontecer</h2>
+      <p>Escolha um dado inicial e arraste $t$. À esquerda, o diagrama $x$–$t$: o ponto $P$, as duas características por ele e o trecho do eixo $t=0$ de que $u(P)$ depende (em azul). A faixa vermelha é onde o dado inicial é não nulo, e a região rosada é o único lugar onde a solução pode ser diferente de zero. À direita, o perfil $u(\cdot,t)$.</p>
+
+      <div class="demo" id="demo-onda">
+        <div class="controls">
+          <label>Dado inicial
+            <select id="w-preset" aria-label="Dado inicial">
+              <option value="parado">Pulso parado (g = 0)</option>
+              <option value="martelada">Martelada (f = 0, g = caixa)</option>
+              <option value="direita">Só para a direita (g = −c f′)</option>
+            </select>
+          </label>
+          <label>c <input type="range" id="w-c" min="0.5" max="1.5" step="0.05" value="1" aria-label="Velocidade c"> <output id="w-cv">1,00</output></label>
+          <label>t <input type="range" id="w-t" min="0" max="4" step="0.01" value="1.2" aria-label="Tempo t"> <output id="w-tv">1,20</output></label>
+          <label>x de P <input type="range" id="w-x" min="-6" max="6" step="0.1" value="0.6" aria-label="Posição x do ponto P"> <output id="w-xv">0,6</output></label>
+          <button id="w-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="w-diag-canvas" role="img" aria-label="Diagrama x–t com o ponto P, as duas características por P e o domínio de dependência"></canvas>
+          <canvas id="w-perfil-canvas" role="img" aria-label="Perfil u(x,t) no instante t"></canvas>
+        </div>
+        <div class="readout" id="w-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>$u(\cdot,t)$</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial $f$</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>parte que vai para a direita</span>
+          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>parte que vai para a esquerda</span>
+        </div>
+      </div>
+
+      <p>Para explorar: (1) com o pulso parado, veja o pico se dividir em dois, cada um com altura $1/2$. (2) Com a martelada, o ponto $x=0$ sobe até o patamar $1/c$ e <em>fica lá</em>: a corda em uma dimensão não volta sozinha à posição original. (3) No terceiro dado, $g=-cf'$ faz $v\equiv0$ no Jeito 1, e a onda anda inteira para a direita. (4) Arraste $c$ e veja o cone abrir e fechar.</p>
+      <aside class="box">
+        <p><b>Ligação com a condição CFL.</b> O domínio de dependência $[x-ct,\,x+ct]$ é o "cone da equação" que aparece na <a href="cfl.html">página sobre CFL</a>. Ela mostra que um esquema numérico só tem chance se o cone dele contiver esse.</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Complete a fórmula de d'Alembert, veja a martelada evoluir e confira numericamente, com diferenças finitas, que a fórmula de fato resolve a EDP.</p>
+      <div class="pycell" data-title="Fórmula de d'Alembert"
+           data-starter="../py/onda_lacunas.py"
+           data-solution="../py/onda_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A onda com termo fonte</p>
+        <p>Encontre a solução da equação da onda não homogênea $u_{tt}-u_{xx}=1$. (Depois: com dados $u(x,0)=f(x)$ e $u_t(x,0)=g(x)$.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Basta uma solução particular e somar a solução geral da equação homogênea. Tente algo que só dependa de $t$: $u_p=t^2/2$ dá $u_{tt}=1$ e $u_{xx}=0$. A solução geral é
+          $$u(x,t)=\frac{t^2}2+M(x-t)+N(x+t).$$
+          Com dados: $w=u-t^2/2$ resolve a equação homogênea com $w(x,0)=f(x)$ e $w_t(x,0)=g(x)$ (porque $\partial_t(t^2/2)=t$ vale $0$ em $t=0$). Então
+          $$u(x,t)=\frac{t^2}2+\frac12\big[f(x-t)+f(x+t)\big]+\frac12\int_{x-t}^{x+t}g(w)\,dw.$$</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Conferindo a fórmula</p>
+        <p>Mostre diretamente que $u=\frac12[f(x-ct)+f(x+ct)]+\frac1{2c}\int_{x-ct}^{x+ct}g$ satisfaz $u_{tt}=c^2u_{xx}$, $u(x,0)=f$ e $u_t(x,0)=g$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Escreva $u=\frac12[f(\xi)+f(\eta)]+\frac1{2c}[G(\eta)-G(\xi)]$, com $G'=g$, $\xi=x-ct$ e $\eta=x+ct$. Então
+          $$u_t=\tfrac c2\big[f'(\eta)-f'(\xi)\big]+\tfrac12\big[g(\eta)+g(\xi)\big],\qquad u_{tt}=\tfrac{c^2}2\big[f''(\eta)+f''(\xi)\big]+\tfrac c2\big[g'(\eta)-g'(\xi)\big],$$
+          $$u_{xx}=\tfrac12\big[f''(\xi)+f''(\eta)\big]+\tfrac1{2c}\big[g'(\eta)-g'(\xi)\big].$$
+          Comparando, $u_{tt}=c^2u_{xx}$. Em $t=0$ temos $\xi=\eta=x$, então $u=f(x)$ e $u_t=g(x)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A martelada</p>
+        <p>Sejam $c=2$, $f=0$ e $g=1$ em $[-1,1]$ e $g=0$ fora. Calcule $u(0,t)$ para todo $t$ e descreva $u(\cdot,t)$ para $t$ grande.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $f=0$, $u(x,t)=\frac1{2c}\int_{x-ct}^{x+ct}g=\frac14\times(\text{comprimento de }[x-2t,\,x+2t]\cap[-1,1])$. Em $x=0$ o intervalo $[-2t,2t]$ cobre $[-1,1]$ a partir de $t=1/2$. Então $u(0,t)=\frac14\cdot4t=t$ para $t\le\frac12$ e $u(0,t)=\frac14\cdot2=\frac12$ para $t\ge\frac12$, sem nunca voltar a zero.</p>
+          <p>Para $t$ grande: $u=\frac12$ se $|x|\le2t-1$ (o intervalo de dependência contém $[-1,1]$ inteiro), $u=0$ se $|x|\ge2t+1$, e $u$ cai linearmente de $\frac12$ a $0$ entre os dois. É um patamar de altura $1/c$ que se alarga com velocidade $c$ nas duas pontas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Onda que só anda para um lado</p>
+        <p>Mostre que, se $g=-c\,f'$, então $u(x,t)=f(x-ct)$. Usando o Jeito 1, explique o que acontece com $v$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $G=-cf$, d'Alembert dá $u=\frac12[f(\xi)+f(\eta)]-\frac12[f(\eta)-f(\xi)]=f(\xi)$. No Jeito 1, $v_0=g+cf'=0$, então $v\equiv0$ e a equação restante é $u_t+cu_x=0$, o transporte puro com velocidade $c$, cuja solução é $f(x-ct)$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Onda estacionária</p>
+        <p>Com $f(x)=\sin x$ e $g=0$, calcule $u$. Quais pontos $x$ ficam parados para sempre?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u=\frac12[\sin(x-ct)+\sin(x+ct)]=\sin x\,\cos(ct)$. É o produto de uma função de $x$ por uma função de $t$: a forma da corda não anda, só oscila. Os pontos $x=k\pi$ têm $\sin x=0$ e ficam parados para sempre (são os nós).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Velocidade finita</p>
+        <p>Se $f$ e $g$ valem zero fora de $[a,b]$, em que região $u(x,t)$ pode ser diferente de zero? Quanto tempo leva para um ponto $x_0>b$ sentir alguma coisa?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u(x,t)$ só depende dos dados em $[x-ct,\,x+ct]$. Se esse intervalo não encontra $[a,b]$, ou seja, se $x+ct&lt;a$ ou $x-ct>b$, então $u=0$. Logo $u\ne0$ só em $[a-ct,\,b+ct]$. O ponto $x_0>b$ começa a sentir quando $x_0-ct=b$, isto é, em $t=(x_0-b)/c$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a></li>
+            <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/onda-core.js"></script>
+  <script src="../assets/onda-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -70,12 +70,12 @@
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
       desc: "O cone de dependência do esquema precisa conter o da equação. Com Python editável." },
-    { id: "char2", lane: "seg", col: 1, row: 0, label: "Características\nde 2ª ordem", href: null, trails: ["segunda"],
-      desc: "Quando o sistema para as derivadas de segunda ordem fica singular." },
-    { id: "class", lane: "seg", col: 2, row: 0, label: "Hiperbólica,\nparabólica, elíptica", href: null, trails: ["segunda"],
-      desc: "A classificação pelo discriminante B² − AC, invariante por mudança de coordenadas." },
-    { id: "wave2", lane: "seg", col: 2, row: 1, label: "Onda e\nd'Alembert", href: null, trails: ["segunda", "numerico"],
-      desc: "Características como novas coordenadas e a fórmula de d'Alembert." },
+    { id: "char2", lane: "seg", col: 1, row: 0, label: "Características\nde 2ª ordem", href: "paginas/caracteristicas-2a-ordem.html", trails: ["segunda"],
+      desc: "Quando o sistema para as derivadas de segunda ordem fica singular, e o recado que anda pela curva." },
+    { id: "class", lane: "seg", col: 2, row: 0, label: "Hiperbólica,\nparabólica, elíptica", href: "paginas/classificacao.html", trails: ["segunda"],
+      desc: "O discriminante B² − AC, invariante por mudança de coordenadas, e por que o calor e Laplace não rendem como a onda." },
+    { id: "wave2", lane: "seg", col: 2, row: 1, label: "Onda e\nd'Alembert", href: "paginas/onda-dalembert.html", trails: ["segunda", "numerico"],
+      desc: "A fórmula de d'Alembert deduzida fatorando o operador e seguindo as características. Com demo e Python." },
     { id: "ma", lane: "seg", col: 3, row: 0, label: "Monge–Ampère", href: null, trails: ["segunda"],
       desc: "Leitura opcional: características por homotetia e a área sob a curva." }
   ];

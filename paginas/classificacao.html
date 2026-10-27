@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hiperbólica, parabólica, elíptica — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Hiperbólica, parabólica, elíptica</h1>
+        <p class="lede">O número de direções características reais por cada ponto é 2, 1 ou 0, e o discriminante $B^2-AC$ diz qual. É assim que onda, calor e Laplace ficam em três famílias, e por que só a primeira rende ao método das características.</p>
+        <p class="meta">Continuação de <a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a>.</p>
+      </header>
+
+      <h2 id="contando" data-toc="Contando direções">Contando direções</h2>
+      <p>Na página anterior, uma curva é característica quando sua direção $(\dot x,\dot y)$ satisfaz
+      $$C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.$$
+      É uma equação quadrática homogênea para a direção. Escrevendo a inclinação $m=\dot y/\dot x$ (quando $\dot x\ne0$), fica $A\,m^2-2B\,m+C=0$, com discriminante proporcional a
+      $$\Delta=B^2-AC.$$
+      Em cada ponto $P$, o número de direções características reais é $2$, $1$ ou $0$, conforme o sinal de $\Delta$:</p>
+      <table class="tabela">
+        <thead><tr><th>$\Delta=B^2-AC$</th><th>Direções reais por $P$</th><th>Nome</th><th>Exemplo</th></tr></thead>
+        <tbody>
+          <tr><td>$\Delta&gt;0$</td><td>duas</td><td>hiperbólica</td><td>onda: $u_{tt}-c^2u_{xx}=0$</td></tr>
+          <tr><td>$\Delta=0$</td><td>uma</td><td>parabólica</td><td>calor: $u_t=u_{xx}$</td></tr>
+          <tr><td>$\Delta&lt;0$</td><td>nenhuma</td><td>elíptica</td><td>Laplace: $u_{xx}+u_{yy}=0$</td></tr>
+        </tbody>
+      </table>
+      <p>Os nomes vêm das cônicas: as curvas de nível da forma quadrática $Ax^2+2Bxy+Cy^2$ são hipérboles, parábolas ou elipses conforme o mesmo discriminante. Só o nome vem daí.</p>
+      <figure class="fig">
+<svg viewBox="0 0 540 190" role="img" aria-labelledby="fgct" style="width:100%;height:auto;max-width:560px;display:block;margin:0 auto">
+  <title id="fgct">Direções características por um ponto P: duas retas no caso hiperbólico, uma reta horizontal no parabólico e nenhuma no elíptico.</title>
+  <g font-family="sans-serif" font-size="13" text-anchor="middle" style="fill:var(--ink)">
+    <rect x="10" y="10" width="160" height="130" rx="6" fill="none" style="stroke:var(--rule)" stroke-width="1.2"/>
+    <rect x="190" y="10" width="160" height="130" rx="6" fill="none" style="stroke:var(--rule)" stroke-width="1.2"/>
+    <rect x="370" y="10" width="160" height="130" rx="6" fill="none" style="stroke:var(--rule)" stroke-width="1.2"/>
+    <line x1="30" y1="125" x2="150" y2="25" style="stroke:var(--carac)" stroke-width="2.4"/>
+    <line x1="30" y1="25" x2="150" y2="125" style="stroke:var(--carac)" stroke-width="2.4"/>
+    <line x1="205" y1="75" x2="335" y2="75" style="stroke:var(--carac)" stroke-width="2.4"/>
+    <circle cx="90" cy="75" r="5" style="fill:var(--ink)"/>
+    <circle cx="270" cy="75" r="5" style="fill:var(--ink)"/>
+    <circle cx="450" cy="75" r="5" style="fill:var(--ink)"/>
+    <text x="90" y="104" font-weight="bold">P</text>
+    <text x="282" y="68" font-weight="bold">P</text>
+    <text x="462" y="68" font-weight="bold">P</text>
+    <text x="450" y="112" font-size="12" style="fill:var(--ink-soft)">nenhuma direção real</text>
+    <text x="90" y="164" font-weight="bold">hiperbólica</text>
+    <text x="90" y="182" font-size="12" style="fill:var(--ink-soft)">duas direções · onda</text>
+    <text x="270" y="164" font-weight="bold">parabólica</text>
+    <text x="270" y="182" font-size="12" style="fill:var(--ink-soft)">uma direção · calor</text>
+    <text x="450" y="164" font-weight="bold">elíptica</text>
+    <text x="450" y="182" font-size="12" style="fill:var(--ink-soft)">nenhuma · Laplace</text>
+  </g>
+</svg>
+        <figcaption>As direções características por um ponto $P$ (aqui no plano $x$–$t$ para os três exemplos).</figcaption>
+      </figure>
+
+      <p>Conferindo os exemplos (com $y$ no lugar de $t$ na onda e no calor):</p>
+      <ul>
+        <li>Onda, $u_{yy}-c^2u_{xx}=0$: $A=-c^2$, $B=0$, $C=1$, então $\Delta=c^2>0$.</li>
+        <li>Calor, $u_{xx}=u_y$: só a derivada segunda em $x$ conta na parte principal, $A=1$, $B=C=0$, então $\Delta=0$. ($u_y$ é de primeira ordem e não entra.)</li>
+        <li>Laplace, $u_{xx}+u_{yy}=0$: $A=C=1$, $B=0$, então $\Delta=-1<0$.</li>
+      </ul>
+
+      <h2 id="muda" data-toc="O tipo pode mudar">O tipo pode mudar de ponto a ponto</h2>
+      <p>Quando $A,B,C$ dependem de $(x,y)$, o tipo também depende. O exemplo clássico é a equação de Tricomi, $y\,u_{xx}+u_{yy}=0$ (que aparece em escoamento perto da velocidade do som): $A=y$, $B=0$, $C=1$, logo $\Delta=-y$. É elíptica para $y>0$, hiperbólica para $y<0$ e parabólica sobre a reta $y=0$.</p>
+
+      <h2 id="calor-laplace" data-toc="Calor e Laplace">Por que calor e Laplace não se rendem</h2>
+      <p>A equação da onda cai com facilidade no método das características: duas famílias de retas, uma informação viajando em cada uma, e acabou (próxima página). Vejamos o que acontece com as outras duas.</p>
+
+      <h3 id="laplace">Laplace: não há direção real</h3>
+      <p>Para $u_{xx}+u_{yy}=0$ a equação das características é $\dot x^2+\dot y^2=0$, e a única solução real é $\dot x=\dot y=0$. Não há curva real ao longo da qual a informação viaje. Também não há cone de dependência: o valor de $u$ em um ponto depende dos valores em volta de todo ele (a média de $u$ sobre qualquer círculo é o valor no centro).</p>
+      <p>E se tentarmos mesmo assim, como na onda, dando $u$ e $u_y$ sobre o eixo $x$? O problema falha de um jeito dramático. Considere
+      $$u_n(x,y)=\frac{\sin(nx)\,\sinh(ny)}{n^2}.$$
+      Ela satisfaz $u_{xx}+u_{yy}=0$, tem $u_n(x,0)=0$ e $\partial_yu_n(x,0)=\dfrac{\sin(nx)}{n}$, que vai a zero quando $n\to\infty$. Mas em $y=1$ a amplitude é $\sinh(n)/n^2$, que explode. Dados cada vez menores levam a soluções cada vez maiores: o problema de valor inicial (dados de Cauchy) para Laplace é <b>mal posto</b>. A equação de Laplace pede outro tipo de problema, com valores no contorno de uma região.</p>
+      <aside class="box">
+        <p><b>Curiosidade.</b> Com números complexos, $\dot x^2+\dot y^2=0$ tem solução: $\dot x=\pm i\,\dot y$. As "características complexas" são $x\pm iy=\text{const}$ e as soluções de Laplace são $f(x+iy)+g(x-iy)$, a fórmula de d'Alembert com $c=i$. Funciona, mas não ajuda a resolver o problema de valor inicial real.</p>
+      </aside>
+
+      <h3 id="calor">Calor: uma só direção, e ela é horizontal</h3>
+      <p>Para $u_t=u_{xx}$ (com $y=t$), a equação das características é $\dot t^2=0$. Há uma direção só, $\dot t=0$: as características são as retas $t=\text{const}$. Três consequências:</p>
+      <ul>
+        <li><b>Velocidade infinita.</b> Na onda as características são $x=\pm ct+\text{const}$. Quando $c\to\infty$ essas retas deitam e viram $t=\text{const}$. Pense no calor como uma onda de velocidade infinita: uma perturbação em um ponto é sentida em todos os outros no mesmo instante (um pouquinho, mas é sentida), e não existe cone de dependência finito.</li>
+        <li><b>O eixo inicial é característico.</b> A reta $t=0$ é uma das características. Pelo que vimos, sobre uma característica os dados não são livres. E de fato: na onda damos duas funções, $u(x,0)=f$ e $u_t(x,0)=g$. No calor, $u_t=u_{xx}$ já diz quanto vale $u_t$ em $t=0$, então só uma função pode ser dada, $u(x,0)=f$.</li>
+        <li><b>O problema de valor inicial funciona assim mesmo.</b> Como a equação é de primeira ordem no tempo, $u(x,0)=f$ basta, e o problema é bem posto (para $t\ge0$). Só que a solução não é construída andando ao longo de curvas, como na onda. Ela é construída com Fourier e o núcleo gaussiano, como veremos na página de calor na reta.</li>
+      </ul>
+
+      <h3 id="resumo">Em uma tabela</h3>
+      <table class="tabela">
+        <thead><tr><th>Tipo</th><th>Características reais</th><th>O problema natural</th><th>Como a informação anda</th></tr></thead>
+        <tbody>
+          <tr><td>hiperbólica</td><td>duas famílias</td><td>valor inicial: $u$ e $u_t$</td><td>velocidade finita, ao longo das características</td></tr>
+          <tr><td>parabólica</td><td>uma, $t=\text{const}$</td><td>valor inicial: só $u$</td><td>instantaneamente, com suavização</td></tr>
+          <tr><td>elíptica</td><td>nenhuma</td><td>valores no contorno</td><td>cada ponto sente todos os outros</td></tr>
+        </tbody>
+      </table>
+      <p>O método das características, no sentido de resolver seguindo curvas, funciona de verdade só no primeiro caso.</p>
+
+      <h2 id="invariancia" data-toc="Independe das coordenadas">O tipo não depende das coordenadas</h2>
+      <p>Seria estranho se uma equação fosse hiperbólica em $(x,y)$ e elíptica depois de girar os eixos. Não é. Seja $M=\begin{pmatrix}A&B\\B&C\end{pmatrix}$, de modo que a parte principal da EDP é $\sum_{i,j}M_{ij}\,\partial_i\partial_ju$. Troque as coordenadas para $(\varphi,\xi)$ e seja $J=\partial(\varphi,\xi)/\partial(x,y)$ a matriz jacobiana. Escreva $u(x,y)=v(\varphi,\xi)$. Pela regra da cadeia,
+      $$D^2u=J^{T}\,(D^2v)\,J+(\text{termos com }v_\varphi,\,v_\xi),$$
+      e os termos de primeira ordem não afetam a parte principal. Então a parte principal, nas novas coordenadas, tem a matriz
+      $$\widetilde M=J\,M\,J^{T}.$$
+      Como $\det\widetilde M=(\det J)^2\det M$ e $\det J\neq0$ numa mudança regular, o sinal de $\det M=AC-B^2=-\Delta$ não muda. Hiperbólica, parabólica e elíptica são propriedades da equação, não da maneira de desenhar o plano.</p>
+      <details>
+        <summary>De onde sai $JMJ^T$</summary>
+        <div class="body">
+          <p>$\sum_{ij}M_{ij}\,\partial_i\partial_ju=\operatorname{tr}(M\,D^2u)=\operatorname{tr}\big(M J^T(D^2v)J\big)+\cdots=\operatorname{tr}\big(JMJ^T\,D^2v\big)+\cdots$ pela propriedade cíclica do traço. Quem multiplica $D^2v$ é $JMJ^T$.</p>
+        </div>
+      </details>
+      <p>Há mais: em cada tipo dá para escolher coordenadas em que a equação fica o mais simples possível (a forma canônica): $v_{\varphi\xi}=\dots$ no hiperbólico, $v_{\varphi\varphi}=\dots$ no parabólico e $v_{\varphi\varphi}+v_{\xi\xi}=\dots$ no elíptico. No hiperbólico, as coordenadas certas são as próprias características. Na equação da onda isso é feito à mão na próxima página.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Classifique</p>
+        <p>Determine o tipo de cada equação (hiperbólica, parabólica ou elíptica):</p>
+        <p>(a) $u_{xx}+2u_{xy}+u_{yy}=y\,u_x-x\,u_y$;
+        (b) $u_{xx}+4u_{xy}+4u_{yy}=u_x+u_y$;
+        (c) $u_{xx}+e^{-x}u_{yy}=0$;
+        (d) $u_{xx}u_{yy}-u_{xy}^2=1$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $A=1$, $B=1$, $C=1$: $\Delta=1-1=0$, <b>parabólica</b>. A direção característica é $\dot x^2-2\dot x\dot y+\dot y^2=(\dot x-\dot y)^2=0$, isto é, as retas $y=x+k$.</p>
+          <p>(b) $A=1$, $B=2$, $C=4$: $\Delta=4-4=0$, <b>parabólica</b>. $4\dot x^2-4\dot x\dot y+\dot y^2=(2\dot x-\dot y)^2=0$, as retas $y=2x+k$.</p>
+          <p>(c) $A=1$, $B=0$, $C=e^{-x}$: $\Delta=-e^{-x}<0$ em todo ponto, <b>elíptica</b>.</p>
+          <p>(d) Não é semilinear: a parte principal depende de $u$. Pela condição geral, $F=u_{xx}u_{yy}-u_{xy}^2-1$ tem $F_{u_{xx}}=u_{yy}$, $F_{u_{xy}}=-2u_{xy}$ e $F_{u_{yy}}=u_{xx}$, e a equação das características é $u_{xx}\dot x^2+2u_{xy}\dot x\dot y+u_{yy}\dot y^2=0$. Aqui o "$\Delta$" é $u_{xy}^2-u_{xx}u_{yy}=-1<0$, para toda solução: <b>elíptica</b>. Em outras palavras, a equação diz $\det D^2u=1>0$, a hessiana é definida e a forma quadrática acima nunca se anula. (Com $u_{xx}u_{yy}-u_{xy}^2=-c^2$ seria hiperbólica.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Depende de um parâmetro</p>
+        <p>Para $u_{xx}+2k\,u_{xy}+9\,u_{yy}=0$, para quais valores de $k$ a equação é hiperbólica, parabólica, elíptica? E quais são as curvas características quando $k=3$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$A=1$, $B=k$, $C=9$, então $\Delta=k^2-9$. Hiperbólica se $|k|>3$, parabólica se $|k|=3$, elíptica se $|k|&lt;3$. Para $k=3$: $9\dot x^2-6\dot x\dot y+\dot y^2=(3\dot x-\dot y)^2=0$, que dá uma família só, as retas $y=3x+c$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Dados cada vez menores, solução cada vez maior</p>
+        <p>Verifique que $u_n(x,y)=\sin(nx)\sinh(ny)/n^2$ satisfaz $u_{xx}+u_{yy}=0$. Calcule $\sup_x|u_n(x,0)|$ e $\sup_x|\partial_yu_n(x,0)|$ e compare com $\sup_x|u_n(x,1)|$ quando $n\to\infty$. O que isso diz sobre o problema de valor inicial?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u_{xx}=-\sin(nx)\sinh(ny)$ e $u_{yy}=+\sin(nx)\sinh(ny)$; a soma é $0$. Em $y=0$: $u_n=0$ e $\partial_yu_n=\sin(nx)\cosh(0)/n=\sin(nx)/n$, de sup $1/n\to0$. Em $y=1$: o sup de $|u_n|$ é $\sinh(n)/n^2\to\infty$. Os dados tendem a zero e as soluções explodem: a solução não depende continuamente dos dados, e o problema de valor inicial para Laplace é mal posto.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O calor já diz quem é $u_t$</p>
+        <p>Para $u_t=u_{xx}$ com $u(x,0)=\sin x$, calcule $u_t(x,0)$ e $u_{tt}(x,0)$ sem resolver a equação. O que sobra para escolher em $u_t(x,0)$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u_t(x,0)=u_{xx}(x,0)=-\sin x$. Derivando a EDP em $t$, $u_{tt}=u_{xxt}=u_{xxxx}$, então $u_{tt}(x,0)=\sin x$. Tudo é determinado por $u(x,0)$, não sobra nada para escolher: o eixo $t=0$ é característico, e é por isso que o problema de valor inicial do calor só aceita um dado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Características complexas</p>
+        <p>Verifique que $u=\operatorname{Re}(x+iy)^3=x^3-3xy^2$ resolve $u_{xx}+u_{yy}=0$. Que relação isso tem com $\dot x=\pm i\,\dot y$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u_{xx}=6x$ e $u_{yy}=-6x$; a soma é zero. A função é $f(x+iy)$ com $f(w)=w^3$ (tomando a parte real): constante ao longo das retas complexas $x+iy=\text{const}$. Nelas $\dot x+i\dot y=0$, isto é, $\dot x=-i\,\dot y$: é uma das duas famílias de características complexas. A outra, $x-iy=\text{const}$, tem $\dot x=+i\,\dot y$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="onda-dalembert.html">A equação da onda e d'Alembert</a></li>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>
