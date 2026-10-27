@@ -159,6 +159,21 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["w-preset"].value = "martelada"; env.byId["w-preset"].fire("input"); env.byId["w-x"].value = "0"; env.byId["w-x"].fire("input"); await wait(30);
     check("onda-demo: martelada em x = 0 e t = 1,2 dá u = 1,000 (patamar 1/c)", rd().includes("u(P) = 1,000"), rd().slice(0, 120));
   }
+  /* ---- Monge–Ampère ---- */
+  {
+    const env = makeEnv(["demo-ma", "m-curva", "m-s1", "m-s1v", "m-s2", "m-s2v", "m-readout", "m-canvas"], []);
+    run(env, "ma-core.js"); env.sandbox.window.MACore = env.sandbox.MACore || vm.runInContext("MACore", env.sandbox);
+    env.byId["m-curva"].value = "parabola";
+    let err = null; try { run(env, "ma-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("ma-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["m-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("ma-demo: parábola com P1=(−1,1), P2=(1,1): u = −0,667 e fórmula fechada igual", rd().includes("u(P) = −área/2 = −0,667") && rd().includes("fórmula fechada: −0,667"), rd().slice(0, 200));
+    env.byId["m-curva"].value = "circulo"; env.byId["m-curva"].fire("change"); await wait(30);
+    env.byId["m-s2"].value = String(parseFloat(env.byId["m-s2"].max)); env.byId["m-s2"].fire("input"); await wait(30);
+    check("ma-demo: círculo com P2 no extremo do controle (diâmetro) avisa ponto não regular", rd().includes("Ponto não regular"), rd().slice(0, 200));
+    env.byId["m-curva"].value = "elipse"; env.byId["m-curva"].fire("change"); await wait(30);
+    check("ma-demo: elipse tem fórmula fechada na leitura", rd().includes("fórmula fechada"), rd().slice(0, 200));
+  }
   /* ---- convolução: zeros x periódico ---- */
   {
     const env = makeEnv(["demo-conv", "c-sinal", "c-nucleo", "c-modo", "c-j", "c-jv", "c-play", "c-readout", "c-conv-canvas"], []);

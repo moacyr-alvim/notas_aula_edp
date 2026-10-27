@@ -59,6 +59,8 @@ assets/
   conv-core.js        convolução linear e circular (e a regra dos índices que somam), testável em Node
   onda-core.js        fórmula de d'Alembert e dados iniciais da demo da onda, testável em Node
   onda-demo.js        demo da onda: diagrama x–t com o cone de dependência e o perfil u(x,t)
+  ma-core.js          Monge–Ampère: ponto médio, gradiente, área e fórmulas fechadas (parábola, círculo, elipse), testável em Node
+  ma-demo.js          demo de Monge–Ampère: P₂ arrastável, características, gradiente e área
   conv-demo.js        demo da convolução: zeros fora da janela × cópias periódicas
 rascunhos/            material guardado para páginas futuras (não está ligado ao mapa)
 tests/                testes (veja abaixo)
@@ -93,6 +95,7 @@ node tests/burgers-core.test.js     # matemática da demo de Burgers (fórmulas 
 node tests/grafo-core.test.js       # difusão em grafos e grafo em anel: L = BᵀB, evolução contra Runge–Kutta, limite contínuo O(h²)
 node tests/conv-core.test.js        # convolução, matriz circulante, shift S, DFT e teorema da convolução
 node tests/onda-core.test.js        # d'Alembert: dados iniciais, EDP por diferenças finitas, dependência
+node tests/ma-core.test.js          # Monge–Ampère: det D²u = −1, área = |u|, gradiente, elipse = círculo transformado
 node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot (para a futura página de Hamilton–Jacobi)
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
 node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado

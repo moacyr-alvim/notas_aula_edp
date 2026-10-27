@@ -93,6 +93,26 @@
         <figcaption>Para a parábola $\Gamma$: $y=x^2$ e a corda de $\gamma(0)=(-1,1)$ a $\gamma(t)=(1,1)$. As características $\psi_1$ e $\psi_2$ encontram-se em $P=(0,1)$. A área sombreada é $|u(P)|$.</figcaption>
       </figure>
 
+      <h2 id="demo" data-toc="Veja acontecer">Mexa você mesmo</h2>
+      <p>$P_1$ fica fixo e você arrasta $P_2$ pela curva (ou usa os controles). Em cada posição aparecem o ponto médio $P$, as duas características $\psi_1$ e $\psi_2$ (azuis), o gradiente $\nabla u(P)$ (a seta) e a região sombreada, cuja área é $|u(P)|$. Para o círculo e a elipse o controle de $P_2$ vai até o diâmetro: aí $P$ é o centro, onde as características se encontram.</p>
+      <div class="demo" id="demo-ma">
+        <div class="controls">
+          <label>Curva $\Gamma$ <select id="m-curva" aria-label="Curva inicial"></select></label>
+          <label>$P_1$ <input type="range" id="m-s1" min="0" max="1" step="0.01" value="0" aria-label="Posição de P1 na curva"> <output id="m-s1v">0,00</output></label>
+          <label>$P_2$ <input type="range" id="m-s2" min="0" max="1" step="0.01" value="0" aria-label="Posição de P2 na curva"> <output id="m-s2v">0,00</output></label>
+        </div>
+        <div class="panels">
+          <canvas id="m-canvas" role="img" aria-label="Curva Γ com os pontos P1 e P2, o ponto médio P, as duas características, o gradiente e a região sombreada"></canvas>
+        </div>
+        <div class="readout" id="m-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>características $\psi_1,\psi_2$ (pontos médios)</span>
+          <span><i style="border-color:var(--ink)"></i>seta: $\nabla u(P)$</span>
+          <span><i style="border-color:var(--choque);opacity:.5"></i>região: área $=|u(P)|$</span>
+        </div>
+      </div>
+      <p>Para explorar: (1) leve $P_2$ para perto de $P_1$ e veja a área e o gradiente irem a zero (os dados nulos). (2) Na parábola, confira a "fórmula fechada" da leitura contra a área. (3) Na elipse, a leitura também bate com a fórmula fechada, e a figura é a do círculo esticada (exercício 4). (4) No círculo, leve $P_2$ até o fim e veja o centro.</p>
+
       <h2 id="exemplo" data-toc="Conferindo na parábola">Conferindo com a parábola</h2>
       <p>Para $\Gamma:\ y=x^2$, os pontos médios das cordas $P_1=(a,a^2)$, $P_2=(b,b^2)$ com $a&lt;b$ são $x=\tfrac{a+b}2$, $y=\tfrac{a^2+b^2}2$, e $y-x^2=\tfrac{(b-a)^2}4$ (todo ponto com $y>x^2$ é assim). O gradiente é
       $$\nabla u=\tfrac12R\,(b-a,\,b^2-a^2)=\tfrac{b-a}2\,(2x,\,-1)=\sqrt{y-x^2}\,(2x,\,-1),$$
@@ -140,6 +160,19 @@
           <p>Pela classificação, o discriminante é $u_{xy}^2-u_{xx}u_{yy}=c^2>0$. Ou, pela forma quadrática: $\det D^2u=-c^2&lt;0$ significa autovalores de sinais opostos, então a forma $v^TD^2u\,v$ é indefinida e se anula em duas retas.</p>
         </div>
       </details>
+      <aside class="box exercicio">
+        <p class="tag">4. A elipse</p>
+        <p>Use que $\det D^2u=-1$ é invariante por mudanças lineares de coordenadas com $\det=\pm1$ para resolver o problema com dados nulos sobre a elipse $x^2/a^2+y^2/b^2=1$ a partir da solução do círculo.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Se $v$ é solução e $A$ é uma matriz $2\times2$, $w(\mathbf x)=v(A\mathbf x)$ tem $D^2w=A^TD^2v\,A$, logo $\det D^2w=(\det A)^2\det D^2v=-1$ quando $\det A=\pm1$. Os dados nulos vão junto: $w=0$ e $Dw=A^TDv=0$ sobre $A^{-1}\Gamma$.</p>
+          <p>Tome $A=\operatorname{diag}\big(\sqrt{b/a},\sqrt{a/b}\big)$, de determinante $1$. Ela leva a elipse ao círculo de raio $\rho=\sqrt{ab}$, porque $\tfrac ba x^2+\tfrac ab y^2=ab\big(\tfrac{x^2}{a^2}+\tfrac{y^2}{b^2}\big)$. Com $v$ a solução radial do círculo de raio $\rho$ (exercício 1),
+          $$u(x,y)=V(r),\qquad r^2=\tfrac ba\,x^2+\tfrac ab\,y^2,\qquad V'(r)=\sqrt{ab-r^2}.$$
+          Para uma elipse qualquer o determinante não precisa ser $1$: com $\det A$ qualquer, $u=v(A\mathbf x)/|\det A|$ também resolve ($\det D^2u=-1$) e tem dados nulos. Geometricamente, tudo na construção (pontos médios, razão de áreas) é preservado por transformações afins, e é por isso que a regra "gradiente = metade da corda girada" continua valendo.</p>
+        </div>
+      </details>
 
       <nav class="nextprev" aria-label="Navegação">
         <div>
@@ -159,5 +192,7 @@
     </main>
   </div>
 
+  <script src="../assets/ma-core.js"></script>
+  <script src="../assets/ma-demo.js"></script>
 </body>
 </html>
