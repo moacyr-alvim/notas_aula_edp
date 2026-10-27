@@ -74,6 +74,7 @@ need = {
     "paginas/upwind.html": ["tema", "toc"],
     "paginas/caracteristicas-1a-ordem.html": ["tema", "toc"],
     "paginas/modelo-lwr.html": ["tema", "toc"],
+    "paginas/monge-ampere.html": ["tema", "toc"],
     "paginas/caracteristicas-2a-ordem.html": ["tema", "toc"],
     "paginas/classificacao.html": ["tema", "toc"],
     "paginas/onda-dalembert.html": ["demo-onda", "w-preset", "w-c", "w-cv", "w-t", "w-tv", "w-x", "w-xv", "w-play", "w-readout", "w-diag-canvas", "w-perfil-canvas", "tema", "toc"],

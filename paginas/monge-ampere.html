@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monge–Ampère — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Monge–Ampère: características e áreas</h1>
+        <p class="lede">Uma equação totalmente não linear, $\det D^2u=-1$, em que as características são cópias da curva inicial reduzidas à metade e o valor de $u$ é uma área. Leitura opcional.</p>
+        <p class="meta">Continuação de <a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a>; ajuda ter lido <a href="classificacao.html">Hiperbólica, parabólica, elíptica</a>.</p>
+      </header>
+
+      <p>Esta é uma leitura opcional, para ver que a ideia de característica também funciona para equações totalmente não lineares, e que às vezes sai uma resposta geométrica bonita.</p>
+
+      <h2 id="equacao" data-toc="A equação">A equação e seu sistema</h2>
+      <p>A equação de Monge–Ampère que vamos usar é
+      $$u_{xx}\,u_{yy}-u_{xy}^2=-c^2,\qquad c>0,$$
+      isto é, $\det D^2u=-c^2$. Ela não é semilinear: a parte principal depende de $u$. Sobre uma curva $(x(\tau),y(\tau))$, com $p=u_x$ e $q=u_y$, o sistema da página de <a href="caracteristicas-2a-ordem.html">características de 2ª ordem</a> é
+      $$u_{xx}\dot x+u_{xy}\dot y=\dot p,\qquad u_{xy}\dot x+u_{yy}\dot y=\dot q,\qquad u_{xx}u_{yy}-u_{xy}^2=-c^2.$$
+      Vamos tentar resolvê-lo para $u_{xx},u_{xy},u_{yy}$. Das duas primeiras, $u_{xx}=(\dot p-u_{xy}\dot y)/\dot x$ e $u_{yy}=(\dot q-u_{xy}\dot x)/\dot y$. Substituindo na terceira e simplificando (chame $u_{xy}=s$):
+      $$\dot p\,\dot q-s\,(\dot p\,\dot x+\dot q\,\dot y)=-c^2\,\dot x\dot y.$$
+      Isto é uma equação do primeiro grau em $s$. Ela não determina $s$ (e então o sistema é indeterminado, característica!) quando o coeficiente de $s$ se anula, e continua tendo solução quando o resto também bate:
+      $$\dot p\,\dot x+\dot q\,\dot y=0,\qquad \dot p\,\dot q=-c^2\,\dot x\dot y.$$
+      A primeira é exatamente a equação das características: usando as equações de contato, $\dot p\dot x+\dot q\dot y=u_{xx}\dot x^2+2u_{xy}\dot x\dot y+u_{yy}\dot y^2$. Ou seja, a tangente $(\dot x,\dot y)$ é uma direção em que a forma quadrática da hessiana se anula (uma direção assintótica de $D^2u$). Como $\det D^2u=-c^2&lt;0$, a hessiana tem autovalores de sinais opostos, e há mesmo duas direções: a equação é hiperbólica, qualquer que seja a solução.</p>
+
+      <h2 id="goursat" data-toc="As duas famílias">As duas famílias</h2>
+      <p>A primeira equação diz que $(\dot p,\dot q)$ é perpendicular a $(\dot x,\dot y)$, então $(\dot p,\dot q)=\lambda\,(\dot y,-\dot x)$. Na segunda, $\dot p\dot q=-\lambda^2\dot x\dot y$, e então $\lambda=\pm c$. Resultado: uma família de características satisfaz
+      $$\dot p-c\,\dot y=0,\qquad \dot q+c\,\dot x=0,$$
+      e a outra satisfaz
+      $$\dot p+c\,\dot y=0,\qquad \dot q-c\,\dot x=0.$$
+      (São as equações clássicas de Goursat.) Repare na novidade: $p-cy$ e $q+cx$ são constantes na primeira família, e $p+cy$, $q-cx$ na segunda. As equações para $p$ e $q$ se resolvem sozinhas, sem precisar de $u$.</p>
+
+      <h2 id="problema" data-toc="Um problema resolvido">Um problema que se resolve com régua e compasso</h2>
+      <p>Tome $c=1$, isto é, $\det D^2u=-1$, e dados nulos sobre uma curva $\Gamma$:
+      $$u=0,\qquad Du=(0,0)\quad\text{sobre }\Gamma.$$
+      Seja $P=(x,y)$ um ponto regular. Por $P$ passam duas características, uma de cada família, que saem de pontos $P_1=(x_1,y_1)$ e $P_2=(x_2,y_2)$ de $\Gamma$. Como $p=q=0$ em $\Gamma$, integrando as equações de Goursat:</p>
+      <ul>
+        <li>na primeira família, $p=y-y_1$ e $q=-(x-x_1)$ (ao longo da característica, medindo a partir de $P_1$);</li>
+        <li>na segunda, $p=-(y-y_2)$ e $q=x-x_2$.</li>
+      </ul>
+      <p>No ponto $P$ as duas famílias dão o mesmo gradiente. Igualando, $y-y_1=-(y-y_2)$ e $-(x-x_1)=x-x_2$, isto é,
+      $$P=\frac{P_1+P_2}2,\qquad \nabla u(P)=\Big(\frac{y_2-y_1}2,\ \frac{x_1-x_2}2\Big)=\frac12\,R\,(P_2-P_1),\quad R=\begin{pmatrix}0&1\\-1&0\end{pmatrix}.$$
+      Em palavras: <b>$P$ é o ponto médio da corda $P_1P_2$ de $\Gamma$, e o gradiente de $u$ em $P$ é metade do vetor da corda, girado de $90^\circ$</b>.</p>
+      <p>Daí sai a característica: fixe $P_1=\gamma(0)$ e deixe $P_2=\gamma(t)$ percorrer $\Gamma$. Os pontos médios formam
+      $$\psi(t)=\frac{\gamma(0)+\gamma(t)}2,$$
+      uma cópia de $\Gamma$ reduzida à metade (uma homotetia de razão $1/2$ centrada em $\gamma(0)$). As características são simplesmente as cópias de $\Gamma$ encolhidas pela metade a partir de cada um de seus pontos.</p>
+
+      <h2 id="area" data-toc="u é uma área">O valor de $u$ é uma área</h2>
+      <p>Falta o próprio $u$. Ao longo de $\psi$, $\dot z=\nabla u\cdot\dot\psi$, com $\nabla u(\psi(t))=\tfrac12R(\gamma(t)-\gamma(0))$ e $\dot\psi=\tfrac12\dot\gamma$:
+      $$u(\psi(t))=z(t)=\frac14\int_0^t\big\langle R\,(\gamma(s)-\gamma(0)),\,\dot\gamma(s)\big\rangle\,ds.$$
+      Esta integral é (a menos de sinal, que depende da orientação) o dobro da área $A$ da região $C$ entre o arco de $\Gamma$ de $\gamma(0)$ a $\gamma(t)$ e a corda. Então $|u|=A/2$.</p>
+      <p>E $A/2$ também é a área sombreada na figura: a região $C$ contém duas cópias de si mesma reduzidas à metade (as regiões entre $\psi_1$ ou $\psi_2$ e metade da corda), cada uma com área $A/4$. Tirando as duas de $C$, sobra $A-A/2=A/2$. Resumindo: <b>$|u(P)|$ é a área da região entre $\Gamma$ e as duas características que chegam em $P$</b>.</p>
+      <figure class="fig">
+<svg viewBox="0 0 420 300" role="img" aria-labelledby="fgma" style="width:100%;height:auto;max-width:420px;display:block;margin:0 auto">
+  <title id="fgma">A curva inicial Γ (uma parábola) com dois pontos γ(0) e γ(t). As características ψ1 e ψ2 são as cópias de Γ reduzidas à metade a partir de cada extremo; elas se encontram no ponto médio P da corda. O gradiente em P é perpendicular à corda. A região sombreada, entre Γ e as duas características, tem área igual a |u(P)|.</title>
+  <g font-family="sans-serif" font-size="13" style="fill:var(--ink)">
+    <polygon points="98.0,103.6 101.8,114.4 105.6,124.9 109.4,135.0 113.2,144.8 117.0,154.1 120.8,163.1 124.6,171.7 128.4,179.9 132.2,187.8 136.0,195.3 139.8,202.4 143.6,209.1 147.4,215.5 151.2,221.5 154.9,227.1 158.7,232.3 162.5,237.2 166.3,241.7 170.1,245.8 173.9,249.6 177.7,252.9 181.5,255.9 185.3,258.5 189.1,260.8 192.9,262.7 196.7,264.2 200.5,265.3 204.3,266.0 208.1,266.4 211.9,266.4 215.7,266.0 219.5,265.3 223.3,264.2 227.1,262.7 230.9,260.8 234.7,258.5 238.5,255.9 242.3,252.9 246.1,249.6 249.9,245.8 253.7,241.7 257.5,237.2 261.3,232.3 265.1,227.1 268.8,221.5 272.6,215.5 276.4,209.1 280.2,202.4 284.0,195.3 287.8,187.8 291.6,179.9 295.4,171.7 299.2,163.1 303.0,154.1 306.8,144.8 310.6,135.0 314.4,124.9 318.2,114.4 322.0,103.6 322.0,103.6 320.1,109.0 318.2,114.2 316.3,119.3 314.4,124.2 312.5,128.8 310.6,133.3 308.7,137.6 306.8,141.8 304.9,145.7 303.0,149.4 301.1,153.0 299.2,156.4 297.3,159.5 295.4,162.5 293.5,165.3 291.6,168.0 289.7,170.4 287.8,172.6 285.9,174.7 284.0,176.6 282.1,178.3 280.2,179.8 278.3,181.1 276.4,182.2 274.5,183.1 272.6,183.9 270.7,184.4 268.8,184.8 266.9,185.0 265.1,185.0 263.2,184.8 261.3,184.4 259.4,183.9 257.5,183.1 255.6,182.2 253.7,181.1 251.8,179.8 249.9,178.3 248.0,176.6 246.1,174.7 244.2,172.6 242.3,170.4 240.4,168.0 238.5,165.3 236.6,162.5 234.7,159.5 232.8,156.4 230.9,153.0 229.0,149.4 227.1,145.7 225.2,141.8 223.3,137.6 221.4,133.3 219.5,128.8 217.6,124.2 215.7,119.3 213.8,114.2 211.9,109.0 210.0,103.6 210.0,103.6 208.1,109.0 206.2,114.2 204.3,119.3 202.4,124.2 200.5,128.8 198.6,133.3 196.7,137.6 194.8,141.8 192.9,145.7 191.0,149.4 189.1,153.0 187.2,156.4 185.3,159.5 183.4,162.5 181.5,165.3 179.6,168.0 177.7,170.4 175.8,172.6 173.9,174.7 172.0,176.6 170.1,178.3 168.2,179.8 166.3,181.1 164.4,182.2 162.5,183.1 160.6,183.9 158.7,184.4 156.8,184.8 154.9,185.0 153.1,185.0 151.2,184.8 149.3,184.4 147.4,183.9 145.5,183.1 143.6,182.2 141.7,181.1 139.8,179.8 137.9,178.3 136.0,176.6 134.1,174.7 132.2,172.6 130.3,170.4 128.4,168.0 126.5,165.3 124.6,162.5 122.7,159.5 120.8,156.4 118.9,153.0 117.0,149.4 115.1,145.7 113.2,141.8 111.3,137.6 109.4,133.3 107.5,128.8 105.6,124.2 103.7,119.3 101.8,114.2 99.9,109.0 98.0,103.6" style="fill:var(--choque)" fill-opacity="0.18" stroke="none"/>
+    <polyline points="36.4,-124.9 40.8,-105.3 45.2,-86.2 49.6,-67.7 54.0,-49.6 58.4,-32.1 62.8,-15.0 67.2,1.6 71.6,17.6 76.0,33.2 80.3,48.2 84.7,62.7 89.1,76.8 93.5,90.3 97.9,103.4 102.3,115.9 106.7,128.0 111.1,139.5 115.5,150.5 119.9,161.1 124.3,171.1 128.7,180.6 133.1,189.6 137.5,198.2 141.9,206.2 146.3,213.7 150.7,220.7 155.1,227.3 159.5,233.3 163.9,238.8 168.2,243.8 172.6,248.3 177.0,252.3 181.4,255.9 185.8,258.9 190.2,261.4 194.6,263.4 199.0,264.9 203.4,265.9 207.8,266.4 212.2,266.4 216.6,265.9 221.0,264.9 225.4,263.4 229.8,261.4 234.2,258.9 238.6,255.9 243.0,252.3 247.4,248.3 251.8,243.8 256.1,238.8 260.5,233.3 264.9,227.3 269.3,220.7 273.7,213.7 278.1,206.2 282.5,198.2 286.9,189.6 291.3,180.6 295.7,171.1 300.1,161.1 304.5,150.5 308.9,139.5 313.3,128.0 317.7,115.9 322.1,103.4 326.5,90.3 330.9,76.8 335.3,62.7 339.7,48.2 344.0,33.2 348.4,17.6 352.8,1.6 357.2,-15.0 361.6,-32.1 366.0,-49.6 370.4,-67.7 374.8,-86.2 379.2,-105.3 383.6,-124.9" fill="none" style="stroke:var(--ink)" stroke-width="2.6"/>
+    <line x1="98.0" y1="103.6" x2="322.0" y2="103.6" style="stroke:var(--ink-soft)" stroke-width="1.4" stroke-dasharray="5 4"/>
+    <polyline points="98.0,103.6 99.9,109.0 101.8,114.2 103.7,119.3 105.6,124.2 107.5,128.8 109.4,133.3 111.3,137.6 113.2,141.8 115.1,145.7 117.0,149.4 118.9,153.0 120.8,156.4 122.7,159.5 124.6,162.5 126.5,165.3 128.4,168.0 130.3,170.4 132.2,172.6 134.1,174.7 136.0,176.6 137.9,178.3 139.8,179.8 141.7,181.1 143.6,182.2 145.5,183.1 147.4,183.9 149.3,184.4 151.2,184.8 153.1,185.0 154.9,185.0 156.8,184.8 158.7,184.4 160.6,183.9 162.5,183.1 164.4,182.2 166.3,181.1 168.2,179.8 170.1,178.3 172.0,176.6 173.9,174.7 175.8,172.6 177.7,170.4 179.6,168.0 181.5,165.3 183.4,162.5 185.3,159.5 187.2,156.4 189.1,153.0 191.0,149.4 192.9,145.7 194.8,141.8 196.7,137.6 198.6,133.3 200.5,128.8 202.4,124.2 204.3,119.3 206.2,114.2 208.1,109.0 210.0,103.6" fill="none" style="stroke:var(--carac)" stroke-width="2.4"/>
+    <polyline points="210.0,103.6 211.9,109.0 213.8,114.2 215.7,119.3 217.6,124.2 219.5,128.8 221.4,133.3 223.3,137.6 225.2,141.8 227.1,145.7 229.0,149.4 230.9,153.0 232.8,156.4 234.7,159.5 236.6,162.5 238.5,165.3 240.4,168.0 242.3,170.4 244.2,172.6 246.1,174.7 248.0,176.6 249.9,178.3 251.8,179.8 253.7,181.1 255.6,182.2 257.5,183.1 259.4,183.9 261.3,184.4 263.2,184.8 265.1,185.0 266.9,185.0 268.8,184.8 270.7,184.4 272.6,183.9 274.5,183.1 276.4,182.2 278.3,181.1 280.2,179.8 282.1,178.3 284.0,176.6 285.9,174.7 287.8,172.6 289.7,170.4 291.6,168.0 293.5,165.3 295.4,162.5 297.3,159.5 299.2,156.4 301.1,153.0 303.0,149.4 304.9,145.7 306.8,141.8 308.7,137.6 310.6,133.3 312.5,128.8 314.4,124.2 316.3,119.3 318.2,114.2 320.1,109.0 322.0,103.6" fill="none" style="stroke:var(--carac)" stroke-width="2.4"/>
+    <line x1="210.0" y1="103.6" x2="210.0" y2="198.0" style="stroke:var(--ink)" stroke-width="2"/>
+    <polygon points="205.0,190.0 215.0,190.0 210.0,199.0" style="fill:var(--ink)"/>
+    <circle cx="98.0" cy="103.6" r="4.5" style="fill:var(--ink)"/>
+    <circle cx="322.0" cy="103.6" r="4.5" style="fill:var(--ink)"/>
+    <circle cx="210.0" cy="103.6" r="4.5" style="fill:var(--ink)"/>
+    <text x="92.0" y="94.6" text-anchor="end">γ(0)</text>
+    <text x="328.0" y="94.6">γ(t)</text>
+    <text x="210.0" y="93.6" text-anchor="middle">P</text>
+    <text x="219.0" y="168.7">∇u(P)</text>
+    <text x="140.6" y="139.4" text-anchor="end" style="fill:var(--carac)">ψ₁</text>
+    <text x="279.4" y="139.4" style="fill:var(--carac)">ψ₂</text>
+    <text x="210.0" y="238.8" text-anchor="middle" font-size="12" style="fill:var(--choque)">|u(P)| = área</text>
+    <text x="350.0" y="30.3">Γ</text>
+  </g>
+</svg>
+        <figcaption>Para a parábola $\Gamma$: $y=x^2$ e a corda de $\gamma(0)=(-1,1)$ a $\gamma(t)=(1,1)$. As características $\psi_1$ e $\psi_2$ encontram-se em $P=(0,1)$. A área sombreada é $|u(P)|$.</figcaption>
+      </figure>
+
+      <h2 id="exemplo" data-toc="Conferindo na parábola">Conferindo com a parábola</h2>
+      <p>Para $\Gamma:\ y=x^2$, os pontos médios das cordas $P_1=(a,a^2)$, $P_2=(b,b^2)$ com $a&lt;b$ são $x=\tfrac{a+b}2$, $y=\tfrac{a^2+b^2}2$, e $y-x^2=\tfrac{(b-a)^2}4$ (todo ponto com $y>x^2$ é assim). O gradiente é
+      $$\nabla u=\tfrac12R\,(b-a,\,b^2-a^2)=\tfrac{b-a}2\,(2x,\,-1)=\sqrt{y-x^2}\,(2x,\,-1),$$
+      e integrando (com $u=0$ em $\Gamma$),
+      $$\boxed{\,u(x,y)=-\frac23\,(y-x^2)^{3/2}.\,}$$
+      Conferindo: com $w=y-x^2$, $u_{yy}=-\tfrac12w^{-1/2}$, $u_{xy}=x\,w^{-1/2}$ e $u_{xx}=2w^{1/2}-2x^2w^{-1/2}$. Então
+      $$u_{xx}u_{yy}-u_{xy}^2=-1+x^2w^{-1}-x^2w^{-1}=-1.\ \checkmark$$
+      E a área? O segmento de parábola entre $a$ e $b$ tem área $(b-a)^3/6$, e $|u|=\tfrac23\cdot\tfrac{(b-a)^3}8=\tfrac{(b-a)^3}{12}$, que é metade. ✓</p>
+      <aside class="box">
+        <p><b>Um detalhe.</b> $u$ e $\nabla u$ tendem a zero ao chegar em $\Gamma$, mas $D^2u$ explode ($w^{-1/2}$). Faz sentido: se $u$ e $Du$ fossem nulos sobre $\Gamma$ e $u\in C^2$ até a curva, a hessiana teria o vetor tangente a $\Gamma$ no núcleo e $\det D^2u$ seria $0$, não $-1$. A solução vive na região "dentro" de $\Gamma$ e só toca os dados em um sentido fraco.</p>
+      </aside>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O círculo</p>
+        <p>Resolva $\det D^2u=-1$ com $u=0$ e $Du=0$ sobre o círculo $\Gamma$ de raio $\rho$ centrado na origem. Mostre que $u$ é radial, com $u_r=\sqrt{\rho^2-r^2}$, e confira $\det D^2u=-1$ (para $u$ radial, $\det D^2u=u_{rr}u_r/r$). O que acontece no centro?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Escreva $P_1=\rho e^{i\alpha}$ e $P_2=\rho e^{i\beta}$, $\mu=\tfrac{\alpha+\beta}2$ e $\delta=\tfrac{\beta-\alpha}2\in(0,\pi)$. Então $P=\tfrac{P_1+P_2}2=\rho\cos\delta\,e^{i\mu}$ e $P_2-P_1=2i\rho\sin\delta\,e^{i\mu}$. A matriz $R$ gira de $-90^\circ$, então $\nabla u=\tfrac12R(P_2-P_1)=\rho\sin\delta\,e^{i\mu}$: é radial, de módulo $\rho\sin\delta=\sqrt{\rho^2-r^2}$ com $r=|P|=\rho\cos\delta$ (tomando $\delta\le\pi/2$). Logo $u_r=\sqrt{\rho^2-r^2}$ e, com $u(\rho)=0$, $u(r)=-\int_r^\rho\sqrt{\rho^2-s^2}\,ds$.</p>
+          <p>Conferindo: $u_{rr}=-r/\sqrt{\rho^2-r^2}$, então $u_{rr}u_r/r=-1$. ✓ No centro, $\nabla u$ tem módulo $\rho$ e a direção depende de qual corda (diâmetro) leva ao centro: todas as características se encontram ali e $u$ tem uma ponta de cone. O centro é um ponto não regular.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Outro $c$</p>
+        <p>Se $v$ resolve $\det D^2v=-1$ com dados nulos em $\Gamma$, o que resolve $\det D^2u=-c^2$ com dados nulos em $\Gamma$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u=c\,v$: $D^2u=c\,D^2v$ e, em dimensão $2$, $\det(cM)=c^2\det M$, então $\det D^2u=-c^2$. Os dados continuam nulos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Sempre hiperbólica</p>
+        <p>Mostre que, para qualquer solução $C^2$ de $u_{xx}u_{yy}-u_{xy}^2=-c^2$, a equação das características $u_{xx}\dot x^2+2u_{xy}\dot x\dot y+u_{yy}\dot y^2=0$ tem duas direções reais distintas em todo ponto.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Pela classificação, o discriminante é $u_{xy}^2-u_{xx}u_{yy}=c^2>0$. Ou, pela forma quadrática: $\det D^2u=-c^2&lt;0$ significa autovalores de sinais opostos, então a forma $v^TD^2u\,v$ é indefinida e se anula em duas retas.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a></li>
+            <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="onda-dalembert.html">A equação da onda e d'Alembert</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

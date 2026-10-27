@@ -76,8 +76,8 @@
       desc: "O discriminante B² − AC, invariante por mudança de coordenadas, e por que o calor e Laplace não rendem como a onda." },
     { id: "wave2", lane: "seg", col: 2, row: 1, label: "Onda e\nd'Alembert", href: "paginas/onda-dalembert.html", trails: ["segunda", "numerico"],
       desc: "A fórmula de d'Alembert deduzida fatorando o operador e seguindo as características. Com demo e Python." },
-    { id: "ma", lane: "seg", col: 3, row: 0, label: "Monge–Ampère", href: null, trails: ["segunda"],
-      desc: "Leitura opcional: características por homotetia e a área sob a curva." }
+    { id: "ma", lane: "seg", col: 3, row: 0, label: "Monge–Ampère", href: "paginas/monge-ampere.html", trails: ["segunda"],
+      desc: "Leitura opcional: det D²u = −1, características por homotetia de razão 1/2 e u como área. Com a parábola e o círculo." }
   ];
 
   var EDGES = [
