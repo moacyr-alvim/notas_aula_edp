@@ -75,12 +75,23 @@
         <figcaption>As direções características por um ponto $P$ (aqui no plano $x$–$t$ para os três exemplos).</figcaption>
       </figure>
 
-      <p>Conferindo os exemplos (com $y$ no lugar de $t$ na onda e no calor):</p>
+      <h2 id="famosas" data-toc="Onda, calor, Laplace">As três famosas</h2>
+      <p>Os três exemplos lineares com coeficientes constantes que todo mundo conhece, um de cada tipo. Para calor e onda a segunda variável é o tempo $t$; em Laplace são duas variáveis espaciais $x,y$.</p>
+      <table class="tabela">
+        <thead><tr><th>Equação</th><th>$A,\ B,\ C$</th><th>$\Delta=B^2-AC$</th><th>Características</th><th>Tipo</th></tr></thead>
+        <tbody>
+          <tr><td>Onda<br>$u_{tt}=c^2u_{xx}$</td><td>$-c^2,\ 0,\ 1$</td><td>$c^2>0$</td><td>$\dot x^2=c^2\dot t^2$: as retas $x=\pm ct+\text{const}$</td><td>hiperbólica</td></tr>
+          <tr><td>Calor<br>$u_t=k\,u_{xx}$</td><td>$k,\ 0,\ 0$</td><td>$0$</td><td>$\dot t^2=0$: as retas $t=\text{const}$</td><td>parabólica</td></tr>
+          <tr><td>Laplace<br>$u_{xx}+u_{yy}=0$</td><td>$1,\ 0,\ 1$</td><td>$-1&lt;0$</td><td>$\dot x^2+\dot y^2=0$: nenhuma real</td><td>elíptica</td></tr>
+        </tbody>
+      </table>
+      <p>Nas contas, as variáveis são $(x,y)$ com $y=t$ na onda e no calor. No calor, $u_t$ é de primeira ordem e fica fora da parte principal, que é só $k\,u_{xx}$ (por isso $B=C=0$). Cada uma conta uma história diferente:</p>
       <ul>
-        <li>Onda, $u_{yy}-c^2u_{xx}=0$: $A=-c^2$, $B=0$, $C=1$, então $\Delta=c^2>0$.</li>
-        <li>Calor, $u_{xx}=u_y$: só a derivada segunda em $x$ conta na parte principal, $A=1$, $B=C=0$, então $\Delta=0$. ($u_y$ é de primeira ordem e não entra.)</li>
-        <li>Laplace, $u_{xx}+u_{yy}=0$: $A=C=1$, $B=0$, então $\Delta=-1&lt;0$.</li>
+        <li><b>Onda</b> (cordas, som, luz): a informação viaja com velocidade finita $c$, ao longo de duas famílias de retas. É a equação que o método das características resolve por inteiro (<a href="onda-dalembert.html">próxima página</a>).</li>
+        <li><b>Calor</b> (difusão): uma só direção característica, horizontal, que é como dizer velocidade infinita. O passado suaviza o futuro e o tempo tem uma seta: a equação é bem posta para frente, mas não para trás.</li>
+        <li><b>Laplace</b> (equilíbrio: potencial elétrico, temperatura estacionária, membrana esticada): nenhuma direção característica real. Não há "antes" e "depois", e o valor em cada ponto depende do contorno todo.</li>
       </ul>
+      <p>Os três são parentes. O calor estacionário ($u_t=0$) é Laplace. E Laplace é a onda com $c=i$, como diz a curiosidade mais abaixo. As seções seguintes mostram por que só a primeira rende ao método das características.</p>
 
       <h2 id="muda" data-toc="O tipo pode mudar">O tipo pode mudar de ponto a ponto</h2>
       <p>Quando $A,B,C$ dependem de $(x,y)$, o tipo também depende. O exemplo clássico é a equação de Tricomi, $y\,u_{xx}+u_{yy}=0$ (que aparece em escoamento perto da velocidade do som): $A=y$, $B=0$, $C=1$, logo $\Delta=-y$. É elíptica para $y>0$, hiperbólica para $y&lt;0$ e parabólica sobre a reta $y=0$.</p>
