@@ -27,6 +27,7 @@
       </header>
 
       <h2 id="contando" data-toc="Contando direções">Contando direções</h2>
+      <p>A ideia é simples: em cada ponto $P$, por quantas direções reais uma curva característica pode passar? A resposta só pode ser duas, uma ou nenhuma, e é isso que dá os três nomes. Vejamos de onde sai a contagem.</p>
       <p>Na página anterior, uma curva $\gamma(s)=(x(s),y(s))$ é característica quando sua velocidade $\dot\gamma=(\dot x,\dot y)$ satisfaz
       $$Q(\dot\gamma)=C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.$$
       Olhe para $Q$ como uma <b>forma quadrática</b> agindo no vetor velocidade, com matriz simétrica
@@ -128,15 +129,16 @@
       <p>O método das características, no sentido de resolver seguindo curvas, funciona de verdade só no primeiro caso.</p>
 
       <h2 id="invariancia" data-toc="Independe das coordenadas">O tipo não depende das coordenadas</h2>
-      <p>Seria estranho se uma equação fosse hiperbólica em $(x,y)$ e elíptica depois de girar os eixos. Não é. Seja $M=\begin{pmatrix}A&B\\B&C\end{pmatrix}$, de modo que a parte principal da EDP é $\sum_{i,j}M_{ij}\,\partial_i\partial_ju$. Troque as coordenadas para $(\varphi,\xi)$ e seja $J=\partial(\varphi,\xi)/\partial(x,y)$ a matriz jacobiana. Escreva $u(x,y)=v(\varphi,\xi)$. Pela regra da cadeia,
+      <p>Seria estranho se uma equação fosse hiperbólica em $(x,y)$ e elíptica depois de girar os eixos. Não é: o tipo é uma propriedade da equação, não de como desenhamos o plano. A prova é uma conta curta com a regra da cadeia.</p>
+      <details>
+        <summary>A conta</summary>
+        <div class="body">
+      <p>Seja $M=\begin{pmatrix}A&B\\B&C\end{pmatrix}$, de modo que a parte principal da EDP é $\sum_{i,j}M_{ij}\,\partial_i\partial_ju$. Troque as coordenadas para $(\varphi,\xi)$ e seja $J=\partial(\varphi,\xi)/\partial(x,y)$ a matriz jacobiana. Escreva $u(x,y)=v(\varphi,\xi)$. Pela regra da cadeia,
       $$D^2u=J^{T}\,(D^2v)\,J+(\text{termos com }v_\varphi,\,v_\xi),$$
       e os termos de primeira ordem não afetam a parte principal. Então a parte principal, nas novas coordenadas, tem a matriz
       $$\widetilde M=J\,M\,J^{T}.$$
       Como $\det\widetilde M=(\det J)^2\det M$ e $\det J\neq0$ numa mudança regular, o sinal de $\det M=AC-B^2=-\Delta$ não muda. Hiperbólica, parabólica e elíptica são propriedades da equação, não da maneira de desenhar o plano.</p>
-      <details>
-        <summary>De onde sai $JMJ^T$</summary>
-        <div class="body">
-          <p>$\sum_{ij}M_{ij}\,\partial_i\partial_ju=\operatorname{tr}(M\,D^2u)=\operatorname{tr}\big(M J^T(D^2v)J\big)+\cdots=\operatorname{tr}\big(JMJ^T\,D^2v\big)+\cdots$ pela propriedade cíclica do traço. Quem multiplica $D^2v$ é $JMJ^T$.</p>
+      <p>(De onde sai $JMJ^T$: $\sum_{ij}M_{ij}\,\partial_i\partial_ju=\operatorname{tr}(M\,D^2u)=\operatorname{tr}\big(M J^T(D^2v)J\big)+\cdots=\operatorname{tr}\big(JMJ^T\,D^2v\big)+\cdots$ pela propriedade cíclica do traço.)</p>
         </div>
       </details>
       <p>Há mais: em cada tipo dá para escolher coordenadas em que a equação fica o mais simples possível (a forma canônica): $v_{\varphi\xi}=\dots$ no hiperbólico, $v_{\varphi\varphi}=\dots$ no parabólico e $v_{\varphi\varphi}+v_{\xi\xi}=\dots$ no elíptico. No hiperbólico, as coordenadas certas são as próprias características. Na equação da onda isso é feito à mão na próxima página.</p>

@@ -27,7 +27,8 @@
       </header>
 
       <h2 id="ideia" data-toc="A ideia">Andar por um caminho onde a EDP fica sozinha</h2>
-      <p>Queremos $u(\vec x)$ com $F(\vec x,u,Du)=0$. Vamos andar por um caminho $\vec x(s)$ carregando, junto, o valor $z(s)=u(\vec x(s))$ e o gradiente $\vec p(s)=Du(\vec x(s))$. O sonho é um caminho em que a EDP, reduzida a ele, seja <em>autossuficiente</em>: $z$ e $\vec p$ dependam só do caminho e deles mesmos, sem precisar saber como $u$ se comporta nos lados. A EDP vira então um sistema de EDOs.</p>
+      <p>Uma EDP de primeira ordem diz algo sobre a inclinação de $u$ em cada ponto. Procurar $u$ inteira de uma vez é difícil. A saída é andar por <em>uma curva</em> e anotar só o que acontece nela: se a curva for bem escolhida, a EDP vira uma conta de EDOs, que sabemos fazer. Toda a página é sobre como escolher a curva.</p>
+      <p>Em símbolos: queremos $u(\vec x)$ com $F(\vec x,u,Du)=0$. Vamos andar por um caminho $\vec x(s)$ carregando, junto, o valor $z(s)=u(\vec x(s))$ e o gradiente $\vec p(s)=Du(\vec x(s))$. O sonho é um caminho em que a EDP, reduzida a ele, seja <em>autossuficiente</em>: $z$ e $\vec p$ dependam só do caminho e deles mesmos, sem precisar saber como $u$ se comporta nos lados. A EDP vira então um sistema de EDOs.</p>
 
       <h2 id="truque" data-toc="O truque">O truque</h2>
       <p>Derivando $z$ e $\vec p$ em $s$ saem as equações de contato:
@@ -179,7 +180,11 @@
       </details>
 
       <h2 id="existencia" data-toc="Por que funciona">Por que funciona: existência e unicidade local</h2>
-      <p>Um roteiro para mostrar que a receita dá, perto do eixo, uma solução, e que é a única. Considere o problema $u_t+F(u,u_x,x,t)=0$, $u(x,0)=f(x)$, com $F$ infinitamente diferenciável em todas as variáveis e $f\in C^\infty(\mathbb R)$. Suponha que em certo ponto $(x_0,0)$ temos $F_p(z,p,x_0,0)\neq0$ e também $F(f(x_0),f'(x_0),x_0,0)\neq0$.</p>
+      <p>A receita não é só um truque: perto do eixo ela de fato produz uma solução, e só uma. A demonstração é longa e técnica, então ela fica guardada aqui, opcional. Se você aceitar o resultado, pode pular para a próxima página sem perder o fio.</p>
+      <details>
+        <summary>Abrir a demonstração (opcional)</summary>
+        <div class="body">
+      <p>Um roteiro para mostrar isso. Considere o problema $u_t+F(u,u_x,x,t)=0$, $u(x,0)=f(x)$, com $F$ infinitamente diferenciável em todas as variáveis e $f\in C^\infty(\mathbb R)$. Suponha que em certo ponto $(x_0,0)$ temos $F_p(z,p,x_0,0)\neq0$ e também $F(f(x_0),f'(x_0),x_0,0)\neq0$.</p>
 
       <aside class="box exercicio">
         <p class="tag">7. Existência e unicidade local</p>
@@ -204,6 +209,8 @@
           <p><b>(e)</b> Defina $a(\bar x,s)=z_{\bar x}-p\,x_{\bar x}-q\,t_{\bar x}$. Em $s=0$: $z_{\bar x}=f'(\bar x)$, $p=f'(\bar x)$, $x_{\bar x}=1$ e $t_{\bar x}=0$, então $a(\bar x,0)=0$. Derivando em $s$, usando $z_s=px_s+qt_s$ (que vale porque $x_s=F_p$, $t_s=F_q$) para trocar a ordem das derivadas,
           $$a_s=p_{\bar x}x_s+q_{\bar x}t_s-p_sx_{\bar x}-q_st_{\bar x}=p_{\bar x}\Phi_p+q_{\bar x}\Phi_q+(\Phi_x+p\Phi_z)x_{\bar x}+(\Phi_t+q\Phi_z)t_{\bar x}.$$
           Por outro lado, derivando $\Phi(x,t,z,p,q)=0$ em $\bar x$ (vale pelo item d): $\Phi_xx_{\bar x}+\Phi_tt_{\bar x}+\Phi_zz_{\bar x}+\Phi_pp_{\bar x}+\Phi_qq_{\bar x}=0$. Subtraindo, $a_s=-\Phi_z\,z_{\bar x}+\Phi_z(p\,x_{\bar x}+q\,t_{\bar x})=-\Phi_z\,a$. Uma EDO linear com $a(\bar x,0)=0$ tem solução $a\equiv0$. Então $z_{\bar x}=px_{\bar x}+qt_{\bar x}$ e $z_s=px_s+qt_s$, ou seja, $dz=p\,dx+q\,dt$ em coordenadas $(\bar x,s)$. Mudando para $(x,t)$ (item c), $du=P\,dx+Q\,dt$, isto é, $u_x=P$ e $u_t=Q$.</p>
+        </div>
+      </details>
         </div>
       </details>
 

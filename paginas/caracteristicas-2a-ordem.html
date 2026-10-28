@@ -27,6 +27,7 @@
       </header>
 
       <h2 id="pergunta" data-toc="A pergunta">A pergunta que muda</h2>
+      <p>Imagine que você sabe como uma superfície $u$ se comporta ao longo de uma cerca (a altura e a inclinação em cada ponto da cerca) e quer saber como ela <em>curva</em> ali, para poder continuar a superfície para fora da cerca. Na maioria das cercas dá. Nas cercas "especiais" não, e são elas as características.</p>
       <p>Em primeira ordem, característica era uma curva ao longo da qual a EDP vira uma EDO. Em segunda ordem vale a mesma ideia, mas o caminho até ela é outro. Você conhece $u$ e as derivadas primeiras, $p=u_x$ e $q=u_y$, sobre uma curva $\Gamma$ do plano (a curva inicial). Dá para descobrir as derivadas de segunda ordem sobre $\Gamma$?</p>
       <p>Se der, dá para sair da curva passo a passo, com Taylor. Se não der, a curva é especial. Esse é o critério.</p>
 
@@ -47,7 +48,12 @@
         $$\boxed{\,C\,\dot x^{2}-2B\,\dot x\dot y+A\,\dot y^{2}=0.\,}$$
         É uma equação só para a <em>direção</em> $(\dot x,\dot y)$ da curva, em cada ponto.</p>
       </aside>
-      <p>Para uma EDP qualquer, $F(x,y,u,u_x,u_y,u_{xx},u_{xy},u_{yy})=0$, vale a mesma conta: a última linha da matriz passa a ser $(F_{u_{xx}},F_{u_{xy}},F_{u_{yy}})$ e a condição fica $\dot x^2F_{u_{yy}}-\dot x\dot y\,F_{u_{xy}}+\dot y^2F_{u_{xx}}=0$. Na semilinear $F_{u_{xx}}=A$, $F_{u_{xy}}=2B$, $F_{u_{yy}}=C$ e recai na caixa acima.</p>
+      <details>
+        <summary>E para uma EDP de segunda ordem qualquer?</summary>
+        <div class="body">
+          <p>Para $F(x,y,u,u_x,u_y,u_{xx},u_{xy},u_{yy})=0$, vale a mesma conta: a última linha da matriz passa a ser $(F_{u_{xx}},F_{u_{xy}},F_{u_{yy}})$ e a condição fica $\dot x^2F_{u_{yy}}-\dot x\dot y\,F_{u_{xy}}+\dot y^2F_{u_{xx}}=0$. Na semilinear $F_{u_{xx}}=A$, $F_{u_{xy}}=2B$, $F_{u_{yy}}=C$ e recai na caixa acima.</p>
+        </div>
+      </details>
 
       <h2 id="recado" data-toc="O que a característica carrega">O recado que anda pela característica</h2>
       <p>Num ponto de uma característica o sistema é singular, mas continua precisando de uma solução (estamos supondo que existe uma solução). Isso só acontece se o lado direito $(\dot p,\dot q,G)$ satisfizer uma condição de compatibilidade, e essa condição é uma relação entre $\dot p$ e $\dot q$, ou seja, uma lei de transporte ao longo da curva. É o análogo do $\dot z=\dots$ do caso de primeira ordem.</p>
