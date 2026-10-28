@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equação de transporte — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A equação de transporte</h1>
+        <p class="lede">O caso mais simples de todos: retas paralelas, e a solução é o dado inicial deslizando, $u(x,t)=f(x-ct)$. Demo, semirreta, termos extras e exercícios.</p>
+        <p class="meta">Ajuda ler antes: <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a>. Leva a: <a href="upwind.html">Upwind</a>, <a href="burgers.html">Burgers</a>, <a href="onda-dalembert.html">Onda e d'Alembert</a>.</p>
+      </header>
+
+      <h2 id="rio" data-toc="Intuição">Uma mancha na correnteza</h2>
+      <p>Um rio corre para a direita com velocidade constante $c$. Alguém joga uma mancha de tinta. A mancha não se desmancha (por enquanto vamos ignorar a difusão): ela só <em>anda</em>, com o formato que tinha, na velocidade do rio. Quem está na margem vê a concentração $u(x,t)$ passar por ele. Essa é a equação de transporte:
+      $$u_t+c\,u_x=0,\qquad u(x,0)=f(x).$$
+      Lendo a equação: $u_t$ é o que o fotógrafo parado em $x$ vê mudar; $c\,u_x$ é a diferença causada por a água estar andando. Elas se compensam. Em palavras, <em>quem anda com a água não vê nada mudar</em>.</p>
+
+      <h2 id="solucao" data-toc="A solução">A solução é $f(x-ct)$</h2>
+      <p>Fazendo o que a frase acima diz: andar com a água é seguir a reta $x=x_0+ct$ no plano $x$–$t$ (é a característica; veja <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a>). Ao longo dela,
+      $$\frac{d}{dt}\,u(x_0+ct,\,t)=u_t+c\,u_x=0,$$
+      então $u$ é constante e vale o que valia em $t=0$, isto é, $f(x_0)$. Para saber $u$ em um ponto $(x,t)$ qualquer, ande para trás pela característica até o eixo: o pé é $x_0=x-ct$. Logo
+      $$\boxed{\,u(x,t)=f(x-ct).\,}$$
+      O gráfico em $t$ é o gráfico inicial deslocado $ct$ para a direita. Só isso: nenhuma deformação, nada se alarga, nada quebra (compare com <a href="burgers.html">Burgers</a>, onde a velocidade depende de $u$ e a coisa quebra).</p>
+      <aside class="box">
+        <p><b>Outra maneira de ver, sem características.</b> Mude de variáveis para $\xi=x-ct$ e $\tau=t$ (um referencial que anda com o rio) e escreva $u(x,t)=w(\xi,\tau)$. Pela regra da cadeia $u_t=w_\tau-c\,w_\xi$ e $u_x=w_\xi$, então
+        $$u_t+c\,u_x=w_\tau.$$
+        A equação virou $w_\tau=0$: $w$ não depende de $\tau$, $w=f(\xi)$. É o mesmo resultado, e é a ideia que vai reaparecer no <a href="onda-dalembert.html">método do $\xi,\eta$ para a onda</a>.</p>
+      </aside>
+      <p>Uma observação que parece boba e é importante: o valor $u(x,t)$ depende de <em>um único ponto</em> do dado inicial, $x-ct$. Na equação da onda, com duas velocidades $\pm c$, o dado de que $u$ depende era um intervalo $[x-ct,x+ct]$. Daqui sai uma ligação: a equação da onda é, no fundo, <b>dois transportes</b>, um para cada lado (foi o que o Jeito 1 da <a href="onda-dalembert.html#fatoracao">página de d'Alembert</a> mostrou). E é esse pé único que explica o esquema <a href="upwind.html">upwind</a> e a condição <a href="cfl.html">CFL</a>.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>Escolha o perfil inicial e arraste $t$. À esquerda, o plano $x$–$t$: as retas azuis são as características, a reta grossa é a que passa por $P$ e o ponto azul no eixo é o pé $x-ct$. À direita, o perfil $u(\cdot,t)$ (cheio) e o inicial (tracejado). Note que a <em>forma</em> nunca muda, mesmo para a caixa, que tem saltos, e para o triângulo, que tem quinas: o transporte não suaviza nada, nem cria nada.</p>
+
+      <div class="demo" id="demo-transp">
+        <div class="controls">
+          <label>Perfil inicial
+            <select id="tr-preset" aria-label="Perfil inicial">
+              <option value="pulso">Pulso suave</option>
+              <option value="caixa">Caixa (descontínua)</option>
+              <option value="dente">Triângulo (com quinas)</option>
+            </select>
+          </label>
+          <label>Domínio
+            <select id="tr-modo" aria-label="Domínio">
+              <option value="reta">Reta toda</option>
+              <option value="semi">Semirreta x ≥ 0 (entrada em x = 0)</option>
+            </select>
+          </label>
+          <label>c <input type="range" id="tr-c" min="-1.5" max="1.5" step="0.05" value="1" aria-label="Velocidade c"> <output id="tr-cv">1,00</output></label>
+          <label>t <input type="range" id="tr-t" min="0" max="4" step="0.01" value="1.5" aria-label="Tempo t"> <output id="tr-tv">1,50</output></label>
+          <label>x de P <input type="range" id="tr-x" min="-2" max="8" step="0.1" value="2.5" aria-label="Posição x do ponto P"> <output id="tr-xv">2,5</output></label>
+          <button id="tr-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="tr-diag-canvas" role="img" aria-label="Plano x–t com as características e o ponto P"></canvas>
+          <canvas id="tr-perfil-canvas" role="img" aria-label="Perfil u(x,t) deslizando"></canvas>
+        </div>
+        <div class="readout" id="tr-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>$u(\cdot,t)$</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial $f$</span>
+          <span><i style="border-color:var(--carac)"></i>características $x=x_0+ct$</span>
+          <span><i style="border-color:var(--choque)"></i>onde o dado inicial é não nulo (e, na semirreta, características de entrada)</span>
+        </div>
+      </div>
+      <p>Para explorar: (1) com $c&lt;0$ o perfil anda para a esquerda. (2) Passe para a <b>semirreta</b> com $c>0$: o que entra por $x=0$ é a função $h(t)=0{,}6\sin^2 2t$, e as características vermelhas trazem essa informação para dentro. (3) Na semirreta com $c&lt;0$, tudo <em>sai</em> por $x=0$ e não há o que impor lá: veja o próximo assunto.</p>
+
+      <h2 id="semirreta" data-toc="Semirreta">Com parede: quem manda é o sentido de $c$</h2>
+      <p>Suponha agora que o rio só existe para $x\ge0$. Em $x=0$ há uma fronteira. Para $c>0$ a água <em>entra</em> por ela, e então temos que dizer o que entra:
+      $$u_t+c\,u_x=0\ (x>0,\,t>0),\qquad u(x,0)=f(x),\qquad u(0,t)=h(t).$$
+      Cada ponto $(x,t)$ tem uma característica que, andando para trás, bate ou no eixo $t=0$ ou na parede $x=0$. A reta que sai da origem, $x=ct$, separa os dois casos:
+      $$u(x,t)=\begin{cases}f(x-ct), & x\ge ct,\\[2pt] h\!\left(t-\dfrac xc\right), & x&lt;ct.\end{cases}$$
+      (Para $x&lt;ct$ a característica por $(x,t)$ bate na parede no instante $t_0=t-x/c$, quando a água entrou com o valor $h(t_0)$.) Para a solução ser contínua em $x=ct$ é preciso $f(0)=h(0)$: é a <b>condição de compatibilidade</b>. Sem ela o que acontece é um salto que anda ao longo de $x=ct$ (veja o exercício 5).</p>
+      <p>Para $c&lt;0$ a água <em>sai</em>. Todas as características voltam, para trás no tempo, até o eixo $t=0$, e a solução é $f(x-ct)$ em todo lugar. Não sobrou nada para impor em $x=0$; se alguém impuser $u(0,t)=h(t)$, vai brigar com a solução $f(-ct)$ já determinada. Regra de bolso: <b>condição de contorno só onde a informação entra</b>.</p>
+
+      <h2 id="mais" data-toc="Termos extras">Com um termo a mais: decaimento, fonte, $c$ variável</h2>
+      <p>O método não muda quando a equação ganha termos; só que $u$ deixa de ser constante ao longo da característica. Ele passa a obedecer a uma equação diferencial <em>ordinária</em>:</p>
+      <ul>
+        <li><b>Decaimento:</b> $u_t+c\,u_x=-\lambda u$. Ao longo de $x=x_0+ct$, $\dot u=-\lambda u$, então $u=f(x_0)e^{-\lambda t}$: o perfil anda e murcha. Solução: $u=f(x-ct)\,e^{-\lambda t}$.</li>
+        <li><b>Fonte:</b> $u_t+c\,u_x=g(x,t)$. Ao longo da característica, $\dot u=g$; integrando, $u(x,t)=f(x-ct)+\int_0^t g\big(x-c(t-s),\,s\big)\,ds$.</li>
+        <li><b>$c$ depende de $x$:</b> $u_t+c(x)\,u_x=0$. As características deixam de ser retas: $\dot x=c(x)$. Mas $u$ ainda é constante nelas (exercício 3).</li>
+      </ul>
+
+      <h2 id="fraca" data-toc="Choques?">E se o dado inicial tem salto?</h2>
+      <p>A caixa da demo tem dois saltos. A fórmula $f(x-ct)$ continua fazendo sentido, mas $f$ não é derivável, e então não vale a equação ponto a ponto. Ela vale como <a href="solucao-fraca.html">solução fraca</a>, e os saltos andam com velocidade $c$. Isto é o que dá a condição de <a href="burgers.html#rankine-hugoniot">Rankine–Hugoniot</a>: como $u_t+c\,u_x=u_t+(cu)_x$, o fluxo é $F(u)=cu$ e
+      $$\sigma=\frac{[F]}{[u]}=\frac{c\,[u]}{[u]}=c.$$
+      Ou seja, o salto anda junto com as características, e por isso <em>nunca</em> há choque de verdade aqui: as características não se cruzam (são paralelas), então não há nada que seja produzido, só transportado.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Para onde foi o pico</p>
+        <p>Resolva $u_t+2u_x=0$ com $u(x,0)=e^{-x^2}$. Onde está o pico em $t=3$? Quanto vale $u(5,2)$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u(x,t)=e^{-(x-2t)^2}$. O pico estava em $x=0$ e vai para $x=2t$: em $t=3$ está em $x=6$, ainda com altura $1$. E $u(5,2)=e^{-(5-4)^2}=e^{-1}\approx0{,}37$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Rio ao contrário e a parede</p>
+        <p>(a) Resolva $u_t-u_x=0$, $u(x,0)=f(x)$ em $\mathbb R$. (b) Na semirreta $x\ge0$ com o mesmo $f$, é possível impor $u(0,t)=h(t)$? Para qual $h$ o problema tem solução?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Aqui $c=-1$, então $u=f(x+t)$: o perfil anda para a esquerda. (b) A solução já está determinada para $x\ge0$ e vale $f(x+t)$; em $x=0$ ela dá $u(0,t)=f(t)$. Só se pode impor $h(t)=f(t)$, ou seja, a "condição" não impõe nada de novo. Qualquer outro $h$ torna o problema sem solução. A informação sai pela parede, não entra.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Velocidade que depende de $x$</p>
+        <p>Resolva $u_t+x\,u_x=0$, $u(x,0)=f(x)$. Para onde vão as características? Como fica o perfil de $e^{-x^2}$ em $t$ grande?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\dot x=x$ dá $x=x_0e^t$: as características se afastam da origem, exponencialmente (a velocidade cresce com $|x|$). Como $u$ é constante em cada uma, $u(x,t)=f(x_0)=f(xe^{-t})$. Para $f=e^{-x^2}$, $u=e^{-x^2e^{-2t}}$: o pico continua em $x=0$ e o perfil se <em>alarga</em> (largura $\sim e^{t}$). Diferentemente do caso $c$ constante, o formato muda, porque pontos vizinhos viajam com velocidades diferentes; o que não muda é que as retas (curvas) não se cruzam.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Decaimento e fonte</p>
+        <p>(a) Resolva $u_t+c\,u_x=-\lambda u$, $u(x,0)=f(x)$. (b) Resolva $u_t+c\,u_x=1$, $u(x,0)=0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Ao longo de $x=x_0+ct$, $\dot u=-\lambda u$, logo $u=f(x_0)e^{-\lambda t}$ e $u(x,t)=f(x-ct)\,e^{-\lambda t}$. Conferindo: $u_t+cu_x=-\lambda f e^{-\lambda t}+(-c f'+cf')e^{-\lambda t}=-\lambda u$.</p>
+          <p>(b) Ao longo da característica $\dot u=1$ com $u=0$ em $t=0$, então $u=t$. Conferindo: $u_t+cu_x=1+0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Entrada em desacordo com o dado inicial</p>
+        <p>Na semirreta com $c=2$, tome $f\equiv0$ e $h\equiv1$ (um jato constante que liga na parede em $t=0$). Encontre $u$ e a curva em que $u$ salta. Confira com Rankine–Hugoniot.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $x\ge2t$, vale $f(x-2t)=0$; para $x&lt;2t$, vale $h(t-x/2)=1$. Logo $u=1$ para $0\le x&lt;2t$ e $u=0$ para $x>2t$: um degrau que anda para a direita. A curva de salto é $x=2t$, com velocidade $2$. Por Rankine–Hugoniot, com $F=cu=2u$: $\sigma=[F]/[u]=(2\cdot1-2\cdot0)/(1-0)=2$. Bate. (Aqui $f(0)=0\ne1=h(0)$: é a incompatibilidade.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Duas ondas em uma</p>
+        <p>Mostre que $u(x,t)=A(x-ct)+B(x+ct)$ resolve a equação da onda $u_{tt}=c^2u_{xx}$ e que cada parcela resolve uma equação de transporte. Quais?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u_{tt}=c^2A''+c^2B''$ e $u_{xx}=A''+B''$, então $u_{tt}=c^2u_{xx}$. A parcela $A(x-ct)$ resolve $u_t+c\,u_x=0$ (velocidade $+c$) e $B(x+ct)$ resolve $u_t-c\,u_x=0$ (velocidade $-c$). A equação da onda é, portanto, a soma de uma onda que vai para a direita e outra que vai para a esquerda, e a fórmula de d'Alembert diz como $f$ e $g$ se repartem entre elas.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="upwind.html">Upwind: seguir a característica</a></li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+            <li><a href="onda-dalembert.html">Onda e d'Alembert</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/transp-core.js"></script>
+  <script src="../assets/transp-demo.js"></script>
+</body>
+</html>

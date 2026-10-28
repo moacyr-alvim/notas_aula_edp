@@ -32,8 +32,8 @@
   var NODES = [
     { id: "carac1", lane: "carac", col: 0, label: "Características\nde 1ª ordem", href: "paginas/caracteristicas-1a-ordem.html", trails: ["basico", "choques", "variacional"],
       desc: "O sistema de EDOs ao longo de curvas: x, z e p caminham juntos. Com exercícios: quase linear, Evans, Hamilton–Jacobi, eikonal e a prova de existência local." },
-    { id: "transp", lane: "carac", col: 1, label: "Equação de\ntransporte", href: null, trails: ["basico", "numerico"],
-      desc: "O caso mais simples: retas paralelas e u(x,t) = f(x − ct)." },
+    { id: "transp", lane: "carac", col: 1, label: "Equação de\ntransporte", href: "paginas/equacao-transporte.html", trails: ["basico", "numerico"],
+      desc: "O caso mais simples: retas paralelas e u(x,t) = f(x − ct). Semirreta, termos extras e demo." },
     { id: "burgers", lane: "choques", col: 1, label: "Burgers, quebra\ne choques", href: "paginas/burgers.html", trails: ["basico", "choques", "variacional"],
       desc: "Características que se cruzam, tempo de quebra e o choque. Com demo interativa." },
     { id: "lc", lane: "choques", col: 2, label: "Leis de\nconservação", href: "paginas/leis-conservacao.html", trails: ["basico", "choques"],

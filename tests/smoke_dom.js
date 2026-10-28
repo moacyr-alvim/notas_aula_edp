@@ -159,6 +159,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["w-preset"].value = "martelada"; env.byId["w-preset"].fire("input"); env.byId["w-x"].value = "0"; env.byId["w-x"].fire("input"); await wait(30);
     check("onda-demo: martelada em x = 0 e t = 1,2 dá u = 1,000 (patamar 1/c)", rd().includes("u(P) = 1,000"), rd().slice(0, 120));
   }
+  /* ---- transporte ---- */
+  {
+    const env = makeEnv(["demo-transp", "tr-preset", "tr-modo", "tr-c", "tr-cv", "tr-t", "tr-tv", "tr-x", "tr-xv", "tr-play", "tr-readout", "tr-diag-canvas", "tr-perfil-canvas"], []);
+    run(env, "transp-core.js"); env.sandbox.window.TranspCore = env.sandbox.TranspCore || vm.runInContext("TranspCore", env.sandbox);
+    env.byId["tr-preset"].value = "pulso"; env.byId["tr-modo"].value = "reta"; env.byId["tr-c"].value = "1"; env.byId["tr-x"].value = "1.5";
+    let err = null; try { run(env, "transp-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("transp-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["tr-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("transp-demo: pé da característica x − ct = 0,00 em P = (1,5; 1,5), u = 1,000", rd().includes("0,00") && rd().includes("u(P) = 1,000"), rd().slice(0, 140));
+    env.byId["tr-modo"].value = "semi"; env.byId["tr-modo"].fire("input"); env.byId["tr-x"].value = "0.5"; env.byId["tr-x"].fire("input"); await wait(30);
+    check("transp-demo: semirreta, x < ct vem do contorno", rd().includes("contorno"), rd().slice(0, 140));
+  }
   /* ---- Monge–Ampère ---- */
   {
     const env = makeEnv(["demo-ma", "m-curva", "m-s1", "m-s1v", "m-s2", "m-s2v", "m-readout", "m-canvas"], []);
