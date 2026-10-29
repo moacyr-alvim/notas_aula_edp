@@ -15,7 +15,8 @@
   function css(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
   function colors() { return { ink: css("--ink"), soft: css("--ink-soft"), rule: css("--rule"), carac: css("--carac"), choque: css("--choque") }; }
 
-  Object.keys(K.FLUXES).forEach(function (k) {
+  var only = (root.getAttribute("data-fluxes") || "").split(",").filter(Boolean);
+  Object.keys(K.FLUXES).filter(function (k) { return !only.length || only.indexOf(k) >= 0; }).forEach(function (k) {
     var o = document.createElement("option"); o.value = k; o.textContent = K.FLUXES[k].label; selF.appendChild(o);
   });
 
@@ -175,5 +176,6 @@
   if ("ResizeObserver" in window) new ResizeObserver(schedule).observe(root);
   document.addEventListener("themechange", schedule);
 
+  if (only.length === 1 && selF.parentNode) selF.parentNode.style.display = "none";
   selF.value = "burgers"; rUL.value = 1; rUR.value = 0; rT.value = t; schedule();
 })();

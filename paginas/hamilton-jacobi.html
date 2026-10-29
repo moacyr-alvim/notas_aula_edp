@@ -37,6 +37,11 @@
       </ul>
       <p>Como a EDP é de primeira ordem, a receita da <a href="caracteristicas-1a-ordem.html">página de características</a> se aplica. O que a torna especial é o que sai dela.</p>
 
+      <h2 id="mecanica" data-toc="Motivação: Newton">Antes das contas: de onde vem o hamiltoniano</h2>
+      <p>Uma partícula de massa $m$ que anda em linha reta, na posição $x(t)$, sob um potencial $V(x)$, obedece a Newton: $m\ddot x=-V'(x)$. Uma equação de segunda ordem. Chame de <b>momento</b> a quantidade $p=m\dot x$. Então $\dot x=p/m$ e $\dot p=-V'(x)$, um sistema de primeira ordem em $(x,p)$. Com o hamiltoniano $H(p,x)=\dfrac{p^2}{2m}+V(x)$ (a energia), o sistema é
+      $$\dot x=H_p,\qquad\dot p=-H_x.$$
+      São as <b>equações de Hamilton</b>. Elas descrevem as mesmas trajetórias que Newton, só que lidas no plano $(x,p)$. O que isso tem a ver com uma EDP? Vamos ver que, ao aplicar o método das características a $u_t+H(u_x,x)=0$, essas mesmas equações aparecem como o sistema das características. Resolver a EDP é seguir as trajetórias da partícula, e a função $u$ vai ser o "custo" ao longo delas. (O exercício 3 resolve o caso do campo uniforme, a queda livre. A comparação entre Newton, Lagrange e Hamilton fica para mais adiante.)</p>
+
       <h2 id="caracteristicas" data-toc="Características = Hamilton">As características são as equações de Hamilton</h2>
       <p>Escreva a EDP como $F(x,t,z,p,q)=0$ com $z=u$, $p=Du$, $q=u_t$ e
       $$F(x,t,z,p,q)=q+H(p,x).$$
@@ -93,17 +98,47 @@
       </ul>
       <p>E há mais: para qualquer $m$ (até negativo), dois saltos de $0$ para $m$ e de $m$ para $1$, com velocidades $m/2&lt;(m+1)/2$, deixam entre eles uma faixa de valor $m$, e também são soluções fracas. Existem infinitas. Precisamos de um critério para escolher a solução fisicamente correta.</p>
 
-      <h3 id="entropia">A condição de Lax</h3>
-      <p>Para um salto com velocidade $\sigma$ entre $u_-$ e $u_+$, o critério é
-      $$\lambda(u_-)>\sigma>\lambda(u_+),$$
-      isto é, as características dos dois lados <em>entram</em> no salto (como na rampa de Burgers, onde elas colidem). Se elas saem do salto, uma perturbação mínima o desmancha em um leque, e ele é descartado. Para fluxo convexo, $F''>0$, isso se resume a $u_->u_+$; para fluxo côncavo, $F''&lt;0$, a $u_-&lt;u_+$.</p>
-      <p>Há uma leitura geométrica no gráfico de $F$. A velocidade de Rankine–Hugoniot $\sigma$ é a inclinação da <b>corda</b> entre $(u_-,F(u_-))$ e $(u_+,F(u_+))$, e $\lambda$ é a inclinação da <b>tangente</b>. A condição de Lax diz que a corda tem inclinação entre as das tangentes nas duas pontas, na ordem certa.</p>
-      <p>Em termos de Hamilton–Jacobi, com $F=H$ convexa: Lax diz $v_->v_+$, isto é, $u_x$ só pode <em>descer</em> ao cruzar um bico, e é a "regra dos bicos côncavos" da seção anterior. Sob hipóteses adequadas, a solução escolhida é a mesma que se obtém como limite de $u_t+(F(u))_x=\varepsilon u_{xx}$ quando $\varepsilon\to0$ (viscosidade evanescente). No caso de Burgers é a fornecida pela <a href="burgers.html#hopf-lax">fórmula de Hopf–Lax</a>, que escolhe a solução minimizando um custo, e a ideia geral de solução de Hamilton–Jacobi que "olha por cima" dos bicos será o assunto de uma página futura (soluções de viscosidade).</p>
+      <h2 id="lax" data-toc="De onde vem Lax">De onde vem a condição de Lax</h2>
+      <p>A condição de Rankine–Hugoniot (R–H) vem da forma integral da lei de conservação, e a forma integral não sabe em que sentido o tempo anda. Por isso ela vale para o salto bom e para o ruim: o degrau para cima de Burgers satisfaz R–H exatamente como o choque. Falta um critério que escolha. Ele não é um decreto, e há dois jeitos de enxergá-lo.</p>
+
+      <h3 id="lax-determinismo">1. Determinismo: a informação tem que vir do dado inicial</h3>
+      <p>Uma solução deve ser determinada pelo dado inicial. Para saber $u$ em um ponto $(x,t)$ seguimos a característica dele <em>para trás</em> até $t=0$. Em um choque admissível, as características dos dois lados <em>entram</em> no choque quando andamos para a frente (é a rampa de Burgers, onde elas colidem), então, de trás para a frente, elas se afastam dele e chegam ao eixo $t=0$: tudo vem do dado. Em um salto não admissível é o contrário: as características <em>saem</em> do salto. Seguindo uma delas para trás, vamos parar <em>no próprio salto</em>, não no eixo. O valor de $u$ ali teria sido inventado pelo salto, sem vir do dado inicial. É o que o salto em V de Hamilton–Jacobi faz ao "emitir" características. Outra maneira de dizer: um salto não admissível é um leque visto com o tempo ao contrário, e é por isso que qualquer perturbação mínima o desfaz em um leque.</p>
+
+      <h3 id="lax-viscosidade">2. Viscosidade: o choque como o limite de uma onda suave</h3>
+      <p>Na natureza o choque não é uma descontinuidade perfeita: há um pouquinho de dissipação (viscosidade, atrito) que o suaviza. Troquemos a lei de conservação por
+      $$u_t+F(u)_x=\varepsilon\,u_{xx},\qquad\varepsilon>0\text{ pequeno},$$
+      e procuremos uma <b>onda viajante</b> que vá de $u_-$ (à esquerda) a $u_+$ (à direita) com velocidade $\sigma$: $u=\varphi(\xi)$, $\xi=(x-\sigma t)/\varepsilon$, com $\varphi\to u_-$ quando $\xi\to-\infty$ e $\varphi\to u_+$ quando $\xi\to+\infty$. A regra da cadeia dá $u_t=-\tfrac\sigma\varepsilon\varphi'$, $F(u)_x=\tfrac1\varepsilon F(\varphi)'$ e $\varepsilon u_{xx}=\tfrac1\varepsilon\varphi''$, então
+      $$-\sigma\varphi'+F(\varphi)'=\varphi''.$$
+      Integrando uma vez em $\xi$, com a constante escolhida para que o lado direito se anule em $u_-$ (onde $\varphi'=0$),
+      $$\varphi'=g(\varphi),\qquad g(\varphi)=F(\varphi)-F(u_-)-\sigma\,(\varphi-u_-).$$
+      O gráfico de $g$ é a diferença entre o gráfico de $F$ e a reta de inclinação $\sigma$ pela ponta $(u_-,F(u_-))$. Duas coisas decorrem daí:</p>
+      <ul>
+        <li><b>Rankine–Hugoniot.</b> Para que $\varphi$ também pare em $u_+$ é preciso $g(u_+)=0$, isto é, $F(u_+)=F(u_-)+\sigma(u_+-u_-)$, ou
+        $$\sigma=\frac{F(u_+)-F(u_-)}{u_+-u_-}.$$
+        A reta passa então também por $(u_+,F(u_+))$: é a corda. R–H é a condição de que o perfil <em>feche</em> nas duas pontas.</li>
+        <li><b>A direção, que é a condição de Lax.</b> Suponha $F$ convexa. Entre $u_-$ e $u_+$ o gráfico de $F$ fica <em>abaixo</em> da corda, então $g&lt;0$ nesse intervalo e $\varphi'&lt;0$: o perfil só pode <em>descer</em> quando $\xi$ cresce. Portanto $u_->u_+$. Se $u_-&lt;u_+$, o perfil teria que subir e não existe (corresponderia a viscosidade negativa). Olhando as pontas: $g'(u_-)=F'(u_-)-\sigma>0$ e $g'(u_+)=F'(u_+)-\sigma&lt;0$, isto é,
+        $$\lambda(u_-)>\sigma>\lambda(u_+),\qquad\lambda=F'.$$
+        O perfil <em>sai</em> de $u_-$ e <em>chega</em> a $u_+$.</li>
+      </ul>
+      <details>
+        <summary>Burgers, explicitamente</summary>
+        <div class="body">
+          <p>Com $F(u)=u^2/2$, $u_-=1$ e $u_+=0$: $\sigma=\tfrac12$ e $g(\varphi)=\tfrac12\varphi(\varphi-1)$. A EDO $\varphi'=\tfrac12\varphi(\varphi-1)$ tem a solução
+          $$\varphi(\xi)=\frac1{1+e^{\xi/2}},$$
+          que vale $1$ em $-\infty$ e $0$ em $+\infty$ (confira: $\varphi'=-\tfrac12\dfrac{e^{\xi/2}}{(1+e^{\xi/2})^2}=\tfrac12\varphi(\varphi-1)$). É um degrau suavizado em uma faixa de largura da ordem de $\varepsilon$ ao redor de $x=\sigma t$. Quando $\varepsilon\to0$ vira o degrau, que é o choque. Já para $u_-=0$ e $u_+=1$ temos $g=\tfrac12\varphi(\varphi-1)&lt;0$ em $(0,1)$, então $\varphi$ só desce e não consegue ir de $0$ a $1$: não existe perfil viscoso. O salto "para cima" não é limite de nada suave.</p>
+        </div>
+      </details>
+
+      <h3 id="entropia">O critério de Lax</h3>
+      <p>Resumindo, para um salto com velocidade $\sigma$ entre $u_-$ e $u_+$, a <b>condição de Lax</b> é
+      $$\lambda(u_-)>\sigma>\lambda(u_+).$$
+      As características dos dois lados <em>entram</em> no salto, e ele é o limite de ondas viscosas. Para fluxo convexo, $F''>0$, isso se resume a $u_->u_+$. Há uma leitura geométrica no gráfico de $F$: $\sigma$ é a inclinação da <b>corda</b> entre $(u_-,F(u_-))$ e $(u_+,F(u_+))$, $\lambda$ é a inclinação da <b>tangente</b>, e a condição diz que a corda tem inclinação entre as das tangentes nas duas pontas, na ordem certa. (É também chamada de <em>condição de entropia</em>: nos choques admissíveis a energia $\int u^2$ diminui, e a dissipação é o que dá a seta do tempo.)</p>
+      <p>Em termos de Hamilton–Jacobi, com $F=H$ convexa: Lax diz $v_->v_+$, isto é, $u_x$ só pode <em>descer</em> ao cruzar um bico, que é a regra dos bicos côncavos da seção anterior. E o argumento da viscosidade tem a sua versão para a EDP original: $u_t+H(u_x)=\varepsilon u_{xx}$, e é daí que vem o nome de <b>soluções de viscosidade</b>, assunto de uma página futura. No caso de Burgers, a solução escolhida é a fornecida pela <a href="burgers.html#hopf-lax">fórmula de Hopf–Lax</a>.</p>
 
       <h2 id="demo" data-toc="Veja o problema de Riemann">Veja o problema de Riemann</h2>
-      <p>O <b>problema de Riemann</b> é o caso mais simples com salto: $u=u_L$ para $x&lt;0$ e $u=u_R$ para $x>0$. Escolha o fluxo, mexa em $u_L$ e $u_R$ e leia o resultado em três painéis: o gráfico de $F$ com a corda (vermilion) e as tangentes (azul tracejado), o perfil de $u$ no instante $t$ e o plano $(x,t)$. (A demo usa a letra $u$ para a variável da lei de conservação; no nosso contexto, ela faz o papel de $v=u_x$, e $F$ faz o papel de $H$.)</p>
+      <p>O <b>problema de Riemann</b> é o caso mais simples com salto: $u=u_L$ para $x&lt;0$ e $u=u_R$ para $x>0$. Mexa em $u_L$ e $u_R$ e leia o resultado em três painéis: o gráfico de $F$ com a corda (vermilion) e as tangentes (azul tracejado), o perfil de $u$ no instante $t$ e o plano $(x,t)$. Aqui o fluxo é o de Burgers, $F(u)=u^2/2$. (A demo usa a letra $u$ para a variável da lei de conservação; no nosso contexto, ela faz o papel de $v=u_x$, e $F$ faz o papel de $H$.)</p>
 
-      <div class="demo" id="demo-lei">
+      <div class="demo" id="demo-lei" data-fluxes="burgers">
         <div class="controls">
           <label>Fluxo <select id="l-fluxo" aria-label="Fluxo"></select></label>
           <label>uL <input type="range" id="l-uL" min="0" max="1" step="0.01" value="1" aria-label="Valor à esquerda"> <output id="l-uLv">1,00</output></label>
@@ -128,19 +163,7 @@
         </div>
       </div>
 
-      <p>Para explorar:</p>
-      <ol>
-        <li><b>Burgers</b> com $u_L=1$, $u_R=0$: choque. A corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque. Marque a caixa para ver o salto que também seria solução fraca, mas que a condição de Lax descarta.</li>
-        <li><b>Trânsito</b> com $u_L=0{,}5$, $u_R=0{,}8$: o choque anda para <em>trás</em> ($\sigma&lt;0$), contra o fluxo dos carros. Com $u_L=1$, $u_R=0$ (engarrafamento total e pista livre à frente) aparece um leque.</li>
-        <li><b>Transporte:</b> $F$ é uma reta, a corda coincide com as tangentes, e o salto só é transportado.</li>
-      </ol>
-
-      <p>Para explorar:</p>
-      <ol>
-        <li><b>Burgers</b> com $u_L=1$, $u_R=0$: choque. A corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Em termos de $u$ de Hamilton–Jacobi: é o bico $\Lambda$. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque (o "leque" da seção anterior). Marque a caixa para ver o salto que também seria solução fraca, mas que a condição de Lax descarta: o bico em V.</li>
-        <li><b>Trânsito</b> com $u_L=0{,}5$, $u_R=0{,}8$: o choque anda para <em>trás</em> ($\sigma&lt;0$), contra o fluxo dos carros. Com $u_L=1$, $u_R=0$ (engarrafamento total e pista livre à frente) aparece um leque. Aqui o fluxo é côncavo e a regra se inverte.</li>
-        <li><b>Transporte:</b> $F$ é uma reta, a corda coincide com as tangentes, e o salto só é transportado.</li>
-      </ol>
+      <p>Para explorar: com $u_L=1$ e $u_R=0$ aparece um choque, e a corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Em termos de $u$ de Hamilton–Jacobi, é o bico $\Lambda$. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque (o "leque" da seção anterior). Marque a caixa para ver o salto que também seria solução fraca, mas que Lax descarta: o bico em V.</p>
 
       <h2 id="exercicios">Exercícios</h2>
 
@@ -205,25 +228,15 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">6. O fluxo do trânsito</p>
-        <p>Para $F(u)=u(1-u)$, mostre que $\sigma=1-(u_-+u_+)$ e que a condição de Lax equivale a $u_-&lt;u_+$. Interprete.</p>
+        <p class="tag">6. O perfil viscoso de Burgers</p>
+        <p>Seja $u_->u_+$, $d=u_--u_+$ e $\sigma=\tfrac12(u_-+u_+)$. Mostre que $\varphi(\xi)=u_++\dfrac{d}{1+e^{d\xi/2}}$ satisfaz $\varphi'=\tfrac12(\varphi-u_-)(\varphi-u_+)$, que $u(x,t)=\varphi\big((x-\sigma t)/\varepsilon\big)$ resolve $u_t+uu_x=\varepsilon u_{xx}$, e que $\varphi$ vai de $u_-$ a $u_+$. O que muda se $u_-&lt;u_+$?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>$\sigma=\dfrac{u_--u_-^2-u_++u_+^2}{u_--u_+}=1-(u_-+u_+)$. E $\lambda(u)=1-2u$. Então $\lambda(u_-)>\sigma\iff 1-2u_->1-u_--u_+\iff u_+>u_-$, e $\sigma>\lambda(u_+)\iff 1-u_--u_+>1-2u_+\iff u_+>u_-$. Os dois lados da condição dão a mesma desigualdade.</p>
-          <p>Interpretação: um choque só se forma quando a densidade <em>aumenta</em> no sentido do fluxo, isto é, quando carros mais rápidos (menos densos) alcançam os mais lentos (mais densos) à frente. É o início de um engarrafamento. O caso contrário, a densidade diminuindo, é um leque: o engarrafamento se desfaz.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">7. O leque do trânsito</p>
-        <p>Com $F(u)=u(1-u)$, $u_L=1$ e $u_R=0$, mostre que $u=\tfrac12(1-x/t)$ para $-t&lt;x&lt;t$ (com $u=1$ à esquerda e $u=0$ à direita) é solução.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>No leque, $\lambda(u)=1-2u=x/t$, que é o que $u=\tfrac12(1-x/t)$ diz. Verificando na EDP $u_t+(1-2u)u_x=0$: $u_t=\dfrac{x}{2t^2}$, $u_x=-\dfrac{1}{2t}$ e $1-2u=\dfrac xt$, então $u_t+(1-2u)u_x=\dfrac{x}{2t^2}-\dfrac{x}{2t^2}=0$. Nas bordas $x=\mp t$ a função vale $1$ e $0$, de modo que a solução é contínua.</p>
+          <p>Seja $E=e^{d\xi/2}$. Então $\varphi-u_+=\dfrac d{1+E}$ e $\varphi-u_-=\dfrac d{1+E}-d=-\dfrac{dE}{1+E}$, de modo que $\tfrac12(\varphi-u_-)(\varphi-u_+)=-\dfrac{d^2E}{2(1+E)^2}$. Por outro lado, $\varphi'=-d\cdot\dfrac{\tfrac d2E}{(1+E)^2}=-\dfrac{d^2E}{2(1+E)^2}$. Iguais.</p>
+          <p>Para $u=\varphi\big((x-\sigma t)/\varepsilon\big)$, vimos que $u_t+uu_x=\varepsilon u_{xx}$ equivale a $-\sigma\varphi'+\varphi\varphi'=\varphi''$. Como $\varphi'=\tfrac12(\varphi^2-2\sigma\varphi+u_-u_+)$ (pois $u_-+u_+=2\sigma$), derivando, $\varphi''=(\varphi-\sigma)\varphi'$. Confere.</p>
+          <p>Quando $\xi\to-\infty$, $E\to0$ e $\varphi\to u_++d=u_-$; quando $\xi\to+\infty$, $E\to\infty$ e $\varphi\to u_+$. É o degrau suavizado, em uma faixa de largura da ordem de $\varepsilon$ em torno de $x=\sigma t$. Se $u_-&lt;u_+$, então $d&lt;0$ e a mesma fórmula ainda resolve a EDO, mas agora $\varphi\to u_+$ em $-\infty$ e $\varphi\to u_-$ em $+\infty$: ela liga os estados na ordem <em>contrária</em> (o maior à esquerda). Não há perfil viscoso com o menor à esquerda e o maior à direita.</p>
         </div>
       </details>
 
