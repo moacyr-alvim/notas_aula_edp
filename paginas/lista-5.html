@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista 5 — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Lista 5</h1>
+        <p class="lede">Lista de exercícios valendo nota: papel e lápis (grid e calor, séries de Fourier, Fourier discreto, transporte e onda) e computacional (calor no grid, afinador de Fourier e suavização de uma curva).</p>
+        <p class="meta">Reúne os assuntos de <a href="difusao-grafos.html">difusão em grafos</a>, <a href="dft.html">Fourier discreto</a>, <a href="separacao-variaveis.html">separação de variáveis</a> e <a href="equacao-transporte.html">transporte</a>.</p>
+      </header>
+
+      <aside class="box">
+        <p class="tag">Informações</p>
+        <p><b>Prazo:</b> [preencher]. <b>Forma de entrega:</b> [preencher]. A lista tem duas partes: <b>papel e lápis</b> (com ou sem ajuda de pacote simbólico) e <b>computacional</b>. Os arquivos de dados da parte computacional estão no fim desta página. As páginas que ajudam em cada item estão indicadas na tabela abaixo.</p>
+      </aside>
+
+      <h2 id="consulta" data-toc="Onde estudar">Onde estudar cada item</h2>
+      <table class="tabela">
+        <thead><tr><th>Item</th><th>Assunto</th><th>Páginas do livro que ajudam</th></tr></thead>
+        <tbody>
+          <tr><td>Papel e lápis 1</td><td>grid e equação do calor</td><td><a href="difusao-grafos.html">Difusão em grafos</a>, <a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a></td></tr>
+          <tr><td>Papel e lápis 2</td><td>séries de Fourier</td><td><a href="separacao-variaveis.html#superpor">Separação de variáveis</a> (coeficientes por ortogonalidade)</td></tr>
+          <tr><td>Papel e lápis 3</td><td>Fourier discreto e equação de diferenças</td><td><a href="dft.html">Transformada de Fourier discreta</a>, <a href="calor-fourier.html">O calor no grafo em anel, com Fourier</a></td></tr>
+          <tr><td>Papel e lápis 4</td><td>transporte por séries de Fourier</td><td><a href="equacao-transporte.html">Equação de transporte</a>, <a href="dft.html#translacao">propriedade da translação</a></td></tr>
+          <tr><td>Papel e lápis 5</td><td>onda com extremos fixos</td><td><a href="separacao-variaveis.html">Separação de variáveis</a> (exercício 3), <a href="onda-dalembert.html">Onda e d'Alembert</a></td></tr>
+          <tr><td>Computacional 1</td><td>calor e Laplace no grid</td><td><a href="difusao-grafos.html">Difusão em grafos</a>, <a href="autovalores-redes.html">Autovalores nulos e pequenos</a></td></tr>
+          <tr><td>Computacional 2</td><td>afinador de Fourier</td><td><a href="dft.html">Transformada de Fourier discreta</a></td></tr>
+          <tr><td>Computacional 3</td><td>suavizar uma curva</td><td><a href="calor-fourier.html">O calor no grafo em anel, com Fourier</a>, <a href="dft.html">DFT</a></td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="papel" data-toc="Papel e lápis">Papel e lápis <small>(com ou sem ajuda de pacote simbólico)</small></h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1</p>
+        <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+          <p style="flex:1 1 280px;margin-top:0">Mostre que, em um grafo planar regular (um <em>grid</em>), onde cada nó tem 4 vizinhos, a equação de difusão nos vértices, $\vec u_t=-c\,L\vec u$, com condutividade $c$ em todas as arestas, tem, como caso limite, a equação do calor $u_t=\tilde c\,\Delta u$.</p>
+          <svg viewBox="0 0 180 180" role="img" aria-labelledby="fgl5" style="width:100%;height:auto;max-width:150px;display:block">
+  <title id="fgl5">Um trecho de um grafo planar regular, o grid: cada vértice tem quatro vizinhos.</title>
+  <g style="stroke:var(--ink-soft)" stroke-width="1.6"><line x1="5" y1="30" x2="175" y2="30"/><line x1="5" y1="70" x2="175" y2="70"/><line x1="5" y1="110" x2="175" y2="110"/><line x1="5" y1="150" x2="175" y2="150"/><line x1="30" y1="5" x2="30" y2="175"/><line x1="70" y1="5" x2="70" y2="175"/><line x1="110" y1="5" x2="110" y2="175"/><line x1="150" y1="5" x2="150" y2="175"/></g>
+  <g style="fill:var(--ink)"><circle cx="30" cy="30" r="4.5"/><circle cx="30" cy="70" r="4.5"/><circle cx="30" cy="110" r="4.5"/><circle cx="30" cy="150" r="4.5"/><circle cx="70" cy="30" r="4.5"/><circle cx="70" cy="70" r="4.5"/><circle cx="70" cy="110" r="4.5"/><circle cx="70" cy="150" r="4.5"/><circle cx="110" cy="30" r="4.5"/><circle cx="110" cy="70" r="4.5"/><circle cx="110" cy="110" r="4.5"/><circle cx="110" cy="150" r="4.5"/><circle cx="150" cy="30" r="4.5"/><circle cx="150" cy="70" r="4.5"/><circle cx="150" cy="110" r="4.5"/><circle cx="150" cy="150" r="4.5"/></g>
+</svg>
+        </div>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">2</p>
+        <p>Calcule as séries de Fourier das funções abaixo (na verdade, de suas extensões periódicas...):</p>
+        <ol type="a">
+          <li>$a:[-\pi,\pi]$, $\ a(x)=\operatorname{sen}(5x)$</li>
+          <li>$b:[-\pi,\pi]$, $\ b(x)=\operatorname{sen}(5x+\alpha)$</li>
+          <li>$c:[-\pi,\pi]$, $\ c(x)=\begin{cases}0,&\text{se }x\le0\\1,&\text{se }x>0\end{cases}$</li>
+          <li>$d:[-1,1]$, $\ d(x)=x$</li>
+        </ol>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">3</p>
+        <p>Considere o vetor $u(x,t)$ como a temperatura no tempo $t$ medida nos vértices de um polígono regular com $n$ lados. Mostre como a "série de Fourier discreta" pode ser usada para resolver a equação de diferenças parcial (análoga à equação contínua $u_t=u_{xx}$)
+        $$u_t(x,t)=u(x+\Delta x,t)-2u(x,t)+u(x-\Delta x,t)$$
+        com $u(x,0)=u_0(x)$.</p>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">4</p>
+        <p>Resolva o problema de valor inicial $u_t+c\,u_x=0$, com $u(x,0)=f(x)$, onde $f\in C^1$ e periódica com período $2\pi$, usando séries de Fourier.</p>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">5</p>
+        <p>Use a série de Fourier (ou separação de variáveis) para determinar a solução da equação da onda com extremos fixos
+        $$\begin{cases}u_{tt}=u_{xx}\\u(0,t)=u(2\pi,t)=0\\u_t(x,0)=0\\u(x,0)=\operatorname{sen}(5x)\end{cases}$$</p>
+      </aside>
+
+      <h2 id="computacional" data-toc="Computacional">Computacional</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1</p>
+        <p>Faça a simulação da difusão do calor em um grafo como o grid do exercício 1 (teórico) sobre o laplaciano. O grafo deve formar um quadrado com 32 vértices em cada lado.</p>
+        <ol type="a">
+          <li>A temperatura nos vértices dos bordos do quadrado deve ser mantida constante igual a 10. A temperatura inicial dos vértices interiores é igual a zero. Mostre como a temperatura evolui com o tempo através de uma sequência de gráficos.</li>
+          <li>Faça a temperatura igual a 10 nos lados horizontais do bordo do quadrado e igual a 20 nos lados verticais. Encontre a temperatura no equilíbrio, isto é, resolva a equação de Laplace $\Delta u=0$.</li>
+        </ol>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">2</p>
+        <p><b>Afinador de Fourier:</b> escreva um programa que tem como entrada um arquivo de áudio digital no formato .wav e devolve a tonalidade dominante (a frequência dominante em hertz ou a nota musical dominante). Teste com o arquivo de áudio <a href="../dados/CordaViolao.wav" download>CordaViolao.wav</a> em anexo a esta lista. <small>(obs: você pode, alternativamente, querer encontrar a "frequência fundamental", que é a primeira frequência que se destaca no espectro de frequências, mas não necessariamente a mais saliente).</small></p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">Lembrete</p>
+        <p>A "série de Fourier discreta", ou transformada de Fourier discreta (DFT), consiste na escrita do vetor $u$ na base ortonormal de Fourier $[f_0,f_1,f_2,\dots,f_{N-1}]$, que são as colunas da matriz
+        $$F=\frac1{\sqrt N}\begin{pmatrix}1&1&1&1&\cdots&1\\1&w&w^2&w^3&\cdots&w^{N-1}\\1&w^2&w^4&w^6&\cdots&(w^{N-1})^2\\\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\1&w^{N-1}&(w^2)^{N-1}&(w^3)^{N-1}&\cdots&(w^{N-1})^{N-1}\end{pmatrix}.$$
+        A FFT de um vetor $u$ são os coeficientes de $u$ nesta base de Fourier, na ordem como aparecem na matriz acima.</p>
+      </aside>
+
+      <aside class="box exercicio">
+        <p class="tag">3</p>
+        <p>O arquivo <a href="../dados/Polvo.csv" download>Polvo.csv</a>, em anexo, contém uma sequência de pares ordenados $(x_i,y_i)$ que representam uma curva fechada no plano. (Você pode usar outra sequência de pontos que represente uma curva no plano, se quiser.)</p>
+        <ol type="a">
+          <li>Plote a curva obtida pelos pontos $(x_i,y_i)$.</li>
+          <li>Os vetores $(x_1,x_2,\dots,x_n)$ e $(y_1,y_2,\dots,y_n)$ podem ser vistos como "funções discretas" periódicas. Use a equação do calor (ou outro método para filtrar altas frequências de sua preferência) para produzir sequências $(x_1(t),x_2(t),\dots,x_n(t))$ e $(y_1(t),y_2(t),\dots,y_n(t))$ que sejam versões suavizadas das sequências. Plote as curvas para pelo menos 3 valores diferentes de $t$.</li>
+        </ol>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">Lembrete: equação do calor em "grafos circulares"</p>
+        <p>A equação do calor em grafos é um sistema de EDOs
+        $$\vec u_t=-c\,L\vec u$$
+        cuja solução é
+        $$\vec u(t)=e^{-c\,t\,L}\,\vec u_0.$$
+        Então, a solução do problema (2) pode ser alcançada usando exponenciais de matrizes, sem apelar para a transformada de Fourier. A matriz $e^{-c\,t\,L}$ é o <em>núcleo do calor discreto</em>.</p>
+        <p>Mas é possível escrever a solução através dos autovalores da matriz do laplaciano $L$, que são exatamente os coeficientes de Fourier de $-c\cdot t\cdot[2,-1,0,0,\dots,-1]$.</p>
+        <p>A "série de Fourier" de $x(t)$ e $y(t)$, ou mais precisamente, a FFT desses vetores, fornece outras maneiras de filtrar as altas frequências de $x(t)$ e $y(t)$. Você pode querer experimentar outros filtros "passa-baixa".</p>
+      </aside>
+
+      <h2 id="arquivos" data-toc="Arquivos">Arquivos</h2>
+      <ul>
+        <li><a href="../dados/CordaViolao.wav" download>CordaViolao.wav</a>: áudio de uma corda de violão (computacional 2).</li>
+        <li><a href="../dados/Polvo.csv" download>Polvo.csv</a>: pares $(x_i,y_i)$, um por linha, separados por vírgula, sem cabeçalho (computacional 3).</li>
+      </ul>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+            <li><a href="dft.html">Transformada de Fourier discreta</a></li>
+            <li><a href="calor-fourier.html">O calor no grafo em anel, com Fourier</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li>Fim da trilha por enquanto</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>
