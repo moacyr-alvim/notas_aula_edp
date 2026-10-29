@@ -57,6 +57,10 @@ s, _ = rodar("transporte_lambda.py")
 m = {float(a): float(b) for a, b in re.findall(r"lambda = ([0-9.]+)\s.*?max = ([-+0-9.eE]+)", s)}
 check("λ=0,5 e λ=1 estáveis (max ≤ 1); λ=1,2 instável", m[0.5] <= 1 + 1e-9 and m[1.0] <= 1 + 1e-9 and m[1.2] > 10, str(m))
 
+s, _ = rodar("sep_solucao.py")
+dif = float(re.search(r"diferenças finitas.*?: ([0-9.eE+-]+)\n", s).group(1))
+check("separação de variáveis: série ≈ diferenças finitas (erro < 0,01)", dif < 0.01, f"dif={dif:.4f}")
+
 # versões com lacunas: devem rodar (sem explodir erro) mesmo incompletas
 s, _ = rodar("cfl_lacunas.py")
 check("cfl_lacunas roda com o código incompleto", True)

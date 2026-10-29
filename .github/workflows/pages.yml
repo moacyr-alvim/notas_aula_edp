@@ -42,6 +42,7 @@ jobs:
           node tests/conv-core.test.js
           node tests/onda-core.test.js
           node tests/transp-core.test.js
+          node tests/sep-core.test.js
           node tests/ma-core.test.js
           python3 tests/run_python_cells.py
           node tests/smoke_dom.js

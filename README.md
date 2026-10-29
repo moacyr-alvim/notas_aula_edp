@@ -59,6 +59,8 @@ assets/
   conv-core.js        convolução linear e circular (e a regra dos índices que somam), testável em Node
   onda-core.js        fórmula de d'Alembert e dados iniciais da demo da onda, testável em Node
   transp-core.js      transporte u = f(x − ct), semirreta com entrada; testável em Node
+  sep-core.js         séries de senos do calor numa barra, testável em Node
+  sep-demo.js         demo da separação de variáveis: soma de N modos e amplitudes que murcham
   transp-demo.js      demo do transporte: características no plano x–t e o perfil deslizando
   onda-demo.js        demo da onda: diagrama x–t com o cone de dependência e o perfil u(x,t)
   ma-core.js          Monge–Ampère: ponto médio, gradiente, área e fórmulas fechadas (parábola, círculo, elipse), testável em Node
@@ -96,6 +98,7 @@ do nó correspondente pelo caminho da página. O índice lateral é gerado dos `
 node tests/burgers-core.test.js     # matemática da demo de Burgers (fórmulas exatas e Godunov)
 node tests/grafo-core.test.js       # difusão em grafos e grafo em anel: L = BᵀB, evolução contra Runge–Kutta, limite contínuo O(h²)
 node tests/conv-core.test.js        # convolução, matriz circulante, shift S, DFT e teorema da convolução
+node tests/sep-core.test.js         # separação de variáveis: coeficientes, EDP, Parseval, decaimento
 node tests/transp-core.test.js      # transporte: EDP, translação, semirreta, saltos
 node tests/onda-core.test.js        # d'Alembert: dados iniciais, EDP por diferenças finitas, dependência
 node tests/ma-core.test.js          # Monge–Ampère: det D²u = −1, área = |u|, gradiente, elipse = círculo transformado

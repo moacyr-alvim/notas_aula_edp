@@ -77,6 +77,7 @@ need = {
     "paginas/monge-ampere.html": ["demo-ma", "m-curva", "m-s1", "m-s1v", "m-s2", "m-s2v", "m-readout", "m-canvas", "tema", "toc"],
     "paginas/caracteristicas-2a-ordem.html": ["tema", "toc"],
     "paginas/classificacao.html": ["tema", "toc"],
+    "paginas/separacao-variaveis.html": ["demo-sep", "sv-preset", "sv-n", "sv-nv", "sv-t", "sv-tv", "sv-play", "sv-readout", "sv-u-canvas", "sv-a-canvas", "tema", "toc"],
     "paginas/equacao-transporte.html": ["demo-transp", "tr-preset", "tr-modo", "tr-c", "tr-cv", "tr-t", "tr-tv", "tr-x", "tr-xv", "tr-play", "tr-readout", "tr-diag-canvas", "tr-perfil-canvas", "tema", "toc"],
     "paginas/onda-dalembert.html": ["demo-onda", "w-preset", "w-c", "w-cv", "w-t", "w-tv", "w-x", "w-xv", "w-play", "w-readout", "w-diag-canvas", "w-perfil-canvas", "tema", "toc"],
     "index.html": ["mapa", "chips", "info", "trail-list", "tema"],

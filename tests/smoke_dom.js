@@ -171,6 +171,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["tr-modo"].value = "semi"; env.byId["tr-modo"].fire("input"); env.byId["tr-x"].value = "0.5"; env.byId["tr-x"].fire("input"); await wait(30);
     check("transp-demo: semirreta, x < ct vem do contorno", rd().includes("contorno"), rd().slice(0, 140));
   }
+  /* ---- separação de variáveis ---- */
+  {
+    const env = makeEnv(["demo-sep", "sv-preset", "sv-n", "sv-nv", "sv-t", "sv-tv", "sv-play", "sv-readout", "sv-u-canvas", "sv-a-canvas"], []);
+    run(env, "sep-core.js"); env.sandbox.window.SepCore = env.sandbox.SepCore || vm.runInContext("SepCore", env.sandbox);
+    env.byId["sv-preset"].value = "parabola"; env.byId["sv-n"].value = "16";
+    let err = null; try { run(env, "sep-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("sep-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["sv-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("sep-demo: parábola em t = 0,05: u(π/2) ≈ 0,9 e energia restante < 100%", /u\(π\/2, t\) = 0,9/.test(rd()) && /energia restante: \d+,\d%/.test(rd()), rd().slice(0, 140));
+    env.byId["sv-preset"].value = "caixa"; env.byId["sv-preset"].fire("input"); await wait(30);
+    check("sep-demo: troca de dado inicial redesenha", rd().length > 20, rd().slice(0, 100));
+  }
   /* ---- Monge–Ampère ---- */
   {
     const env = makeEnv(["demo-ma", "m-curva", "m-s1", "m-s1v", "m-s2", "m-s2v", "m-readout", "m-canvas"], []);
@@ -205,7 +217,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 25 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 25);
+    check("mapa: SVG gerado com os 26 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 26);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 8);
   }
   /* ---- executor de Python ---- */

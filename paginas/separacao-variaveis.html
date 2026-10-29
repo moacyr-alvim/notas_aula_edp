@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Separação de variáveis — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Separação de variáveis: o calor numa barra</h1>
+        <p class="lede">Procurar soluções que só murcham, uma função de $x$ vezes uma de $t$, e depois somá-las: o método clássico aplicado à equação do calor. Com demo e Python.</p>
+        <p class="meta">Ajuda ler antes: <a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a>. Vale também: <a href="classificacao.html">Hiperbólica, parabólica, elíptica</a>.</p>
+      </header>
+
+      <h2 id="ideia" data-toc="A ideia">Procurar vibrações puras</h2>
+      <p>Uma barra fina de comprimento $\ell$, com as duas pontas mergulhadas em gelo (temperatura $0$), e um perfil de temperatura inicial $f(x)$ dentro dela. A temperatura $u(x,t)$ obedece a
+      $$u_t=k\,u_{xx},\qquad u(0,t)=u(\ell,t)=0,\qquad u(x,0)=f(x).$$
+      Resolver isso de uma vez, para um $f$ qualquer, parece difícil. A ideia da <b>separação de variáveis</b> é começar por perfis muito especiais: aqueles que, quando evoluem, <em>não mudam de forma</em>, só murcham, todos juntos, na mesma proporção. Quem já viu o <a href="calor-grafo-anel.html">grafo em anel</a> reconhece: são os modos (autovetores do Laplaciano), cada um decaindo no seu ritmo. Se conseguirmos todos os modos, resolvemos o problema para qualquer $f$ que seja soma deles. E, por sorte, quase todo $f$ é.</p>
+
+      <h2 id="separando" data-toc="Separando">Separando: uma função de $x$ vezes uma de $t$</h2>
+      <p>"Perfil que só murcha" quer dizer $u(x,t)=X(x)\,T(t)$: o formato $X(x)$ é fixo, e $T(t)$ é o fator que o multiplica ao longo do tempo. Substituindo na equação do calor,
+      $$X(x)\,T'(t)=k\,X''(x)\,T(t).$$
+      Divida por $k\,X\,T$:
+      $$\frac{T'(t)}{k\,T(t)}=\frac{X''(x)}{X(x)}.$$
+      O lado esquerdo só depende de $t$ e o direito só de $x$. Duas coisas que variam independentemente só podem ser iguais se ambas forem a mesma <em>constante</em>, que vamos chamar de $-\lambda$ (o sinal é para lembrar que a solução vai decair). Sobram duas EDOs, uma para cada variável:
+      $$X''+\lambda X=0,\quad X(0)=X(\ell)=0,\qquad\qquad T'=-k\lambda\,T.$$
+      As condições de contorno $u(0,t)=u(\ell,t)=0$ viraram condições para $X$, pois $T(t)$ não pode ser zero sempre (senão $u\equiv0$).</p>
+
+      <h2 id="autovalores" data-toc="Quais λ servem">Quais $\lambda$ servem? Só alguns</h2>
+      <p>A EDO em $X$ tem solução para qualquer $\lambda$, mas só alguns valores respeitam as duas condições nas pontas. É igual a um problema de autovalores: $-X''=\lambda X$ com $X(0)=X(\ell)=0$.</p>
+      <p><b>Primeiro, $\lambda$ tem que ser positivo.</b> Multiplique $X''+\lambda X=0$ por $X$ e integre em $[0,\ell]$. Integrando por partes, $\int_0^\ell XX''\,dx=\big[XX'\big]_0^\ell-\int_0^\ell X'^2\,dx=-\int_0^\ell X'^2\,dx$, pois $X$ se anula nas pontas. Logo
+      $$\lambda\int_0^\ell X^2\,dx=\int_0^\ell X'^2\,dx\ \ge0.$$
+      Então $\lambda\ge0$, e $\lambda=0$ forçaria $X'\equiv0$, ou seja, $X$ constante, e a constante é $0$ pelas condições. Sobra $\lambda>0$.</p>
+      <p><b>Depois, a quantização.</b> Com $\lambda=\mu^2>0$, $X=A\cos\mu x+B\sin\mu x$. Em $x=0$: $X(0)=A=0$. Em $x=\ell$: $B\sin\mu\ell=0$, e $B\ne0$ (senão $X\equiv0$), logo $\mu\ell=n\pi$. Os valores permitidos são
+      $$\boxed{\;\lambda_n=\Big(\frac{n\pi}{\ell}\Big)^2,\qquad X_n(x)=\sin\frac{n\pi x}{\ell},\qquad n=1,2,3,\dots\;}$$
+      Faz sentido pelo desenho: o formato tem que "caber" na barra, com zero nas duas pontas, então cabe meia onda, uma onda inteira, uma e meia, e assim por diante.</p>
+
+      <h2 id="modos" data-toc="Os modos">Cada modo murcha no seu ritmo</h2>
+      <p>Para cada $\lambda_n$, a EDO do tempo $T'=-k\lambda_nT$ dá $T_n=e^{-k\lambda_nt}$. Os produtos
+      $$u_n(x,t)=e^{-k\,(n\pi/\ell)^2\,t}\ \sin\frac{n\pi x}{\ell}$$
+      são soluções do calor com as pontas a zero. O modo $n$ tem $n$ gomos e murcha com taxa $k\,n^2\pi^2/\ell^2$: <b>o modo dois morre quatro vezes mais rápido que o um, o três nove vezes</b>. Detalhes finos (gomos estreitos) alisam depressa, a forma geral demora. Duas conclusões físicas já saem daqui. A barra esfria no ritmo do primeiro modo, em tempo da ordem de $\ell^2/(k\pi^2)$, e esse tempo cresce com o <em>quadrado</em> do comprimento. E quanto menores os detalhes, mais rápido somem.</p>
+
+      <h2 id="superpor" data-toc="Somar tudo">Somando os modos: o dado inicial entra aqui</h2>
+      <p>A equação do calor é linear, e as condições de contorno também: a soma de soluções é solução. Então
+      $$u(x,t)=\sum_{n=1}^{\infty}b_n\,e^{-k(n\pi/\ell)^2t}\sin\frac{n\pi x}{\ell}$$
+      resolve a EDP e as condições nas pontas, para qualquer escolha de $b_n$. Falta o dado inicial: em $t=0$ precisamos
+      $$f(x)=\sum_{n=1}^{\infty}b_n\sin\frac{n\pi x}{\ell}.$$
+      É a série de Fourier de senos de $f$. Para achar $b_n$ usamos que os senos são <b>ortogonais</b>:
+      $$\int_0^\ell\sin\frac{n\pi x}\ell\,\sin\frac{m\pi x}\ell\,dx=\begin{cases}\ell/2,&n=m,\\0,&n\ne m.\end{cases}$$
+      Multiplicando a série por $\sin(m\pi x/\ell)$ e integrando, só o termo $n=m$ sobrevive:
+      $$\boxed{\;b_n=\frac2\ell\int_0^\ell f(x)\,\sin\frac{n\pi x}\ell\,dx.\;}$$
+      Isso é tudo, e é a mesma estrutura do grafo em anel: decomponha o dado nos modos, faça cada modo murchar na sua taxa, e some de volta.</p>
+      <aside class="box">
+        <p><b>A receita.</b> (1) Escreva $u=X(x)T(t)$ e separe: $X''/X=T'/(kT)=-\lambda$. (2) Resolva a EDO de $X$ com as condições de contorno: sai uma lista de autovalores $\lambda_n$ e de formas $X_n$. (3) Resolva a EDO de $T$ para cada $\lambda_n$. (4) Some $\sum b_nX_nT_n$ e escolha $b_n$ para casar com o dado inicial, usando a ortogonalidade das $X_n$. Funciona quando a EDP é linear, as condições de contorno são homogêneas e a região combina com as coordenadas (aqui, um intervalo).</p>
+      </aside>
+
+      <details>
+        <summary>Um exemplo completo: a barra toda a temperatura $1$</summary>
+        <div class="body">
+          <p>Tome $\ell=\pi$, $k=1$ e $f\equiv1$ (a barra está a temperatura $1$ e as pontas são subitamente postas no gelo). Então
+          $$b_n=\frac2\pi\int_0^\pi\sin nx\,dx=\frac2\pi\cdot\frac{1-\cos n\pi}n=\begin{cases}\dfrac4{n\pi},&n\text{ ímpar},\\[4pt]0,&n\text{ par},\end{cases}$$
+          e
+          $$u(x,t)=\frac4\pi\Big(e^{-t}\sin x+\frac13e^{-9t}\sin3x+\frac15e^{-25t}\sin5x+\cdots\Big).$$
+          Em $t=0$ a série vale $1$ no interior e $0$ nas pontas: o dado é descontínuo nos cantos e a série converge devagar (e com oscilações) ali. Mas para $t>0$ os fatores $e^{-n^2t}$ matam as oscilações e o perfil fica liso.</p>
+        </div>
+      </details>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja os modos murchando</h2>
+      <p>Aqui $\ell=\pi$ e $k=1$. À esquerda, a temperatura aproximada pelos $N$ primeiros modos (linha preta), o dado inicial (tracejado cinza) e só o primeiro modo (tracejado azul). À direita, as amplitudes $b_ne^{-n^2t}$ de cada modo: o contorno tracejado é a amplitude inicial $b_n$, e a barra cheia é o que sobrou no instante $t$. Com $t=0$ e poucos modos você vê a aproximação da série; arraste $t$ e veja as barras da direita desaparecerem da direita para a esquerda.</p>
+
+      <div class="demo" id="demo-sep">
+        <div class="controls">
+          <label>Dado inicial
+            <select id="sv-preset" aria-label="Dado inicial">
+              <option value="constante">Constante (f = 1)</option>
+              <option value="triangulo">Triângulo (pico em π/2)</option>
+              <option value="parabola">Parábola 4x(π−x)/π²</option>
+              <option value="caixa">Caixa central [π/4, 3π/4]</option>
+            </select>
+          </label>
+          <label>modos N <input type="range" id="sv-n" min="1" max="16" step="1" value="8" aria-label="Número de modos"> <output id="sv-nv">8</output></label>
+          <label>t <input type="range" id="sv-t" min="0" max="2" step="0.005" value="0.05" aria-label="Tempo t"> <output id="sv-tv">0,05</output></label>
+          <button id="sv-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="sv-u-canvas" role="img" aria-label="Temperatura u(x,t) como soma dos primeiros modos"></canvas>
+          <canvas id="sv-a-canvas" role="img" aria-label="Amplitudes dos modos em função de n"></canvas>
+        </div>
+        <div class="readout" id="sv-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>$u$ com $N$ modos</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial $f$</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>só o modo 1</span>
+          <span><i style="border-color:var(--carac)"></i>amplitude $b_ne^{-n^2t}$</span>
+        </div>
+      </div>
+      <p>Para explorar: (1) escolha a <b>caixa</b> com $t=0$ e aumente $N$: a aproximação "treme" perto dos saltos (é o fenômeno de Gibbs). (2) Agora aumente $t$ só um pouquinho, para $0{,}05$: o tremor some, mesmo com $N=16$. É o calor alisando. (3) Com a <b>parábola</b>, que já respeita as pontas, $N=3$ já basta. (4) Em $t=1$ qualquer perfil é praticamente o primeiro modo, e a energia restante cai a uma fração pequena do que era.</p>
+
+      <h2 id="bordas" data-toc="Outras bordas">Outras condições de contorno, outros modos</h2>
+      <p>O método não é só para pontas no gelo. A condição de contorno escolhe a lista de modos:</p>
+      <table class="tabela">
+        <thead><tr><th>Condição nas pontas</th><th>Modos $X_n$</th><th>Autovalores $\lambda_n$</th><th>Interpretação</th></tr></thead>
+        <tbody>
+          <tr><td>$u=0$ (gelo)</td><td>$\sin\dfrac{n\pi x}\ell$, $n\ge1$</td><td>$(n\pi/\ell)^2$</td><td>calor escapa pelas pontas: tudo vai a $0$</td></tr>
+          <tr><td>$u_x=0$ (isolada)</td><td>$\cos\dfrac{n\pi x}\ell$, $n\ge0$</td><td>$(n\pi/\ell)^2$, incluindo $0$</td><td>o modo constante não decai: o calor total se conserva e $u\to$ média de $f$</td></tr>
+          <tr><td>periódica (círculo)</td><td>$e^{2\pi inx/\ell}$, $n\in\mathbb Z$</td><td>$(2\pi n/\ell)^2$</td><td>os modos do <a href="calor-grafo-anel.html">grafo em anel</a> no limite $N\to\infty$</td></tr>
+        </tbody>
+      </table>
+      <p>Para pontas a temperaturas diferentes de zero, $u(0,t)=A$ e $u(\ell,t)=B$, subtrai-se o estado estacionário $A+(B-A)x/\ell$, que resolve a equação, e o resto cai no caso homogêneo (exercício 4).</p>
+
+      <h2 id="conta" data-toc="O que a fórmula conta">O que a fórmula conta sobre o calor</h2>
+      <ul>
+        <li><b>Suavização.</b> Os coeficientes $b_n$ de um $f$ limitado são limitados, e em $t>0$ são multiplicados por $e^{-kn^2\pi^2t/\ell^2}$, que decai mais rápido que qualquer potência de $n$. A série converge com todas as suas derivadas, e $u(\cdot,t)$ é infinitamente derivável em $x$, mesmo que $f$ tenha saltos. A caixa da demo vira um morro liso quase instantaneamente. É a marca das equações parabólicas, como dito em <a href="classificacao.html#calor">Hiperbólica, parabólica, elíptica</a>.</li>
+        <li><b>Seta do tempo.</b> Rodar o calor para trás significaria trocar $e^{-n^2t}$ por $e^{+n^2t}$: os modos finos, que já eram pequenos, seriam multiplicados por números gigantescos. Qualquer errinho nos dados vira uma explosão. O problema "de trás para frente" é mal posto.</li>
+        <li><b>Memória curta.</b> Para $t$ grande só o primeiro modo conta, então a forma final é sempre a mesma, um arco $\sin(\pi x/\ell)$, qualquer que tenha sido $f$ (desde que $b_1\ne0$).</li>
+      </ul>
+
+      <aside class="box">
+        <p><b>E a equação da onda?</b> O mesmo método com $u_{tt}=c^2u_{xx}$, pontas fixas, dá as mesmas formas $X_n=\sin(n\pi x/\ell)$ e $\lambda_n=(n\pi/\ell)^2$, mas agora a EDO do tempo é $T''=-c^2\lambda_nT$, que <em>oscila</em> em vez de decair: $T_n=\cos(n\pi ct/\ell)$ e $\sin(n\pi ct/\ell)$. Dois jeitos de uma EDO em $t$ reagir ao mesmo $\lambda$: murchar (calor) ou vibrar (onda). Os "modos de vibração" da corda de violão são estes, e cada modo $\sin(n\pi x/\ell)\cos(n\pi ct/\ell)$ é uma soma de duas ondas que andam em sentidos opostos, o que liga com <a href="onda-dalembert.html">d'Alembert</a> (exercício 3).</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Complete o cálculo dos coeficientes $b_n$ (por integração numérica) e a soma da série, veja a caixa suavizar, e confira o resultado com um esquema de diferenças finitas para o calor.</p>
+      <div class="pycell" data-title="Calor na barra por separação de variáveis"
+           data-starter="../py/sep_lacunas.py"
+           data-solution="../py/sep_solucao.py"></div>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Poucos modos</p>
+        <p>Resolva $u_t=u_{xx}$ em $[0,\pi]$ com $u(0,t)=u(\pi,t)=0$ e $u(x,0)=\sin x+3\sin2x-\sin5x$. (a) Escreva $u(x,t)$. (b) Em que instante a amplitude do modo $2$ cai a $1\%$ da inicial? (c) Qual modo domina em $t=2$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) O dado já é uma soma de modos ($n=1,2,5$), então basta fazer cada um murchar: $u=e^{-t}\sin x+3e^{-4t}\sin2x-e^{-25t}\sin5x$.</p>
+          <p>(b) $e^{-4t}=0{,}01$ dá $t=\tfrac14\ln100\approx1{,}15$.</p>
+          <p>(c) Em $t=2$: $e^{-2}\approx0{,}135$ (modo 1), $3e^{-8}\approx10^{-3}$ (modo 2) e $e^{-50}\approx2\cdot10^{-22}$ (modo 5). Domina o modo $1$ por larga margem.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Barra isolada</p>
+        <p>Resolva por separação de variáveis $u_t=k\,u_{xx}$ em $[0,\ell]$ com $u_x(0,t)=u_x(\ell,t)=0$ e $u(x,0)=f(x)$. Para onde vai $u$ quando $t\to\infty$? Explique também fisicamente, mostrando que $\int_0^\ell u\,dx$ não muda no tempo.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Separando, $X''+\lambda X=0$ com $X'(0)=X'(\ell)=0$. O argumento da energia dá de novo $\lambda\ge0$, e agora $\lambda=0$ serve ($X$ constante, pois $X'\equiv0$). Para $\lambda=\mu^2>0$, $X=A\cos\mu x+B\sin\mu x$, $X'(0)=B\mu=0$ dá $B=0$, e $X'(\ell)=-A\mu\sin\mu\ell=0$ dá $\mu\ell=n\pi$. Os modos são $X_n=\cos(n\pi x/\ell)$, $n=0,1,2,\dots$, e
+          $$u=\frac{a_0}2+\sum_{n\ge1}a_n\,e^{-k(n\pi/\ell)^2t}\cos\frac{n\pi x}\ell,\qquad a_n=\frac2\ell\int_0^\ell f(x)\cos\frac{n\pi x}\ell\,dx.$$
+          Quando $t\to\infty$, só sobra $a_0/2=\frac1\ell\int_0^\ell f\,dx$: a média de $f$. Fisicamente, $\dfrac{d}{dt}\int_0^\ell u\,dx=k\int_0^\ell u_{xx}\,dx=k\,[u_x]_0^\ell=0$: nenhum calor entra ou sai, então o total se conserva e o perfil se achata na média.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A corda e os modos</p>
+        <p>Uma corda de comprimento $\ell$ com as pontas fixas parte do repouso com $u(x,0)=\sin(\pi x/\ell)$. (a) Resolva $u_{tt}=c^2u_{xx}$ por separação de variáveis. (b) Mostre que é o mesmo resultado que d'Alembert. (c) Qual o período de oscilação?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Os modos espaciais são $\sin(n\pi x/\ell)$, com $\lambda_n=(n\pi/\ell)^2$, e $T''=-c^2\lambda_nT$ dá $T=a\cos(n\pi ct/\ell)+b\sin(n\pi ct/\ell)$. O dado é o modo $n=1$, e $u_t(x,0)=0$ elimina o seno em $t$. Logo $u=\sin\dfrac{\pi x}\ell\cos\dfrac{\pi ct}\ell$.</p>
+          <p>(b) Pela identidade $\sin a\cos b=\tfrac12[\sin(a-b)+\sin(a+b)]$, $u=\tfrac12\big[\sin\tfrac{\pi(x-ct)}\ell+\sin\tfrac{\pi(x+ct)}\ell\big]$, que é a fórmula de d'Alembert com $f=\sin(\pi x/\ell)$ e $g=0$. (Em geral, d'Alembert para a corda com pontas fixas usa a extensão ímpar e $2\ell$-periódica de $f$.)</p>
+          <p>(c) O cosseno repete quando $\pi ct/\ell=2\pi$, ou seja, $t=2\ell/c$. Como $c=\sqrt{T/\rho}$, uma corda mais curta ou mais esticada oscila mais rápido, e o som é mais agudo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Pontas a temperaturas diferentes</p>
+        <p>Resolva $u_t=u_{xx}$ em $[0,\pi]$ com $u(0,t)=0$, $u(\pi,t)=1$ e $u(x,0)=0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>A função $w(x)=x/\pi$ resolve a EDP (não depende de $t$ e $w''=0$) e as condições nas pontas. Chame $v=u-w$: resolve o calor com $v(0,t)=v(\pi,t)=0$ e $v(x,0)=-x/\pi$. Então $v=\sum b_ne^{-n^2t}\sin nx$ com
+          $$b_n=-\frac2\pi\int_0^\pi\frac x\pi\sin nx\,dx=-\frac2{\pi^2}\cdot\frac{\pi(-1)^{n+1}}n=\frac{2(-1)^n}{n\pi},$$
+          usando $\int_0^\pi x\sin nx\,dx=\pi(-1)^{n+1}/n$. Portanto
+          $$u(x,t)=\frac x\pi+\sum_{n=1}^\infty\frac{2(-1)^n}{n\pi}\,e^{-n^2t}\sin nx.$$
+          Em $t\to\infty$, $u\to x/\pi$: o perfil linear entre as duas temperaturas, que é o estado de equilíbrio.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. E Laplace?</p>
+        <p>Resolva $u_{xx}+u_{yy}=0$ no retângulo $0&lt;x&lt;\pi$, $0&lt;y&lt;1$, com $u=0$ em $x=0$, $x=\pi$ e $y=1$, e $u(x,0)=f(x)$. Compare com o exemplo de Hadamard da página de classificação.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $u=X(x)Y(y)$ vem $X''/X=-Y''/Y=-\lambda$. As condições em $x=0,\pi$ dão de novo $X_n=\sin nx$ e $\lambda_n=n^2$. Para $y$ a equação é $Y''=n^2Y$, cujas soluções são <em>exponenciais</em>, $e^{\pm ny}$, e não senos: aqui não há oscilação. Impondo $Y(1)=0$ e $Y(0)=1$, $Y_n=\sinh n(1-y)/\sinh n$ (confira: vale $1$ em $y=0$ e $0$ em $y=1$). Logo
+          $$u(x,y)=\sum_{n\ge1}b_n\,\frac{\sinh n(1-y)}{\sinh n}\,\sin nx,\qquad b_n=\frac2\pi\int_0^\pi f(x)\sin nx\,dx.$$
+          O problema com valores em <em>dois</em> lados ($y=0$ e $y=1$) é estável: o fator $\sinh n(1-y)/\sinh n\le1$ só encolhe os modos. Já pedir $u$ e $u_y$ em $y=0$ (dados de Cauchy) faria aparecer $\sinh ny$, que cresce como $e^{ny}$, o mesmo mecanismo da explosão do exemplo de Hadamard. É a diferença entre o elíptico e o parabólico/hiperbólico, vista modo a modo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Dobrando a barra</p>
+        <p>Uma barra de comprimento $\ell$ esfria (modo 1 dominante) em um tempo característico $\tau$. Quanto vale o tempo de uma barra do mesmo material com comprimento $2\ell$? E com $\ell/2$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>O modo 1 decai como $e^{-k\pi^2t/\ell^2}$, então $\tau=\ell^2/(k\pi^2)$. Com $2\ell$, $\tau$ é multiplicado por $4$; com $\ell/2$, por $1/4$. O tempo cresce com o quadrado do comprimento, e é por isso que uma xícara esfria bem mais rápido que uma panela.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a></li>
+            <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="onda-dalembert.html">Onda e d'Alembert</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/sep-core.js"></script>
+  <script src="../assets/sep-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

@@ -59,7 +59,9 @@
     { id: "anel", lane: "calor", col: 3, label: "O grafo em anel\ne o limite contínuo", href: "paginas/calor-grafo-anel.html", trails: ["calor", "numerico"],
       desc: "Modos de Fourier no grafo em anel e o limite N → ∞ (o círculo), que dá u_t = k u_xx. Com demo e Python." },
     { id: "fourier", lane: "calor", col: 4, label: "Calor na reta:\nFourier e núcleo", href: null, trails: ["calor"],
-      desc: "A equação do calor em ℝ: séries de Fourier, núcleo gaussiano e propagação com velocidade infinita." },
+      desc: "A equação do calor em ℝ: transformada de Fourier, núcleo gaussiano e propagação com velocidade infinita." },
+    { id: "sep", lane: "calor", col: 4, row: 1, label: "Separação de\nvariáveis", href: "paginas/separacao-variaveis.html", trails: ["calor"],
+      desc: "O calor numa barra: u = X(x)T(t), autovalores (nπ/ℓ)², soma dos modos e coeficientes por ortogonalidade. Com demo e Python." },
     { id: "conv", lane: "disc", col: 2, label: "Convolução", href: "paginas/convolucao.html", trails: ["fdiscreto"],
       desc: "Polinômios, probabilidade e áudio; o que supor fora da janela: zeros (linear) ou periódico (circular). Com demo e Python." },
     { id: "dft", lane: "disc", col: 3, label: "Transformada de\nFourier discreta", href: "paginas/dft.html", trails: ["fdiscreto"],
@@ -88,7 +90,7 @@
     ["burgers", "lc"], ["lc", "weak"], ["weak", "rh"], ["rh", "lwr"],
     ["hj", "el"], ["el", "hl"], ["hl", "visc"],
     ["char2", "class"], ["char2", "wave2"], ["char2", "ma"], ["newton", "wave2"],
-    ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"],
+    ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"], ["anel", "sep"], ["sep", "fourier"],
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
