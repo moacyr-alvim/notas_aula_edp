@@ -102,7 +102,7 @@
 
       <aside class="box exercicio">
         <p class="tag">2</p>
-        <p><b>Afinador de Fourier:</b> escreva um programa que tem como entrada um arquivo de áudio digital no formato .wav e devolve a tonalidade dominante (a frequência dominante em hertz ou a nota musical dominante). Teste com o arquivo de áudio <a href="../dados/CordaViolao.wav" download>CordaViolao.wav</a> em anexo a esta lista. <small>(obs: você pode, alternativamente, querer encontrar a "frequência fundamental", que é a primeira frequência que se destaca no espectro de frequências, mas não necessariamente a mais saliente).</small></p>
+        <p><b>Afinador de Fourier:</b> escreva um programa que tem como entrada um arquivo de áudio digital no formato .wav e devolve a <em>frequência fundamental</em> (em hertz ou como nota musical), isto é, a primeira frequência que se destaca no espectro de frequências, e não necessariamente a de maior amplitude. Defina e justifique o critério que você usa para dizer que uma frequência "se destaca". Teste com o arquivo de áudio <a href="../dados/CordaViolao.wav" download>CordaViolao.wav</a> em anexo a esta lista.</p>
       </aside>
 
       <aside class="box">
@@ -127,8 +127,8 @@
         $$\vec u_t=-c\,L\vec u$$
         cuja solução é
         $$\vec u(t)=e^{-c\,t\,L}\,\vec u_0.$$
-        Então, a solução do problema (2) pode ser alcançada usando exponenciais de matrizes, sem apelar para a transformada de Fourier. A matriz $e^{-c\,t\,L}$ é o <em>núcleo do calor discreto</em>.</p>
-        <p>Mas é possível escrever a solução através dos autovalores da matriz do laplaciano $L$, que são exatamente os coeficientes de Fourier de $-c\cdot t\cdot[2,-1,0,0,\dots,-1]$.</p>
+        Então, a solução do problema 3(b) pode ser alcançada usando exponenciais de matrizes, sem apelar para a transformada de Fourier. A matriz $e^{-c\,t\,L}$ é o <em>núcleo do calor discreto</em>.</p>
+        <p>Mas é possível escrever a solução através dos autovalores da matriz do laplaciano $L$, que são exatamente os coeficientes de Fourier (a FFT, sem o fator $1/\sqrt N$) de $[2,-1,0,0,\dots,-1]$, a primeira coluna de $L$. Os autovalores de $e^{-c\,t\,L}$ são então $e^{-c\,t\,\lambda_k}$.</p>
         <p>A "série de Fourier" de $x(t)$ e $y(t)$, ou mais precisamente, a FFT desses vetores, fornece outras maneiras de filtrar as altas frequências de $x(t)$ e $y(t)$. Você pode querer experimentar outros filtros "passa-baixa".</p>
       </aside>
 
