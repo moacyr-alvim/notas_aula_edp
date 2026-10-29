@@ -29,7 +29,7 @@
       <h2 id="ideia" data-toc="A ideia">Procurar vibrações puras</h2>
       <p>Uma barra fina de comprimento $\ell$, com as duas pontas mergulhadas em gelo (temperatura $0$), e um perfil de temperatura inicial $f(x)$ dentro dela. A temperatura $u(x,t)$ obedece a
       $$u_t=k\,u_{xx},\qquad u(0,t)=u(\ell,t)=0,\qquad u(x,0)=f(x).$$
-      Resolver isso de uma vez, para um $f$ qualquer, parece difícil. A ideia da <b>separação de variáveis</b> é começar por perfis muito especiais: aqueles que, quando evoluem, <em>não mudam de forma</em>, só murcham, todos juntos, na mesma proporção. Quem já viu o <a href="calor-grafo-anel.html">grafo em anel</a> reconhece: são os modos (autovetores do Laplaciano), cada um decaindo no seu ritmo. Se conseguirmos todos os modos, resolvemos o problema para qualquer $f$ que seja soma deles. E, por sorte, quase todo $f$ é.</p>
+      Resolver isso de uma vez, para um $f$ qualquer, parece difícil. A ideia da <b>separação de variáveis</b> é começar por perfis muito especiais: aqueles que, quando evoluem, <em>não mudam de forma</em>, só murcham, todos juntos, na mesma proporção. Quem já viu o <a href="calor-grafo-anel.html">grafo em anel</a> reconhece: são os modos (autovetores do Laplaciano), cada um decaindo no seu ritmo. Se conseguirmos todos os modos, resolvemos o problema para qualquer $f$ que seja uma soma (possivelmente infinita) deles. Isso vale para uma classe bem geral de funções $f$; precisar em que sentido uma série de senos converge para $f$ é um assunto à parte, e vamos voltar a ele.</p>
 
       <h2 id="separando" data-toc="Separando">Separando: uma função de $x$ vezes uma de $t$</h2>
       <p>"Perfil que só murcha" quer dizer $u(x,t)=X(x)\,T(t)$: o formato $X(x)$ é fixo, e $T(t)$ é o fator que o multiplica ao longo do tempo. Substituindo na equação do calor,
@@ -59,7 +59,7 @@
       $$u(x,t)=\sum_{n=1}^{\infty}b_n\,e^{-k(n\pi/\ell)^2t}\sin\frac{n\pi x}{\ell}$$
       resolve a EDP e as condições nas pontas, para qualquer escolha de $b_n$. Falta o dado inicial: em $t=0$ precisamos
       $$f(x)=\sum_{n=1}^{\infty}b_n\sin\frac{n\pi x}{\ell}.$$
-      É a série de Fourier de senos de $f$. Para achar $b_n$ usamos que os senos são <b>ortogonais</b>:
+      É a série de Fourier de senos de $f$. (Para que funções $f$ essa série existe, e em que sentido ela converge para $f$ — pontualmente, uniformemente, em média quadrática — é a pergunta de convergência de séries trigonométricas, que vamos estudar à parte. Por enquanto, tratamos como razoável que valha para os perfis que nos interessam.) Para achar $b_n$ usamos que os senos são <b>ortogonais</b>:
       $$\int_0^\ell\sin\frac{n\pi x}\ell\,\sin\frac{m\pi x}\ell\,dx=\begin{cases}\ell/2,&n=m,\\0,&n\ne m.\end{cases}$$
       Multiplicando a série por $\sin(m\pi x/\ell)$ e integrando, só o termo $n=m$ sobrevive:
       $$\boxed{\;b_n=\frac2\ell\int_0^\ell f(x)\,\sin\frac{n\pi x}\ell\,dx.\;}$$
