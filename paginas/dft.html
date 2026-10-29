@@ -190,6 +190,11 @@
       $$\hat z_k=\langle f_k,z\rangle=\frac1{\sqrt N}\sum_{j}\omega^{-jk}\,z_j.$$
       É essa a fórmula que vai virar $\hat z(k)=\int e^{-ikx}z(x)\,dx$ no caso contínuo.</p>
 
+      <aside class="box">
+        <p><b>A fórmula essencial: $\hat u_k=\langle f_k,u\rangle$.</b>
+        $$\boxed{\;\hat u_k=\langle f_k,u\rangle=\frac1{\sqrt N}\sum_{j=0}^{N-1}\omega^{-jk}\,u_j\;}$$
+        O somatório é só o produto interno escrito por extenso (o conjugado de $\omega^{jk}$ é $\omega^{-jk}$). Ele aparece porque $\hat u_k$ é a <em>$k$-ésima coordenada de $u$ na base de Fourier</em>, e numa base <em>ortonormal</em> a coordenada se obtém por produto interno: se $u=\sum_lc_lf_l$, então $\langle f_k,u\rangle=\sum_lc_l\langle f_k,f_l\rangle=c_k$.</p>
+      </aside>
       <h2 id="teorema" data-toc="Convolução vira produto">A convolução vira produto</h2>
       <p>Pelo que vimos, $F^*UF=\Lambda_u$ é diagonal, com $\lambda_k=\sum_l u_l\omega^{-lk}=\sqrt N\,\langle f_k,u\rangle=\sqrt N\,\hat u_k$. Então, para $z=u\circledast v=Uv$ (aqui $\circledast$ é a convolução circular):
       $$\hat z=F^*Uv=(F^*UF)(F^*v)=\Lambda_u\hat v\quad\Longrightarrow\quad\boxed{\,\hat z_k=\sqrt N\;\hat u_k\,\hat v_k\,},\qquad z=F\big(\sqrt N\,\hat u\odot\hat v\big),$$
@@ -204,6 +209,36 @@
         <p class="tag">Por que isso é natural</p>
         <p>Multiplicar polinômios módulo $x^N-1$ é a convolução circular dos coeficientes (página anterior). A DFT avalia o polinômio nas raízes de $x^N-1$, e nessas raízes <em>fazer módulo $x^N-1$ não muda o valor</em>. Então "o valor do produto é o produto dos valores", e é exatamente o teorema acima.</p>
       </aside>
+
+      <h2 id="translacao" data-toc="Translação">Deslocar o sinal só gira as fases</h2>
+      <p>Seja $z$ o vetor $u$ deslocado circularmente de $l$ casas, $z_j=u_{(j-l)\bmod N}$, isto é, $z=S^lu$. Em Fourier isso é só uma multiplicação de cada coordenada por um número de módulo $1$:
+      $$\boxed{\;\hat z_k=\omega^{-lk}\,\hat u_k.\;}$$
+      Em particular $|\hat z_k|=|\hat u_k|$: deslocar o sinal não muda quanto de cada onda ele tem, só a <em>fase</em> de cada onda. Faz sentido, pois as ondas $f_k$ são as que o deslocamento só multiplica por um número ($Sf_k=\omega^{-k}f_k$). (Deslocar é a convolução com $e_l$, então isto é um caso particular do teorema acima.)</p>
+      <details>
+        <summary>Demonstração</summary>
+        <div class="body">
+          <p><b>Pelo produto interno.</b> $S$ é uma matriz de permutação, logo unitária: $S^*=S^{-1}$ e $(S^l)^*=S^{-l}$. Passando o operador para o outro lado do produto interno,
+          $$\hat z_k=\langle f_k,S^lu\rangle=\langle(S^l)^*f_k,u\rangle=\langle S^{-l}f_k,u\rangle.$$
+          Como $Sf_k=\omega^{-k}f_k$, vale $S^{-l}f_k=\omega^{lk}f_k$. O produto interno é linear no segundo argumento e <em>antilinear</em> no primeiro, então o escalar sai conjugado:
+          $$\langle\omega^{lk}f_k,u\rangle=\overline{\omega^{lk}}\,\langle f_k,u\rangle=\omega^{-lk}\,\hat u_k.$$</p>
+          <p><b>Na conta direta.</b> $\hat z_k=\dfrac1{\sqrt N}\sum_j\omega^{-jk}u_{(j-l)\bmod N}$. Troque o índice por $m=(j-l)\bmod N$, isto é, $j\equiv m+l$. Como $\omega^{-jk}$ só depende de $j$ módulo $N$ ($\omega^N=1$), $\omega^{-jk}=\omega^{-lk}\omega^{-mk}$ e, quando $j$ percorre $0,\dots,N-1$, $m$ também percorre todos os índices uma vez cada:
+          $$\hat z_k=\omega^{-lk}\,\frac1{\sqrt N}\sum_m\omega^{-mk}u_m=\omega^{-lk}\hat u_k.$$</p>
+        </div>
+      </details>
+
+      <h2 id="parseval" data-toc="Parseval">Parseval: a transformada conserva o produto interno</h2>
+      <p>Para quaisquer $u,v\in\mathbb C^N$,
+      $$\boxed{\;\langle u,v\rangle=\langle\hat u,\hat v\rangle,\qquad\text{em particular}\qquad\|u\|^2=\sum_j|u_j|^2=\sum_k|\hat u_k|^2=\|\hat u\|^2.\;}$$
+      A "energia" de um sinal é a mesma contada nas posições ou nas ondas. É a razão geométrica de a mudança para a base de Fourier ser uma rotação (uma isometria): não distorce comprimentos nem ângulos.</p>
+      <details>
+        <summary>Demonstração</summary>
+        <div class="body">
+          <p>Escreva os dois vetores na base de Fourier: $u=\sum_k\hat u_kf_k$ e $v=\sum_l\hat v_lf_l$. Expandindo o produto interno (antilinear em $u$, linear em $v$) e usando $\langle f_k,f_l\rangle=\delta_{kl}$,
+          $$\langle u,v\rangle=\sum_{k,l}\overline{\hat u_k}\,\hat v_l\,\langle f_k,f_l\rangle=\sum_k\overline{\hat u_k}\,\hat v_k=\langle\hat u,\hat v\rangle.$$
+          Em forma matricial, é a mesma coisa: $\langle F^*u,F^*v\rangle=\langle u,FF^*v\rangle=\langle u,v\rangle$, porque $F^*F=I$ para uma matriz quadrada implica $FF^*=I$.</p>
+          <p><small>Com a convenção do <code>np.fft.fft</code> (sem o $1/\sqrt N$), o resultado é $\sum_k|\mathrm{fft}(u)_k|^2=N\sum_j|u_j|^2$.</small></p>
+        </div>
+      </details>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
       <p>Monte $U$ a partir de $u$, construa $F$ e confira, passo a passo, que $F^*UF$ é diagonal, que sua diagonal é <code>fft(u)</code> e que a convolução virou produto. No fim, uma figura mostra os autovalores de $U$ no plano complexo, em cima de <code>fft(u)</code>.</p>
@@ -244,6 +279,52 @@
         <summary>Solução</summary>
         <div class="body">
           <p>Complete $u$ e $v$ com zeros até um tamanho $N'\ge N+M-1$. Nesse tamanho não há o que dobrar, então a circular coincide com a linear: $u\ast v=\mathrm{ifft}\big(\mathrm{fft}(u,N')\cdot\mathrm{fft}(v,N')\big)$. Em numpy, <code>np.fft.fft(u, n=Np)</code> já completa com zeros.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Sinal real</p>
+        <p>Se $u$ tem entradas reais, mostre que $\hat u_{N-k}=\overline{\hat u_k}$ (índices módulo $N$). O que isso diz sobre $\hat u_0$ e, para $N$ par, sobre $\hat u_{N/2}$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Como $u_j$ é real, $\overline{\hat u_k}=\dfrac1{\sqrt N}\sum_j\omega^{+jk}u_j$. Mas $\omega^{jk}=\omega^{jk}\omega^{-jN}=\omega^{-j(N-k)}$ (pois $\omega^{jN}=1$), então esta soma é exatamente $\hat u_{N-k}$. Logo as coordenadas de Fourier de um sinal real vêm em pares conjugados, e só metade é independente. Com $k=0$ sai $\hat u_0=\overline{\hat u_0}$, então $\hat u_0=\frac1{\sqrt N}\sum_ju_j$ é real (é $\sqrt N$ vezes a média). Para $N$ par, $k=N/2$ também dá um número real.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Modulação: a propriedade dual da translação</p>
+        <p>Seja $w_j=\omega^{jl}u_j$ ($u$ multiplicado pela onda $\omega^{jl}$). Mostre que $\hat w_k=\hat u_{k-l}$ (índice módulo $N$).</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\hat w_k=\dfrac1{\sqrt N}\sum_j\omega^{-jk}\omega^{jl}u_j=\dfrac1{\sqrt N}\sum_j\omega^{-j(k-l)}u_j=\hat u_{k-l}$. Multiplicar por uma onda desloca o espectro; deslocar o sinal multiplica o espectro por uma onda. As duas propriedades são "a mesma" com os papéis de $j$ e $k$ trocados.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Parseval e o calor no anel</p>
+        <p>No grafo em anel, a solução de $z'=-cLz$ tem $\hat z_k(t)=e^{-c\lambda_kt}\hat z_k(0)$, com $\lambda_k=2-2\cos(2\pi k/N)$ (veja <a href="calor-fourier.html">o calor no grafo em anel, com Fourier</a>). Use Parseval para calcular $\|z(t)\|^2$ e mostre que decresce até $N\bar u^2$, onde $\bar u$ é a média do dado inicial.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Por Parseval, $\|z(t)\|^2=\sum_k|\hat z_k(t)|^2=\sum_ke^{-2c\lambda_kt}\,|\hat z_k(0)|^2$. Como $\lambda_k\ge0$, cada parcela decresce, e $\lambda_k=0$ só para $k=0$. Quando $t\to\infty$ só resta o termo $k=0$: $|\hat z_0(0)|^2=\Big|\frac1{\sqrt N}\sum_ju_j\Big|^2=N\bar u^2$, que é a energia do vetor constante igual à média. (A energia em Fourier é a energia em cada vértice, então "o calor se espalha" é o mesmo que "a energia dos modos rápidos some".)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. Autocorrelação</p>
+        <p>Mostre que $\langle u,S^lu\rangle=\sum_k|\hat u_k|^2\,\omega^{-lk}$. (O produto interno de $u$ com ele mesmo deslocado só depende de $|\hat u_k|$, o "espectro de potência".)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Por Parseval, $\langle u,S^lu\rangle=\langle\hat u,\widehat{S^lu}\rangle$. Pela translação, $\widehat{S^lu}_k=\omega^{-lk}\hat u_k$. Então
+          $$\langle u,S^lu\rangle=\sum_k\overline{\hat u_k}\,\omega^{-lk}\hat u_k=\sum_k|\hat u_k|^2\omega^{-lk}.$$
+          Para $l=0$ é o próprio Parseval, $\|u\|^2=\sum_k|\hat u_k|^2$.</p>
         </div>
       </details>
 
