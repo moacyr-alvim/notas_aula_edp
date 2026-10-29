@@ -16,7 +16,7 @@
     { id: "calor",   label: "Calor e\ndifusão" },
     { id: "disc",    label: "Fourier\ndiscreto" },
     { id: "seg",     label: "Segunda\nordem" },
-    { id: "listas",  label: "Listas para\nentregar" }
+    { id: "listas",  label: "Listas de\nexercícios" }
   ];
 
   var TRAILS = [
@@ -81,7 +81,7 @@
       desc: "A fórmula de d'Alembert deduzida fatorando o operador e seguindo as características. Com demo e Python." },
     { id: "newton", lane: "seg", col: 1, row: 1, label: "De onde vem a\nequação da onda", href: "paginas/equacao-onda-fisica.html", trails: ["segunda"],
       desc: "Newton em um colar de bolinhas e molas, o limite do contínuo e a velocidade c. Também a corda esticada." },
-    { id: "lista5", lane: "listas", col: 5, label: "Lista 5\n(valendo nota)", href: "paginas/lista-5.html", trails: ["calor", "fdiscreto"],
+    { id: "lista5", lane: "listas", col: 5, label: "Lista de\nexercícios 5", href: "paginas/lista-5.html", trails: ["calor", "fdiscreto"],
       desc: "Papel e lápis (grid e calor, Fourier, transporte, onda) e computacional (calor no grid, afinador, suavização de curva)." },
     { id: "ma", lane: "seg", col: 3, row: 0, label: "Monge–Ampère", href: "paginas/monge-ampere.html", trails: ["segunda"],
       desc: "Leitura opcional: det D²u = −1, características por homotetia de razão 1/2 e u como área. Com a parábola e o círculo." }
