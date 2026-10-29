@@ -45,7 +45,7 @@
       desc: "A velocidade do choque a partir da conservação. Está dentro da página de Burgers." },
     { id: "lwr", lane: "choques", col: 5, label: "Modelo LWR\n(trânsito)", href: "paginas/modelo-lwr.html", trails: ["choques"],
       desc: "Engarrafamentos como choques que andam para trás e o sinal verde como rarefação. Com os exercícios e o carro que acompanha a onda." },
-    { id: "hj", lane: "var", col: 1, label: "Hamilton–Jacobi", href: null, trails: ["variacional"],
+    { id: "hj", lane: "var", col: 1, label: "Hamilton–Jacobi", href: "paginas/hamilton-jacobi.html", trails: ["variacional"],
       desc: "u_t + H(Du,x) = 0, as equações de Hamilton como características e a escolha da solução física entre as fracas (condição de Lax)." },
     { id: "el", lane: "var", col: 2, label: "Euler–Lagrange\ne Legendre", href: null, trails: ["variacional"],
       desc: "Cálculo das variações e a transformada de Legendre entre H e L." },
@@ -88,7 +88,7 @@
   ];
 
   var EDGES = [
-    ["carac1", "transp"], ["carac1", "burgers"], ["carac1", "hj"], ["carac1", "char2"],
+    ["carac1", "transp"], ["carac1", "burgers"], ["carac1", "hj"], ["burgers", "hj"], ["carac1", "char2"],
     ["transp", "upwind"],
     ["burgers", "lc"], ["lc", "weak"], ["weak", "rh"], ["rh", "lwr"],
     ["hj", "el"], ["el", "hl"], ["hl", "visc"],

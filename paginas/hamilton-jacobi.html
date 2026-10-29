@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hamilton–Jacobi — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Hamilton–Jacobi: características como trajetórias</h1>
+        <p class="lede">A equação $u_t+H(Du,x)=0$, em que as características são as equações de Hamilton da mecânica. Quando elas se cruzam, $u$ ganha bicos, e é preciso escolher a solução: a condição de Lax e o problema de Riemann.</p>
+        <p class="meta">Ajuda ler antes: <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a> e <a href="burgers.html">Burgers</a>. Leva a: Euler–Lagrange e Legendre, <a href="burgers.html#hopf-lax">Hopf–Lax</a>.</p>
+      </header>
+
+      <h2 id="equacao" data-toc="A equação">A equação</h2>
+      <p>Uma equação de <b>Hamilton–Jacobi</b> tem a forma
+      $$u_t+H(Du,x)=0,$$
+      com $u=u(x,t)$, $x\in\mathbb R^n$, e $H(p,x)$ dado, o <b>hamiltoniano</b>. Em uma dimensão, $u_t+H(u_x,x)=0$. Alguns exemplos:</p>
+      <ul>
+        <li>$H(p)=\tfrac12p^2$: $\ u_t+\tfrac12u_x^2=0$. É a mais frequente por aqui, e parente próxima de Burgers (a seção "Quando as características se cruzam" mostra a ligação);</li>
+        <li>$H(p)=|p|$: $\ u_t+|Du|=0$. As curvas de nível de $u$ são frentes que avançam com velocidade $1$ na direção normal (a <a href="caracteristicas-1a-ordem.html">eikonal</a> em movimento);</li>
+        <li>$H(p,x)=\dfrac{p^2}{2m}+V(x)$: o hamiltoniano de uma partícula de massa $m$ em um potencial $V$, e o nome vem daí. Na mecânica, $u$ faz o papel da <em>ação</em> acumulada, o que será assunto da página seguinte.</li>
+      </ul>
+      <p>Como a EDP é de primeira ordem, a receita da <a href="caracteristicas-1a-ordem.html">página de características</a> se aplica. O que a torna especial é o que sai dela.</p>
+
+      <h2 id="caracteristicas" data-toc="Características = Hamilton">As características são as equações de Hamilton</h2>
+      <p>Escreva a EDP como $F(x,t,z,p,q)=0$ com $z=u$, $p=Du$, $q=u_t$ e
+      $$F(x,t,z,p,q)=q+H(p,x).$$
+      Então $F_q=1$, $F_p=H_p$, $F_x=H_x$, $F_z=0$ e $F_t=0$. As equações características $x_s=F_p$, $t_s=F_q$, $p_s=-F_x-F_zp$, $q_s=-F_t-F_zq$, $z_s=p\cdot x_s+q\,t_s$ ficam</p>
+      <aside class="box">
+        <p><b>Características de Hamilton–Jacobi.</b>
+        $$\boxed{\;\dot t=1,\qquad\dot x=H_p(p,x),\qquad\dot p=-H_x(p,x),\qquad\dot q=0,\qquad\dot z=p\cdot H_p(p,x)-H(p,x).\;}$$</p>
+      </aside>
+      <p>Como $\dot t=1$, o próprio $t$ serve de parâmetro. As duas equações do meio são exatamente as <b>equações de Hamilton</b> da mecânica: $x$ é a posição e $p$ é o momento. Duas observações:</p>
+      <ul>
+        <li><b>Conservação da energia, de graça.</b> Ao longo de uma trajetória, $\dfrac{d}{dt}H(p,x)=H_p\dot p+H_x\dot x=-H_pH_x+H_xH_p=0$. É coerente com $\dot q=0$: como $q=u_t=-H$, o fato de $q$ ser constante é o mesmo que $H$ ser constante.</li>
+        <li><b>O valor de $u$ é uma ação.</b> A equação de $z$ diz que $\dot z=p\cdot\dot x-H$. Na próxima página essa combinação aparece com o nome de lagrangiano $L$, e $u(x,t)$ será o menor custo para chegar em $x$ no instante $t$.</li>
+      </ul>
+      <p>Para o problema de valor inicial $u(x,0)=f(x)$, a característica que sai de $x_0$ tem
+      $$t(0)=0,\quad x(0)=x_0,\quad z(0)=f(x_0),\quad p(0)=Df(x_0),\quad q(0)=-H\big(Df(x_0),x_0\big).$$
+      Resolver o sistema dá $x(t),\,p(t),\,z(t)$, e basta inverter $x_0\mapsto x(x_0,t)$ para ler $u(x,t)=z$.</p>
+
+      <h2 id="h-de-p" data-toc="H só de p">Quando $H$ só depende de $p$: retas</h2>
+      <p>Se $H=H(p)$, então $\dot p=0$: o momento é constante, $p=p_0=f'(x_0)$, e a velocidade $\dot x=H'(p_0)$ também. As características são <b>retas</b>:
+      $$x(t)=x_0+t\,H'(f'(x_0)),\qquad u\big(x(t),t\big)=f(x_0)+t\big[p_0H'(p_0)-H(p_0)\big].$$
+      Cada reta anda com uma velocidade que depende da inclinação do dado naquele ponto, como em Burgers. Para $H=p^2/2$: $H'(p)=p$ e
+      $$x=x_0+t\,f'(x_0),\qquad u=f(x_0)+\tfrac t2\,f'(x_0)^2.$$</p>
+      <details>
+        <summary>Um exemplo completo: $f(x)=x^2/2$</summary>
+        <div class="body">
+          <p>Aqui $f'(x_0)=x_0$, então $x=x_0(1+t)$, ou seja, $x_0=\dfrac x{1+t}$, e
+          $$u=\frac{x_0^2}2+\frac t2x_0^2=\frac{x_0^2}2(1+t)=\frac{x^2}{2(1+t)}.$$
+          Conferindo na EDP: $u_t=-\dfrac{x^2}{2(1+t)^2}$ e $\tfrac12u_x^2=\tfrac12\Big(\dfrac x{1+t}\Big)^2=\dfrac{x^2}{2(1+t)^2}$, e a soma é $0$. A parábola vai se achatando, e as características nunca se cruzam ($f''=1>0$).</p>
+        </div>
+      </details>
+
+      <h2 id="cruzam" data-toc="Quando elas se cruzam">Quando as características se cruzam</h2>
+      <p>A fórmula $u=z(x_0,t)$ só vale enquanto $x_0\mapsto x_0+t\,H'(f'(x_0))$ puder ser invertida. Para $H=p^2/2$ a derivada dessa aplicação é $1+t\,f''(x_0)$. Se $f''\ge0$ nunca há problema. Se $f''$ é negativa em algum lugar, o primeiro cruzamento é em
+      $$t^*=\frac{-1}{\inf f''}.$$
+      É a mesma conta do tempo de quebra de Burgers, e por um bom motivo. Se $u$ resolve $u_t+H(u_x)=0$ e $v=u_x$, então, derivando a EDP em $x$, $v_t+H'(v)v_x=0$, isto é,
+      $$v_t+\big[H(v)\big]_x=0.$$
+      <b>$v=u_x$ resolve uma lei de conservação</b>, com fluxo $H$ (exercício 1). Para $H=p^2/2$ é exatamente Burgers. E as características de Hamilton–Jacobi, projetadas no plano $x$–$t$, são as de Burgers para $v$: $\dot x=H'(p)=H'(v)$.</p>
+      <p>Isso diz o que acontece depois do cruzamento. Quando $v$ forma um choque (um salto), $u$, que é uma integral de $v$, continua <em>contínua</em>, mas ganha um <b>bico</b>: a derivada $u_x$ salta. A página de <a href="burgers.html">Burgers</a> descreve o choque de $v$; aqui ele é o bico de $u$. Nesses bicos, $Du$ não existe e a EDP não faz sentido ponto a ponto. Surge a pergunta de sempre: em que sentido $u$ ainda "resolve" a equação, e qual solução escolher se houver várias?</p>
+
+      <h2 id="muitas" data-toc="Várias soluções">Há mais de uma solução razoável. Qual escolher?</h2>
+      <p>Tome $H=p^2/2$ e $f(x)=|x|$ (uma ponta em $x=0$). As características que saem de $x_0>0$ têm $p=1$ e $x=x_0+t$; as de $x_0&lt;0$ têm $p=-1$ e $x=x_0-t$. Elas se <em>afastam</em>, e a região $|x|&lt;t$ fica sem característica. Há duas maneiras naturais de preencher:</p>
+      <ul>
+        <li><b>o leque:</b> $u=|x|-\tfrac t2$ para $|x|\ge t$ e $u=\dfrac{x^2}{2t}$ para $|x|\le t$. É uma parábola que costura os dois lados com derivada contínua ($u_x=x/t=\pm1$ em $|x|=t$);</li>
+        <li><b>o bico em V:</b> $u=|x|-\tfrac t2$ para todo $x$. A ponta em $x=0$ fica para sempre.</li>
+      </ul>
+      <p>Conferindo: no V, e no leque para $|x|\ge t$, $u_t=-\tfrac12$ e $\tfrac12u_x^2=\tfrac12$; no leque para $|x|\le t$, $u_t=-\dfrac{x^2}{2t^2}$ e $\tfrac12u_x^2=\dfrac{x^2}{2t^2}$. As duas funções são contínuas, assumem $f$ em $t=0$ e resolvem a EDP em todo ponto exceto em um conjunto de medida nula. Qual é a "certa"?</p>
+      <p>A física pede o <b>leque</b>. No V, a derivada $v=u_x$ pula de $-1$ para $+1$ em $x=0$, e as características de cada lado (velocidade $v$) <em>saem</em> do bico, "inventadas do nada". Se dobrarmos o dado para $f(x)=-|x|$, é o contrário: $v$ passa de $1$ para $-1$, as características se <em>aproximam</em>, colidem em $x=0$, e a única solução razoável é o bico em $\Lambda$, $u=-|x|-\tfrac t2$. A regra, então: <b>os bicos aceitáveis são côncavos ($\Lambda$), nunca convexos (V)</b>. Dito para $v=u_x$: os saltos só podem ir para baixo.</p>
+
+      <h2 id="nao-unicidade" data-toc="Fracas demais">Soluções fracas demais</h2>
+      <p>O custo de aceitar saltos é perder a unicidade. Considere Burgers com $u(x,0)=0$ para $x&lt;0$ e $u(x,0)=1$ para $x>0$ (no nosso contexto, é $v=u_x$, e corresponde a um dado inicial de Hamilton–Jacobi convexo, como $f=x_+$, a rampa que começa em $0$). Duas soluções fracas:</p>
+      <ul>
+        <li>o <b>leque de rarefação</b> $u=0$ para $x&lt;0$, $u=x/t$ para $0&lt;x&lt;t$, $u=1$ para $x>t$ (contínuo, clássico fora da origem);</li>
+        <li>o <b>salto</b> $u=0$ para $x&lt;t/2$ e $u=1$ para $x>t/2$, que satisfaz Rankine–Hugoniot com $\sigma=\tfrac12(0+1)$.</li>
+      </ul>
+      <p>E há mais: para qualquer $m$ (até negativo), dois saltos de $0$ para $m$ e de $m$ para $1$, com velocidades $m/2&lt;(m+1)/2$, deixam entre eles uma faixa de valor $m$, e também são soluções fracas. Existem infinitas. Precisamos de um critério para escolher a solução fisicamente correta.</p>
+
+      <h3 id="entropia">A condição de Lax</h3>
+      <p>Para um salto com velocidade $\sigma$ entre $u_-$ e $u_+$, o critério é
+      $$\lambda(u_-)>\sigma>\lambda(u_+),$$
+      isto é, as características dos dois lados <em>entram</em> no salto (como na rampa de Burgers, onde elas colidem). Se elas saem do salto, uma perturbação mínima o desmancha em um leque, e ele é descartado. Para fluxo convexo, $F''>0$, isso se resume a $u_->u_+$; para fluxo côncavo, $F''&lt;0$, a $u_-&lt;u_+$.</p>
+      <p>Há uma leitura geométrica no gráfico de $F$. A velocidade de Rankine–Hugoniot $\sigma$ é a inclinação da <b>corda</b> entre $(u_-,F(u_-))$ e $(u_+,F(u_+))$, e $\lambda$ é a inclinação da <b>tangente</b>. A condição de Lax diz que a corda tem inclinação entre as das tangentes nas duas pontas, na ordem certa.</p>
+      <p>Em termos de Hamilton–Jacobi, com $F=H$ convexa: Lax diz $v_->v_+$, isto é, $u_x$ só pode <em>descer</em> ao cruzar um bico, e é a "regra dos bicos côncavos" da seção anterior. Sob hipóteses adequadas, a solução escolhida é a mesma que se obtém como limite de $u_t+(F(u))_x=\varepsilon u_{xx}$ quando $\varepsilon\to0$ (viscosidade evanescente). No caso de Burgers é a fornecida pela <a href="burgers.html#hopf-lax">fórmula de Hopf–Lax</a>, que escolhe a solução minimizando um custo, e a ideia geral de solução de Hamilton–Jacobi que "olha por cima" dos bicos será o assunto de uma página futura (soluções de viscosidade).</p>
+
+      <h2 id="demo" data-toc="Veja o problema de Riemann">Veja o problema de Riemann</h2>
+      <p>O <b>problema de Riemann</b> é o caso mais simples com salto: $u=u_L$ para $x&lt;0$ e $u=u_R$ para $x>0$. Escolha o fluxo, mexa em $u_L$ e $u_R$ e leia o resultado em três painéis: o gráfico de $F$ com a corda (vermilion) e as tangentes (azul tracejado), o perfil de $u$ no instante $t$ e o plano $(x,t)$. (A demo usa a letra $u$ para a variável da lei de conservação; no nosso contexto, ela faz o papel de $v=u_x$, e $F$ faz o papel de $H$.)</p>
+
+      <div class="demo" id="demo-lei">
+        <div class="controls">
+          <label>Fluxo <select id="l-fluxo" aria-label="Fluxo"></select></label>
+          <label>uL <input type="range" id="l-uL" min="0" max="1" step="0.01" value="1" aria-label="Valor à esquerda"> <output id="l-uLv">1,00</output></label>
+          <label>uR <input type="range" id="l-uR" min="0" max="1" step="0.01" value="0" aria-label="Valor à direita"> <output id="l-uRv">0,00</output></label>
+        </div>
+        <div class="controls">
+          <label>t <input type="range" id="l-t" min="0" max="4" step="0.01" value="1.5" aria-label="Tempo t"> <output id="l-tv">1,50</output></label>
+          <button id="l-play" type="button">▶ Animar</button>
+          <label class="check"><input type="checkbox" id="l-alt"> mostrar também o salto não admissível (quando há leque)</label>
+        </div>
+        <div class="panels two">
+          <canvas id="l-flux" role="img" aria-label="Gráfico do fluxo F de u, com a corda e as tangentes"></canvas>
+          <canvas id="l-prof" role="img" aria-label="Perfil da solução u em função de x no instante t"></canvas>
+          <canvas id="l-xt" class="wide-panel" role="img" aria-label="Plano x, t com características e choque ou leque"></canvas>
+        </div>
+        <div class="readout" id="l-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>solução admissível</span>
+          <span><i style="border-color:var(--choque)"></i>choque / corda de F (σ)</span>
+          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>salto não admissível</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>tangentes de F (λ) / características</span>
+        </div>
+      </div>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Burgers</b> com $u_L=1$, $u_R=0$: choque. A corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque. Marque a caixa para ver o salto que também seria solução fraca, mas que a condição de Lax descarta.</li>
+        <li><b>Trânsito</b> com $u_L=0{,}5$, $u_R=0{,}8$: o choque anda para <em>trás</em> ($\sigma&lt;0$), contra o fluxo dos carros. Com $u_L=1$, $u_R=0$ (engarrafamento total e pista livre à frente) aparece um leque.</li>
+        <li><b>Transporte:</b> $F$ é uma reta, a corda coincide com as tangentes, e o salto só é transportado.</li>
+      </ol>
+
+      <p>Para explorar:</p>
+      <ol>
+        <li><b>Burgers</b> com $u_L=1$, $u_R=0$: choque. A corda do gráfico de $F$ fica entre as duas tangentes, na ordem de Lax. Em termos de $u$ de Hamilton–Jacobi: é o bico $\Lambda$. Troque os valores ($u_L=0$, $u_R=1$): a corda passa a ficar fora, e o que aparece é um leque (o "leque" da seção anterior). Marque a caixa para ver o salto que também seria solução fraca, mas que a condição de Lax descarta: o bico em V.</li>
+        <li><b>Trânsito</b> com $u_L=0{,}5$, $u_R=0{,}8$: o choque anda para <em>trás</em> ($\sigma&lt;0$), contra o fluxo dos carros. Com $u_L=1$, $u_R=0$ (engarrafamento total e pista livre à frente) aparece um leque. Aqui o fluxo é côncavo e a regra se inverte.</li>
+        <li><b>Transporte:</b> $F$ é uma reta, a corda coincide com as tangentes, e o salto só é transportado.</li>
+      </ol>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A derivada resolve uma lei de conservação</p>
+        <p>Suponha que $u$ seja uma solução clássica de $u_t+H(u_x)=0$. Mostre que $v=u_x$ satisfaz $v_t+[H(v)]_x=0$. Explique por que esse cálculo deixa de ser suficiente quando $u$ não é diferenciável.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Derive a EDP em $x$: $u_{tx}+H'(u_x)\,u_{xx}=0$, isto é, $v_t+H'(v)\,v_x=0$, que é $v_t+[H(v)]_x=0$. A conta usa $u_{tx}$ e $u_{xx}$, que existem se $u\in C^2$. Nos bicos de $u$ (como a reta $x=t/2$ em uma solução com degrau, ou $x=0$ no V da seção anterior) $v$ tem salto e essas derivadas não existem. Daí só resta a forma fraca da lei de conservação, e já vimos que ela admite várias soluções (o exercício 5 deixa isso explícito). É preciso outro critério para escolher a boa: Lax, Hopf–Lax ou, depois, soluções de viscosidade.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Quando as características de Hamilton–Jacobi não se cruzam</p>
+        <p>Considere $H(p)=p^2/2$ e uma função inicial $f\in C^2(\mathbb R)$. (a) Mostre que as características clássicas são $x(t)=x_0+t\,f'(x_0)$. Determine uma condição em termos de $f''$ que garanta que elas não se cruzem até um tempo $T>0$. (b) Para $f(x)=\cos x$, determine o primeiro instante de cruzamento e o valor de $u$ nesse ponto.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $H'(p)=p$ e $p$ constante em cada característica, $p=f'(x_0)$ e $x(t)=x_0+t\,f'(x_0)$.</p>
+          <p>Duas características não se cruzam em $[0,T]$ quando, para cada $t\in[0,T]$, a aplicação $x_0\mapsto x_0+tf'(x_0)$ é injetiva. Basta que ela seja estritamente crescente: $1+t\,f''(x_0)>0$ para todo $x_0$ e todo $t\in[0,T]$. Como é linear em $t$, isso vale se e só se $f''(x_0)>-1/T$ para todo $x_0$ (em $t=T$ é a condição mais exigente). Se $f''\ge0$ nunca há cruzamento; se $\inf f''&lt;0$, o primeiro cruzamento é em $t^*=-1/\inf f''$ (é a mesma conta do tempo de quebra de Burgers, com $u=u_x$).</p>
+          <p>(b) $f''=-\cos x_0$, então $1+tf''=1-t\cos x_0$ se anula primeiro em $t=1$, nos pontos $x_0=2\pi k$ (onde $\cos x_0=1$). Ali as características têm $x=x_0-t\sin x_0=2\pi k$ e $u=f+\tfrac t2f'^2=1+0=1$. Em $t=1$ muitas características chegam ao mesmo ponto $(2\pi k,1)$, e daí em diante surgem bicos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Campo uniforme</p>
+        <p>Resolva $u_t+\tfrac12u_x^2+g\,x=0$, $u(x,0)=0$, pelo método das características ($g$ é uma constante). Confira na EDP.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Aqui $H(p,x)=\tfrac12p^2+gx$, então $\dot x=p$ e $\dot p=-g$, com $x(0)=x_0$ e $p(0)=f'(x_0)=0$. Logo $p=-gt$ e $x=x_0-\tfrac g2t^2$. Além disso $\dot z=p\,H_p-H=p^2-\big(\tfrac12p^2+gx\big)=\tfrac12p^2-gx=\tfrac12g^2t^2-g\big(x_0-\tfrac g2t^2\big)=g^2t^2-g\,x_0$, e integrando de $0$ a $t$ (com $z(0)=0$), $z=\tfrac13g^2t^3-g\,x_0\,t$. Como $x_0=x+\tfrac g2t^2$,
+          $$u(x,t)=-g\,x\,t-\frac{g^2}6\,t^3.$$
+          Conferindo: $u_t=-gx-\tfrac{g^2}2t^2$ e $u_x=-gt$, então $u_t+\tfrac12u_x^2+gx=-gx-\tfrac{g^2}2t^2+\tfrac{g^2}2t^2+gx=0$. É a queda livre: $x(t)=x_0-\tfrac g2t^2$ é a trajetória de uma partícula que parte do repouso.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O leque e o V</p>
+        <p>Para $H=p^2/2$ e $f(x)=-|x|$, mostre que $u=-|x|-\tfrac t2$ resolve a EDP fora de $x=0$ e explique, com as características, por que é a solução certa. Por que, para esse dado, não faz sentido a solução "leque"?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $x>0$: $u=-x-t/2$, $u_t=-\tfrac12$ e $\tfrac12u_x^2=\tfrac12$. Soma zero. Para $x&lt;0$, idem. A característica que sai de $x_0>0$ tem $p=f'(x_0)=-1$ e $x=x_0-t$ (anda para a esquerda); a de $x_0&lt;0$ tem $p=+1$ e $x=x_0+t$ (anda para a direita). Elas <em>se encontram</em> em $x=0$ nos instantes $t=|x_0|$, e ali terminam. Não há região sem característica (diferente do dado $|x|$), então não há o que preencher com um leque: a solução é única e tem o bico $\Lambda$ em $x=0$, com $v=u_x$ passando de $1$ para $-1$ (um salto para baixo, que satisfaz Lax).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Infinitas soluções fracas</p>
+        <p>Em Burgers com $u_L=0$ e $u_R=1$, mostre que, para cada $m\in\mathbb R$, a função com $u=0$ para $x&lt;\tfrac m2t$, $u=m$ para $\tfrac m2t&lt;x&lt;\tfrac{m+1}2t$ e $u=1$ para $x>\tfrac{m+1}2t$ satisfaz Rankine–Hugoniot nos dois saltos. Por que a condição de Lax descarta todas?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Em Burgers, $\sigma=(u_-+u_+)/2$. O primeiro salto, de $0$ para $m$, tem $\sigma_1=m/2$; o segundo, de $m$ para $1$, tem $\sigma_2=(m+1)/2$. Cada um coincide com a posição onde a função muda de valor, então R–H vale nos dois. Como $\sigma_1&lt;\sigma_2$, a faixa intermediária se alarga com o tempo.</p>
+          <p>Lax para Burgers pede $u_->u_+$ em cada salto. Aqui $0$ vs $m$ e $m$ vs $1$ exigiriam $0>m>1$, impossível. Então nenhum deles é admissível, e sobra o leque, que não tem saltos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. O fluxo do trânsito</p>
+        <p>Para $F(u)=u(1-u)$, mostre que $\sigma=1-(u_-+u_+)$ e que a condição de Lax equivale a $u_-&lt;u_+$. Interprete.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\sigma=\dfrac{u_--u_-^2-u_++u_+^2}{u_--u_+}=1-(u_-+u_+)$. E $\lambda(u)=1-2u$. Então $\lambda(u_-)>\sigma\iff 1-2u_->1-u_--u_+\iff u_+>u_-$, e $\sigma>\lambda(u_+)\iff 1-u_--u_+>1-2u_+\iff u_+>u_-$. Os dois lados da condição dão a mesma desigualdade.</p>
+          <p>Interpretação: um choque só se forma quando a densidade <em>aumenta</em> no sentido do fluxo, isto é, quando carros mais rápidos (menos densos) alcançam os mais lentos (mais densos) à frente. É o início de um engarrafamento. O caso contrário, a densidade diminuindo, é um leque: o engarrafamento se desfaz.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. O leque do trânsito</p>
+        <p>Com $F(u)=u(1-u)$, $u_L=1$ e $u_R=0$, mostre que $u=\tfrac12(1-x/t)$ para $-t&lt;x&lt;t$ (com $u=1$ à esquerda e $u=0$ à direita) é solução.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>No leque, $\lambda(u)=1-2u=x/t$, que é o que $u=\tfrac12(1-x/t)$ diz. Verificando na EDP $u_t+(1-2u)u_x=0$: $u_t=\dfrac{x}{2t^2}$, $u_x=-\dfrac{1}{2t}$ e $1-2u=\dfrac xt$, então $u_t+(1-2u)u_x=\dfrac{x}{2t^2}-\dfrac{x}{2t^2}=0$. Nas bordas $x=\mp t$ a função vale $1$ e $0$, de modo que a solução é contínua.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a></li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+            <li><a href="solucao-fraca.html">Solução fraca e Rankine–Hugoniot</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Euler–Lagrange e Legendre (em breve)</li>
+            <li><a href="burgers.html#hopf-lax">Fórmula de Hopf–Lax</a></li>
+            <li class="soon">Soluções de viscosidade (em breve)</li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/lei-core.js"></script>
+  <script src="../assets/lei-demo.js"></script>
+</body>
+</html>
