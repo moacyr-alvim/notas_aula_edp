@@ -76,6 +76,8 @@
       desc: "O discriminante B² − AC, invariante por mudança de coordenadas, e por que o calor e Laplace não rendem como a onda." },
     { id: "wave2", lane: "seg", col: 2, row: 1, label: "Onda e\nd'Alembert", href: "paginas/onda-dalembert.html", trails: ["segunda", "numerico"],
       desc: "A fórmula de d'Alembert deduzida fatorando o operador e seguindo as características. Com demo e Python." },
+    { id: "newton", lane: "seg", col: 1, row: 1, label: "De onde vem a\nequação da onda", href: "paginas/equacao-onda-fisica.html", trails: ["segunda"],
+      desc: "Newton em um colar de bolinhas e molas, o limite do contínuo e a velocidade c. Também a corda esticada." },
     { id: "ma", lane: "seg", col: 3, row: 0, label: "Monge–Ampère", href: "paginas/monge-ampere.html", trails: ["segunda"],
       desc: "Leitura opcional: det D²u = −1, características por homotetia de razão 1/2 e u como área. Com a parábola e o círculo." }
   ];
@@ -85,7 +87,7 @@
     ["transp", "upwind"],
     ["burgers", "lc"], ["lc", "weak"], ["weak", "rh"], ["rh", "lwr"],
     ["hj", "el"], ["el", "hl"], ["hl", "visc"],
-    ["char2", "class"], ["char2", "wave2"], ["char2", "ma"],
+    ["char2", "class"], ["char2", "wave2"], ["char2", "ma"], ["newton", "wave2"],
     ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"],
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["upwind", "cfl"], ["wave2", "cfl"]

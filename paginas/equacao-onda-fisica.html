@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>De onde vem a equação da onda — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>De onde vem a equação da onda</h1>
+        <p class="lede">Newton em um colar de bolinhas e molas, e depois no limite do contínuo: a equação $u_{tt}=c^2u_{xx}$ e o que diz a velocidade $c$.</p>
+        <p class="meta">Ajuda ler antes: só a lei de Hooke e a segunda lei de Newton. Vale: <a href="difusao-grafos.html">Difusão em grafos</a>. Leva a: <a href="onda-dalembert.html">Onda e d'Alembert</a>.</p>
+      </header>
+
+      <h2 id="colar" data-toc="O colar de molas">Newton em um colar de molas</h2>
+      <p>Antes de resolver a equação da onda, vale ver de onde ela sai. A ideia é a mais simples possível: nada de cordas, só <b>contas e molas</b>. Pense em uma fileira de $N$ bolinhas iguais, de massa $m$, ligadas por molas iguais, de constante $k$ e comprimento natural $h$. Em equilíbrio a bolinha $j$ está em $x_j=jh$. Quando o sistema vibra (ao longo da fileira), chame de $u_j(t)$ o quanto a bolinha $j$ se afastou do seu lugar.</p>
+
+      <h2 id="forca" data-toc="Força em uma bolinha">A força em uma bolinha</h2>
+      <p>A mola da direita está esticada em $u_{j+1}-u_j$ e a da esquerda em $u_j-u_{j-1}$. Pela lei de Hooke, cada mola puxa com $k$ vezes o seu esticamento, a da direita para a direita e a da esquerda para a esquerda. A força resultante na bolinha $j$ é
+      $$F_j=k\,(u_{j+1}-u_j)-k\,(u_j-u_{j-1})=k\,(u_{j+1}-2u_j+u_{j-1}).$$
+      E a segunda lei de Newton, massa vezes aceleração igual à força, dá
+      $$\boxed{\,m\,\ddot u_j=k\,(u_{j+1}-2u_j+u_{j-1}).\,}$$
+      Vale a pena ler o lado direito: $u_{j+1}+u_{j-1}-2u_j=2\big(\text{média dos vizinhos}-u_j\big)$. Se a bolinha está <em>abaixo</em> da média dos vizinhos, é puxada para cima, e vice-versa: <b>cada uma é puxada em direção à média dos vizinhos</b>. É a mesma conta do Laplaciano do grafo da <a href="difusao-grafos.html">difusão em grafos</a>, só que agora a derivada de $u_j$ no tempo é a <em>segunda</em> (aceleração) e não a primeira. Lá a bolinha escorregava para a média; aqui ela é acelerada em direção à média, passa direto e oscila.</p>
+
+      <h2 id="limite" data-toc="Limite do contínuo">Muitas bolinhas, bem pertinho: o limite do contínuo</h2>
+      <p>Agora imagine o colar com um comprimento total $L$ fixo, mas com $N=L/h$ bolinhas, cada vez mais, cada vez mais próximas ($h\to0$), até parecer um fio contínuo. Para a conta fechar, o fio todo tem que ter massa total $M$ e rigidez total $K$ fixas, e isso diz quem são $m$ e $k$ em função de $h$:</p>
+      <ul>
+        <li><b>Massa:</b> $N$ bolinhas dividem $M$, então $m=\dfrac MN=\dfrac{Mh}{L}$.</li>
+        <li><b>Mola:</b> $N$ molas em série, esticadas pela mesma força, somam os esticamentos. Cada mola estica $1/N$ do total, então o conjunto tem rigidez $K=k/N$, isto é, $k=NK=\dfrac{KL}{h}$. Molinhas curtas são rígidas.</li>
+      </ul>
+      <p>Falta o lado direito. Escrevendo $u_j(t)=u(x_j,t)$ e usando Taylor,
+      $$u(x\pm h)=u\pm h\,u_x+\tfrac{h^2}2u_{xx}\pm\cdots\quad\Longrightarrow\quad u(x+h)-2u(x)+u(x-h)=h^2\,u_{xx}+O(h^4),$$
+      (as derivadas ímpares cancelam). Substituindo tudo na equação de Newton:
+      $$\frac{Mh}{L}\,u_{tt}=\frac{KL}{h}\cdot h^2\,u_{xx}\quad\Longrightarrow\quad u_{tt}=\frac{KL^2}{M}\,u_{xx}.$$
+      O $h$ se cancela dos dois lados, e por isso o limite $h\to0$ faz sentido. Sai a equação da onda,
+      $$\boxed{\,u_{tt}=c^2u_{xx},\qquad c^2=\frac{KL^2}{M}.\,}$$
+      O que o $c$ diz: quanto mais <b>rígido</b> o fio ($K$ grande), mais rápida a onda; quanto mais <b>pesado</b> ($M$ grande), mais lenta. Confira as unidades: $K$ é força por comprimento, então $KL^2/M$ tem unidade de (força × comprimento)/massa $=(\text{comprimento}/\text{tempo})^2$. É uma velocidade ao quadrado, como deveria.</p>
+
+      <h2 id="corda" data-toc="A corda esticada">Na corda esticada</h2>
+      <aside class="box">
+        <p><b>O mesmo resultado, por outro caminho.</b> Em uma corda com tensão $T$ e densidade linear $\rho$, pegue um pedacinho entre $x$ e $x+dx$ com deslocamentos pequenos (inclinação $u_x$ pequena). A tensão puxa as duas pontas, e a componente vertical da força resultante é $T\,[u_x(x+dx)-u_x(x)]\approx T\,u_{xx}\,dx$. A massa do pedacinho é $\rho\,dx$. Newton:
+        $$\rho\,dx\;u_{tt}=T\,u_{xx}\,dx\quad\Longrightarrow\quad u_{tt}=\frac T\rho\,u_{xx},\qquad c=\sqrt{T/\rho}.$$
+        Corda mais esticada, mais rápida; corda mais grossa, mais lenta. (Na barra elástica, que é o colar de molas em que a rigidez vem do material, sai $c=\sqrt{E/\rho}$, com $E$ o módulo de Young.)</p>
+      </aside>
+
+
+      <aside class="box">
+        <p><b>E agora?</b> Com a equação na mão, falta resolvê-la com os dados $u(x,0)=f(x)$ e $u_t(x,0)=g(x)$. Isso é a fórmula de d\'Alembert, na <a href="onda-dalembert.html">próxima página</a>.</p>
+      </aside>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O colar de molas e as ondas longas</p>
+        <p>No colar de molas, $m\ddot u_j=k(u_{j+1}-2u_j+u_{j-1})$, procure ondas $u_j=\cos(\kappa jh-\omega t)$. Encontre $\omega$ em função de $\kappa$. Mostre que, para ondas longas ($\kappa h$ pequeno), $\omega\approx c\kappa$ com $c^2=h^2k/m$, e confira que isso é o $c^2=KL^2/M$ de antes.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Como $\cos(\kappa(j\pm1)h-\omega t)$ somado dá $2\cos(\kappa h)\cos(\kappa jh-\omega t)$ (identidade de soma de cossenos), o lado direito é $k\,(2\cos\kappa h-2)\,u_j=-4k\sin^2\!\big(\tfrac{\kappa h}2\big)u_j$, e o esquerdo é $-m\omega^2u_j$. Logo
+          $$\omega^2=\frac{4k}{m}\sin^2\!\Big(\frac{\kappa h}2\Big),\qquad \omega=2\sqrt{k/m}\,\Big|\sin\frac{\kappa h}2\Big|.$$
+          Para $\kappa h$ pequeno, $\sin(\kappa h/2)\approx\kappa h/2$, então $\omega\approx\kappa\,h\sqrt{k/m}$: uma onda de velocidade $c=h\sqrt{k/m}$. Com $m=Mh/L$ e $k=KL/h$, $c^2=h^2k/m=h^2\cdot\dfrac{KL}{h}\cdot\dfrac{L}{Mh}=\dfrac{KL^2}{M}$. Bate.</p>
+          <p>A diferença para a equação da onda aparece quando $\kappa h$ não é pequeno: aí $\omega/\kappa$ depende de $\kappa$ (ondas curtas andam mais devagar que as longas), fenômeno chamado de <em>dispersão</em>. O colar é dispersivo; o fio contínuo, não. Dá para pensar na equação da onda como "o colar visto de longe, com ondas muito mais longas que o espaçamento".</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Uma corda de violão</p>
+        <p>Uma corda tem densidade linear $\rho=0{,}005\ \text{kg/m}$ e tensão $T=80\ \text{N}$. Qual a velocidade das ondas nela? Se a tensão for quadruplicada, o que acontece?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$c=\sqrt{T/\rho}=\sqrt{80/0{,}005}=\sqrt{16000}\approx126\ \text{m/s}$. Quadruplicar $T$ multiplica $c$ por $\sqrt4=2$: $c\approx253\ \text{m/s}$. (É por isso que apertar a tarraxa afina a corda para um som mais agudo: a velocidade sobe, e a frequência dos modos, proporcional a $c$, também.)</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li>Só Hooke e Newton</li>
+            <li><a href="difusao-grafos.html">Difusão em grafos (o colar é o Laplaciano do grafo)</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="onda-dalembert.html">Onda e d'Alembert</a></li>
+            <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

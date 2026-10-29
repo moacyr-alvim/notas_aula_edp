@@ -205,7 +205,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 24 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 24);
+    check("mapa: SVG gerado com os 25 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 25);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 8);
   }
   /* ---- executor de Python ---- */
