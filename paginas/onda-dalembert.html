@@ -26,8 +26,39 @@
         <p class="meta">Ajuda ler antes: <a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a>. Vale também: <a href="classificacao.html">Hiperbólica, parabólica, elíptica</a>.</p>
       </header>
 
+      <h2 id="newton" data-toc="De onde vem">De onde vem a equação: Newton em um colar de molas</h2>
+      <p>Antes de resolver a equação da onda, vale ver de onde ela sai. A ideia é a mais simples possível: nada de cordas, só <b>contas e molas</b>. Pense em uma fileira de $N$ bolinhas iguais, de massa $m$, ligadas por molas iguais, de constante $k$ e comprimento natural $h$. Em equilíbrio a bolinha $j$ está em $x_j=jh$. Quando o sistema vibra (ao longo da fileira), chame de $u_j(t)$ o quanto a bolinha $j$ se afastou do seu lugar.</p>
+
+      <h3 id="newton-forca">A força em uma bolinha</h3>
+      <p>A mola da direita está esticada em $u_{j+1}-u_j$ e a da esquerda em $u_j-u_{j-1}$. Pela lei de Hooke, cada mola puxa com $k$ vezes o seu esticamento, a da direita para a direita e a da esquerda para a esquerda. A força resultante na bolinha $j$ é
+      $$F_j=k\,(u_{j+1}-u_j)-k\,(u_j-u_{j-1})=k\,(u_{j+1}-2u_j+u_{j-1}).$$
+      E a segunda lei de Newton, massa vezes aceleração igual à força, dá
+      $$\boxed{\,m\,\ddot u_j=k\,(u_{j+1}-2u_j+u_{j-1}).\,}$$
+      Vale a pena ler o lado direito: $u_{j+1}+u_{j-1}-2u_j=2\big(\text{média dos vizinhos}-u_j\big)$. Se a bolinha está <em>abaixo</em> da média dos vizinhos, é puxada para cima, e vice-versa: <b>cada uma é puxada em direção à média dos vizinhos</b>. É a mesma conta do Laplaciano do grafo da <a href="difusao-grafos.html">difusão em grafos</a>, só que agora a derivada de $u_j$ no tempo é a <em>segunda</em> (aceleração) e não a primeira. Lá a bolinha escorregava para a média; aqui ela é acelerada em direção à média, passa direto e oscila.</p>
+
+      <h3 id="newton-limite">Muitas bolinhas, bem pertinho: o limite do contínuo</h3>
+      <p>Agora imagine o colar com um comprimento total $L$ fixo, mas com $N=L/h$ bolinhas, cada vez mais, cada vez mais próximas ($h\to0$), até parecer um fio contínuo. Para a conta fechar, o fio todo tem que ter massa total $M$ e rigidez total $K$ fixas, e isso diz quem são $m$ e $k$ em função de $h$:</p>
+      <ul>
+        <li><b>Massa:</b> $N$ bolinhas dividem $M$, então $m=\dfrac MN=\dfrac{Mh}{L}$.</li>
+        <li><b>Mola:</b> $N$ molas em série, esticadas pela mesma força, somam os esticamentos. Cada mola estica $1/N$ do total, então o conjunto tem rigidez $K=k/N$, isto é, $k=NK=\dfrac{KL}{h}$. Molinhas curtas são rígidas.</li>
+      </ul>
+      <p>Falta o lado direito. Escrevendo $u_j(t)=u(x_j,t)$ e usando Taylor,
+      $$u(x\pm h)=u\pm h\,u_x+\tfrac{h^2}2u_{xx}\pm\cdots\quad\Longrightarrow\quad u(x+h)-2u(x)+u(x-h)=h^2\,u_{xx}+O(h^4),$$
+      (as derivadas ímpares cancelam). Substituindo tudo na equação de Newton:
+      $$\frac{Mh}{L}\,u_{tt}=\frac{KL}{h}\cdot h^2\,u_{xx}\quad\Longrightarrow\quad u_{tt}=\frac{KL^2}{M}\,u_{xx}.$$
+      O $h$ se cancela dos dois lados, e por isso o limite $h\to0$ faz sentido. Sai a equação da onda,
+      $$\boxed{\,u_{tt}=c^2u_{xx},\qquad c^2=\frac{KL^2}{M}.\,}$$
+      O que o $c$ diz: quanto mais <b>rígido</b> o fio ($K$ grande), mais rápida a onda; quanto mais <b>pesado</b> ($M$ grande), mais lenta. Confira as unidades: $K$ é força por comprimento, então $KL^2/M$ tem unidade de (força × comprimento)/massa $=(\text{comprimento}/\text{tempo})^2$. É uma velocidade ao quadrado, como deveria.</p>
+
+      <aside class="box">
+        <p><b>Na corda esticada (o mesmo resultado, outro caminho).</b> Em uma corda com tensão $T$ e densidade linear $\rho$, pegue um pedacinho entre $x$ e $x+dx$ com deslocamentos pequenos (inclinação $u_x$ pequena). A tensão puxa as duas pontas, e a componente vertical da força resultante é $T\,[u_x(x+dx)-u_x(x)]\approx T\,u_{xx}\,dx$. A massa do pedacinho é $\rho\,dx$. Newton:
+        $$\rho\,dx\;u_{tt}=T\,u_{xx}\,dx\quad\Longrightarrow\quad u_{tt}=\frac T\rho\,u_{xx},\qquad c=\sqrt{T/\rho}.$$
+        Corda mais esticada, mais rápida; corda mais grossa, mais lenta. (Na barra elástica, que é o colar de molas em que a rigidez vem do material, sai $c=\sqrt{E/\rho}$, com $E$ o módulo de Young.)</p>
+      </aside>
+      <p class="meta">Fonte: a dedução do colar de molas segue a apresentação do verbete <em>Wave equation</em> da Wikipédia em inglês (consultado em outubro de 2026), reescrita aqui; a da corda é a clássica, que remonta a d'Alembert (1747), <em>Recherches sur la courbe que forme une corde tenduë mise en vibration</em>.</p>
+
       <h2 id="problema" data-toc="O problema">A corda e a fórmula</h2>
-      <p>Uma corda esticada, com deslocamento $u(x,t)$ no ponto $x$ e instante $t$, obedece (para pequenos deslocamentos) a
+      <p>Com a equação deduzida, falta dar os dados. Uma corda esticada, com deslocamento $u(x,t)$ no ponto $x$ e instante $t$, obedece (para pequenos deslocamentos) a
       $$u_{tt}=c^2u_{xx},\qquad u(x,0)=f(x),\qquad u_t(x,0)=g(x).$$
       O número $c>0$ é uma velocidade (veremos qual). Como a equação é de segunda ordem no tempo, são dois dados: $f$ é a foto da corda em $t=0$ e $g$ é a velocidade de cada pontinho nesse instante.</p>
       <p>A resposta, antes de qualquer conta, é a <b>fórmula de d'Alembert</b>:
@@ -215,12 +246,38 @@
         </div>
       </details>
 
+      <aside class="box exercicio">
+        <p class="tag">7. O colar de molas e as ondas longas</p>
+        <p>No colar de molas, $m\ddot u_j=k(u_{j+1}-2u_j+u_{j-1})$, procure ondas $u_j=\cos(\kappa jh-\omega t)$. Encontre $\omega$ em função de $\kappa$. Mostre que, para ondas longas ($\kappa h$ pequeno), $\omega\approx c\kappa$ com $c^2=h^2k/m$, e confira que isso é o $c^2=KL^2/M$ de antes.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Como $\cos(\kappa(j\pm1)h-\omega t)$ somado dá $2\cos(\kappa h)\cos(\kappa jh-\omega t)$ (identidade de soma de cossenos), o lado direito é $k\,(2\cos\kappa h-2)\,u_j=-4k\sin^2\!\big(\tfrac{\kappa h}2\big)u_j$, e o esquerdo é $-m\omega^2u_j$. Logo
+          $$\omega^2=\frac{4k}{m}\sin^2\!\Big(\frac{\kappa h}2\Big),\qquad \omega=2\sqrt{k/m}\,\Big|\sin\frac{\kappa h}2\Big|.$$
+          Para $\kappa h$ pequeno, $\sin(\kappa h/2)\approx\kappa h/2$, então $\omega\approx\kappa\,h\sqrt{k/m}$: uma onda de velocidade $c=h\sqrt{k/m}$. Com $m=Mh/L$ e $k=KL/h$, $c^2=h^2k/m=h^2\cdot\dfrac{KL}{h}\cdot\dfrac{L}{Mh}=\dfrac{KL^2}{M}$. Bate.</p>
+          <p>A diferença para a equação da onda aparece quando $\kappa h$ não é pequeno: aí $\omega/\kappa$ depende de $\kappa$ (ondas curtas andam mais devagar que as longas), fenômeno chamado de <em>dispersão</em>. O colar é dispersivo; o fio contínuo, não. Dá para pensar na equação da onda como "o colar visto de longe, com ondas muito mais longas que o espaçamento".</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">8. Uma corda de violão</p>
+        <p>Uma corda tem densidade linear $\rho=0{,}005\ \text{kg/m}$ e tensão $T=80\ \text{N}$. Qual a velocidade das ondas nela? Se a tensão for quadruplicada, o que acontece?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$c=\sqrt{T/\rho}=\sqrt{80/0{,}005}=\sqrt{16000}\approx126\ \text{m/s}$. Quadruplicar $T$ multiplica $c$ por $\sqrt4=2$: $c\approx253\ \text{m/s}$. (É por isso que apertar a tarraxa afina a corda para um som mais agudo: a velocidade sobe, e a frequência dos modos, proporcional a $c$, também.)</p>
+        </div>
+      </details>
+
       <nav class="nextprev" aria-label="Navegação">
         <div>
           <h4>Ajuda ler antes</h4>
           <ul>
             <li><a href="caracteristicas-2a-ordem.html">Características de 2ª ordem</a></li>
             <li><a href="classificacao.html">Hiperbólica, parabólica, elíptica</a></li>
+            <li><a href="difusao-grafos.html">Difusão em grafos (o colar de molas é o Laplaciano do grafo)</a></li>
           </ul>
         </div>
         <div>
