@@ -60,6 +60,8 @@ assets/
   onda-core.js        fórmula de d'Alembert e dados iniciais da demo da onda, testável em Node
   transp-core.js      transporte u = f(x − ct), semirreta com entrada; testável em Node
   sep-core.js         séries de senos do calor numa barra, testável em Node
+  sf-core.js          séries de Fourier: coeficientes fechados, energia (Parseval), Gibbs; testável em Node
+  sf-demo.js          demo da soma parcial e do espectro log-log
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
   hl-demo.js          demo do mínimo que salta (a função minimizada e o perfil)
   sep-demo.js         demo da separação de variáveis: soma de N modos e amplitudes que murcham

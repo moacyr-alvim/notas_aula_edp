@@ -71,6 +71,8 @@
       desc: "O shift S, a base de Fourier e a convolução circular virando produto ponto a ponto. Com Python editável." },
     { id: "calorf", lane: "disc", col: 4, label: "O calor no grafo\nem anel, com Fourier", href: "paginas/calor-fourier.html", trails: ["fdiscreto", "calor"],
       desc: "O laplaciano do grafo em anel é circulante: Fourier desacopla as EDOs e a solução é uma convolução. Com Python editável." },
+    { id: "serief", lane: "disc", col: 5, label: "Série de\nFourier", href: "paginas/serie-fourier.html", trails: ["fdiscreto", "calor"],
+      desc: "As funções e^{ikx} como base ortonormal, os coeficientes como produto interno, decaimento e suavidade, Gibbs e o aliasing da DFT." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -97,6 +99,7 @@
     ["char2", "class"], ["char2", "wave2"], ["char2", "ma"], ["newton", "wave2"],
     ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"], ["anel", "sep"], ["sep", "fourier"], ["sep", "listafc"], ["calorf", "listafc"],
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
+    ["dft", "serief"], ["anel", "serief"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 

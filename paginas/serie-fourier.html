@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Série de Fourier — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Série de Fourier</h1>
+        <p class="lede">As funções $e^{ikx}$ formam um conjunto ortonormal, agora com infinitos elementos. Repetindo a frase da transformada discreta — numa base ortonormal, o coeficiente é o produto interno — aparece a série de Fourier, e com ela a pergunta de quando a soma infinita devolve a função.</p>
+        <p class="meta">Continuação de <a href="dft.html">Transformada de Fourier discreta</a>. Usada em <a href="separacao-variaveis.html">separação de variáveis</a>. Leitura de uns 25 minutos, com a demo.</p>
+      </header>
+
+
+      <h2 id="base" data-toc="As funções e o produto interno">As funções $\varphi_k$ e o produto interno</h2>
+      <p>Na página da <a href="dft.html">transformada de Fourier discreta</a>, tudo saiu de uma observação só: os vetores
+      $$f_k(j)=\frac1{\sqrt N}\,\omega^{jk}$$
+      formam uma base <b>ortonormal</b> de $\mathbb C^N$, e por isso o coeficiente de $u$ nessa base é simplesmente o produto interno, $\hat u_k=\langle f_k,u\rangle$. Aqui fazemos a mesma coisa com funções, e a frase vai ser a mesma. Troque o vetor de $N$ coordenadas por uma função de período $2\pi$, e a soma sobre $j$ por uma integral.</p>
+
+      <p>As funções são
+      $$\varphi_k(x)=e^{ikx},\qquad k\in\mathbb Z,$$
+      uma para cada inteiro — positivo, negativo ou zero. Cada uma dá exatamente $|k|$ voltas no círculo unitário quando $x$ percorre $[-\pi,\pi]$, e é $2\pi$-periódica. O produto interno é
+      $$\boxed{\,\langle u,v\rangle=\frac1{2\pi}\int_{-\pi}^{\pi}\overline{u(x)}\,v(x)\,dx.\,}$$
+      O fator $\frac1{2\pi}$ é a média: ele faz a função constante $1$ ter norma $1$, e é o análogo exato do $\frac1{\sqrt N}$ que normaliza os $f_k$.</p>
+
+      <p>Agora a conta que organiza tudo. Para $j\ne k$,
+      $$\langle\varphi_j,\varphi_k\rangle=\frac1{2\pi}\int_{-\pi}^{\pi}e^{-ijx}e^{ikx}\,dx=\frac1{2\pi}\int_{-\pi}^{\pi}e^{i(k-j)x}\,dx=\frac1{2\pi}\left[\frac{e^{i(k-j)x}}{i(k-j)}\right]_{-\pi}^{\pi}=0,$$
+      porque $e^{i(k-j)x}$ dá um número inteiro de voltas e volta ao mesmo lugar. E para $j=k$ o integrando é $1$, então a integral é $2\pi$ e o produto interno é $1$:
+      $$\boxed{\,\langle\varphi_j,\varphi_k\rangle=\delta_{jk}.\,}$$
+      É um conjunto ortonormal, agora com infinitos elementos.</p>
+
+      <aside class="box">
+        <p class="tag">O dicionário com o caso discreto</p>
+        <table class="tabela">
+          <thead><tr><th></th><th>Fourier discreto</th><th>Série de Fourier</th></tr></thead>
+          <tbody>
+            <tr><td>objeto</td><td>vetor $u\in\mathbb C^N$</td><td>função $f$ de período $2\pi$</td></tr>
+            <tr><td>base</td><td>$f_k(j)=\omega^{jk}/\sqrt N$, $k=0,\dots,N-1$</td><td>$\varphi_k(x)=e^{ikx}$, $k\in\mathbb Z$</td></tr>
+            <tr><td>produto interno</td><td>$\sum_j\overline{a_j}b_j$</td><td>$\frac1{2\pi}\int_{-\pi}^{\pi}\overline{u}\,v\,dx$</td></tr>
+            <tr><td>ortonormalidade</td><td>soma geométrica se anula</td><td>a integral de uma volta inteira se anula</td></tr>
+            <tr><td>coeficiente</td><td>$\hat u_k=\langle f_k,u\rangle$</td><td>$c_k=\langle\varphi_k,f\rangle$</td></tr>
+            <tr><td>Parseval</td><td>$\sum_k|\hat u_k|^2=\|u\|^2$</td><td>$\sum_k|c_k|^2=\|f\|^2$</td></tr>
+          </tbody>
+        </table>
+        <p>A diferença que importa está na última linha do meio: lá a base é finita e a conta acaba; aqui são infinitos termos, e aparece a palavra <em>convergência</em>.</p>
+      </aside>
+
+      <h2 id="coeficientes" data-toc="Os coeficientes">Os coeficientes são obrigados</h2>
+      <p>Agora a pergunta: dada uma função $f$ de período $2\pi$, como escrevê-la como combinação dos $\varphi_k$? Suponha, por um instante, que dê certo:
+      $$f(x)=\sum_{k\in\mathbb Z}c_k\,e^{ikx}.$$
+      Tome o produto interno com $\varphi_j$ dos dois lados. Se for lícito trocar o produto interno com a soma, a ortonormalidade mata tudo menos um termo:
+      $$\langle\varphi_j,f\rangle=\sum_k c_k\,\langle\varphi_j,\varphi_k\rangle=c_j.$$
+      Os coeficientes não foram escolhidos: eles são o que têm que ser.
+      $$\boxed{\,c_k=\langle\varphi_k,f\rangle=\frac1{2\pi}\int_{-\pi}^{\pi}e^{-ikx}f(x)\,dx.\,}$$
+      A <b>série de Fourier</b> de $f$ é a série formada com esses números. Compare com $\hat u_k=\frac1{\sqrt N}\sum_j\omega^{-jk}u_j$ da página da DFT: é a mesma fórmula, com a integral no lugar da soma e o conjugado aparecendo como $e^{-ikx}$.</p>
+
+      <aside class="box atencao">
+        <p class="tag">Duas coisas foram supostas</p>
+        <p>Que a série converge para $f$, e que dá para trocá-la de lugar com a integral. Nenhuma das duas é óbvia, e nenhuma das duas é necessária para <em>definir</em> os $c_k$ — a fórmula da caixa só precisa que $f$ seja integrável. A seção seguinte justifica os coeficientes sem supor nada disso, e a convergência fica para a página de convergência <small>(em breve)</small>.</p>
+      </aside>
+
+      <h2 id="projecao" data-toc="A melhor aproximação">A soma parcial é a melhor aproximação</h2>
+      <p>Chame de $S_Nf$ a soma parcial simétrica,
+      $$S_Nf(x)=\sum_{|k|\le N}c_k\,e^{ikx}.$$
+      Entre todas as combinações $g=\sum_{|k|\le N}d_k\varphi_k$ dos mesmos $2N+1$ harmônicos, <b>$S_Nf$ é a que fica mais perto de $f$</b> na norma do produto interno. A conta é a de sempre com bases ortonormais: expandindo $\|f-g\|^2$ e usando $\langle\varphi_j,\varphi_k\rangle=\delta_{jk}$,
+      $$\|f-g\|^2=\|f\|^2-\sum_{|k|\le N}|c_k|^2+\sum_{|k|\le N}|d_k-c_k|^2.$$
+      Os dois primeiros termos não dependem de $g$, e o último é mínimo (zero) quando $d_k=c_k$. Em palavras: $S_Nf$ é a <b>projeção ortogonal</b> de $f$ sobre o espaço gerado pelos harmônicos até $N$, e o erro $f-S_Nf$ é perpendicular a todos eles.</p>
+      <p>Isso responde à pergunta "por que esses coeficientes?" sem falar em convergência. E dá duas consequências de graça. Como $\|f-S_Nf\|^2\ge0$, vale a <b>desigualdade de Bessel</b>:
+      $$\sum_{|k|\le N}|c_k|^2\le\|f\|^2\quad\text{para todo }N,$$
+      de modo que a série $\sum|c_k|^2$ converge e, em particular, $c_k\to0$. E quando o erro vai a zero, Bessel vira igualdade, que é a <b>identidade de Parseval</b>:
+      $$\sum_{k\in\mathbb Z}|c_k|^2=\|f\|^2=\frac1{2\pi}\int_{-\pi}^{\pi}|f|^2\,dx,$$
+      a mesma identidade da DFT, com infinitos termos. Ela vale para toda $f$ de quadrado integrável; dizer isso com precisão é afirmar que os $\varphi_k$ são uma base <em>completa</em>, e é parte do que a página de convergência tem a fazer.</p>
+
+      <h2 id="real" data-toc="Senos e cossenos">A forma real: senos e cossenos</h2>
+      <p>Se $f$ é real, os coeficientes vêm em pares conjugados. Tomando o conjugado da fórmula de $c_k$,
+      $$\overline{c_k}=\frac1{2\pi}\int_{-\pi}^{\pi}e^{ikx}f(x)\,dx=c_{-k},$$
+      a mesma simetria dos sinais reais na DFT. Juntando os termos $k$ e $-k$ com $e^{\pm ikx}=\cos kx\pm i\sin kx$, a série vira
+      $$f(x)=\frac{a_0}2+\sum_{n\ge1}\big(a_n\cos nx+b_n\sin nx\big),\qquad a_n=c_n+c_{-n},\quad b_n=i\,(c_n-c_{-n}),$$
+      isto é, $a_n=\frac1\pi\int_{-\pi}^{\pi}f\cos nx\,dx$ e $b_n=\frac1\pi\int_{-\pi}^{\pi}f\sin nx\,dx$. Duas simetrias simplificam:</p>
+      <ul>
+        <li>$f$ <b>par</b>: os $b_n$ somem e sobra uma série de cossenos;</li>
+        <li>$f$ <b>ímpar</b>: os $a_n$ somem e sobra uma série de senos.</li>
+      </ul>
+      <p>O segundo caso é exatamente o que apareceu em <a href="separacao-variaveis.html">separação de variáveis</a>. Lá, a barra $[0,\ell]$ com as pontas a zero pedia $f(x)=\sum b_n\sin(n\pi x/\ell)$ com $b_n=\frac2\ell\int_0^\ell f\sin(n\pi x/\ell)\,dx$. É esta série, aplicada à <b>extensão ímpar</b> de $f$: estenda $f$ para $[-\ell,0]$ por $f(-x)=-f(x)$, depois periodicamente, e os cossenos desaparecem sozinhos. A condição de contorno $u=0$ nas pontas, que parecia uma escolha de modos, é só a paridade da extensão.</p>
+
+      <h2 id="exemplos" data-toc="Três exemplos">Três exemplos</h2>
+      <p>Os três que a demo usa, todos de período $2\pi$ e escritos em $(-\pi,\pi)$.</p>
+      <table class="tabela">
+        <thead><tr><th>$f$</th><th>série</th><th>$|c_n|$</th></tr></thead>
+        <tbody>
+          <tr><td>onda quadrada, $\operatorname{sinal}(x)$</td><td>$\dfrac4\pi\displaystyle\sum_{n\ \text{ímpar}}\frac{\sin nx}{n}$</td><td>$\dfrac{2}{\pi n}$ ($n$ ímpar)</td></tr>
+          <tr><td>dente de serra, $x$</td><td>$2\displaystyle\sum_{n\ge1}(-1)^{n+1}\frac{\sin nx}{n}$</td><td>$\dfrac1n$</td></tr>
+          <tr><td>triângulo, $|x|$</td><td>$\dfrac\pi2-\dfrac4\pi\displaystyle\sum_{n\ \text{ímpar}}\frac{\cos nx}{n^2}$</td><td>$\dfrac{2}{\pi n^2}$ ($n$ ímpar)</td></tr>
+        </tbody>
+      </table>
+      <p>Repare na última coluna: os dois primeiros têm salto e os coeficientes caem como $1/n$; o terceiro é contínuo, com um bico, e caem como $1/n^2$. Não é coincidência.</p>
+
+      <h2 id="decaimento" data-toc="Decaimento e suavidade">Decaimento e suavidade</h2>
+      <p>Integrando por partes a fórmula de $c_k$, com $f$ derivável e periódica (o termo de borda se cancela, porque $f(-\pi)=f(\pi)$):
+      $$c_k(f')=\frac1{2\pi}\int_{-\pi}^{\pi}e^{-ikx}f'(x)\,dx=ik\,c_k(f).$$
+      Derivar multiplica o coeficiente por $ik$ — é a mesma regra da transformada contínua, e a razão de a série de Fourier resolver EDPs: ela troca derivada por multiplicação. Lida ao contrário, a identidade diz que $c_k(f)=c_k(f')/(ik)$, e como os coeficientes de qualquer função integrável tendem a zero, cada derivada a mais faz os $c_k$ caírem uma potência a mais:
+      $$f\in C^m\ \text{e periódica com as derivadas}\ \Longrightarrow\ c_k=o\!\left(\frac1{|k|^m}\right).$$
+      Daí a regra prática: <b>salto dá $1/n$, bico dá $1/n^2$, função suave dá decaimento mais rápido que qualquer potência</b>. E, na direção contrária, coeficientes que caem depressa garantem que a série converge bem — se $\sum|c_k|&lt;\infty$, por exemplo, a convergência é uniforme, e a soma é contínua.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, $f$ tracejada e a soma parcial $S_N$ cheia. À direita, o espectro $|c_n|$ em escala log-log, com as retas de referência $1/n$ e $1/n^2$: nessa escala, decaimento em potência é uma reta, e a inclinação é o expoente. As barras azuis são os harmônicos já incluídos.</p>
+
+      <div class="demo" id="demo-sf">
+        <div class="controls">
+          <label>Função
+            <select id="sf-dado" aria-label="Função periódica"></select>
+          </label>
+          <label>N
+            <input type="range" id="sf-n" min="1" max="120" step="1" value="7" aria-label="Número de harmônicos">
+            <output id="sf-nv">7</output>
+          </label>
+          <button id="sf-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="sf-perfil" role="img" aria-label="A função e a soma parcial de Fourier com N harmônicos"></canvas>
+          <canvas id="sf-espectro" role="img" aria-label="Espectro dos módulos dos coeficientes em escala log-log"></canvas>
+        </div>
+        <div class="readout" id="sf-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>soma parcial S<sub>N</sub></span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>a função f</span>
+          <span><i style="border-color:var(--carac)"></i>harmônicos incluídos</span>
+          <span><i style="border-top-style:dashed;border-color:var(--choque)"></i>o ponto de salto</span>
+        </div>
+      </div>
+
+      <p>Três coisas para tentar:</p>
+      <ol>
+        <li>Na <b>onda quadrada</b>, aumente $N$ e olhe o que acontece junto do salto. A oscilação encolhe em largura, mas <b>não em altura</b>: o pico teima em torno de $1{,}179$, um excesso de cerca de $9\%$ do tamanho do salto. É o <b>fenômeno de Gibbs</b>, e ele não desaparece nunca — o que vai a zero é a <em>área</em> do erro, não o seu máximo.</li>
+        <li>Compare a energia capturada: com $N=7$ a onda quadrada já captura quase $95\%$, e mesmo assim o gráfico ainda ondula bastante. Energia em média quadrática e semelhança visual são coisas diferentes.</li>
+        <li>Troque para o <b>triângulo</b>. Sem salto, não há Gibbs: o erro máximo cai a cada harmônico, e no espectro as barras seguem a reta $1/n^2$ em vez da $1/n$. Com $N=7$ o desenho já é quase indistinguível do original.</li>
+      </ol>
+
+      <aside class="box">
+        <p class="tag">O que a DFT realmente calcula</p>
+        <p>Amostre $f$ em $N$ pontos igualmente espaçados, $u_j=f(2\pi j/N)$, e calcule a transformada discreta. Substituindo a série em $u_j$ e usando a ortogonalidade dos $f_k$, sai uma identidade exata:
+        $$\frac{\hat u_k}{\sqrt N}=\sum_{r\in\mathbb Z}c_{k+rN}.$$
+        A DFT não devolve $c_k$: devolve $c_k$ <b>somado a todos os seus parentes distantes</b> $c_{k\pm N},c_{k\pm2N},\dots$, dobrados sobre ele. É o <b>aliasing</b>. Se $f$ for suave, os coeficientes distantes são minúsculos e a DFT é uma boa aproximação dos $c_k$; se $f$ tiver saltos, eles caem só como $1/n$ e contaminam o espectro medido. É também a razão de uma frequência acima de $N/2$ aparecer disfarçada de outra, mais baixa, numa gravação.</p>
+      </aside>
+
+      <h2 id="convergencia" data-toc="O que é verdade">O que é verdade sobre a convergência</h2>
+      <p>Esta caixa construiu os coeficientes e mostrou em que sentido eles são os melhores. Falta dizer quando a série realmente reconstrói $f$, e isso tem respostas diferentes conforme o sentido da pergunta. Em resumo, e sem demonstração:</p>
+      <ul>
+        <li><b>Em média quadrática</b>, sempre: se $\int|f|^2&lt;\infty$, então $\|f-S_Nf\|\to0$, e vale Parseval. É o sentido mais natural aqui, porque é o do produto interno.</li>
+        <li><b>Ponto a ponto</b>, onde $f$ se comporta bem: se $f$ é derivável em $x$ (ou tem derivadas laterais ali), $S_Nf(x)\to f(x)$. Num ponto de salto, a série converge para a <em>média</em> dos dois limites laterais — é o que a demo mostra no meio do salto.</li>
+        <li><b>Uniformemente</b>, se $f$ é contínua, periódica e $C^1$ por partes. Sem continuidade, não: Gibbs impede.</li>
+      </ul>
+      <p>As demonstrações, o núcleo de Dirichlet $S_Nf=D_N*f$ e os contraexemplos ficam para a página de convergência <small>(em breve)</small>.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A conta da ortonormalidade</p>
+        <p>Verifique com cuidado que $\langle\varphi_j,\varphi_k\rangle=\delta_{jk}$, tratando separadamente $j=k$ e $j\ne k$. Depois explique por que o mesmo argumento falha se o intervalo de integração tiver comprimento diferente de $2\pi$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $j=k$, $\overline{e^{ijx}}e^{ijx}=1$ e a média de $1$ é $1$. Para $j\ne k$, com $m=k-j\ne0$ inteiro,
+          $$\frac1{2\pi}\int_{-\pi}^{\pi}e^{imx}dx=\frac1{2\pi}\cdot\frac{e^{im\pi}-e^{-im\pi}}{im}=\frac{\sin(m\pi)}{m\pi}=0,$$
+          porque $m$ é inteiro. Num intervalo de comprimento $L\ne2\pi$, $e^{imx}$ não completa um número inteiro de voltas, a integral não se anula e as funções deixam de ser ortogonais. Para período $L$ a base certa é $e^{2\pi ikx/L}$, e aí as voltas voltam a ser inteiras.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O dente de serra</p>
+        <p>Para $f(x)=x$ em $(-\pi,\pi)$, estendida periodicamente, calcule $c_k$ e obtenha a série de senos. Quanto vale a série em $x=\pi$, e o que isso diz?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $k\ne0$, integrando por partes,
+          $$c_k=\frac1{2\pi}\int_{-\pi}^{\pi}x\,e^{-ikx}dx=\frac1{2\pi}\left(\left[\frac{x\,e^{-ikx}}{-ik}\right]_{-\pi}^{\pi}+\frac1{ik}\int_{-\pi}^{\pi}e^{-ikx}dx\right)=\frac{i(-1)^k}{k},$$
+          porque a segunda integral é zero e $e^{\mp ik\pi}=(-1)^k$. E $c_0=\frac1{2\pi}\int x\,dx=0$. Juntando $k$ e $-k$ (note que $c_{-k}=\overline{c_k}$, como tem que ser para $f$ real):
+          $$c_ke^{ikx}+c_{-k}e^{-ikx}=\frac{i(-1)^k}{k}\big(e^{ikx}-e^{-ikx}\big)=\frac{i(-1)^k}{k}\,2i\sin kx=\frac{2(-1)^{k+1}}{k}\sin kx,$$
+          isto é, $f(x)=2\sum_{n\ge1}\frac{(-1)^{n+1}}n\sin nx$.</p>
+          <p>Em $x=\pi$ todos os senos se anulam, e a série vale $0$ — e não $\pi$. Está certo: $\pi$ é ponto de salto da extensão periódica (de $\pi$ para $-\pi$), e ali a série converge para a média dos limites laterais, que é $0$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Parseval e a soma dos inversos dos quadrados</p>
+        <p>Use a identidade de Parseval no dente de serra para mostrar que $\displaystyle\sum_{n\ge1}\frac1{n^2}=\frac{\pi^2}6$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>De um lado, $\|f\|^2=\frac1{2\pi}\int_{-\pi}^{\pi}x^2dx=\frac1{2\pi}\cdot\frac{2\pi^3}3=\frac{\pi^2}3$. Do outro, $|c_k|=1/|k|$ para $k\ne0$, então
+          $$\sum_{k\ne0}|c_k|^2=2\sum_{n\ge1}\frac1{n^2}.$$
+          Igualando, $2\sum 1/n^2=\pi^2/3$, ou seja, $\sum 1/n^2=\pi^2/6$. (É o problema da Basileia, resolvido por Euler por outro caminho. Com o triângulo, o mesmo truque dá $\sum_{n\ \text{ímpar}}1/n^4=\pi^4/96$.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Derivar é multiplicar por $ik$</p>
+        <p>Mostre que, se $f$ é $C^1$ e $2\pi$-periódica, então $c_k(f')=ik\,c_k(f)$. Use isso para concluir que os coeficientes de uma função $C^2$ periódica caem pelo menos como $1/k^2$, e explique por que a hipótese de periodicidade não pode ser dispensada.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Integrando por partes,
+          $$c_k(f')=\frac1{2\pi}\int_{-\pi}^{\pi}e^{-ikx}f'\,dx=\frac1{2\pi}\Big[e^{-ikx}f\Big]_{-\pi}^{\pi}+\frac{ik}{2\pi}\int_{-\pi}^{\pi}e^{-ikx}f\,dx.$$
+          O termo de borda é $\frac1{2\pi}\big(e^{-ik\pi}f(\pi)-e^{ik\pi}f(-\pi)\big)=\frac{(-1)^k}{2\pi}\big(f(\pi)-f(-\pi)\big)$, que se anula <em>porque</em> $f$ é periódica. Sobra $c_k(f')=ik\,c_k(f)$.</p>
+          <p>Aplicando duas vezes, $c_k(f'')=-k^2c_k(f)$, logo $|c_k(f)|=|c_k(f'')|/k^2$. Como $f''$ é contínua, seus coeficientes são limitados (e tendem a zero), então $|c_k(f)|\le C/k^2$.</p>
+          <p>Sem periodicidade o termo de borda não some, e ele é da ordem de $1$: é exatamente ele que produz o decaimento lento $1/k$ do dente de serra, cuja extensão periódica tem um salto em $\pm\pi$. Um salto é uma "falta de periodicidade" vista pela série.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Translação e modulação</p>
+        <p>Seja $g(x)=f(x-a)$. Escreva $c_k(g)$ em termos de $c_k(f)$. Depois faça o contrário: o que acontece com os coeficientes se multiplicarmos $f$ por $e^{imx}$? Compare com as propriedades correspondentes na página da <a href="dft.html">DFT</a>.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com a troca $y=x-a$ (e usando que tudo é $2\pi$-periódico, então o intervalo de integração pode ser qualquer um de comprimento $2\pi$),
+          $$c_k(g)=\frac1{2\pi}\int e^{-ikx}f(x-a)\,dx=\frac1{2\pi}\int e^{-ik(y+a)}f(y)\,dy=e^{-ika}c_k(f).$$
+          Transladar multiplica cada coeficiente por um número de módulo $1$: muda a fase, nunca a amplitude. É o análogo exato de $\hat z_k=\omega^{-lk}\hat u_k$ na DFT.</p>
+          <p>No outro sentido, se $g(x)=e^{imx}f(x)$, então $c_k(g)=c_{k-m}(f)$: multiplicar por uma onda <em>desloca</em> o espectro. Os dois fatos são o mesmo enunciado, trocando os papéis de $x$ e de $k$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. De onde vem o aliasing</p>
+        <p>Mostre a identidade da caixa acima: amostrando $u_j=f(2\pi j/N)$, vale $\hat u_k/\sqrt N=\sum_{r\in\mathbb Z}c_{k+rN}$. (Sugestão: substitua a série em $u_j$ e troque a ordem das somas.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $\omega=e^{2\pi i/N}$, a amostra é $u_j=\sum_m c_m e^{2\pi ijm/N}=\sum_m c_m\,\omega^{jm}$. Então
+          $$\frac{\hat u_k}{\sqrt N}=\frac1N\sum_{j=0}^{N-1}\omega^{-jk}u_j=\frac1N\sum_m c_m\sum_{j=0}^{N-1}\omega^{j(m-k)}.$$
+          A soma interna é a mesma soma geométrica da página da DFT: vale $N$ se $m\equiv k\pmod N$ e $0$ caso contrário. Sobram exatamente os $m$ da forma $k+rN$, cada um com peso $1$:
+          $$\frac{\hat u_k}{\sqrt N}=\sum_{r\in\mathbb Z}c_{k+rN}.$$
+          Quanto mais suave a $f$, mais rápido os $c_{k+rN}$ com $r\ne0$ somem, e melhor a DFT estima $c_k$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="dft.html">Transformada de Fourier discreta</a></li>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+            <li><a href="calor-fourier.html">O calor no grafo em anel, com Fourier</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Convergência de séries de Fourier (em breve)</li>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="lista-fourier-calor.html">Lista de exercícios: Fourier, calor e ondas</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/sf-core.js"></script>
+  <script src="../assets/sf-demo.js"></script>
+</body>
+</html>

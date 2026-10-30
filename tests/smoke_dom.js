@@ -183,6 +183,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["sv-preset"].value = "caixa"; env.byId["sv-preset"].fire("input"); await wait(30);
     check("sep-demo: troca de dado inicial redesenha", rd().length > 20, rd().slice(0, 100));
   }
+  /* ---- série de Fourier ---- */
+  {
+    const env = makeEnv(["demo-sf", "sf-dado", "sf-n", "sf-nv", "sf-play", "sf-readout", "sf-perfil", "sf-espectro"], []);
+    run(env, "sf-core.js"); env.sandbox.window.SFCore = env.sandbox.SFCore || vm.runInContext("SFCore", env.sandbox);
+    env.byId["sf-n"].value = "7";
+    let err = null; try { run(env, "sf-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("sf-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["sf-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("sf-demo: quadrada com N = 7 captura mais de 95% da energia e avisa Gibbs", /9\d,\d\d%/.test(rd()) && rd().includes("Gibbs"), rd().slice(0, 160));
+    env.byId["sf-dado"].value = "triangulo"; env.byId["sf-dado"].fire("input"); await wait(30);
+    check("sf-demo: no triângulo mostra erro máximo e decaimento 1/n²", rd().includes("1/n²") && rd().includes("erro máximo"), rd().slice(0, 160));
+  }
   /* ---- Hopf–Lax ---- */
   {
     const env = makeEnv(["demo-hl", "hl-dado", "hl-t", "hl-tv", "hl-x", "hl-xv", "hl-play", "hl-readout", "hl-g", "hl-perfil"], []);
@@ -231,7 +243,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 28 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 28);
+    check("mapa: SVG gerado com os 29 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 29);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 8);
   }
   /* ---- executor de Python ---- */
