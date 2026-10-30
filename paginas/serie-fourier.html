@@ -108,14 +108,14 @@
           <tr><td>função real</td><td>$c_{-k}=\overline{c_k}$</td><td>$\hat u_{N-k}=\overline{\hat u_k}$</td></tr>
           <tr><td>translação</td><td>$c_k\big(f(\cdot-a)\big)=e^{-ika}\,c_k$</td><td>$\hat z_k=\omega^{-lk}\,\hat u_k$</td></tr>
           <tr><td>modulação</td><td>$c_k\big(e^{imx}f\big)=c_{k-m}$</td><td>$\hat z_k=\hat u_{k-m}$</td></tr>
-          <tr><td>derivada</td><td>$c_k(f')=ik\,c_k$</td><td>$\widehat{(Du)}_k=(1-\omega^{-k})\,\hat u_k$</td></tr>
+          <tr><td>derivada</td><td>$c_k(f')=ik\,c_k$</td><td>$\widehat{(D_cu)}_k=i\sin\theta\;\hat u_k$</td></tr>
           <tr><td>convolução</td><td>$c_k(f*g)=c_k\,d_k$</td><td>$\hat z_k=\sqrt N\,\hat u_k\hat v_k$</td></tr>
           <tr><td>produto</td><td>$c_k(fg)=\sum_m c_m\,d_{k-m}$</td><td>produto ponto a ponto vira convolução circular</td></tr>
           <tr><td>Parseval</td><td>$\langle f,g\rangle=\sum_k\overline{c_k}\,d_k$</td><td>$\langle u,v\rangle=\langle\hat u,\hat v\rangle$</td></tr>
         </tbody>
       </table>
 
-      <p>As provas são curtas e todas usam o mesmo par de truques: trocar a ordem das integrais e mudar a variável aproveitando a periodicidade.</p>
+      <p>Na linha da derivada, a versão discreta é a diferença <b>centrada</b>, $D_c=\tfrac12(S^{-1}-S)$, com $\theta=2\pi k/N$: é ela que tem símbolo imaginário puro, como o $ik$ de cá, e a <a href="dft.html#centrada">página da DFT</a> compara as duas escolhas. As provas abaixo são curtas e todas usam o mesmo par de truques: trocar a ordem das integrais e mudar a variável aproveitando a periodicidade.</p>
 
       <details>
         <summary>Translação, modulação e função real</summary>
