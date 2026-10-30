@@ -65,7 +65,7 @@ need = {
     "paginas/leis-conservacao.html": ["tema", "toc"],
     "paginas/solucao-fraca.html": ["tema", "toc"],
     "paginas/rankine-hugoniot.html": ["tema", "toc"],
-    "paginas/hopf-lax.html": ["tema", "toc"],
+    "paginas/hopf-lax.html": ["demo-hl", "hl-dado", "hl-t", "hl-tv", "hl-x", "hl-xv", "hl-play", "hl-readout", "hl-g", "hl-perfil", "tema", "toc"],
     "paginas/euler-lagrange.html": ["tema", "toc"],
     "paginas/acao-discreta.html": ["tema", "toc"],
     "paginas/difusao-grafos.html": ["tema", "toc"],

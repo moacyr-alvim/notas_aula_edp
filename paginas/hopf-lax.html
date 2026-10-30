@@ -39,6 +39,29 @@
 
       <p>Duas coisas estão escondidas nessa frase, e vêm da <a href="euler-lagrange.html">página anterior</a>: que o custo de um caminho qualquer $\gamma$ é $\int_0^tL(\dot\gamma)\,ds$, e que, com $L$ convexa, o caminho mais barato entre dois pontos é a <em>reta</em> — por isso só a velocidade média aparece. A página de <a href="euler-lagrange.html">Euler–Lagrange</a> cuida das duas, e o exercício 2 aqui refaz a segunda com a desigualdade de Jensen, de um jeito que vale até para caminhos com bicos.</p>
 
+      <h2 id="deducao" data-toc="De onde vem">De onde vem a fórmula</h2>
+      <p>A fórmula não cai do céu: ela é a função valor da <a href="euler-lagrange.html#valor">página anterior</a>, simplificada por uma observação. São dois passos.</p>
+      <p><b>Primeiro</b>, a solução de Hamilton–Jacobi é o menor custo total entre todos os caminhos que chegam em $x$ no instante $t$:
+      $$u(x,t)=\inf_{\gamma(t)=x}\Big\{f(\gamma(0))+\int_0^tL\big(\dot\gamma(s)\big)\,ds\Big\}.$$
+      <b>Segundo</b>, como $H$ não depende de $x$, o lagrangiano $L$ também não: o preço de um caminho depende só das velocidades usadas, não de por onde ele passa. E aí, com $L$ convexa, o caminho mais barato entre dois pontos dados é a <em>reta</em>, percorrida com velocidade constante (foi o que Euler–Lagrange deu, e o exercício 2 refaz com Jensen). Então, uma vez escolhido o ponto de partida $y$, o melhor caminho é conhecido, e custa
+      $$t\,L\Big(\frac{x-y}{t}\Big).$$
+      Não sobra nada para decidir além de $y$: o ínfimo sobre um conjunto enorme de caminhos virou um mínimo sobre um único número real. Isso é a fórmula de Hopf–Lax.</p>
+
+      <details>
+        <summary>Por que a função valor resolve a equação</summary>
+        <div class="body">
+          <p>Falta justificar o primeiro passo, e o argumento é curto. Para chegar em $x$ no instante $t+\Delta$, escolha a velocidade $v$ do último pedacinho de caminho: um instante antes você estava em $x-v\Delta$, e o pedacinho custa $\Delta\,L(v)$. O melhor caminho inteiro é o melhor caminho até ali seguido do melhor pedacinho — é o <b>princípio da programação dinâmica</b>:
+          $$u(x,t+\Delta)=\min_v\Big\{u(x-v\Delta,\,t)+\Delta\,L(v)\Big\}+o(\Delta).$$
+          Agora é só expandir os dois lados em $\Delta$, supondo $u$ derivável:
+          $$u(x,t)+\Delta\,u_t=\min_v\Big\{u(x,t)-\Delta\,v\,u_x+\Delta\,L(v)\Big\}+o(\Delta).$$
+          O termo $u(x,t)$ não depende de $v$ e sai do mínimo; cancelando-o dos dois lados, dividindo por $\Delta$ e fazendo $\Delta\to0$,
+          $$u_t=\min_v\big\{L(v)-v\,u_x\big\}=-\max_v\big\{v\,u_x-L(v)\big\}=-H(u_x),$$
+          porque o máximo do meio é, letra por letra, a transformada de Legendre de $L$ calculada em $p=u_x$. Ou seja, $u_t+H(u_x)=0$. A transformada de Legendre não foi escolhida: ela apareceu no lugar onde tinha que aparecer.</p>
+          <p>O dado inicial também sai: quando $t$ é pequeno, o custo da viagem $t\,L\big(\tfrac{x-y}t\big)$ fica enorme para qualquer $y$ longe de $x$ (com $L(v)=v^2/2$ ele é $(x-y)^2/2t$), então o mínimo é atingido perto de $y=x$ e $u(x,t)\to f(x)$.</p>
+          <p>Repare no único ponto frágil: a expansão supôs que $u$ é derivável. É exatamente por isso que o argumento vale até a quebra, e também é por isso que a fórmula é mais robusta que a EDP — o mínimo continua definido onde a derivada não existe. Dizer em que sentido ele ainda resolve a equação nos bicos é o assunto das soluções de viscosidade <small>(em breve)</small>.</p>
+        </div>
+      </details>
+
       <h2 id="burgers" data-toc="O caso de Burgers">O caso de Burgers</h2>
       <p>Tome $H(p)=p^2/2$, cuja transformada de Legendre é $L(v)=v^2/2$ (<a href="euler-lagrange.html#exercicios">exercício 1 da página anterior</a>). A fórmula fica
       $$u(x,t)=\min_{y}\Big\{f(y)+\frac{(x-y)^2}{2t}\Big\}.$$
@@ -51,9 +74,48 @@
       que é exatamente a característica de Burgers que parte de $y$ com velocidade $f'(y)$. Antes de $t^*$ o mínimo é único e $y^*$ é o pé dessa característica, de modo que a fórmula devolve a solução clássica. Depois de $t^*$, duas características disputam o mesmo ponto, e o mínimo <em>salta</em> de uma para outra. É nesse salto que está o choque.</p>
 
       <aside class="box">
-        <p class="tag">É o que a demo faz</p>
-        <p>A demo da página de <a href="burgers.html#demo">Burgers</a> desenha a solução depois da quebra sem procurar saltos nem testar condições: ela calcula esse mínimo ponto a ponto. O choque aparece sozinho, no lugar certo.</p>
+        <p class="tag">É o que as demos fazem</p>
+        <p>A demo logo abaixo e a da página de <a href="burgers.html#demo">Burgers</a> desenham a solução depois da quebra sem procurar saltos nem testar condições: as duas simplesmente calculam esse mínimo ponto a ponto. O choque aparece sozinho, no lugar certo.</p>
       </aside>
+
+      <h2 id="demo" data-toc="Veja o mínimo saltar">Veja o mínimo saltar</h2>
+      <p>À esquerda está a função que está sendo minimizada, $G(y)=f(y)+\dfrac{(x-y)^2}{2t}$, com as duas parcelas tracejadas: o dado inicial $f$ e o custo da viagem, aquela parábola que desliza junto com $x$. A bolinha cheia é o mínimo vencedor, $y^*$; quando aparece uma bolinha vazada, é um segundo mínimo local, um ponto de partida que também é bom, mas perde. À direita, o perfil $u(\cdot,t)$ e a derivada $v=u_x$, com a posição atual de $x$ tracejada e o choque em vermelho.</p>
+
+      <div class="demo" id="demo-hl">
+        <div class="controls">
+          <label>Dado inicial
+            <select id="hl-dado" aria-label="Dado inicial"></select>
+          </label>
+          <label>t
+            <input type="range" id="hl-t" min="0.1" max="4" step="0.01" value="3" aria-label="Tempo t">
+            <output id="hl-tv">3,00</output>
+          </label>
+          <label>x
+            <input type="range" id="hl-x" min="-1" max="5" step="0.01" value="1.6" aria-label="Posição x">
+            <output id="hl-xv">1,60</output>
+          </label>
+          <button id="hl-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="hl-g" role="img" aria-label="A função G(y) que está sendo minimizada, com as duas parcelas e os mínimos locais"></canvas>
+          <canvas id="hl-perfil" role="img" aria-label="O perfil u no instante t e a derivada v = u_x, com o choque marcado"></canvas>
+        </div>
+        <div class="readout" id="hl-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>G(y) e, à direita, u</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>custo da viagem e, à direita, v = u<sub>x</sub></span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial f</span>
+          <span><i style="border-color:var(--choque)"></i>mínimo escolhido e choque</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li>Na <b>rampa</b> com $t$ abaixo de $2$, arraste $x$ de ponta a ponta: há sempre um único mínimo, e $y^*$ desliza continuamente. É o regime clássico, antes da quebra.</li>
+        <li>Agora ponha $t=3$ e arraste $x$ devagar em torno de $2{,}5$. Um segundo mínimo aparece, os dois empatam exatamente em $x=2{,}5$ e a vitória troca de lado. Nesse ponto $y^*$ dá um pulo — e $v$ pula junto, para baixo. <b>Esse pulo é o choque</b>, visto por dentro da fórmula.</li>
+        <li>Anime $t$ na rampa e olhe o painel da esquerda: o segundo mínimo nasce em $t=2$, que é o $t^*$ da página de Burgers, e depois cresce. No <b>degrau para baixo</b> ele já existe desde o começo.</li>
+        <li>No <b>leque</b> nunca aparece bolinha vazada: o mínimo é único para todo $x$ e todo $t$. Sem empate, sem pulo, sem choque — só um bico suave se formando.</li>
+      </ol>
 
       <h2 id="lax" data-toc="O salto certo">O mínimo nunca dá o salto errado</h2>
       <p>Há uma razão simples para a fórmula não produzir os saltos proibidos: <b>$y^*$ cresce com $x$</b>. Se você anda para a direita, o ponto de partida ótimo também anda para a direita, nunca para trás (exercício 3). Quando $y^*$ dá um pulo, ele pula para a direita, e então
@@ -127,5 +189,7 @@
     </main>
   </div>
 
+  <script src="../assets/hl-core.js"></script>
+  <script src="../assets/hl-demo.js"></script>
 </body>
 </html>

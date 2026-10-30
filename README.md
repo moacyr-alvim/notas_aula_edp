@@ -52,7 +52,7 @@ assets/
   burgers-demo.js     desenho da demo de Burgers
   cfl-demo.js         demo dos cones de dependência
   lei-core.js         problema de Riemann para u_t + F(u)_x = 0 (fluxos quadráticos), testável em Node
-  lei-demo.js         desenho da demo do problema de Riemann (hoje fora das páginas; ver rascunhos/)
+  lei-demo.js         desenho da demo do problema de Riemann (página de Hamilton–Jacobi)
   grafo-core.js       difusão em grafos (L = BᵀCB, autovalores, dois blocos) e o grafo em anel de N vértices, testável em Node
   grafo-demo.js       demo dos dois blocos (λ₂ e o vetor de Fiedler)
   anel-demo.js        demo do grafo em anel contra a equação do calor (limite contínuo)
@@ -60,6 +60,8 @@ assets/
   onda-core.js        fórmula de d'Alembert e dados iniciais da demo da onda, testável em Node
   transp-core.js      transporte u = f(x − ct), semirreta com entrada; testável em Node
   sep-core.js         séries de senos do calor numa barra, testável em Node
+  hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
+  hl-demo.js          demo do mínimo que salta (a função minimizada e o perfil)
   sep-demo.js         demo da separação de variáveis: soma de N modos e amplitudes que murcham
   transp-demo.js      demo do transporte: características no plano x–t e o perfil deslizando
   onda-demo.js        demo da onda: diagrama x–t com o cone de dependência e o perfil u(x,t)

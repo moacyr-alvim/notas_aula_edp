@@ -183,6 +183,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["sv-preset"].value = "caixa"; env.byId["sv-preset"].fire("input"); await wait(30);
     check("sep-demo: troca de dado inicial redesenha", rd().length > 20, rd().slice(0, 100));
   }
+  /* ---- Hopf–Lax ---- */
+  {
+    const env = makeEnv(["demo-hl", "hl-dado", "hl-t", "hl-tv", "hl-x", "hl-xv", "hl-play", "hl-readout", "hl-g", "hl-perfil"], []);
+    run(env, "hl-core.js"); env.sandbox.window.HLCore = env.sandbox.HLCore || vm.runInContext("HLCore", env.sandbox);
+    env.byId["hl-t"].value = "3"; env.byId["hl-x"].value = "1.6";
+    let err = null; try { run(env, "hl-demo.js"); await wait(30); } catch (e) { err = e; }
+    check("hl-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["hl-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("hl-demo: rampa em t = 3, x = 1,6: choque em x ≈ 2,50", rd().includes("choque em x ≈ 2,50"), rd().slice(0, 200));
+    env.byId["hl-x"].value = "2.5"; env.byId["hl-x"].fire("input"); await wait(30);
+    check("hl-demo: em cima do choque, avisa que os dois mínimos empatam", rd().includes("empatados"), rd().slice(0, 200));
+    env.byId["hl-dado"].value = "leque"; env.byId["hl-dado"].fire("input"); await wait(30);
+    check("hl-demo: no leque não há choque", rd().includes("sem choque"), rd().slice(0, 200));
+  }
   /* ---- Monge–Ampère ---- */
   {
     const env = makeEnv(["demo-ma", "m-curva", "m-s1", "m-s1v", "m-s2", "m-s2v", "m-readout", "m-canvas"], []);
