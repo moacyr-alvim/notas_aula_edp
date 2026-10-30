@@ -98,6 +98,67 @@
       </ul>
       <p>O segundo caso é exatamente o que apareceu em <a href="separacao-variaveis.html">separação de variáveis</a>. Lá, a barra $[0,\ell]$ com as pontas a zero pedia $f(x)=\sum b_n\sin(n\pi x/\ell)$ com $b_n=\frac2\ell\int_0^\ell f\sin(n\pi x/\ell)\,dx$. É esta série, aplicada à <b>extensão ímpar</b> de $f$: estenda $f$ para $[-\ell,0]$ por $f(-x)=-f(x)$, depois periodicamente, e os cossenos desaparecem sozinhos. A condição de contorno $u=0$ nas pontas, que parecia uma escolha de modos, é só a paridade da extensão.</p>
 
+      <h2 id="propriedades" data-toc="Catálogo de propriedades">Um catálogo de propriedades</h2>
+      <p>Tudo o que a <a href="dft.html">transformada discreta</a> faz, a série faz também, e pelo mesmo motivo: as duas são coordenadas numa base ortonormal de autovetores do deslocamento. Vale a pena ter a lista num lugar só. Escrevo $c_k=c_k(f)$ e $d_k=c_k(g)$.</p>
+
+      <table class="tabela">
+        <thead><tr><th>Propriedade</th><th>Série de Fourier</th><th>Fourier discreto</th></tr></thead>
+        <tbody>
+          <tr><td>linearidade</td><td>$c_k(\alpha f+\beta g)=\alpha c_k+\beta d_k$</td><td>igual</td></tr>
+          <tr><td>função real</td><td>$c_{-k}=\overline{c_k}$</td><td>$\hat u_{N-k}=\overline{\hat u_k}$</td></tr>
+          <tr><td>translação</td><td>$c_k\big(f(\cdot-a)\big)=e^{-ika}\,c_k$</td><td>$\hat z_k=\omega^{-lk}\,\hat u_k$</td></tr>
+          <tr><td>modulação</td><td>$c_k\big(e^{imx}f\big)=c_{k-m}$</td><td>$\hat z_k=\hat u_{k-m}$</td></tr>
+          <tr><td>derivada</td><td>$c_k(f')=ik\,c_k$</td><td>$\widehat{(Du)}_k=(1-\omega^{-k})\,\hat u_k$</td></tr>
+          <tr><td>convolução</td><td>$c_k(f*g)=c_k\,d_k$</td><td>$\hat z_k=\sqrt N\,\hat u_k\hat v_k$</td></tr>
+          <tr><td>produto</td><td>$c_k(fg)=\sum_m c_m\,d_{k-m}$</td><td>produto ponto a ponto vira convolução circular</td></tr>
+          <tr><td>Parseval</td><td>$\langle f,g\rangle=\sum_k\overline{c_k}\,d_k$</td><td>$\langle u,v\rangle=\langle\hat u,\hat v\rangle$</td></tr>
+        </tbody>
+      </table>
+
+      <p>As provas são curtas e todas usam o mesmo par de truques: trocar a ordem das integrais e mudar a variável aproveitando a periodicidade.</p>
+
+      <details>
+        <summary>Translação, modulação e função real</summary>
+        <div class="body">
+          <p><b>Translação.</b> Com $y=x-a$, e lembrando que o integrando é $2\pi$-periódico, de modo que qualquer intervalo de comprimento $2\pi$ serve:
+          $$c_k\big(f(\cdot-a)\big)=\frac1{2\pi}\int e^{-ikx}f(x-a)\,dx=\frac1{2\pi}\int e^{-ik(y+a)}f(y)\,dy=e^{-ika}\,c_k.$$
+          O fator tem módulo $1$: transladar muda a <em>fase</em> de cada harmônico, nunca a sua amplitude. É por isso que $|c_k|$ não enxerga de onde a função começa.</p>
+          <p><b>Modulação.</b> É a mesma conta do outro lado: $e^{-ikx}e^{imx}=e^{-i(k-m)x}$, então
+          $$c_k\big(e^{imx}f\big)=\frac1{2\pi}\int e^{-i(k-m)x}f(x)\,dx=c_{k-m}.$$
+          Transladar em $x$ gira as fases; multiplicar por uma onda translada o espectro. As duas propriedades são a mesma, com $x$ e $k$ trocando de papel.</p>
+          <p><b>Função real.</b> Conjugando a definição, $\overline{c_k}=\frac1{2\pi}\int e^{ikx}\overline{f}\,dx$, e se $f$ é real isso é $c_{-k}$. Em consequência, $|c_{-k}|=|c_k|$: o espectro de um sinal real é simétrico, e basta olhar os $k\ge0$.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Convolução vira produto, e produto vira convolução</summary>
+        <div class="body">
+          <p>Para funções $2\pi$-periódicas, a convolução que faz sentido é a circular, com a mesma média do produto interno:
+          $$(f*g)(x)=\frac1{2\pi}\int_{-\pi}^{\pi}f(y)\,g(x-y)\,dy.$$
+          Trocando a ordem das integrais e usando a translação na de dentro,
+          $$c_k(f*g)=\frac1{2\pi}\int e^{-ikx}\Big(\frac1{2\pi}\int f(y)g(x-y)\,dy\Big)dx=\frac1{2\pi}\int f(y)\,\Big(\frac1{2\pi}\int e^{-ikx}g(x-y)\,dx\Big)dy.$$
+          A integral de dentro é $e^{-iky}d_k$, pela translação. Sobra
+          $$c_k(f*g)=d_k\cdot\frac1{2\pi}\int e^{-iky}f(y)\,dy=c_k\,d_k.$$
+          Sem fator nenhum sobrando — a normalização $\frac1{2\pi}$ na convolução e no produto interno foi escolhida para isso. Compare com o $\sqrt N$ que aparece na versão discreta: lá a convolução circular é definida sem média.</p>
+          <p>No outro sentido, multiplicar as funções convolve os coeficientes. Se as duas séries convergem absolutamente, dá para multiplicá-las termo a termo e juntar as potências iguais:
+          $$f(x)g(x)=\Big(\sum_m c_m e^{imx}\Big)\Big(\sum_l d_l e^{ilx}\Big)=\sum_k\Big(\sum_m c_m\,d_{k-m}\Big)e^{ikx},$$
+          agrupando os pares com $m+l=k$. É a mesma regra dos índices que somam que apareceu na <a href="convolucao.html">página de convolução</a>, agora com índices em $\mathbb Z$.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Parseval: o que dá para provar agora, e o que fica para depois</summary>
+        <div class="body">
+          <p>Esta é a única da lista que ainda não podemos fechar, e vale ser preciso sobre o motivo. O que já está provado na seção da <a href="#projecao">melhor aproximação</a> é a desigualdade de Bessel,
+          $$\sum_{|k|\le N}|c_k|^2\le\|f\|^2\quad\text{para todo }N,$$
+          que vem de $\|f-S_Nf\|^2\ge0$. Mais exatamente, aquela mesma identidade dá
+          $$\|f-S_Nf\|^2=\|f\|^2-\sum_{|k|\le N}|c_k|^2,$$
+          e daí a equivalência: <b>Parseval vale se, e somente se, $\|f-S_Nf\|\to0$</b>, isto é, se e somente se a série converge para $f$ em média quadrática. Ou seja, o que falta não é uma conta, é um teorema de convergência — e ele é verdadeiro para toda $f$ de quadrado integrável. Dizer isso é afirmar que o conjunto $\{\varphi_k\}$ é <em>completo</em>: nenhuma função não nula é ortogonal a todas elas. Fica para a página de convergência <small>(em breve)</small>.</p>
+          <p>Com a igualdade das normas em mãos, a versão com duas funções sai de graça, pela identidade de polarização: $\langle f,g\rangle$ se escreve como combinação de $\|f+g\|^2$, $\|f-g\|^2$, $\|f+ig\|^2$ e $\|f-ig\|^2$, e cada uma delas obedece a Parseval.</p>
+          <p>No caso discreto não havia nada disso a fazer: a base era finita, todo vetor é combinação dos $f_k$ sem passar ao limite, e Parseval é só a conta que está <a href="dft.html#parseval">naquela página</a>. É a diferença que a última linha do dicionário já anunciava.</p>
+        </div>
+      </details>
+
       <h2 id="exemplos" data-toc="Três exemplos">Três exemplos</h2>
       <p>Os três que a demo usa, todos de período $2\pi$ e escritos em $(-\pi,\pi)$.</p>
       <table class="tabela">
@@ -232,16 +293,18 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">5. Translação e modulação</p>
-        <p>Seja $g(x)=f(x-a)$. Escreva $c_k(g)$ em termos de $c_k(f)$. Depois faça o contrário: o que acontece com os coeficientes se multiplicarmos $f$ por $e^{imx}$? Compare com as propriedades correspondentes na página da <a href="dft.html">DFT</a>.</p>
+        <p class="tag">5. A onda quadrada deslocada</p>
+        <p>Use a propriedade da translação para obter a série de $g(x)=f(x-\pi/2)$, onde $f$ é a onda quadrada $\operatorname{sinal}(x)$. Verifique que $g$ é par, escreva a série só com cossenos e confira o valor em $x=0$.</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>Com a troca $y=x-a$ (e usando que tudo é $2\pi$-periódico, então o intervalo de integração pode ser qualquer um de comprimento $2\pi$),
-          $$c_k(g)=\frac1{2\pi}\int e^{-ikx}f(x-a)\,dx=\frac1{2\pi}\int e^{-ik(y+a)}f(y)\,dy=e^{-ika}c_k(f).$$
-          Transladar multiplica cada coeficiente por um número de módulo $1$: muda a fase, nunca a amplitude. É o análogo exato de $\hat z_k=\omega^{-lk}\hat u_k$ na DFT.</p>
-          <p>No outro sentido, se $g(x)=e^{imx}f(x)$, então $c_k(g)=c_{k-m}(f)$: multiplicar por uma onda <em>desloca</em> o espectro. Os dois fatos são o mesmo enunciado, trocando os papéis de $x$ e de $k$.</p>
+          <p>Primeiro, quem é $g$: como $f$ vale $+1$ em $(0,\pi)$ e $-1$ em $(-\pi,0)$, deslocar de $\pi/2$ dá $g=-1$ em $(-\pi/2,\pi/2)$ e $g=+1$ no resto do período. É uma função <b>par</b>, então a série tem que sair só com cossenos.</p>
+          <p>Para $k$ ímpar, $c_k(f)=\dfrac{-2i}{\pi k}$ (da série $\frac4\pi\sum_{n\ \text{ímpar}}\frac{\sin nx}n$, usando $\sin nx=\frac{e^{inx}-e^{-inx}}{2i}$), e os pares são zero. A translação multiplica por $e^{-ik\pi/2}=(-i)^k$:
+          $$c_k(g)=(-i)^k\,\frac{-2i}{\pi k}.$$
+          Para $k=1$ isso dá $(-i)(-2i/\pi)=-2/\pi$; para $k=3$, $(-i)^3=i$ e sai $+2/(3\pi)$; e assim por diante, alternando. Todos reais, como tem que ser para uma função par. Juntando $k$ e $-k$ ($a_k=2c_k$ aqui):
+          $$g(x)=-\frac4\pi\left(\cos x-\frac{\cos 3x}3+\frac{\cos 5x}5-\cdots\right).$$</p>
+          <p>Em $x=0$ a série vale $-\frac4\pi\big(1-\frac13+\frac15-\cdots\big)=-\frac4\pi\cdot\frac\pi4=-1$, que é mesmo $g(0)$. De quebra, a conta leu ao contrário é a série de Leibniz para $\pi/4$.</p>
         </div>
       </details>
 

@@ -226,6 +226,23 @@
         </div>
       </details>
 
+      <h2 id="derivada" data-toc="Derivada discreta">A derivada discreta também vira multiplicação</h2>
+      <p>A diferença para trás, $(Du)_j=u_j-u_{j-1}$, é a versão discreta da derivada. Em forma de operador, $D=I-S$, e como os $f_k$ são autovetores de $S$ eles também são de $D$:
+      $$Df_k=(1-\omega^{-k})\,f_k\qquad\Longrightarrow\qquad\boxed{\;\widehat{(Du)}_k=(1-\omega^{-k})\,\hat u_k.\;}$$
+      Derivar virou multiplicar coordenada a coordenada, igual à convolução — e não é coincidência, porque $D$ também é uma matriz circulante.</p>
+      <p>O fator tem módulo $|1-\omega^{-k}|=2\,\big|\sin(\pi k/N)\big|$: vale zero em $k=0$ (a diferença mata as constantes) e é máximo nas frequências mais altas, perto de $k=N/2$. Derivar <em>amplifica</em> o que oscila depressa, que é a razão de ruído e derivada numérica se darem tão mal.</p>
+      <details>
+        <summary>Demonstração, e o laplaciano do anel</summary>
+        <div class="body">
+          <p>Como $Sf_k=\omega^{-k}f_k$ e $D=I-S$, vale $Df_k=f_k-\omega^{-k}f_k=(1-\omega^{-k})f_k$. Escrevendo $u=\sum_k\hat u_kf_k$ e aplicando $D$ termo a termo, a coordenada $k$ de $Du$ é $(1-\omega^{-k})\hat u_k$.</p>
+          <p>Para o módulo, ponha $\theta=2\pi k/N$: $|1-e^{-i\theta}|^2=(1-\cos\theta)^2+\sin^2\theta=2-2\cos\theta=4\sin^2(\theta/2)$.</p>
+          <p>A segunda diferença é $L=2I-S-S^{-1}$, o laplaciano do <a href="calor-grafo-anel.html">grafo em anel</a>, e o mesmo argumento dá
+          $$Lf_k=\big(2-\omega^{-k}-\omega^{k}\big)f_k=\Big(2-2\cos\tfrac{2\pi k}N\Big)f_k=4\sin^2\!\Big(\tfrac{\pi k}N\Big)f_k,$$
+          que são exatamente os autovalores usados em <a href="calor-fourier.html">o calor no grafo em anel, com Fourier</a>.</p>
+          <p>Para $k$ pequeno em relação a $N$, com espaçamento $h=2\pi/N$, vale $1-\omega^{-k}=1-e^{-ikh}\approx ikh$: dividida por $h$, a diferença tende à derivada, e o fator tende ao $ik$ da <a href="serie-fourier.html">série de Fourier</a>.</p>
+        </div>
+      </details>
+
       <h2 id="parseval" data-toc="Parseval">Parseval: a transformada conserva o produto interno</h2>
       <p>Para quaisquer $u,v\in\mathbb C^N$,
       $$\boxed{\;\langle u,v\rangle=\langle\hat u,\hat v\rangle,\qquad\text{em particular}\qquad\|u\|^2=\sum_j|u_j|^2=\sum_k|\hat u_k|^2=\|\hat u\|^2.\;}$$
