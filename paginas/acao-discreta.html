@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A ação discretizada — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A ação discretizada: Euler–Lagrange como gradiente</h1>
+        <p class="lede">Em vez de perturbar a curva inteira, corte o caminho em pedaços e trate a ação como uma função de muitas variáveis. O gradiente dela é, ponto a ponto, a expressão de Euler–Lagrange — e descer esse gradiente faz o caminho relaxar até a trajetória certa.</p>
+        <p class="meta">Caminho paralelo ao de <a href="euler-lagrange.html">Euler–Lagrange e Legendre</a>: a mesma equação, obtida só com derivadas parciais. Leitura de uns 20 minutos, com a célula de Python.</p>
+      </header>
+
+
+      <h2 id="discreta" data-toc="O caminho vira uma lista">O caminho vira uma lista de números</h2>
+      <p>A dedução da <a href="euler-lagrange.html">página anterior</a> é curta, mas tem um passo que pede fé na primeira leitura: perturbar a curva inteira com uma função $\eta$ qualquer e derivar em $\varepsilon$. Dá para fazer tudo com o cálculo de várias variáveis que você já conhece, sem nada de novo, se antes você <b>cortar o caminho em pedaços</b>.</p>
+      <p>Divida $[0,t]$ em $N$ passos de tamanho $h=t/N$, com instantes $s_k=kh$, e guarde só a posição em cada instante:
+      $$x_0,\;x_1,\;x_2,\;\dots,\;x_N.$$
+      Os extremos são dados, $x_0=y$ e $x_N=x$; os $N-1$ pontos do meio é que são livres. Entre dois instantes vizinhos, a velocidade média é
+      $$v_k=\frac{x_{k+1}-x_k}{h},$$
+      e a ação, que era uma integral, vira uma soma:
+      $$A_h(x_1,\dots,x_{N-1})=\sum_{k=0}^{N-1}h\,L\big(x_k,v_k\big).$$
+      Olhe bem para o que apareceu: $A_h$ é uma função comum, de $N-1$ variáveis reais. Procurar o caminho mais barato virou procurar o mínimo de uma função de muitas variáveis, e para isso a receita é a de sempre — <b>anular o gradiente</b>.</p>
+
+      <h2 id="gradiente" data-toc="O gradiente">O gradiente da ação</h2>
+      <p>Derive $A_h$ em relação a um $x_k$ do meio. A variável $x_k$ aparece em exatamente dois termos da soma: no termo $k$, como posição e dentro de $v_k$; e no termo $k-1$, dentro de $v_{k-1}$. Nada mais depende dela. Do termo $k$, lembrando que $\partial v_k/\partial x_k=-1/h$:
+      $$\frac{\partial}{\partial x_k}\Big[h\,L(x_k,v_k)\Big]=h\,L_x(x_k,v_k)-L_v(x_k,v_k).$$
+      Do termo $k-1$, com $\partial v_{k-1}/\partial x_k=+1/h$:
+      $$\frac{\partial}{\partial x_k}\Big[h\,L(x_{k-1},v_{k-1})\Big]=L_v(x_{k-1},v_{k-1}).$$
+      Somando as duas e pondo $h$ em evidência,
+      $$\boxed{\,\frac{\partial A_h}{\partial x_k}=h\left[L_x(x_k,v_k)-\frac{L_v(x_k,v_k)-L_v(x_{k-1},v_{k-1})}{h}\right].\,}$$</p>
+
+      <p>O colchete é a expressão de Euler–Lagrange, com a derivada $\dfrac{d}{ds}L_v$ trocada por uma diferença finita. Anular o gradiente é, portanto, impor
+      $$\frac{L_v(x_k,v_k)-L_v(x_{k-1},v_{k-1})}{h}=L_x(x_k,v_k)$$
+      em cada ponto do meio, e quando $h\to0$ isso vira $\dfrac{d}{ds}L_v=L_x$. É a mesma equação de antes, agora obtida sem perturbação nenhuma: só derivadas parciais de uma função de $N-1$ variáveis.</p>
+
+      <p>E aparece de brinde a resposta para uma pergunta que a dedução contínua deixa no ar: <b>em que sentido Euler–Lagrange é um gradiente?</b> Neste: a derivada da ação em relação ao ponto $x_k$ é a expressão de Euler–Lagrange ali, vezes o peso $h$ daquele pedaço do caminho. A expressão contínua é o gradiente <em>por unidade de tempo</em> — assim como uma densidade é massa por unidade de volume. Por isso ela tem uma direção, e por isso faz sentido andar no sentido contrário a ela.</p>
+
+      <aside class="box">
+        <p class="tag">Somar por partes é integrar por partes</p>
+        <p>As duas deduções são a mesma, traduzida. A perturbação $\eta$ da versão contínua é a direção genérica em que se mexe o caminho; aqui, mexer só no ponto $k$ é tomar a derivada parcial naquela direção. A integração por partes virou o encontro dos dois termos $L_v(x_k,v_k)$ e $L_v(x_{k-1},v_{k-1})$, que é uma <em>soma</em> por partes. E o termo de borda, que lá sumiu porque $\eta(a)=\eta(b)=0$, aqui sumiu porque $x_0$ e $x_N$ não são variáveis: estão presos (exercício 4).</p>
+      </aside>
+
+      <h2 id="descida" data-toc="Descer o gradiente">Descer o gradiente</h2>
+      <p>Se temos o gradiente, temos também um método para <em>achar</em> o caminho, e não só para reconhecê-lo. É a descida de gradiente do cálculo: dê um passo pequeno no sentido oposto ao gradiente e repita,
+      $$x_k\ \longleftarrow\ x_k-\tau\,\frac{\partial A_h}{\partial x_k},$$
+      sempre com os extremos parados. Cada passo diminui a ação, e o processo para onde o gradiente é zero: na trajetória de Euler–Lagrange.</p>
+
+      <p>Vale a pena ver o que esse passo é no caso mais simples, $L(v)=v^2/2$. Aí $L_x=0$, $L_v=v$, e
+      $$\frac{\partial A_h}{\partial x_k}=-\big(v_k-v_{k-1}\big)=-\frac{x_{k+1}-2x_k+x_{k-1}}{h}.$$
+      Reconhece? É menos o <b>laplaciano do grafo caminho</b>, o mesmo operador da página de <a href="difusao-grafos.html">difusão em grafos</a>, aplicado à lista de posições. A descida fica
+      $$x_k\ \longleftarrow\ x_k+\frac\tau h\big(x_{k+1}-2x_k+x_{k-1}\big),$$
+      que é exatamente o esquema explícito da equação do calor, com as pontas fixas. Ou seja: <b>relaxar um caminho até a reta é difundir calor numa barra</b>. A reta é o estado de equilíbrio porque é onde o laplaciano se anula, do mesmo jeito que a temperatura de equilíbrio com as pontas fixas é a reta que liga as duas pontas.</p>
+
+      <aside class="box atencao">
+        <p class="tag">O passo não pode ser grande</p>
+        <p>Como é o esquema explícito do calor, há um limite para $\tau$: os autovalores do laplaciano do caminho ficam entre $0$ e $4$ (página de <a href="autovalores-redes.html">autovalores</a>), e a iteração só é estável se $\dfrac\tau h\le\dfrac12$. Passou disso, o caminho começa a oscilar e a explodir, com a mesma cara da instabilidade da <a href="cfl.html">condição CFL</a>. É a mesma matemática: um esquema explícito com um passo grande demais.</p>
+      </aside>
+
+      <p>Com um potencial, entra um termo a mais. Para a queda livre, $L(y,v)=\tfrac12v^2-gy$, o gradiente é
+      $$\frac{\partial A_h}{\partial y_k}=-hg-\big(v_k-v_{k-1}\big),$$
+      e a descida é a mesma difusão, agora com uma fonte constante empurrando o caminho para cima — o resultado é a parábola, e não a reta (exercício 2).</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Complete o gradiente e o passo da descida. A primeira figura começa com o caminho reto $y\equiv0$ e o deixa relaxar até a parábola da queda livre, imprimindo a ação a cada marco — ela desce até $-g^2T^3/24$. A segunda mostra o caso sem potencial: um caminho cheio de ruído virando a reta, que é a equação do calor em ação.</p>
+      <div class="pycell" data-title="Descendo o gradiente da ação"
+           data-starter="../py/acao_lacunas.py"
+           data-solution="../py/acao_solucao.py"></div>
+
+      <aside class="box atencao">
+        <p class="tag">Mínimo, ou só ponto crítico?</p>
+        <p>Gradiente zero é ponto crítico, e nem todo ponto crítico é mínimo — a mesma ressalva da página anterior, agora em dimensão $N-1$. Se $L$ é convexa na velocidade e não há potencial, $A_h$ é uma função convexa e o ponto crítico é mínimo mesmo. Com potencial, a trajetória da mecânica é mínimo apenas se o intervalo de tempo não for longo demais; em intervalos longos ela vira um ponto de sela, e a descida de gradiente deixa de convergir para ela. Os exemplos desta página estão todos no regime curto, em que tudo funciona.</p>
+      </aside>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O gradiente do caminho mais curto</p>
+        <p>Para $L(v)=v^2/2$, escreva $A_h$ explicitamente e calcule $\partial A_h/\partial x_k$ diretamente, sem usar a fórmula geral. Conclua que anular o gradiente é pedir $x_{k+1}-2x_k+x_{k-1}=0$, e mostre que as soluções com $x_0$ e $x_N$ dados são os pontos igualmente espaçados da reta.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$A_h=\displaystyle\sum_{k=0}^{N-1}\frac{(x_{k+1}-x_k)^2}{2h}$. A variável $x_k$ está em dois termos, o $k$ (com sinal $-$ na derivada) e o $k-1$ (com sinal $+$):
+          $$\frac{\partial A_h}{\partial x_k}=-\frac{x_{k+1}-x_k}{h}+\frac{x_k-x_{k-1}}{h}=-\frac{x_{k+1}-2x_k+x_{k-1}}{h}.$$
+          Anular isso é dizer que a segunda diferença é zero, isto é, que as diferenças $x_{k+1}-x_k$ são todas iguais. Chamando esse valor comum de $d$, temos $x_k=x_0+kd$, e $x_N=x_0+Nd$ dá $d=(x_N-x_0)/N$: são os pontos igualmente espaçados da reta que liga os extremos, percorrida com velocidade constante.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A parábola acerta na mosca</p>
+        <p>Para a queda livre, $L(y,v)=\tfrac12v^2-gy$, mostre que o gradiente é $\partial A_h/\partial y_k=-hg-(v_k-v_{k-1})$. Depois tome a parábola exata $y(s)=\tfrac g2 s(T-s)$, amostre-a nos instantes $s_k$ e mostre que o gradiente é <em>exatamente</em> zero nesses pontos, sem erro de discretização nenhum.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $L_y=-g$ e $L_v=v$, a fórmula geral dá $\partial A_h/\partial y_k=h(-g)-(v_k-v_{k-1})$.</p>
+          <p>Agora $v_k-v_{k-1}=\dfrac{y_{k+1}-2y_k+y_{k-1}}{h}$. Para um polinômio de grau $2$, a segunda diferença é exata: se $y(s)=as^2+bs+c$, então
+          $$y(s+h)-2y(s)+y(s-h)=2ah^2=h^2\,y''(s).$$
+          Na nossa parábola $y''=-g$, então $y_{k+1}-2y_k+y_{k-1}=-gh^2$ e $v_k-v_{k-1}=-gh$. Logo
+          $$\frac{\partial A_h}{\partial y_k}=-hg-(-hg)=0.$$
+          Quer dizer: o mínimo do problema discreto <em>é</em> a solução exata amostrada, para qualquer $N$. Isso não é regra geral — acontece aqui porque a trajetória é um polinômio de grau $2$ e a segunda diferença não erra nesses. É também por isso que, na célula de Python, o erro cai até a precisão da descida, e não até um patamar de discretização.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Por que o passo tem limite</p>
+        <p>No caso $L=v^2/2$, a descida é $x\leftarrow x+\frac\tau h\Delta x$, com $\Delta$ a segunda diferença. Escrevendo $x$ na base dos autovetores do laplaciano do caminho, com autovalores $\mu\in[0,4]$, descubra para quais $\tau$ cada componente do erro encolhe. Compare com a condição da página de <a href="cfl.html">CFL</a>.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Numa componente de autovalor $\mu$ (com $\Delta$ agindo como $-\mu$), um passo multiplica o erro por $1-\dfrac\tau h\mu$. Para encolher é preciso $\big|1-\tfrac\tau h\mu\big|&lt;1$, isto é, $0&lt;\tfrac\tau h\mu&lt;2$. O pior caso é o maior autovalor, $\mu\approx4$, que exige
+          $$\frac\tau h\le\frac12.$$
+          O modo mais lento é o de menor $\mu$, que é da ordem de $(\pi/N)^2$: é ele que decide quantos passos a descida precisa, e é por isso que a célula usa dezenas de milhares deles. A semelhança com CFL não é coincidência: nos dois casos é um esquema explícito, e o passo tem que ser pequeno em relação ao quadrado do espaçamento.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A soma por partes</p>
+        <p>Mostre a identidade discreta
+        $$\sum_{k=0}^{N-1}a_k\,(\eta_{k+1}-\eta_k)=\big[a\,\eta\big]-\sum_{k=1}^{N-1}(a_k-a_{k-1})\,\eta_k,$$
+        dizendo quem é o termo de borda $[a\,\eta]$, e explique por que ele desaparece quando os extremos do caminho estão presos. Compare com a integração por partes da dedução contínua.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Separe a soma em duas e reindexe a primeira ($j=k+1$):
+          $$\sum_{k=0}^{N-1}a_k\eta_{k+1}-\sum_{k=0}^{N-1}a_k\eta_k=\sum_{j=1}^{N}a_{j-1}\eta_j-\sum_{k=0}^{N-1}a_k\eta_k.$$
+          Os índices de $1$ a $N-1$ aparecem nas duas somas e se juntam em $-\sum_{k=1}^{N-1}(a_k-a_{k-1})\eta_k$. Sobram as pontas: $a_{N-1}\eta_N$ da primeira e $-a_0\eta_0$ da segunda, que é o termo de borda $[a\eta]=a_{N-1}\eta_N-a_0\eta_0$.</p>
+          <p>Com os extremos presos, $\eta_0=\eta_N=0$ e o termo de borda some — é o análogo exato de $\eta(a)=\eta(b)=0$ matar $[L_v\eta]_a^b$ na integração por partes. Tomando $a_k=L_v(x_k,v_k)$ e $\eta$ a perturbação, a identidade acima é a dedução do gradiente desta página, escrita de uma vez só para todos os $k$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="euler-lagrange.html">Euler–Lagrange e Legendre</a></li>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="hopf-lax.html">Fórmula de Hopf–Lax</a></li>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi</a></li>
+            <li><a href="autovalores-redes.html">Autovalores nulos e pequenos</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

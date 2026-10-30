@@ -61,6 +61,12 @@ s, _ = rodar("sep_solucao.py")
 dif = float(re.search(r"diferenças finitas.*?: ([0-9.eE+-]+)\n", s).group(1))
 check("separação de variáveis: série ≈ diferenças finitas (erro < 0,01)", dif < 0.01, f"dif={dif:.4f}")
 
+s, _ = rodar("acao_solucao.py")
+err = float(re.search(r"20000 passos:.*?erro máx = ([0-9.eE+-]+)", s).group(1))
+A20 = float(re.search(r"20000 passos:\s+A = *([-0-9.eE+]+)", s).group(1))
+check("ação discreta: a descida chega na parábola (erro < 0,01)", err < 1e-2, f"erro={err:.2e}")
+check("ação discreta: A ≈ -g²T³/24 = -32,013", abs(A20 + 32.0133) < 0.05, f"A={A20:.4f}")
+
 # versões com lacunas: devem rodar (sem explodir erro) mesmo incompletas
 s, _ = rodar("cfl_lacunas.py")
 check("cfl_lacunas roda com o código incompleto", True)
