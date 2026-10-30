@@ -23,7 +23,7 @@
       <header>
         <h1>Hamilton–Jacobi: características como trajetórias</h1>
         <p class="lede">A equação $u_t+H(Du,x)=0$, em que as características são as equações de Hamilton da mecânica. Quando elas se cruzam, $u$ ganha bicos, e é preciso escolher a solução: a condição de Lax e o problema de Riemann.</p>
-        <p class="meta">Ajuda ler antes: <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a> e <a href="burgers.html">Burgers</a>. Leva a: Euler–Lagrange e Legendre, <a href="burgers.html#hopf-lax">Hopf–Lax</a>.</p>
+        <p class="meta">Ajuda ler antes: <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a> e <a href="burgers.html">Burgers</a>. Leva a: Euler–Lagrange e Legendre, <a href="hopf-lax.html">Hopf–Lax</a>.</p>
       </header>
 
       <h2 id="equacao" data-toc="A equação">A equação</h2>
@@ -99,7 +99,7 @@
       <p>E há mais: para qualquer $m$ (até negativo), dois saltos de $0$ para $m$ e de $m$ para $1$, com velocidades $m/2&lt;(m+1)/2$, deixam entre eles uma faixa de valor $m$, e também são soluções fracas. Existem infinitas. Precisamos de um critério para escolher a solução fisicamente correta.</p>
 
       <h2 id="lax" data-toc="De onde vem Lax">De onde vem a condição de Lax</h2>
-      <p>A condição de Rankine–Hugoniot (R–H) vem da forma integral da lei de conservação, e a forma integral não sabe em que sentido o tempo anda. Por isso ela vale para o salto bom e para o ruim: o degrau para cima de Burgers satisfaz R–H exatamente como o choque. Falta um critério que escolha. Ele não é um decreto, e há dois jeitos de enxergá-lo.</p>
+      <p>A condição de <a href="rankine-hugoniot.html">Rankine–Hugoniot</a> (R–H) vem da forma integral da lei de conservação, e a forma integral não sabe em que sentido o tempo anda. Por isso ela vale para o salto bom e para o ruim: o degrau para cima de Burgers satisfaz R–H exatamente como o choque. Falta um critério que escolha. Ele não é um decreto, e há dois jeitos de enxergá-lo.</p>
 
       <h3 id="lax-determinismo">1. Determinismo: a informação tem que vir do dado inicial</h3>
       <p>Uma solução deve ser determinada pelo dado inicial. Para saber $u$ em um ponto $(x,t)$ seguimos a característica dele <em>para trás</em> até $t=0$. Em um choque admissível, as características dos dois lados <em>entram</em> no choque quando andamos para a frente (é a rampa de Burgers, onde elas colidem), então, de trás para a frente, elas se afastam dele e chegam ao eixo $t=0$: tudo vem do dado. Em um salto não admissível é o contrário: as características <em>saem</em> do salto. Seguindo uma delas para trás, vamos parar <em>no próprio salto</em>, não no eixo. O valor de $u$ ali teria sido inventado pelo salto, sem vir do dado inicial. É o que o salto em V de Hamilton–Jacobi faz ao "emitir" características. Outra maneira de dizer: um salto não admissível é um leque visto com o tempo ao contrário, e é por isso que qualquer perturbação mínima o desfaz em um leque.</p>
@@ -133,7 +133,7 @@
       <p>Resumindo, para um salto com velocidade $\sigma$ entre $u_-$ e $u_+$, a <b>condição de Lax</b> é
       $$\lambda(u_-)>\sigma>\lambda(u_+).$$
       As características dos dois lados <em>entram</em> no salto, e ele é o limite de ondas viscosas. Para fluxo convexo, $F''>0$, isso se resume a $u_->u_+$. Há uma leitura geométrica no gráfico de $F$: $\sigma$ é a inclinação da <b>corda</b> entre $(u_-,F(u_-))$ e $(u_+,F(u_+))$, $\lambda$ é a inclinação da <b>tangente</b>, e a condição diz que a corda tem inclinação entre as das tangentes nas duas pontas, na ordem certa. (É também chamada de <em>condição de entropia</em>: nos choques admissíveis a energia $\int u^2$ diminui, e a dissipação é o que dá a seta do tempo.)</p>
-      <p>Em termos de Hamilton–Jacobi, com $F=H$ convexa: Lax diz $v_->v_+$, isto é, $u_x$ só pode <em>descer</em> ao cruzar um bico, que é a regra dos bicos côncavos da seção anterior. E o argumento da viscosidade tem a sua versão para a EDP original: $u_t+H(u_x)=\varepsilon u_{xx}$, e é daí que vem o nome de <b>soluções de viscosidade</b>, assunto de uma página futura. No caso de Burgers, a solução escolhida é a fornecida pela <a href="burgers.html#hopf-lax">fórmula de Hopf–Lax</a>.</p>
+      <p>Em termos de Hamilton–Jacobi, com $F=H$ convexa: Lax diz $v_->v_+$, isto é, $u_x$ só pode <em>descer</em> ao cruzar um bico, que é a regra dos bicos côncavos da seção anterior. E o argumento da viscosidade tem a sua versão para a EDP original: $u_t+H(u_x)=\varepsilon u_{xx}$, e é daí que vem o nome de <b>soluções de viscosidade</b>, assunto de uma página futura. No caso de Burgers, a solução escolhida é a fornecida pela <a href="hopf-lax.html">fórmula de Hopf–Lax</a>.</p>
 
       <h2 id="demo" data-toc="Veja o problema de Riemann">Veja o problema de Riemann</h2>
       <p>O <b>problema de Riemann</b> é o caso mais simples com salto: $u=u_L$ para $x&lt;0$ e $u=u_R$ para $x>0$. Mexa em $u_L$ e $u_R$ e leia o resultado em três painéis: o gráfico de $F$ com a corda (vermilion) e as tangentes (azul tracejado), o perfil de $u$ no instante $t$ e o plano $(x,t)$. Aqui o fluxo é o de Burgers, $F(u)=u^2/2$. (A demo usa a letra $u$ para a variável da lei de conservação; no nosso contexto, ela faz o papel de $v=u_x$, e $F$ faz o papel de $H$.)</p>
@@ -246,14 +246,15 @@
           <ul>
             <li><a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a></li>
             <li><a href="burgers.html">Burgers, quebra e choques</a></li>
-            <li><a href="solucao-fraca.html">Solução fraca e Rankine–Hugoniot</a></li>
+            <li><a href="solucao-fraca.html">Solução fraca</a></li>
+            <li><a href="rankine-hugoniot.html">Rankine–Hugoniot</a></li>
           </ul>
         </div>
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
             <li class="soon">Euler–Lagrange e Legendre (em breve)</li>
-            <li><a href="burgers.html#hopf-lax">Fórmula de Hopf–Lax</a></li>
+            <li><a href="hopf-lax.html">Fórmula de Hopf–Lax</a></li>
             <li class="soon">Soluções de viscosidade (em breve)</li>
           </ul>
         </div>

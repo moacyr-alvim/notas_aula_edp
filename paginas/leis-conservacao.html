@@ -67,13 +67,11 @@
       <h2 id="caracteristicas">Características</h2>
       <p>Enquanto a solução for suave, a regra da cadeia dá $(F(u))_x=F'(u)\,u_x$ e a equação fica
       $$u_t + \lambda(u)\,u_x = 0,\qquad \lambda(u)=F'(u).$$
-      Em notação do capítulo geral, $F(x,t,z,p,q)=q+F'(z)\,p$, e as equações características são
-      $$\dot x=F'(z),\quad \dot t=1,\quad \dot z=0,\quad \dot p=-F''(z)\,p^2,\quad \dot q=-F''(z)\,p\,q.$$
-      Então $u$ é constante ao longo de cada característica, e cada característica é uma <b>reta</b> com a velocidade do valor que carrega:
+      Daqui em diante é a mesma história da <a href="burgers.html">página de Burgers</a>, com $u$ trocado por $\lambda(u)$ na velocidade. As equações características (escritas no exercício 1) dizem que $u$ é constante ao longo de cada característica, e que cada característica é uma <b>reta</b> com a velocidade do valor que carrega:
       $$x=x_0+\lambda\big(f(x_0)\big)\,t,\qquad u=f(x_0).$$
-      Para Burgers $\lambda(u)=u$ (a página anterior); para o transporte $\lambda=c$, constante.</p>
+      Para Burgers $\lambda(u)=u$; para o transporte $\lambda=c$, constante, e todas as retas são paralelas.</p>
 
-      <p>As características deixam de ser uma correspondência $x_0\mapsto x$ invertível quando
+      <p>Duas características vizinhas se encontram, e a correspondência $x_0\mapsto x$ deixa de ser invertível, quando
       $$\frac{\partial x}{\partial x_0}=1+F''\big(f(x_0)\big)\,f'(x_0)\,t=0,$$
       isto é, no primeiro instante
       $$t^*=-\frac{1}{\min_x\big[F''(f(x))\,f'(x)\big]}.$$</p>
@@ -85,7 +83,7 @@
 
 
       <h2 id="depois-da-quebra" data-toc="Depois da quebra">E depois de t*?</h2>
-      <p>Depois de $t^*$ não existe solução clássica, mas a lei de conservação continua fazendo sentido: a igualdade $\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t))$ nunca precisou de derivadas de $u$, e um engarrafamento ou uma onda de choque são fenômenos reais, com $u$ descontínua. O que quebrou foi a <em>EDP</em>, não o balanço. Redefinir "solução" para que ela admita saltos é o assunto da página <a href="solucao-fraca.html">Solução fraca</a>.</p>
+      <p>Depois de $t^*$ não existe solução clássica, mas a lei de conservação continua fazendo sentido: a igualdade $\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t))$ nunca precisou de derivadas de $u$, e um engarrafamento ou uma onda de choque são fenômenos reais, com $u$ descontínua. O que quebrou foi a <em>EDP</em>, não o balanço. Redefinir "solução" para que ela admita saltos é o assunto da página <a href="solucao-fraca.html">Solução fraca</a>, e a velocidade com que o salto anda sai na página de <a href="rankine-hugoniot.html">Rankine–Hugoniot</a>.</p>
 
       <h2 id="exercicios">Exercícios</h2>
 
@@ -128,6 +126,7 @@
           <h4>Para onde ir depois</h4>
           <ul>
             <li><a href="solucao-fraca.html">Solução fraca</a></li>
+            <li><a href="rankine-hugoniot.html">Rankine–Hugoniot</a></li>
             <li><a href="modelo-lwr.html">Modelo LWR de trânsito</a></li>
           </ul>
         </div>

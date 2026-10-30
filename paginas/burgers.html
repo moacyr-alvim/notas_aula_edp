@@ -23,7 +23,7 @@
       <header>
         <h1>Burgers, quebra e choques</h1>
         <p class="lede">Na equação de Burgers cada valor de $u$ viaja com a própria velocidade. É a equação mais simples em que as características se cruzam, e por isso o melhor laboratório para entender o que é um choque.</p>
-        <p class="meta">Ajuda ler antes: características de 1ª ordem <small>(página em breve)</small>. Leitura de uns 25 minutos, com a demo.</p>
+        <p class="meta">Ajuda ler antes: <a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a>. Leitura de uns 20 minutos, com a demo.</p>
       </header>
 
       <h2 id="intuicao">Intuição</h2>
@@ -84,8 +84,17 @@
         <li>No <b>degrau para cima</b> não há choque. As características se afastam, e no meio delas o perfil é a reta $u=x/t$.</li>
       </ol>
 
-      <h2 id="quebra">Quando a solução quebra</h2>
-      <p>O ponto $x$ de uma característica depende de $x_0$ por $x=x_0+f(x_0)t$, e
+      <h2 id="cruzamento" data-toc="Duas características se encontram">Duas características se encontram</h2>
+      <p>Toda a dificuldade está em uma conta de três linhas. Pegue dois pontos de partida, $x_0&lt;x_1$. As duas características são retas,
+      $$x=x_0+f(x_0)\,t\qquad\text{e}\qquad x=x_1+f(x_1)\,t,$$
+      e elas se encontram quando $x_0+f(x_0)t=x_1+f(x_1)t$, isto é, no instante
+      $$t=\frac{x_1-x_0}{f(x_0)-f(x_1)}.$$
+      Esse instante é positivo exatamente quando $f(x_0)>f(x_1)$: <b>o valor de trás é maior que o da frente</b>. É o caso em que o trecho rápido alcança o lento.</p>
+      <p>E o que há de errado em duas características se encontrarem? Cada uma carrega o seu valor sem mudar: a primeira diz que ali $u=f(x_0)$, a segunda diz que ali $u=f(x_1)$. Como os dois valores são diferentes, não existe função $u$ que respeite as duas. No ponto de encontro a solução clássica acabou.</p>
+      <p>No perfil, isso aparece antes de acabar: o gráfico de $u(\cdot,t)$ vai ficando cada vez mais inclinado no trecho decrescente, até ficar vertical no instante do primeiro encontro. Depois dele, o que as características desenham deixa de ser um gráfico: há $x$ com três valores de $u$, um de cada característica que chegou ali. É a linha tracejada da demo, aquela onda prestes a "tombar".</p>
+
+      <h2 id="quebra">O instante da quebra</h2>
+      <p>O primeiro encontro de todos é o que interessa, e ele sai de um limite da conta acima: fazendo $x_1\to x_0$, o quociente $\dfrac{x_1-x_0}{f(x_0)-f(x_1)}$ tende a $-1/f'(x_0)$. Características vizinhas se encontram em $t=-1/f'(x_0)$, e o menor desses instantes é o primeiro de todos. A mesma conta sai da derivada: o ponto $x$ de uma característica depende de $x_0$ por $x=x_0+f(x_0)t$, e
       $$\frac{\partial x}{\partial x_0}=1+f'(x_0)\,t.$$
       Enquanto isso for positivo, a correspondência $x_0\mapsto x$ pode ser invertida e $u(x,t)=f(x_0)$ é uma solução clássica. O primeiro instante em que a derivada se anula é
       $$\boxed{\,t^* = -\frac{1}{\min_x f'(x)}\,}$$
@@ -97,48 +106,22 @@
         <li><b>Degrau para baixo:</b> $f'$ é "menos infinito" na descontinuidade, então $t^*=0$.</li>
       </ul>
 
-      <h2 id="rankine-hugoniot">Depois da quebra: o choque e Rankine–Hugoniot</h2>
-      <p>Depois de $t^*$ precisamos aceitar soluções com saltos. O jeito de fazer isso é a forma integral (solução fraca), apresentada na página de <a href="solucao-fraca.html">solução fraca</a>. O que precisamos aqui é uma consequência: se a solução tem um salto sobre a curva $x=x^*(t)$, com limites laterais $u_-$ e $u_+$, o salto se move com velocidade
-      $$\boxed{\,\sigma = \frac{dx^*}{dt}=\frac{F(u_-)-F(u_+)}{u_--u_+}\,}$$
-      Para Burgers, $F(u)=u^2/2$ e a conta simplifica para a média:
-      $$\sigma=\frac{u_-+u_+}{2}.$$</p>
-
-      <details>
-        <summary>De onde vem a fórmula</summary>
-        <div class="body">
-          <p>A lei de conservação diz que, para qualquer intervalo $[a,b]$ que contenha $x^*(t)$,
-          $$\frac{d}{dt}\int_a^b u\,dx = F(u(a,t))-F(u(b,t)).$$
-          Dividindo a integral no ponto do salto e derivando (regra de Leibniz),
-          $$\frac{d}{dt}\int_a^b u\,dx = \dot x^*\,u_- + \int_a^{x^*}u_t\,dx - \dot x^*\,u_+ + \int_{x^*}^b u_t\,dx.$$
-          Faça agora $a\to x^{*}-$ e $b\to x^{*}+$. As duas integrais tendem a zero, o lado direito da conservação tende a $F(u_-)-F(u_+)$, e sobra $\dot x^*(u_--u_+)=F(u_-)-F(u_+)$.</p>
-        </div>
-      </details>
-
-      <p>Na rampa, o choque nasce em $(4,2)$ com $u_-=2$ e $u_+=1$, logo $\sigma=3/2$ e
-      $$x^*(t)=4+\tfrac32\,(t-2),\qquad t\ge 2,$$
-      com $u=2$ à esquerda e $u=1$ à direita. Na demo, a linha de leitura mostra a média $(u_-+u_+)/2$ ao lado da velocidade medida do choque, e as duas coincidem.</p>
-
-      <h2 id="hopf-lax">Qual solução com choque? Entropia e Hopf–Lax</h2>
-      <p>A condição de Rankine–Hugoniot sozinha não escolhe a solução (ela vale para qualquer salto, inclusive para os que não queremos). No degrau para cima ($u_-=0$, $u_+=1$) a função
-      $$u=\begin{cases}0,&x&lt;t/2\\1,&x>t/2\end{cases}$$
-      também é solução fraca, com $\sigma=1/2$, mas é artificial: as características saem do salto em vez de entrar nele, e uma perturbação mínima já a desfaz no leque $u=x/t$. A condição que descarta esses saltos, para fluxo convexo como o de Burgers, é a de Lax: $u_->u_+$, ou seja, as características dos dois lados precisam <em>entrar</em> no choque.</p>
-
-      <p>A demo escolhe a solução correta sem testar saltos: usa a fórmula de Hopf–Lax. Seja $F_0$ uma primitiva do dado inicial, $F_0'=f$. Defina
-      $$w(x,t)=\min_{y}\Big\{F_0(y)+\frac{(x-y)^2}{2t}\Big\},\qquad u(x,t)=w_x=\frac{x-y^*}{t},$$
-      onde $y^*$ é o ponto onde o mínimo é atingido. A função $w$ resolve $w_t+\tfrac12 w_x^2=0$, a equação de Hamilton–Jacobi com $H(p)=p^2/2$ e $L(v)=v^2/2$ (o exemplo do capítulo de Hamilton–Jacobi), e $u=w_x$ resolve Burgers. Antes de $t^*$ o mínimo é único e $y^*=x_0$, o pé da característica. Depois, o mínimo "salta" de uma característica para outra, e é nesse salto que está o choque.</p>
+      <h2 id="depois" data-toc="E depois de t*?">E depois de $t^*$?</h2>
+      <p>A EDP quebrou, mas o fenômeno não: um perfil que tomba é algo que a gente vê acontecer, e nele a onda passa a ter uma frente abrupta. O que a demo desenha em preto depois de $t^*$ é essa frente, um salto que anda: o <b>choque</b>. Ele é a solução, com uma definição de "solução" que ainda vamos acertar.</p>
+      <p>São três passos, cada um na sua página. Primeiro, voltar ao balanço de onde a EDP saiu, que não precisa de derivadas e continua valendo para funções com saltos: é a <a href="leis-conservacao.html">lei de conservação</a> na forma integral, que vira a definição de <a href="solucao-fraca.html">solução fraca</a>. Depois, tirar desse balanço a velocidade com que o salto anda: é a condição de <a href="rankine-hugoniot.html">Rankine–Hugoniot</a>. Por fim, descobrir que a solução fraca não é única e escolher a certa, o que é feito na página de <a href="hamilton-jacobi.html">Hamilton–Jacobi</a>, com a condição de entropia de Lax, e na da <a href="hopf-lax.html">fórmula de Hopf–Lax</a>, que escreve a solução boa de uma vez.</p>
 
       <h2 id="exercicios">Exercícios</h2>
 
       <aside class="box exercicio">
-        <p class="tag">1. A rampa, cinco instantes</p>
-        <p>Considere $u_t+uu_x=0$ com $f(x)=2$ para $x\le0$, $f(x)=2-x/2$ em $(0,2)$ e $f(x)=1$ para $x\ge2$. Mostre que não há choque antes de $t=2$ e esboce $u(\cdot,t)$ para $t=0,1,2,3,4$.</p>
+        <p class="tag">1. A rampa, antes da quebra</p>
+        <p>Considere $u_t+uu_x=0$ com $f(x)=2$ para $x\le0$, $f(x)=2-x/2$ em $(0,2)$ e $f(x)=1$ para $x\ge2$. Mostre que não há choque antes de $t=2$ e esboce $u(\cdot,t)$ para $t=0,1$ e $2$. (A continuação, para $t=3$ e $t=4$, está no exercício 2 de <a href="rankine-hugoniot.html#exercicios">Rankine–Hugoniot</a>.)</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
           <p>$\partial x/\partial x_0=1+f'(x_0)t$ vale $1$, $1-t/2$ e $1$ nas três regiões. Só se anula em $t=2$, e apenas em $(0,2)$, então não há quebra antes disso.</p>
           <p>Para $t&lt;2$: $u=2$ se $x\le 2t$; $u=(4-x)/(2-t)$ se $2t&lt;x&lt;2+t$; $u=1$ se $x\ge 2+t$. Em $t=1$: $u=2$ até $x=2$, cai linearmente até $u=1$ em $x=3$, e fica em 1.</p>
-          <p>Em $t=2$ todo o trecho inclinado já colapsou em $x=4$. Para $t\ge2$ a solução é $2$ à esquerda e $1$ à direita de $x^*(t)=4+\tfrac32(t-2)$: o choque está em $x=4$, $5{,}5$ e $7$ para $t=2,3,4$.</p>
+          <p>Em $t=2$ todo o trecho inclinado já colapsou em $x=4$: o perfil é o degrau que vale $2$ até $x=4$ e $1$ depois. Todas as características que saem de $(0,2)$ chegam a esse mesmo ponto, cada uma com o seu valor, e é ali que a solução clássica termina.</p>
         </div>
       </details>
 
@@ -164,72 +147,6 @@
         </div>
       </details>
 
-      <aside class="box exercicio">
-        <p class="tag">4. Rarefação e unicidade</p>
-        <p>Com $f=0$ para $x&lt;0$ e $f=1$ para $x>0$, verifique que $u=x/t$ em $0&lt;x&lt;t$ (com $u=0$ à esquerda e $u=1$ à direita) é solução. Depois explique por que o salto $u=0$ para $x&lt;t/2$, $u=1$ para $x>t/2$, que satisfaz Rankine–Hugoniot, não é admissível.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>Em $0&lt;x&lt;t$: $u_t=-x/t^2$ e $uu_x=(x/t)(1/t)=x/t^2$, e a soma é zero. Nas bordas $x=0$ e $x=t$ a função é contínua. O salto tem $u_-=0&lt;u_+=1$, e a característica de cada lado se afasta da reta $x=t/2$ (velocidades $0$ e $1$, enquanto o salto vai a $1/2$), então nenhuma entra no salto: viola a condição de Lax. Em termos de Hopf–Lax, o mínimo de $F_0(y)+(x-y)^2/(2t)$ não produz esse salto.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">5. Hopf–Lax à mão</p>
-        <p>Use a fórmula de Hopf–Lax para o degrau para baixo, $f=1$ para $x&lt;0$ e $f=0$ para $x>0$, e mostre que o choque está em $x=t/2$.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>A primitiva é $F_0(y)=y$ para $y&lt;0$ e $F_0(y)=0$ para $y\ge0$. Compare os dois ramos de $G(y)=F_0(y)+(x-y)^2/(2t)$.</p>
-          <p>Para $y&lt;0$, o mínimo está em $y=x-t$ (válido se $x&lt;t$) e vale $x-t/2$. Para $y\ge 0$, o mínimo está em $y=x$ (se $x\ge0$) e vale $0$. Se $0\le x&lt;t$ os dois ramos competem, e o primeiro vence quando $x-t/2&lt;0$, isto é, $x&lt;t/2$. Então $y^*=x-t$ e $u=1$ para $x&lt;t/2$; para $x>t/2$, $y^*=x$ e $u=0$. O choque está em $x=t/2$, de acordo com $\sigma=(1+0)/2$.</p>
-        </div>
-      </details>
-
-      <h3 id="exercicios-hj">Hamilton–Jacobi</h3>
-      <p>Estes usam a equação $u_t+H(u_x)=0$ e a fórmula de Hopf–Lax, $u(x,t)=\min_y\big\{t\,L\big(\tfrac{x-y}{t}\big)+f(y)\big\}$, onde $L$ é a transformada de Legendre de $H$, $L(v)=\sup_p\{pv-H(p)\}$. (Nos exercícios, a solução de Hamilton–Jacobi se chama $u$ e o dado, $f$; no texto acima eram $w$ e $F_0$.) Os exercícios sobre as características de Hamilton–Jacobi e sobre a derivada $u_x$ estão na <a href="hamilton-jacobi.html#exercicios">página de Hamilton–Jacobi</a>; estes três voltam quando existirem as páginas de Euler–Lagrange e de Hopf–Lax.</p>
-
-      <aside class="box exercicio">
-        <p class="tag">6. Legendre</p>
-        <p>Calcule a transformada de Legendre dos hamiltonianos $H(p)=\dfrac{p^2}{2}$ e $H(p)=\dfrac{p^2}{2m}+V$, onde $m>0$ e $V$ é constante.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>Para $H=p^2/2$: $pv-p^2/2$ tem máximo em $p=v$, e $L(v)=v^2/2$.</p>
-          <p>Para $H=p^2/(2m)+V$: $pv-p^2/(2m)-V$ tem máximo em $p=mv$, e $L(v)=mv^2-\dfrac{mv^2}{2}-V=\dfrac{mv^2}{2}-V$. A constante $V$ do hamiltoniano entra com sinal trocado no lagrangiano.</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">7. Hopf–Lax com dois dados</p>
-        <p>Use a fórmula de Hopf–Lax para determinar explicitamente as soluções de $u_t+\dfrac{u_x^2}{2}=0$, $u(x,0)=f(x)$, para (a) $f(x)=x$ se $x\le0$ e $f(x)=0$ se $x>0$; (b) $f(x)=0$ se $x\le0$ e $f(x)=x$ se $x>0$. Determine também as regiões onde as soluções são diferenciáveis e interprete $u_x$ em termos de choques ou rarefações.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>Com $L(v)=v^2/2$, $u(x,t)=\min_y G(y)$, $G(y)=f(y)+\dfrac{(x-y)^2}{2t}$.</p>
-          <p>(a) Para $y\le0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ (válido se $x\le t$), com valor $x-t/2$. Para $y\ge0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ (se $x\ge0$). Para $x&lt;0$ o ramo $y\ge0$ só dá $x^2/(2t)$, que supera $x-t/2$ (porque $x^2/(2t)-x+t/2=(x-t)^2/(2t)\ge0$). Para $0\le x\le t$ os dois ramos competem, e o primeiro vence quando $x-t/2&lt;0$. Resultado:
-          $$u(x,t)=\begin{cases}x-t/2,&x&lt;t/2,\\0,&x\ge t/2.\end{cases}$$
-          É derivável em todo ponto, exceto na reta $x=t/2$. Ali $u_x$ salta de $1$ (à esquerda) para $0$ (à direita): para baixo, então é um <b>choque</b>, com velocidade $\tfrac{1+0}2=\tfrac12$ (é o degrau do exercício 5).</p>
-          <p>(b) Para $y\le0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ se $x\le0$, e $x^2/(2t)$ em $y=0$ se $x>0$. Para $y\ge0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ se $x\ge t$ (valor $x-t/2$) e em $y=0$ se $x\le t$ (valor $x^2/(2t)$). Comparando,
-          $$u(x,t)=\begin{cases}0,&x\le0,\\x^2/(2t),&0&lt;x&lt;t,\\x-t/2,&x\ge t.\end{cases}$$
-          Aqui $u_x=0$, $x/t$, $1$: contínua. É um <b>leque de rarefação</b>, e $u$ é derivável em todo ponto com $t>0$ (a derivada segunda é que salta, em $x=0$ e $x=t$).</p>
-        </div>
-      </details>
-
-      <aside class="box exercicio">
-        <p class="tag">8. Por que a reta minimiza</p>
-        <p>Use a desigualdade de Jensen para mostrar que, entre todas as curvas $\gamma$ tais que $\gamma(0)=y$ e $\gamma(t)=x$, a reta $\gamma(s)=y+\dfrac st(x-y)$ minimiza $\int_0^tL(\dot\gamma(s))\,ds$ quando $L$ é convexa.</p>
-      </aside>
-      <details>
-        <summary>Solução</summary>
-        <div class="body">
-          <p>Jensen para a média, com $L$ convexa: $L\Big(\dfrac1t\displaystyle\int_0^t\dot\gamma\,ds\Big)\le\dfrac1t\displaystyle\int_0^tL(\dot\gamma)\,ds$. A média de $\dot\gamma$ é $\dfrac{\gamma(t)-\gamma(0)}t=\dfrac{x-y}t$, então $\displaystyle\int_0^tL(\dot\gamma)\,ds\ge t\,L\Big(\dfrac{x-y}t\Big)$. Para a reta, $\dot\gamma=(x-y)/t$ é constante e vale a igualdade: $\int_0^tL(\dot\gamma)\,ds=t\,L\big(\tfrac{x-y}t\big)$. Logo nenhuma curva faz menos.</p>
-        </div>
-      </details>
-
       <nav class="nextprev" aria-label="Navegação">
         <div>
           <h4>Ajuda ler antes</h4>
@@ -242,8 +159,9 @@
           <ul>
             <li><a href="leis-conservacao.html">Leis de conservação</a></li>
             <li><a href="solucao-fraca.html">Solução fraca</a></li>
+            <li><a href="rankine-hugoniot.html">Rankine–Hugoniot</a></li>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi</a></li>
             <li><a href="modelo-lwr.html">Modelo LWR de trânsito</a></li>
-            <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
             <li><a href="upwind.html">Upwind: seguir a característica</a></li>
           </ul>
         </div>

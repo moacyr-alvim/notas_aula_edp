@@ -22,8 +22,8 @@
     <main>
       <header>
         <h1>Solução fraca</h1>
-        <p class="lede">Depois que as características se cruzam, a EDP não tem solução clássica, mas o balanço em intervalos continua valendo para funções com saltos. Só com ele sai a velocidade do salto, a condição de Rankine–Hugoniot.</p>
-        <p class="meta">Desdobramento de <a href="leis-conservacao.html">Leis de conservação</a>. Ajuda ler antes: <a href="burgers.html">Burgers, quebra e choques</a>.</p>
+        <p class="lede">Depois que as características se cruzam, a EDP não tem solução clássica, mas o balanço em intervalos continua valendo para funções com saltos. A forma integral vira então a própria definição de solução, e é ela que vale daí em diante.</p>
+        <p class="meta">Desdobramento de <a href="leis-conservacao.html">Leis de conservação</a>. Ajuda ler antes: <a href="burgers.html">Burgers, quebra e choques</a>. Leitura de uns 15 minutos.</p>
       </header>
 
       <h2 id="motivacao" data-toc="Por que mudar">Por que mudar a definição de solução</h2>
@@ -32,31 +32,9 @@
       $$\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t)),$$
       não usa $u_t$ nem $u_x$, e continua fazendo sentido para $u$ descontínua. É ela que passa a ser a definição: uma <b>solução fraca</b> é uma função que satisfaz o balanço em todo intervalo $[a,b]$ (e o dado inicial). A EDP vale onde $u$ é suave, e o balanço cuida dos saltos.</p>
 
-      <h2 id="rankine-hugoniot" data-toc="Rankine–Hugoniot">A velocidade do salto: Rankine–Hugoniot</h2>
-      <p>Suponha que $u$ seja suave dos dois lados de uma curva $x=s(t)$, com limites laterais $u_-$ (à esquerda) e $u_+$ (à direita), e satisfaça o balanço. Então a curva se move com velocidade
-      $$\boxed{\,s'(t)=\sigma=\frac{F(u_-)-F(u_+)}{u_--u_+}.\,}$$</p>
-
-      <details open>
-        <summary>De onde vem a fórmula</summary>
-        <div class="body">
-          <p>Tome $[a,b]$ contendo $s(t)$. Dividindo a integral no ponto do salto e derivando (regra de Leibniz),
-          $$\frac{d}{dt}\int_a^b u\,dx = s'\,u_- + \int_a^{s}u_t\,dx - s'\,u_+ + \int_{s}^b u_t\,dx.$$
-          Igualando ao balanço e fazendo $a\to s^-$, $b\to s^+$, as duas integrais tendem a zero (o integrando é limitado de cada lado) e o lado direito do balanço tende a $F(u_-)-F(u_+)$. Sobra $s'(u_--u_+)=F(u_-)-F(u_+)$.</p>
-        </div>
-      </details>
-
-      <p>Para os fluxos que usamos:</p>
-      <ul>
-        <li><b>transporte</b>, $F(u)=cu$: $\sigma=c$, o salto apenas viaja com o fluxo;</li>
-        <li><b>Burgers</b>, $F(u)=u^2/2$: $\sigma=\dfrac{u_-+u_+}{2}$, a média dos dois valores;</li>
-        <li><b>trânsito</b>, $F(u)=u(1-u)$: $\sigma=1-(u_-+u_+)$.</li>
-      </ul>
-
-      <aside class="box">
-        <p class="tag">Fica em aberto</p>
-        <p>Aceitar saltos custa a unicidade: o mesmo dado inicial pode ter mais de uma solução fraca. Rankine–Hugoniot diz como um salto se move, mas não diz se aquele salto deve existir. Escolher a solução fisicamente correta entre as fracas é assunto da página de Hamilton–Jacobi <small>(em breve)</small>.</p>
-      </aside>
-
+      <h2 id="o-que-vem" data-toc="O que o balanço dá">O que o balanço dá, e o que não dá</h2>
+      <p>Trocar a EDP pelo balanço resolve o problema de existência: agora há soluções depois de $t^*$, com saltos e tudo. E o balanço ainda diz mais do que parece. Se uma solução fraca tem um salto, a velocidade com que esse salto anda não é livre: ela fica determinada pelos valores dos dois lados. Essa é a condição de <a href="rankine-hugoniot.html">Rankine–Hugoniot</a>, deduzida na página seguinte.</p>
+      <p>O preço é a unicidade. O mesmo dado inicial pode ter mais de uma solução fraca, e o balanço não tem como escolher entre elas: ele diz como um salto anda, nunca se aquele salto deveria existir. Escolher a solução fisicamente correta exige um critério a mais, a condição de entropia de Lax, que aparece na página de <a href="hamilton-jacobi.html">Hamilton–Jacobi</a>.</p>
 
       <details>
         <summary>Para ir além: a forma fraca com funções-teste (opcional)</summary>
@@ -111,13 +89,13 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">2. Velocidade do salto</p>
-        <p>Calcule $\sigma$ para: (a) Burgers, $u_-=2$, $u_+=0$; (b) $F(u)=u(1-u)$, $u_-=0{,}2$, $u_+=0{,}6$; (c) $F(u)=u^3/3$, $u_-=2$, $u_+=0$.</p>
+        <p class="tag">2. Fraca e suave é clássica</p>
+        <p>Mostre a recíproca parcial: se $u$ é de classe $C^1$ e satisfaz a forma fraca para toda função-teste $v$, então $u$ resolve a EDP em todo ponto. (Use que uma função contínua que integra a zero contra toda função-teste é identicamente nula.)</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) $\sigma=(2+0)/2=1$. (b) $\sigma=1-(0{,}2+0{,}6)=0{,}2$. (c) $F(2)=8/3$ e $F(0)=0$, então $\sigma=\dfrac{8/3-0}{2-0}=\dfrac43$.</p>
+          <p>Como $u$ é $C^1$, as integrações por partes podem ser desfeitas, e a forma fraca vira $\iint v\,[u_t+(F(u))_x]\,dx\,dt=0$ para toda função-teste $v$. O colchete é contínuo. Se ele fosse diferente de zero em algum ponto, seria diferente de zero, com o mesmo sinal, em uma bolinha em volta; tomando $v\ge0$ com suporte nessa bolinha e $v>0$ no centro, a integral seria diferente de zero. Logo o colchete é zero em toda parte, que é a EDP.</p>
         </div>
       </details>
 
@@ -132,8 +110,9 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
+            <li><a href="rankine-hugoniot.html">Rankine–Hugoniot</a></li>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi</a></li>
             <li><a href="modelo-lwr.html">Modelo LWR de trânsito</a></li>
-            <li class="soon">Hamilton–Jacobi e viscosidade (em breve)</li>
           </ul>
         </div>
       </nav>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rankine–Hugoniot — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Rankine–Hugoniot: a velocidade do choque</h1>
+        <p class="lede">Depois que as características se cruzam não existe mais solução clássica, mas o balanço em intervalos continua valendo para funções com saltos. É dele que sai a velocidade com que um salto anda, e é com ela que a solução continua depois de $t^*$.</p>
+        <p class="meta">Ajuda ler antes: <a href="solucao-fraca.html">Solução fraca</a> e <a href="burgers.html">Burgers, quebra e choques</a>. Leitura de uns 15 minutos.</p>
+      </header>
+
+
+      <h2 id="salto" data-toc="Continuar com um salto">Continuar a solução com um salto</h2>
+      <p>Na página de <a href="burgers.html">Burgers</a> as características se cruzaram no instante $t^*$, e a partir dali nenhuma função derivável resolve a EDP. A página de <a href="solucao-fraca.html">solução fraca</a> deu a licença de que precisávamos: o balanço
+      $$\frac{d}{dt}\int_a^b u\,dx=F(u(a,t))-F(u(b,t))$$
+      não menciona derivadas de $u$ e continua fazendo sentido para funções com saltos.</p>
+      <p>A ideia agora é continuar a solução assim: procurar uma função suave por partes, separada por uma curva $x=s(t)$, o <b>choque</b>, com limites laterais $u_-$ (à esquerda) e $u_+$ (à direita). De cada lado a EDP vale como sempre, e as características continuam retas. O que falta saber é como a curva anda, e o balanço decide isso sozinho.</p>
+
+      <h2 id="velocidade" data-toc="A velocidade do salto">A velocidade do salto</h2>
+      <p>Suponha que $u$ seja suave dos dois lados de $x=s(t)$ e satisfaça o balanço em todo intervalo. Então a curva se move com velocidade
+      $$\boxed{\,\sigma=s'(t)=\frac{F(u_-)-F(u_+)}{u_--u_+}.\,}$$
+      É a condição de <b>Rankine–Hugoniot</b>: a velocidade do salto é o salto do fluxo dividido pelo salto da quantidade. Escrevendo $[\,\cdot\,]$ para a diferença entre os dois lados, ela fica $\sigma\,[u]=[F]$.</p>
+
+      <details open>
+        <summary>De onde vem a fórmula</summary>
+        <div class="body">
+          <p>Tome $[a,b]$ contendo $s(t)$. Dividindo a integral no ponto do salto e derivando (regra de Leibniz),
+          $$\frac{d}{dt}\int_a^b u\,dx = s'\,u_- + \int_a^{s}u_t\,dx - s'\,u_+ + \int_{s}^b u_t\,dx.$$
+          Igualando ao balanço e fazendo $a\to s^-$, $b\to s^+$, as duas integrais tendem a zero (o integrando é limitado de cada lado) e o lado direito do balanço tende a $F(u_-)-F(u_+)$. Sobra $s'(u_--u_+)=F(u_-)-F(u_+)$.</p>
+        </div>
+      </details>
+
+      <p>Para os fluxos que usamos:</p>
+      <ul>
+        <li><b>transporte</b>, $F(u)=cu$: $\sigma=c$, o salto apenas viaja com o fluxo;</li>
+        <li><b>Burgers</b>, $F(u)=u^2/2$: $\sigma=\dfrac{u_-+u_+}{2}$, a média dos dois valores;</li>
+        <li><b>trânsito</b> (<a href="modelo-lwr.html">modelo LWR</a>), $F(u)=u(1-u)$: $\sigma=1-(u_-+u_+)$.</li>
+      </ul>
+
+      <aside class="box">
+        <p class="tag">Uma leitura geométrica</p>
+        <p>No gráfico de $F$, $\sigma$ é a inclinação da <b>corda</b> que liga os pontos $(u_-,F(u_-))$ e $(u_+,F(u_+))$. Já a velocidade das características é $\lambda(u)=F'(u)$, a inclinação da <b>tangente</b>. Essa comparação entre corda e tangentes volta na página de <a href="hamilton-jacobi.html#entropia">Hamilton–Jacobi</a>, e é ela que diz quais saltos são aceitáveis.</p>
+      </aside>
+
+      <h2 id="rampa" data-toc="A rampa, de novo">A rampa, de novo</h2>
+      <p>Na demo da página de Burgers, a rampa (que vale $2$ à esquerda, desce até $1$ e fica em $1$) quebra em $(x,t)=(4,2)$. Dali em diante o salto tem $u_-=2$ e $u_+=1$, logo $\sigma=\tfrac{2+1}2=\tfrac32$ e
+      $$s(t)=4+\tfrac32\,(t-2),\qquad t\ge 2,$$
+      com $u=2$ à esquerda e $u=1$ à direita. Na demo, a linha de leitura mostra a média $(u_-+u_+)/2$ ao lado da velocidade medida do choque, e as duas coincidem.</p>
+      <p>Repare no que o choque faz com as características: as da esquerda andam a $2$, mais depressa que o choque, e as da direita andam a $1$, mais devagar. Elas chegam à curva dos dois lados e terminam ali. O choque vai "comendo" características, e é por isso que a informação do dado inicial se perde quando ele passa.</p>
+
+      <h2 id="nao-unicidade" data-toc="R–H não escolhe">Rankine–Hugoniot não escolhe o salto</h2>
+      <p>A fórmula diz como um salto anda <em>se</em> ele existir; não diz que ele deve existir. Tome o degrau para cima de Burgers, $f=0$ para $x&lt;0$ e $f=1$ para $x>0$. O leque
+      $$u=\begin{cases}0,&x\le 0,\\ x/t,&0&lt;x&lt;t,\\ 1,&x\ge t\end{cases}$$
+      é solução, e o salto parado em $x=t/2$, com $u=0$ à esquerda e $u=1$ à direita, também é: ele obedece a Rankine–Hugoniot com $\sigma=\tfrac{0+1}2=\tfrac12$. Duas soluções fracas para o mesmo dado inicial.</p>
+      <p>A diferença entre elas está nas características. No leque, elas saem do dado inicial e preenchem o setor. No salto, elas <em>saem</em> da curva $x=t/2$ para os dois lados, carregando valores que não vieram de lugar nenhum. Qual das duas é a física, e por quê, é o assunto da condição de entropia de Lax, na página de <a href="hamilton-jacobi.html#lax">Hamilton–Jacobi</a>. A <a href="hopf-lax.html">fórmula de Hopf–Lax</a> dá a resposta de outro jeito, escrevendo direto a solução boa.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Velocidade do salto</p>
+        <p>Calcule $\sigma$ para: (a) Burgers, $u_-=2$, $u_+=0$; (b) $F(u)=u(1-u)$, $u_-=0{,}2$, $u_+=0{,}6$; (c) $F(u)=u^3/3$, $u_-=2$, $u_+=0$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\sigma=(2+0)/2=1$. (b) $\sigma=1-(0{,}2+0{,}6)=0{,}2$. (c) $F(2)=8/3$ e $F(0)=0$, então $\sigma=\dfrac{8/3-0}{2-0}=\dfrac43$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A rampa depois do choque</p>
+        <p>Continue o primeiro exercício da página de Burgers: para a rampa, esboce $u(\cdot,t)$ em $t=3$ e $t=4$ e diga onde está o choque. Confira que a área sob o perfil cresce com a mesma taxa que o balanço prevê.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $t\ge2$ a solução é $2$ à esquerda e $1$ à direita de $s(t)=4+\tfrac32(t-2)$. O choque está em $x=5{,}5$ em $t=3$ e em $x=7$ em $t=4$. O perfil é um degrau que desce de $2$ para $1$, andando para a direita a $3/2$.</p>
+          <p>Em um intervalo $[a,b]$ que contenha o choque, com $u=2$ em $a$ e $u=1$ em $b$, o balanço dá $\frac{d}{dt}\int_a^bu\,dx=F(2)-F(1)=2-\tfrac12=\tfrac32$. Pelo perfil, a integral é $2(s-a)+1(b-s)$, cuja derivada é $s'=\tfrac32$. As duas contas batem, como têm que bater.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Rarefação e unicidade</p>
+        <p>Com $f=0$ para $x&lt;0$ e $f=1$ para $x>0$, verifique que $u=x/t$ em $0&lt;x&lt;t$ (com $u=0$ à esquerda e $u=1$ à direita) é solução de Burgers. Depois explique por que o salto $u=0$ para $x&lt;t/2$, $u=1$ para $x>t/2$, que satisfaz Rankine–Hugoniot, não é admissível.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Em $0&lt;x&lt;t$: $u_t=-x/t^2$ e $uu_x=(x/t)(1/t)=x/t^2$, e a soma é zero. Nas bordas $x=0$ e $x=t$ a função é contínua, e fora do setor ela é constante.</p>
+          <p>O salto tem $u_-=0&lt;u_+=1$. As características de cada lado têm velocidades $0$ e $1$, enquanto o salto anda a $1/2$: as da esquerda ficam para trás e as da direita vão na frente, de modo que nenhuma <em>entra</em> no salto. Ele viola a condição de Lax, e uma perturbação mínima no dado inicial já o desmancha no leque.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Um choque parado</p>
+        <p>Para Burgers com $u_-=1$ e $u_+=-1$, calcule $\sigma$ e descreva a solução. As características entram ou saem do choque?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\sigma=\tfrac{1+(-1)}2=0$: o choque fica parado em $x=0$. À esquerda as características andam a $+1$, para a direita; à direita andam a $-1$, para a esquerda. As duas famílias <em>entram</em> no choque, que é exatamente o que a condição de Lax pede. A solução é o degrau $u=1$ para $x&lt;0$ e $u=-1$ para $x>0$, parado para sempre: os dois lados empurram um contra o outro e se cancelam.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="solucao-fraca.html">Solução fraca</a></li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+            <li><a href="leis-conservacao.html">Leis de conservação</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="modelo-lwr.html">Modelo LWR de trânsito</a></li>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi: qual solução escolher</a></li>
+            <li><a href="upwind.html">Upwind: seguir a característica</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

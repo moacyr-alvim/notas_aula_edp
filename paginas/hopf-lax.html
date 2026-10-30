@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A fórmula de Hopf–Lax — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A fórmula de Hopf–Lax</h1>
+        <p class="lede">Para $u_t+H(u_x)=0$ com $H$ convexa há uma fórmula fechada para a solução: um mínimo sobre o ponto de onde se poderia ter partido. Ela continua valendo depois que as características se cruzam, e sempre devolve a solução certa.</p>
+        <p class="meta">Ajuda ler antes: <a href="hamilton-jacobi.html">Hamilton–Jacobi</a> e <a href="burgers.html">Burgers, quebra e choques</a>. Leitura de uns 15 minutos.</p>
+      </header>
+
+
+      <h2 id="formula" data-toc="A fórmula">O custo de chegar em $(x,t)$</h2>
+      <p>Para a equação de Hamilton–Jacobi
+      $$u_t+H(u_x)=0,\qquad u(x,0)=f(x),$$
+      com $H$ convexa, existe uma fórmula fechada para a solução:
+      $$\boxed{\,u(x,t)=\min_{y}\Big\{f(y)+t\,L\Big(\frac{x-y}{t}\Big)\Big\},\,}$$
+      onde $L$ é a <b>transformada de Legendre</b> de $H$,
+      $$L(v)=\sup_p\{\,pv-H(p)\,\}.$$</p>
+
+      <p>A fórmula se lê como uma conta de custo. Para chegar em $(x,t)$, escolha de onde partir: um ponto $y$ no instante $0$. Você paga $f(y)$ pelo dado inicial naquele ponto e mais $t\,L\big(\tfrac{x-y}t\big)$ pela viagem, que é feita com velocidade média $\tfrac{x-y}t$ durante um tempo $t$. A solução em $(x,t)$ é o menor custo possível. O lagrangiano $L$ é o preço por unidade de tempo de andar a uma certa velocidade, e a transformada de Legendre é a tradução entre ele e o hamiltoniano $H$, que é o preço escrito em termos do momento $p$.</p>
+
+      <p>Duas coisas estão escondidas nessa frase e voltam na página de Euler–Lagrange <small>(em breve)</small>: que o custo de um caminho qualquer $\gamma$ é $\int_0^tL(\dot\gamma)\,ds$, e que, com $L$ convexa, o caminho mais barato entre dois pontos é a <em>reta</em> — por isso só a velocidade média aparece. O exercício 3 faz essa segunda parte com a desigualdade de Jensen.</p>
+
+      <h2 id="burgers" data-toc="O caso de Burgers">O caso de Burgers</h2>
+      <p>Tome $H(p)=p^2/2$, cuja transformada de Legendre é $L(v)=v^2/2$ (exercício 1). A fórmula fica
+      $$u(x,t)=\min_{y}\Big\{f(y)+\frac{(x-y)^2}{2t}\Big\}.$$
+      Como vimos na página de <a href="hamilton-jacobi.html">Hamilton–Jacobi</a>, a derivada $v=u_x$ resolve a equação de Burgers $v_t+vv_x=0$ com dado $v(x,0)=f'(x)$. Derivando a fórmula em $x$ (só o termo do quadrado depende de $x$, porque no mínimo a derivada em $y$ se anula):
+      $$v(x,t)=u_x(x,t)=\frac{x-y^*}{t},$$
+      onde $y^*$ é o ponto onde o mínimo é atingido. Ou seja: a fórmula de Hopf–Lax resolve Burgers também, e sem precisar testar saltos.</p>
+
+      <p>O ponto $y^*$ é velho conhecido. Derivando em $y$ o que está dentro das chaves, $f'(y)-\dfrac{x-y}t=0$, isto é,
+      $$x=y+t\,f'(y),$$
+      que é exatamente a característica de Burgers que parte de $y$ com velocidade $f'(y)$. Antes de $t^*$ o mínimo é único e $y^*$ é o pé dessa característica, de modo que a fórmula devolve a solução clássica. Depois de $t^*$, duas características disputam o mesmo ponto, e o mínimo <em>salta</em> de uma para outra. É nesse salto que está o choque.</p>
+
+      <aside class="box">
+        <p class="tag">É o que a demo faz</p>
+        <p>A demo da página de <a href="burgers.html#demo">Burgers</a> desenha a solução depois da quebra sem procurar saltos nem testar condições: ela calcula esse mínimo ponto a ponto. O choque aparece sozinho, no lugar certo.</p>
+      </aside>
+
+      <h2 id="lax" data-toc="O salto certo">O mínimo nunca dá o salto errado</h2>
+      <p>Há uma razão simples para a fórmula não produzir os saltos proibidos: <b>$y^*$ cresce com $x$</b>. Se você anda para a direita, o ponto de partida ótimo também anda para a direita, nunca para trás (exercício 4). Quando $y^*$ dá um pulo, ele pula para a direita, e então
+      $$v=\frac{x-y^*}{t}$$
+      pula para <em>baixo</em>: $v_->v_+$. Essa é a condição de entropia de Lax, discutida na página de <a href="hamilton-jacobi.html#lax">Hamilton–Jacobi</a>, aqui obtida de graça. Em termos de $u$, é a regra dos bicos côncavos: o gráfico de $u$ pode ganhar um bico em $\Lambda$, nunca em V.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Legendre</p>
+        <p>Calcule a transformada de Legendre dos hamiltonianos $H(p)=\dfrac{p^2}{2}$ e $H(p)=\dfrac{p^2}{2m}+V$, onde $m>0$ e $V$ é constante.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Para $H=p^2/2$: $pv-p^2/2$ tem máximo em $p=v$, e $L(v)=v^2/2$.</p>
+          <p>Para $H=p^2/(2m)+V$: $pv-p^2/(2m)-V$ tem máximo em $p=mv$, e $L(v)=mv^2-\dfrac{mv^2}{2}-V=\dfrac{mv^2}{2}-V$. A constante $V$ do hamiltoniano entra com sinal trocado no lagrangiano.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Hopf–Lax com dois dados</p>
+        <p>Use a fórmula de Hopf–Lax para determinar explicitamente as soluções de $u_t+\dfrac{u_x^2}{2}=0$, $u(x,0)=f(x)$, para (a) $f(x)=x$ se $x\le0$ e $f(x)=0$ se $x>0$; (b) $f(x)=0$ se $x\le0$ e $f(x)=x$ se $x>0$. Determine também as regiões onde as soluções são diferenciáveis e interprete $u_x$ em termos de choques ou rarefações.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com $L(v)=v^2/2$, $u(x,t)=\min_y G(y)$, $G(y)=f(y)+\dfrac{(x-y)^2}{2t}$.</p>
+          <p>(a) Para $y\le0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ (válido se $x\le t$), com valor $x-t/2$. Para $y\ge0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ (se $x\ge0$). Para $x&lt;0$ o ramo $y\ge0$ só dá $x^2/(2t)$, que supera $x-t/2$ (porque $x^2/(2t)-x+t/2=(x-t)^2/(2t)\ge0$). Para $0\le x\le t$ os dois ramos competem, e o primeiro vence quando $x-t/2&lt;0$. Resultado:
+          $$u(x,t)=\begin{cases}x-t/2,&x&lt;t/2,\\0,&x\ge t/2.\end{cases}$$
+          É derivável em todo ponto, exceto na reta $x=t/2$. Ali $u_x$ salta de $1$ (à esquerda) para $0$ (à direita): para baixo, então é um <b>choque</b>, com velocidade $\tfrac{1+0}2=\tfrac12$. Em termos de Burgers, é o degrau para baixo com $v$ passando de $1$ a $0$.</p>
+          <p>(b) Para $y\le0$, $G=(x-y)^2/(2t)$ vale $0$ em $y=x$ se $x\le0$, e $x^2/(2t)$ em $y=0$ se $x>0$. Para $y\ge0$, $G=y+(x-y)^2/(2t)$ tem mínimo em $y=x-t$ se $x\ge t$ (valor $x-t/2$) e em $y=0$ se $x\le t$ (valor $x^2/(2t)$). Comparando,
+          $$u(x,t)=\begin{cases}0,&x\le0,\\x^2/(2t),&0&lt;x&lt;t,\\x-t/2,&x\ge t.\end{cases}$$
+          Aqui $u_x=0$, $x/t$, $1$: contínua. É um <b>leque de rarefação</b>, e $u$ é derivável em todo ponto com $t>0$ (a derivada segunda é que salta, em $x=0$ e $x=t$).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Por que a reta minimiza</p>
+        <p>Use a desigualdade de Jensen para mostrar que, entre todas as curvas $\gamma$ tais que $\gamma(0)=y$ e $\gamma(t)=x$, a reta $\gamma(s)=y+\dfrac st(x-y)$ minimiza $\int_0^tL(\dot\gamma(s))\,ds$ quando $L$ é convexa.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Jensen para a média, com $L$ convexa: $L\Big(\dfrac1t\displaystyle\int_0^t\dot\gamma\,ds\Big)\le\dfrac1t\displaystyle\int_0^tL(\dot\gamma)\,ds$. A média de $\dot\gamma$ é $\dfrac{\gamma(t)-\gamma(0)}t=\dfrac{x-y}t$, então $\displaystyle\int_0^tL(\dot\gamma)\,ds\ge t\,L\Big(\dfrac{x-y}t\Big)$. Para a reta, $\dot\gamma=(x-y)/t$ é constante e vale a igualdade: $\int_0^tL(\dot\gamma)\,ds=t\,L\big(\tfrac{x-y}t\big)$. Logo nenhuma curva faz menos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O ponto de partida anda para a direita</p>
+        <p>No caso $L(v)=v^2/2$, sejam $x_1&lt;x_2$ e sejam $y_1$ e $y_2$ pontos onde os mínimos correspondentes são atingidos. Mostre que $y_1\le y_2$. (Sugestão: some as duas desigualdades que dizem que cada $y_i$ é melhor que o outro.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Escreva $G_x(y)=f(y)+\dfrac{(x-y)^2}{2t}$. Como $y_1$ minimiza $G_{x_1}$ e $y_2$ minimiza $G_{x_2}$,
+          $$G_{x_1}(y_1)\le G_{x_1}(y_2),\qquad G_{x_2}(y_2)\le G_{x_2}(y_1).$$
+          Somando, os termos $f(y_1)$ e $f(y_2)$ aparecem dos dois lados e se cancelam, sobrando
+          $$(x_1-y_1)^2+(x_2-y_2)^2\le(x_1-y_2)^2+(x_2-y_1)^2.$$
+          Expandindo, os quadrados $x_i^2$ e $y_i^2$ também se cancelam, e resta $-2x_1y_1-2x_2y_2\le-2x_1y_2-2x_2y_1$, isto é,
+          $$(x_2-x_1)(y_2-y_1)\ge0.$$
+          Como $x_2>x_1$, segue $y_2\ge y_1$. É por isso que $v=(x-y^*)/t$ só pode saltar para baixo.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi</a></li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Euler–Lagrange e Legendre (em breve)</li>
+            <li class="soon">Soluções de viscosidade (em breve)</li>
+            <li><a href="rankine-hugoniot.html">Rankine–Hugoniot</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>
