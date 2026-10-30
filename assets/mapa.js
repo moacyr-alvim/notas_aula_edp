@@ -14,7 +14,7 @@
     { id: "var",     label: "Variacional e\nviscosidade" },
     { id: "num",     label: "Métodos\nnuméricos" },
     { id: "calor",   label: "Calor e\ndifusão" },
-    { id: "disc",    label: "Fourier\ndiscreto" },
+    { id: "disc",    label: "Fourier" },
     { id: "seg",     label: "Segunda\nordem" },
     { id: "listas",  label: "Listas de\nexercícios" }
   ];
@@ -24,7 +24,7 @@
     { id: "choques",     label: "Choques e tráfego" },
     { id: "variacional", label: "Variacional e viscosidade" },
     { id: "calor",       label: "Calor e difusão" },
-    { id: "fdiscreto",   label: "Convolução e Fourier discreto" },
+    { id: "fdiscreto",   label: "Fourier: do discreto ao contínuo" },
     { id: "numerico",    label: "Numérico" },
     { id: "segunda",     label: "Segunda ordem" }
   ];
