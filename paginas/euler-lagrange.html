@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Euler–Lagrange e Legendre — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Euler–Lagrange e a transformada de Legendre</h1>
+        <p class="lede">Entre todos os caminhos que ligam dois pontos, qual é o mais barato? A resposta é uma equação diferencial, a de Euler–Lagrange. E a tradução entre o custo escrito na velocidade e o custo escrito no momento é a transformada de Legendre, que liga o lagrangiano ao hamiltoniano.</p>
+        <p class="meta">Ajuda ler antes: <a href="hamilton-jacobi.html">Hamilton–Jacobi</a>. Leva a: <a href="hopf-lax.html">a fórmula de Hopf–Lax</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="acao" data-toc="Minimizar uma ação">O problema: minimizar uma ação</h2>
+      <p>Na página de <a href="hamilton-jacobi.html">Hamilton–Jacobi</a> as características eram as equações de Hamilton, as trajetórias de uma partícula. Aqui vemos de onde elas vêm, e a resposta é bonita: de um problema de mínimo. A natureza, nessa descrição, não segue uma força — ela escolhe o caminho mais barato.</p>
+      <p>Fixe uma função $L(x,v)$, chamada <b>lagrangiano</b>, que diz o preço por unidade de tempo de estar na posição $x$ andando com velocidade $v$. O preço total de um caminho $\gamma$ percorrido entre os instantes $a$ e $b$ é a <b>ação</b>
+      $$A[\gamma]=\int_a^b L\big(\gamma(s),\dot\gamma(s)\big)\,ds,$$
+      e o problema é achar, entre todos os caminhos com os extremos fixados,
+      $$\gamma(a)=x_i,\qquad \gamma(b)=x_f,$$
+      aquele de menor ação. Dependendo da aplicação, a ação representa um custo, um tempo, uma distância ou a ação de um sistema mecânico. Três lagrangianos que vamos usar:</p>
+      <ul>
+        <li>$L(v)=\sqrt{1+v^2}$: a ação é o comprimento do gráfico de $\gamma$, e minimizar é procurar o caminho mais curto;</li>
+        <li>$L(x,v)=\dfrac m2v^2-V(x)$: a mecânica, energia cinética menos potencial;</li>
+        <li>$L(v)=\dfrac{v^2}2$: o caso mais simples de todos, que é o de Burgers e o da <a href="hopf-lax.html">fórmula de Hopf–Lax</a>.</li>
+      </ul>
+
+      <h2 id="euler-lagrange" data-toc="Euler–Lagrange">A equação de Euler–Lagrange</h2>
+      <p>A ideia é a mesma do cálculo de uma variável: no mínimo, a derivada é zero. Só que agora o "ponto" é uma curva inteira, e é preciso dizer o que significa mexer um pouquinho nela. Mexa assim:
+      $$\gamma_\varepsilon(s)=\gamma(s)+\varepsilon\,\eta(s),\qquad \eta(a)=\eta(b)=0,$$
+      com $\eta$ qualquer. A condição $\eta(a)=\eta(b)=0$ garante que a curva perturbada ainda liga os mesmos dois pontos. Se $\gamma$ minimiza a ação, a função de uma variável $\Phi(\varepsilon)=A[\gamma_\varepsilon]$ tem um mínimo em $\varepsilon=0$, e então $\Phi'(0)=0$. Derivando dentro da integral,
+      $$0=\Phi'(0)=\int_a^b\Big[L_x(\gamma,\dot\gamma)\cdot\eta+L_v(\gamma,\dot\gamma)\cdot\dot\eta\Big]ds.$$
+      Integrando o segundo termo por partes, e usando $\eta(a)=\eta(b)=0$ para matar o termo de borda,
+      $$0=\int_a^b\Big[L_x(\gamma,\dot\gamma)-\frac{d}{ds}L_v(\gamma,\dot\gamma)\Big]\cdot\eta\,ds.$$
+      Isso vale para <em>toda</em> perturbação $\eta$, e um colchete contínuo que integra a zero contra qualquer $\eta$ é zero (o mesmo argumento do <a href="solucao-fraca.html#exercicios">exercício 2 de solução fraca</a>). Logo
+      $$\boxed{\,\frac{d}{ds}L_v(\gamma,\dot\gamma)=L_x(\gamma,\dot\gamma).\,}$$
+      Esta é a <b>equação de Euler–Lagrange</b>. Repare no que aconteceu: um problema de minimização sobre um conjunto enorme de curvas virou uma equação diferencial.</p>
+
+      <aside class="box atencao">
+        <p class="tag">É uma condição necessária</p>
+        <p>Euler–Lagrange diz que a derivada é zero, não que o ponto é de mínimo — como $f'(x)=0$ no cálculo de uma variável. Uma curva que satisfaz a equação é chamada de <b>extremal</b>, ou trajetória estacionária, e não é necessariamente minimizante. Para garantir o mínimo é preciso hipótese a mais, e a que importa para nós é a <b>convexidade de $L$ na velocidade</b>. É ela que aparece de novo na página de Hopf–Lax.</p>
+      </aside>
+
+      <h2 id="reta" data-toc="A reta">Primeiro exemplo: a reta</h2>
+      <p>Tome $L(v)=v^2/2$, que não depende de $x$. Então $L_x=0$ e $L_v=v$, e Euler–Lagrange fica
+      $$\frac{d}{ds}\dot\gamma=0,\qquad\text{isto é,}\qquad \ddot\gamma=0.$$
+      A velocidade é constante e o caminho é a <b>reta</b>, percorrida com velocidade $\dfrac{x_f-x_i}{b-a}$. É exatamente o fato que a fórmula de Hopf–Lax usa quando escreve o custo da viagem como $t\,L\big(\tfrac{x-y}t\big)$: só a velocidade média aparece porque o caminho ótimo tem velocidade constante.</p>
+      <p>O mesmo acontece com $L(v)=\sqrt{1+v^2}$, e aí o resultado tem nome: a menor distância entre dois pontos é a reta (exercício 2). Na página de Hopf–Lax, o <a href="hopf-lax.html#exercicios">exercício com a desigualdade de Jensen</a> prova a mesma coisa para qualquer $L$ convexa, sem derivar nada — vale até para caminhos com bicos.</p>
+
+      <h2 id="mecanica" data-toc="A ação dá Newton">Mecânica: a ação dá Newton</h2>
+      <p>Agora o lagrangiano da mecânica,
+      $$L(x,v)=\frac m2v^2-V(x),$$
+      energia cinética menos energia potencial. As derivadas são $L_v=mv$ e $L_x=-V'(x)$, e Euler–Lagrange dá
+      $$\frac{d}{ds}\big(m\dot\gamma\big)=-V'(\gamma),\qquad\text{isto é,}\qquad m\ddot x=-V'(x).$$
+      É a lei de Newton. Vale a pena parar um segundo nisso: ninguém falou de força em lugar nenhum. Escrevemos um preço, pedimos o caminho mais barato, e a segunda lei de Newton apareceu sozinha. É o <b>princípio da ação estacionária</b>.</p>
+
+      <aside class="box">
+        <p class="tag">Queda livre</p>
+        <p>Uma partícula de massa $m$ com coordenada vertical $y$ crescendo para cima tem
+        $$L(y,v)=\frac m2v^2-mgy.$$
+        Euler–Lagrange dá $\dfrac{d}{dt}(m\dot y)+mg=0$, ou seja, $\ddot y=-g$. Com $y(0)=h$ e $y(T)=0$, a trajetória é
+        $$y(t)=h+v_0t-\frac g2t^2,\qquad v_0=-\frac hT+\frac{gT}2.$$
+        A velocidade inicial não é dada: ela é escolhida pelo problema, para que a pedra chegue ao chão exatamente no instante $T$.</p>
+      </aside>
+
+      <h2 id="legendre" data-toc="Legendre">A transformada de Legendre</h2>
+      <p>Euler–Lagrange é uma equação de segunda ordem em $x$. Hamilton descreve as mesmas trajetórias com um sistema de primeira ordem, ao custo de dobrar o número de variáveis: além da posição, o <b>momento</b>
+      $$p=L_v(x,v).$$
+      Para o lagrangiano da mecânica, $p=mv$, o momento do ensino médio. Supondo que essa relação possa ser invertida para escrever $v=v(p,x)$, defina
+      $$\boxed{\,H(p,x)=p\cdot v(p,x)-L\big(x,v(p,x)\big).\,}$$
+      Para $L=\tfrac m2v^2-V(x)$ sai $H=\dfrac{p^2}{2m}+V(x)$: cinética <em>mais</em> potencial, a energia total. O sinal do potencial virou, e é isso que distingue as duas contabilidades.</p>
+
+      <p>Derivando a definição e usando $p=L_v$, os termos se cancelam dois a dois e sobra
+      $$H_p(p,x)=v,\qquad H_x(p,x)=-L_x(x,v).$$
+      Como Euler–Lagrange diz que $\dot p=\frac{d}{ds}L_v=L_x$, as trajetórias estacionárias satisfazem
+      $$\dot x=H_p(p,x),\qquad \dot p=-H_x(p,x).$$
+      São as <b>equações de Hamilton</b> — as mesmas que apareceram como características de $u_t+H(Du,x)=0$. O círculo começa a se fechar.</p>
+
+      <h3 id="sup" data-toc="A fórmula do sup">A fórmula com o supremo</h3>
+      <p>Quando $L(x,\cdot)$ é derivável, estritamente convexa e cresce rápido o suficiente quando $|v|\to\infty$, a definição acima pode ser escrita sem inverter nada:
+      $$H(p,x)=\sup_v\big\{\,p\cdot v-L(x,v)\,\big\},$$
+      e, sob hipóteses análogas, vale a volta:
+      $$L(x,v)=\sup_p\big\{\,p\cdot v-H(p,x)\,\big\}.$$
+      Cada uma é a <b>transformada de Legendre</b> da outra. São a mesma informação escrita em duas moedas: a de $L$ é a velocidade, a de $H$ é o momento.</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 540 265" role="img" aria-labelledby="figlegt" style="width:100%;height:auto;max-width:540px;display:block;margin:0 auto">
+  <title id="figlegt">O gráfico de L, a reta pv e a maior distância vertical entre as duas, que é H(p)</title>
+  <defs>
+    <marker id="setacima" viewBox="0 0 10 10" refX="5" refY="9" markerWidth="6" markerHeight="6" orient="auto"><path d="M5,0 L9,9 L1,9 z" style="fill:var(--choque)"/></marker>
+    <marker id="setabaixo" viewBox="0 0 10 10" refX="5" refY="1" markerWidth="6" markerHeight="6" orient="auto"><path d="M5,10 L1,1 L9,1 z" style="fill:var(--choque)"/></marker>
+  </defs>
+  <line x1="40" y1="168.0" x2="500" y2="168.0" style="stroke:var(--ink-soft)" stroke-width="1.4"/>
+  <line x1="195.0" y1="10" x2="195.0" y2="250" style="stroke:var(--ink-soft)" stroke-width="1.4"/>
+  <polyline points="172.5,240.0 300.8,137.4 429.0,34.8" fill="none" style="stroke:var(--ink-soft)" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <polyline points="163.5,193.2 276.0,103.2 388.5,13.2" fill="none" style="stroke:var(--carac)" stroke-width="2.2"/>
+  <polyline points="60.0,114.0 64.6,117.6 69.2,121.1 73.8,124.5 78.5,127.8 83.1,130.9 87.7,133.9 92.3,136.7 96.9,139.5 101.5,142.1 106.1,144.6 110.7,147.0 115.3,149.2 120.0,151.3 124.6,153.3 129.2,155.2 133.8,156.9 138.4,158.5 143.0,160.0 147.6,161.4 152.2,162.6 156.9,163.7 161.5,164.7 166.1,165.5 170.7,166.3 175.3,166.9 179.9,167.3 184.5,167.7 189.1,167.9 193.8,168.0 198.4,168.0 203.0,167.8 207.6,167.5 212.2,167.1 216.8,166.6 221.4,165.9 226.1,165.1 230.7,164.2 235.3,163.2 239.9,162.0 244.5,160.7 249.1,159.3 253.7,157.8 258.3,156.1 262.9,154.3 267.6,152.4 272.2,150.4 276.8,148.2 281.4,145.9 286.0,143.5 290.6,140.9 295.2,138.2 299.9,135.4 304.5,132.5 309.1,129.4 313.7,126.3 318.3,123.0 322.9,119.5 327.5,116.0 332.1,112.3 336.8,108.5 341.4,104.5 346.0,100.5 350.6,96.3 355.2,92.0 359.8,87.5 364.4,82.9 369.0,78.3 373.6,73.4 378.3,68.5 382.9,63.4 387.5,58.2 392.1,52.9 396.7,47.4 401.3,41.9 405.9,36.2 410.5,30.3 415.2,24.4 419.8,18.3 424.4,12.1 429.0,5.8" fill="none" style="stroke:var(--ink)" stroke-width="2.8" stroke-linejoin="round"/>
+  <line x1="330.0" y1="114.0" x2="330.0" y2="60.0" style="stroke:var(--choque)" stroke-width="2.2" marker-start="url(#setabaixo)" marker-end="url(#setacima)"/>
+  <line x1="244.5" y1="160.7" x2="244.5" y2="128.4" style="stroke:var(--ink-soft)" stroke-width="2"/>
+  <circle cx="330.0" cy="114.0" r="3.4" style="fill:var(--ink)"/>
+  <circle cx="195.0" cy="222.0" r="3.4" style="fill:var(--ink-soft)"/>
+  <g font-family="sans-serif" font-size="14" style="fill:var(--ink)">
+    <text x="498" y="160.0" text-anchor="end">v</text>
+    <text x="64.5" y="79.2">L(v)</text>
+    <text x="394.8" y="18.8" style="fill:var(--carac)">pv</text>
+    <text x="338.0" y="92.0" style="fill:var(--choque)">H(p)</text>
+    <text x="251.5" y="122.4" style="fill:var(--ink-soft)">menor</text>
+    <text x="187.0" y="227.0" text-anchor="end" style="fill:var(--ink-soft)">−H(p)</text>
+    <text x="330.0" y="186.0" text-anchor="middle">v*</text>
+  </g>
+</svg>
+<figcaption>Para uma inclinação $p$ fixada, $H(p)$ é a maior distância vertical entre a reta $pv$ e o gráfico de $L$. Ela acontece em $v^*$, onde a tangente ao gráfico (tracejada) tem inclinação $p$ — e essa tangente corta o eixo vertical em $-H(p)$.</figcaption>
+</figure>
+
+
+      <p>A figura explica o supremo. Fixe a inclinação $p$ e compare a reta $pv$ com o gráfico de $L$: $H(p)$ é o maior afastamento vertical entre as duas. Onde esse afastamento é máximo, a tangente ao gráfico de $L$ é paralela à reta, isto é, $L'(v^*)=p$ — que é justamente a relação $p=L_v$ de onde partimos. Se $L$ é convexa, cada inclinação $p$ é atingida em um único $v^*$, e a correspondência não tem ambiguidade.</p>
+
+      <table class="tabela">
+        <thead><tr><th>Lagrangiano $L$</th><th>Hamiltoniano $H$</th><th>Onde aparece</th></tr></thead>
+        <tbody>
+          <tr><td>$\dfrac{v^2}2$</td><td>$\dfrac{p^2}2$</td><td>Burgers e Hopf–Lax</td></tr>
+          <tr><td>$\dfrac m2v^2$</td><td>$\dfrac{p^2}{2m}$</td><td>partícula livre</td></tr>
+          <tr><td>$\dfrac m2v^2-V(x)$</td><td>$\dfrac{p^2}{2m}+V(x)$</td><td>mecânica com potencial</td></tr>
+          <tr><td>$\dfrac{|v|^\alpha}\alpha$</td><td>$\dfrac{|p|^\beta}\beta$, com $\tfrac1\alpha+\tfrac1\beta=1$</td><td>exercício 1(c)</td></tr>
+        </tbody>
+      </table>
+
+      <aside class="box">
+        <p class="tag">Queda livre, agora com Hamilton</p>
+        <p>Com $L=\tfrac m2v^2-mgy$, o momento é $p=mv$ e
+        $$H(p,y)=\sup_v\Big\{pv-\frac m2v^2+mgy\Big\}=\frac{p^2}{2m}+mgy.$$
+        As equações de Hamilton são $\dot y=\dfrac pm$ e $\dot p=-mg$, e juntas dão de novo $\ddot y=-g$. Como $H$ não depende do tempo, ela é constante ao longo da trajetória (exercício 5): é a conservação da energia.</p>
+      </aside>
+
+      <h2 id="valor" data-toc="A função valor">A função valor e a volta para Hamilton–Jacobi</h2>
+      <p>Falta juntar as duas histórias. Na página de Hamilton–Jacobi, ao lado das equações de Hamilton havia a equação para o valor de $u$ ao longo da característica:
+      $$\dot z=p\cdot\dot x-H(p,x).$$
+      Se $L$ é a transformada de Legendre de $H$ e $\dot x=H_p(p,x)$, então o lado direito é exatamente $L(x,\dot x)$. Ou seja, ao longo de uma característica,
+      $$z(t)=f(x_0)+\int_0^tL\big(x(s),\dot x(s)\big)\,ds:$$
+      o valor de $u$ é o dado inicial no pé da característica <b>mais a ação acumulada no caminho</b>. As características de Hamilton–Jacobi são, portanto, extremais do problema variacional desta página.</p>
+
+      <p>Sob hipóteses de convexidade e crescimento, as trajetórias que interessam são minimizantes, e somos levados a escrever a solução como um mínimo sobre todos os caminhos que chegam em $x$ no instante $t$:
+      $$\boxed{\,u(x,t)=\inf_{\gamma(t)=x}\Big\{f(\gamma(0))+\int_0^tL\big(\gamma(s),\dot\gamma(s)\big)\,ds\Big\}.\,}$$
+      Essa é a <b>função valor</b>: entre todas as trajetórias que terminam em $x$ no instante $t$, escolhemos a de menor custo total, contando o custo inicial $f(\gamma(0))$ e a ação acumulada durante o movimento. (Para uma primeira leitura, pense em caminhos suaves por partes.)</p>
+
+      <p>A vantagem é que esse mínimo continua fazendo sentido depois que as características se cruzam, quando a descrição clássica já falhou. Quando $H$ não depende de $x$, o caminho mais barato é a reta e o mínimo sobre caminhos vira um mínimo sobre um único número, o ponto de partida: é a <a href="hopf-lax.html">fórmula de Hopf–Lax</a>, da próxima página.</p>
+
+      <aside class="box">
+        <p class="tag">Por que o gradiente da ação é o momento</p>
+        <p>Chame de $S(x_i,x_f)$ a ação mínima entre os dois extremos. Supondo que a curva minimizante seja suave e dependa suavemente dos extremos, a primeira variação dá
+        $$D_{x_f}S=L_v\big(\gamma(b),\dot\gamma(b)\big),\qquad D_{x_i}S=-L_v\big(\gamma(a),\dot\gamma(a)\big),$$
+        isto é, o gradiente da ação no ponto final é o momento final, e no ponto inicial é menos o momento inicial. Para a função valor, isso diz $u_x=p$. E a equação de Hamilton–Jacobi, $u_t=-H(u_x,x)$, diz o resto: as duas derivadas de $u$ são o momento e (menos) a energia da trajetória ótima.</p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">Newton, Lagrange e Hamilton</p>
+        <p>São três contabilidades para as mesmas trajetórias.</p>
+        <table class="tabela">
+          <thead><tr><th></th><th>O que é dado</th><th>A equação</th><th>Variáveis</th></tr></thead>
+          <tbody>
+            <tr><td><b>Newton</b></td><td>a força</td><td>$m\ddot x=-V'(x)$</td><td>$x$, 2ª ordem</td></tr>
+            <tr><td><b>Lagrange</b></td><td>o custo $L=T-V$</td><td>$\frac{d}{ds}L_v=L_x$</td><td>$x$, 2ª ordem</td></tr>
+            <tr><td><b>Hamilton</b></td><td>a energia $H=T+V$</td><td>$\dot x=H_p$, $\dot p=-H_x$</td><td>$(x,p)$, 1ª ordem</td></tr>
+          </tbody>
+        </table>
+        <p>A de Newton é a mais direta quando se conhecem as forças. A de Lagrange não precisa de eixos cartesianos: qualquer conjunto de coordenadas serve (um ângulo, por exemplo), e as simetrias do lagrangiano viram quantidades conservadas. A de Hamilton troca uma equação de segunda ordem por duas de primeira, ganha a energia conservada de brinde e é a que serve para nós: é ela que aparece como o sistema característico de uma EDP.</p>
+      </aside>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Legendre</p>
+        <p>Calcule a transformada de Legendre dos hamiltonianos (a) $H(p)=\dfrac{p^2}{2}$ e (b) $H(p)=\dfrac{p^2}{2m}+V$, com $m>0$ e $V$ constante. (c) Mostre que o lagrangiano $L(v)=\dfrac{|v|^\alpha}\alpha$, com $\alpha>1$, tem $H(p)=\dfrac{|p|^\beta}\beta$, onde $\dfrac1\alpha+\dfrac1\beta=1$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $pv-p^2/2$ tem máximo em $p=v$, e $L(v)=v^2/2$.</p>
+          <p>(b) $pv-p^2/(2m)-V$ tem máximo em $p=mv$, e $L(v)=mv^2-\dfrac{mv^2}{2}-V=\dfrac{mv^2}{2}-V$. A constante $V$ do hamiltoniano entra com sinal trocado no lagrangiano.</p>
+          <p>(c) Para $p>0$, derive $pv-v^\alpha/\alpha$ em $v>0$: o máximo está em $p=v^{\alpha-1}$, isto é, $v=p^{1/(\alpha-1)}$. Substituindo,
+          $$H(p)=p^{\frac\alpha{\alpha-1}}-\frac1\alpha p^{\frac\alpha{\alpha-1}}=\Big(1-\frac1\alpha\Big)p^{\frac\alpha{\alpha-1}}=\frac{p^\beta}\beta,$$
+          porque $\beta=\dfrac\alpha{\alpha-1}$ é o mesmo que $\tfrac1\alpha+\tfrac1\beta=1$, e então $1-\tfrac1\alpha=\tfrac1\beta$. Para $p&lt;0$ a conta é simétrica. O caso $\alpha=\beta=2$ é o item (a).</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O menor caminho</p>
+        <p>Com $L(v)=\sqrt{1+v^2}$, escreva a equação de Euler–Lagrange e conclua que as extremais são retas.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$L_x=0$ e $L_v=\dfrac v{\sqrt{1+v^2}}$, então Euler–Lagrange diz que
+          $$\frac{\dot\gamma}{\sqrt{1+\dot\gamma^2}}\ \text{é constante}.$$
+          A função $v\mapsto v/\sqrt{1+v^2}$ é estritamente crescente, logo injetora: se o valor dela é constante, $\dot\gamma$ é constante, e $\gamma$ é uma reta. (Observe que não é preciso resolver para $\dot\gamma$ — basta a injetividade.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A queda livre, pela ação</p>
+        <p>Tome $m=1$ e $L(x,v)=\dfrac{v^2}2-gx$. (a) Mostre que a ação mínima entre $\gamma(0)=y$ e $\gamma(t)=x$ é
+        $$S(y,x,t)=\frac{(x-y)^2}{2t}-\frac{gt(x+y)}2-\frac{g^2t^3}{24}.$$
+        (b) Com dado inicial $f\equiv0$, minimize $S$ em $y$ e obtenha a função valor $u(x,t)$. Compare com o exercício 3 da página de <a href="hamilton-jacobi.html#exercicios">Hamilton–Jacobi</a>, que resolveu o mesmo problema pelas características.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) A extremal é $\ddot\gamma=-g$, isto é, $\gamma(s)=y+v_0s-\tfrac g2s^2$ com $v_0$ ajustado para $\gamma(t)=x$:
+          $$v_0=\frac{x-y}t+\frac{gt}2.$$
+          Agora é só integrar. Com $\dot\gamma=v_0-gs$,
+          $$\int_0^t\frac{\dot\gamma^2}2\,ds=\frac{v_0^2t}2-\frac{v_0gt^2}2+\frac{g^2t^3}6,\qquad \int_0^tg\gamma\,ds=gyt+\frac{gv_0t^2}2-\frac{g^2t^3}6.$$
+          Subtraindo e substituindo $v_0$, os termos se reorganizam na expressão do enunciado. (Vale conferir um caso: com $g=0$ sobra $(x-y)^2/2t$, o custo da reta, como tem que ser.)</p>
+          <p>(b) Derivando em $y$: $-\dfrac{x-y}t-\dfrac{gt}2=0$, ou seja, $y^*=x+\dfrac{gt^2}2$. A partida ótima está <em>acima</em> do ponto de chegada, o que faz sentido: a pedra cai. Substituindo,
+          $$u(x,t)=\frac{g^2t^3}8-gxt-\frac{g^2t^3}4-\frac{g^2t^3}{24}=-gxt-\frac{g^2t^3}6,$$
+          exatamente o que as características deram na página de Hamilton–Jacobi. Dois caminhos bem diferentes, a mesma função.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A desigualdade de Young</p>
+        <p>Mostre que, se $H$ é a transformada de Legendre de $L$, então $pv\le L(v)+H(p)$ para todos $p$ e $v$, com igualdade exatamente quando $p=L'(v)$. Escreva o que isso diz no caso $L(v)=|v|^\alpha/\alpha$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Por definição, $H(p)=\sup_w\{pw-L(w)\}\ge pv-L(v)$ para qualquer $v$ particular, e reorganizando sai $pv\le L(v)+H(p)$. A igualdade vale quando o supremo é atingido em $w=v$, isto é, quando $p=L'(v)$ (com $L$ convexa e derivável).</p>
+          <p>Com $L(v)=|v|^\alpha/\alpha$ e $H(p)=|p|^\beta/\beta$, a desigualdade fica
+          $$pv\le\frac{|v|^\alpha}\alpha+\frac{|p|^\beta}\beta,\qquad \frac1\alpha+\frac1\beta=1,$$
+          que é a desigualdade de Young, a que está por trás da desigualdade de Hölder.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. A energia se conserva</p>
+        <p>Mostre que, se $H$ não depende explicitamente do tempo, então $H(p(s),x(s))$ é constante ao longo de uma solução das equações de Hamilton.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Pela regra da cadeia e pelas equações de Hamilton,
+          $$\frac{d}{ds}H(p,x)=H_p\,\dot p+H_x\,\dot x=H_p\,(-H_x)+H_x\,(H_p)=0.$$
+          Os dois termos se cancelam exatamente porque um tem o sinal trocado em relação ao outro. Para $H=\tfrac{p^2}{2m}+V(x)$, isso é a conservação da energia mecânica.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="hamilton-jacobi.html">Hamilton–Jacobi</a></li>
+            <li><a href="caracteristicas-1a-ordem.html">Características de 1ª ordem</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="hopf-lax.html">Fórmula de Hopf–Lax</a></li>
+            <li class="soon">Soluções de viscosidade (em breve)</li>
+            <li><a href="burgers.html">Burgers, quebra e choques</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

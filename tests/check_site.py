@@ -66,6 +66,7 @@ need = {
     "paginas/solucao-fraca.html": ["tema", "toc"],
     "paginas/rankine-hugoniot.html": ["tema", "toc"],
     "paginas/hopf-lax.html": ["tema", "toc"],
+    "paginas/euler-lagrange.html": ["tema", "toc"],
     "paginas/difusao-grafos.html": ["tema", "toc"],
     "paginas/autovalores-redes.html": ["demo-grafo", "g-eps", "g-epsv", "g-t", "g-tv", "g-play", "g-readout", "g-grafo-canvas", "g-curvas-canvas", "tema", "toc"],
     "paginas/calor-grafo-anel.html": ["demo-anel", "a-N", "a-Nv", "a-t", "a-tv", "a-play", "a-readout", "a-anel-canvas", "a-perfil-canvas", "tema", "toc"],
