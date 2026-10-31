@@ -81,6 +81,22 @@
       $$u^{n+1}=(1-4r)\,u^n.$$
       Para $r>\tfrac12$ o fator $|1-4r|$ passa de $1$ e a serrilha cresce a cada passo, trocando de sinal — a instabilidade que a <a href="cfl.html">condição CFL</a> descreve é a mesma coisa que a violação do princípio do máximo discreto. Estabilidade, aqui, é literalmente a propriedade de ser uma média.</p>
 
+      <p>Em forma matricial o passo é
+      $$u^{n+1}=(I-rL)\,u^n=P\,u^n,\qquad P_{ij}=\begin{cases}1-r\,d_i,&j=i,\\[1mm] r\,c_{ij},&j\sim i,\\[1mm] 0,&\text{nos demais casos,}\end{cases}$$
+      e aí a condição ganha um nome. Como as linhas de $L$ somam zero, $P\mathbf 1=\mathbf 1$: as linhas de $P$ somam $1$, sempre. As entradas fora da diagonal, $r\,c_{ij}$, são não negativas, sempre. Falta só a diagonal, $1-r\,d_i$, e ela é não negativa exatamente quando $r\,d_i\le1$. Ou seja:
+      $$\boxed{\,P\ \text{é uma matriz estocástica}\iff r\,\max_i d_i\le1.\,}$$
+      Estabilidade, princípio do máximo discreto e estocasticidade são a mesma desigualdade, ditas em três vocabulários.</p>
+
+      <p>E como $L$ é simétrica, $P$ também é, então as <em>colunas</em> somam $1$ igualmente: $P$ é <b>duplamente estocástica</b>. As duas somas dizem coisas diferentes e complementares — linhas somando $1$ é o princípio do máximo (cada valor novo é média dos antigos), colunas somando $1$ é a conservação da massa total, $\mathbf 1^\top P=\mathbf 1^\top$. Os dois fatos que a página da difusão provou separadamente são as duas somas da mesma matriz.</p>
+
+      <aside class="box">
+        <p class="tag">O calor como passeio aleatório</p>
+        <p>Uma matriz estocástica é uma matriz de transição, e esta descreve um <b>passeio aleatório preguiçoso</b> no grafo: a cada passo, o caminhante fica parado com probabilidade $1-r\,d_i$ e vai para o vizinho $j$ com probabilidade $r\,c_{ij}$. Como $u^n=P^nu^0$, vale
+        $$u_i^n=\mathbb E\big[\,u^0_{X_n}\ \big|\ X_0=i\,\big]:$$
+        o valor no vértice $i$ depois de $n$ passos é a <b>esperança do dado inicial na posição do caminhante</b>. Com essa leitura o princípio do máximo deixa de precisar de demonstração — uma média de valores está entre o menor e o maior deles. É a forma mais simples da representação de Feynman–Kac, e é também a razão profunda de o núcleo do calor ser positivo: ele é uma densidade de probabilidade.</p>
+        <p>A teoria de Perron–Frobenius completa o quadro. Num grafo conexo com $r\,d_i&lt;1$ estrito, a preguiça positiva torna o passeio aperiódico, e então $P^n$ converge para a matriz que faz a média uniforme: é a convergência para a média, de novo. No limiar $r\,d_i=1$ a preguiça desaparece; num anel de $N$ par o passeio fica periódico, o modo serrilhado tem autovalor $1-4r=-1$ e oscila para sempre, sem decair. O caso extremo da estabilidade é justamente o caso em que o esquema não converge.</p>
+      </aside>
+
       <h2 id="continuo" data-toc="No contínuo">No contínuo, e por que Fourier não vê</h2>
       <p>O argumento pontual tem a mesma cara. Num instante em que $u(\cdot,t)$ atinge um máximo interior em $x_0$, o cálculo de uma variável dá $u_{xx}(x_0,t)\le0$ (um máximo tem concavidade para baixo), e a equação diz
       $$u_t(x_0,t)=u_{xx}(x_0,t)\le0.$$
@@ -103,7 +119,7 @@
         um erro no dado nunca é amplificado. Compare com o argumento de energia, que dá o mesmo em norma $L^2$ — aqui a garantia é ponto a ponto, que costuma ser o que interessa na prática.</li>
         <li><b>Comparação (monotonia).</b> Se $f\le g$ em toda parte, então $u\le v$ para todo $t$. Soluções não se cruzam: a ordem inicial é preservada.</li>
       </ul>
-      <p>E ele falha, como tem que falhar, para trás no tempo. A função $u(x,t)=e^{t}\cos x$ resolve $u_t=-u_{xx}$ e começa dentro de $[-1,1]$, mas cresce sem limite (exercício 5). É a mesma irreversibilidade que a série mostrou com o fator $e^{+k^2t}$, vista pela outra lente.</p>
+      <p>E ele falha, como tem que falhar, para trás no tempo. A função $u(x,t)=e^{t}\cos x$ resolve $u_t=-u_{xx}$ e começa dentro de $[-1,1]$, mas cresce sem limite (exercício 6). É a mesma irreversibilidade que a série mostrou com o fator $e^{+k^2t}$, vista pela outra lente.</p>
 
       <h2 id="adiante" data-toc="Para onde vai">Para onde isso vai</h2>
       <p>O princípio do máximo é, no fundo, um fato sobre o laplaciano, não sobre o tempo. Em equilíbrio, quando $u_t=0$, ele diz que uma função com $\Delta u\ge0$ não tem máximo interior — o que está por trás da propriedade do valor médio das funções harmônicas e do princípio do máximo para equações elípticas.</p>
@@ -137,7 +153,20 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">3. Unicidade de graça</p>
+        <p class="tag">3. A matriz do passo no anel de quatro</p>
+        <p>No anel com $N=4$ e pesos $1$, escreva $P=I-rL$ para $r=\tfrac14$ e para $r=\tfrac12$. (a) Confira que as linhas e as colunas somam $1$ nos dois casos, e diga em qual deles $P$ é estocástica. (b) Calcule os autovalores usando $\lambda_k=4\sin^2(\pi k/4)$. (c) O que acontece com o modo serrilhado $(1,-1,1,-1)$ em cada caso?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $d_i=2$, $P=(1-2r)I+r(S+S^{-1})$. Para $r=\tfrac14$ a diagonal é $\tfrac12$ e cada vizinho entra com $\tfrac14$: todas as entradas são não negativas e somam $1$ — estocástica (e duplamente, por simetria). Para $r=\tfrac12$ a diagonal zera e cada vizinho entra com $\tfrac12$: as somas continuam $1$, e no limiar ela ainda é estocástica, mas sem preguiça nenhuma.</p>
+          <p>(b) Os autovalores de $L$ são $\lambda_k=4\sin^2(\pi k/4)=0,\,2,\,4,\,2$ para $k=0,1,2,3$, e os de $P$ são $1-r\lambda_k$. Com $r=\tfrac14$: $1,\ \tfrac12,\ 0,\ \tfrac12$. Com $r=\tfrac12$: $1,\ 0,\ -1,\ 0$.</p>
+          <p>(c) O serrilhado é o modo $k=2$. Com $r=\tfrac14$ o autovalor é <b>zero</b>: ele desaparece em um único passo. Com $r=\tfrac12$ o autovalor é $-1$: ele troca de sinal a cada passo e nunca decai, e o esquema, embora não exploda, também não converge. Entre os dois, a preguiça é o que faz a mistura funcionar.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Unicidade de graça</p>
         <p>Mostre que o problema do calor no círculo tem no máximo uma solução (suave) com um dado inicial dado, usando só o princípio do máximo. Depois obtenha o mesmo resultado pelo argumento de energia e compare o que cada um exige.</p>
       </aside>
       <details>
@@ -149,7 +178,7 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">4. Soluções não se cruzam</p>
+        <p class="tag">5. Soluções não se cruzam</p>
         <p>Sejam $u$ e $v$ soluções do calor com dados $f\le g$. Mostre que $u(x,t)\le v(x,t)$ para todo $t\ge0$. Dê um exemplo em que a desigualdade é estrita em $t>0$ mesmo começando com $f=g$ em alguns pontos.</p>
       </aside>
       <details>
@@ -161,7 +190,7 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">5. Para trás, nada feito</p>
+        <p class="tag">6. Para trás, nada feito</p>
         <p>Verifique que $u(x,t)=e^{t}\cos x$ resolve $u_t=-u_{xx}$ com $u(x,0)=\cos x$. Por que isso não contradiz o princípio do máximo? O que a conta diz sobre resolver o calor de trás para a frente?</p>
       </aside>
       <details>
