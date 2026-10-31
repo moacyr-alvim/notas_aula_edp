@@ -67,6 +67,12 @@ A20 = float(re.search(r"20000 passos:\s+A = *([-0-9.eE+]+)", s).group(1))
 check("ação discreta: a descida chega na parábola (erro < 0,01)", err < 1e-2, f"erro={err:.2e}")
 check("ação discreta: A ≈ -g²T³/24 = -32,013", abs(A20 + 32.0133) < 0.05, f"A={A20:.4f}")
 
+s, _ = rodar("calor_circulo_solucao.py")
+esp = float(re.search(r"erro espectral\s*= ([0-9.eE+-]+)", s).group(1))
+dif = float(re.search(r"erro diferencas finitas = ([0-9.eE+-]+)", s).group(1))
+check("calor no círculo: espectral é exato até o arredondamento", esp < 1e-12, f"erro={esp:.1e}")
+check("calor no círculo: diferenças finitas erram bem mais", dif > 100 * esp, f"erro={dif:.1e}")
+
 # versões com lacunas: devem rodar (sem explodir erro) mesmo incompletas
 s, _ = rodar("cfl_lacunas.py")
 check("cfl_lacunas roda com o código incompleto", True)

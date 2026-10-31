@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O calor no círculo — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O calor no círculo: a EDP vira infinitas EDOs</h1>
+        <p class="lede">Na base de Fourier, derivar é multiplicar — e uma equação diferencial com coeficientes constantes vira uma equação algébrica, modo a modo. Aplicado ao calor num anel, isso resolve a EDP em uma linha e deixa à vista a suavização instantânea, o decaimento para a média e a irreversibilidade.</p>
+        <p class="meta">Continuação de <a href="serie-fourier.html">Série de Fourier</a>. Versão contínua de <a href="calor-fourier.html">o calor no grafo em anel</a> e caso geral de <a href="separacao-variaveis.html">separação de variáveis</a>. Leitura de uns 25 minutos, com a célula de Python.</p>
+      </header>
+
+
+      <h2 id="edo" data-toc="Aquecimento: uma EDO">Aquecimento: uma equação diferencial vira álgebra</h2>
+      <p>Antes do calor, um caso sem tempo nenhum, para ver a mecânica funcionando. Procure uma função $u$, periódica de período $2\pi$, com
+      $$-u''+u=f,$$
+      onde $f$ é dada e também periódica. Escreva as duas em série, $u=\sum_k c_k(u)e^{ikx}$ e $f=\sum_k c_k(f)e^{ikx}$. Como derivar multiplica por $ik$, derivar duas vezes multiplica por $-k^2$, e a equação, lida modo a modo, vira
+      $$\big(k^2+1\big)\,c_k(u)=c_k(f)\qquad\Longrightarrow\qquad c_k(u)=\frac{c_k(f)}{k^2+1}.$$
+      Uma divisão por modo. Isso é o que se quer dizer com "a equação diferencial virou algébrica": na base de Fourier o operador $-\frac{d^2}{dx^2}+1$ é <b>diagonal</b>, com autovalor $k^2+1$ no modo $k$, e resolver um sistema diagonal é dividir por autovalores. É a mesma coisa que o livro já fez duas vezes, na <a href="difusao-grafos.html">difusão em grafos</a>, onde $u'=-cLu$ foi resolvida modo a modo, e na <a href="dft.html">DFT</a>, onde toda matriz circulante vira diagonal.</p>
+
+      <aside class="box atencao">
+        <p class="tag">Quando vale dizer isso</p>
+        <p>A frase vale para operadores <b>lineares de coeficientes constantes</b> com <b>condição periódica</b> — são esses que os $e^{ikx}$ diagonalizam. Com coeficientes variáveis, os modos deixam de ser independentes e o sistema algébrico fica cheio, em vez de diagonal. E repare que o problema acima é de <em>contorno</em>, não de valor inicial: para algo como $y'=ay$ com $y(0)$ dado a série de Fourier não é a ferramenta natural, porque a solução nem é periódica.</p>
+      </aside>
+
+      <p>Tire o $+1$ e a coisa fica mais interessante. Para $u''=f$, o modo $k$ dá $-k^2c_k(u)=c_k(f)$, o que funciona para todo $k\ne0$. Em $k=0$, porém, a equação é
+      $$0\cdot c_0(u)=c_0(f),$$
+      e ela só tem solução se $c_0(f)=0$, isto é, se <b>$f$ tem média zero</b>. Quando tem, $c_0(u)$ fica indeterminado: a solução existe e é única <em>a menos de uma constante</em>. As duas coisas que normalmente se enuncia como teorema aparecem aqui como uma divisão por zero. Faz sentido físico: $u''=f$ com fonte $f$ num anel só pode estar em equilíbrio se o que entra é igual ao que sai, e a temperatura só é determinada a menos do nível de referência.</p>
+
+      <p>Mais uma leitura, de graça: dividir por $k^2$ faz os coeficientes caírem duas potências mais depressa. A solução é sempre <b>duas derivadas mais lisa</b> que o dado — resolver uma equação de segunda ordem é integrar duas vezes, e a série diz isso em uma linha.</p>
+
+      <h2 id="calor" data-toc="O calor no círculo">O calor no círculo</h2>
+      <p>Agora o problema de verdade: um anel de material condutor, sem bordas, com temperatura inicial dada.
+      $$u_t=u_{xx},\qquad u(x,0)=f(x),\qquad u\ \text{periódica em }x\ \text{de período }2\pi.$$
+      A diferença para o caso anterior é que os coeficientes agora dependem do tempo: $u(x,t)=\sum_k c_k(t)\,e^{ikx}$. Derivar em $x$ continua multiplicando por $ik$; derivar em $t$ mexe só nos coeficientes. Então, modo a modo,
+      $$\dot c_k(t)=-k^2\,c_k(t),$$
+      que é a EDO mais simples que existe. Com $c_k(0)=c_k(f)$,
+      $$\boxed{\,u(x,t)=\sum_{k\in\mathbb Z}c_k(f)\,e^{-k^2t}\,e^{ikx}.\,}$$
+      <b>A EDP virou infinitas EDOs desacopladas</b>, cada uma resolvida em uma linha. Cada harmônico murcha com a sua própria taxa, $e^{-k^2t}$, e a taxa cresce com o <em>quadrado</em> da frequência: o modo $3$ morre nove vezes mais depressa que o modo $1$.</p>
+
+      <h2 id="consequencias" data-toc="O que a fórmula mostra">O que a fórmula mostra na hora</h2>
+      <p>Três fatos sobre o calor, que costumam dar trabalho, aqui são leitura direta do fator $e^{-k^2t}$.</p>
+
+      <p><b>Suavização instantânea.</b> Tome um dado horroroso, uma caixa com dois saltos, cujos coeficientes caem só como $1/k$. Para qualquer $t>0$, os coeficientes da solução são $c_k(f)e^{-k^2t}$, e $e^{-k^2t}$ vai a zero mais depressa que qualquer potência de $1/k$. Pela seção de <a href="serie-fourier.html#decaimento">decaimento e suavidade</a>, isso quer dizer que $u(\cdot,t)$ é infinitamente derivável. O calor apaga os bicos e os saltos <em>imediatamente</em>, não aos poucos.</p>
+
+      <p><b>Decaimento para a média.</b> O modo $k=0$ não decai: $e^{-0\cdot t}=1$. Todos os outros decaem. Logo
+      $$u(x,t)\ \longrightarrow\ c_0(f)=\frac1{2\pi}\int_{-\pi}^{\pi}f,$$
+      a temperatura média, e a aproximação é governada pelo primeiro modo não nulo, à taxa $e^{-t}$ (ou $e^{-k_{\min}^2t}$, se os primeiros modos forem nulos). Que a média se conserva já era esperado: num anel isolado não há por onde o calor escapar. Pela identidade de Parseval, a energia é
+      $$\|u(\cdot,t)\|^2=\sum_k|c_k(f)|^2e^{-2k^2t},$$
+      que decresce em $t$, termo a termo.</p>
+
+      <p><b>Irreversibilidade.</b> Tente andar para trás: o fator vira $e^{+k^2t}$, e ele explode. Um erro minúsculo no modo $k$ — um arredondamento, um ruído de medição — é amplificado por $e^{k^2t}$, que para $k=20$ e $t=1$ já é $e^{400}$. O problema para trás é <b>mal posto</b>: a solução pode nem existir, e quando existe não depende continuamente do dado. É a flecha do tempo aparecendo numa fórmula: o calor <em>esquece</em>, e esquece tão depressa que não dá para reconstruir o passado (exercício 5).</p>
+
+      <h2 id="nucleo" data-toc="O núcleo do calor">O núcleo do calor</h2>
+      <p>A solução multiplicou cada coeficiente por $e^{-k^2t}$. Pela propriedade "<a href="serie-fourier.html#propriedades">convolução vira produto</a>", multiplicar os coeficientes é convolver as funções. Então existe uma função $K_t$, com coeficientes exatamente $e^{-k^2t}$, tal que
+      $$u(\cdot,t)=K_t*f,\qquad K_t(x)=\sum_{k\in\mathbb Z}e^{-k^2t}\,e^{ikx}=1+2\sum_{k\ge1}e^{-k^2t}\cos kx.$$
+      É o <b>núcleo do calor no círculo</b>. A segunda forma, com cossenos, mostra que ele é real e par. Sua média é $1$, porque $c_0(K_t)=1$ — por isso a convolução preserva a média. Ele é positivo, embora isso não seja óbvio na série (a fórmula acima é uma função teta de Jacobi).</p>
+      <p>Os dois extremos valem a pena. Quando $t\to\infty$, só o termo $k=0$ sobrevive e $K_t\to1$: convolver com a função constante $1$ é tomar a média, que é o decaimento da seção anterior. Quando $t\to0^+$, todos os coeficientes tendem a $1$, a série deixa de convergir como função e $K_t$ concentra toda a sua massa perto de $x=0$: ela é uma <em>aproximação da identidade</em>, e $K_t*f\to f$. Na reta, em vez do círculo, essa mesma conta dá a gaussiana $\frac{1}{\sqrt{4\pi t}}e^{-x^2/4t}$ — é a caixinha do calor na reta <small>(em breve)</small>.</p>
+
+      <aside class="box">
+        <p class="tag">A barra com pontas fixas é um caso particular</p>
+        <p>Em <a href="separacao-variaveis.html">separação de variáveis</a>, a barra $[0,\pi]$ com $u=0$ nas pontas deu os modos $\sin(nx)$ com taxas $e^{-n^2t}$. É este problema, com a <b>extensão ímpar</b>: estenda o dado a $[-\pi,\pi]$ por $f(-x)=-f(x)$ e depois periodicamente. Como a equação do calor preserva a paridade, a solução no círculo continua ímpar para sempre, e uma função ímpar se anula em $0$ e em $\pi$ automaticamente — a condição de contorno não precisa ser imposta, ela vem junto. Na série, $e^{inx}-e^{-inx}=2i\sin nx$: os modos de lá são as combinações ímpares dos modos daqui, com o mesmo autovalor $n^2$. Separação de variáveis não é outro método; é este, restrito às funções com a simetria certa.</p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">Do anel discreto para o círculo</p>
+        <p>Na <a href="calor-fourier.html">versão discreta</a>, o calor no grafo em anel com $N$ vértices e espaçamento $h=2\pi/N$ tem solução $\hat u_k(t)=\hat u_k(0)e^{-\lambda_kt}$ com
+        $$\lambda_k=\frac{4}{h^2}\sin^2\!\Big(\frac{\pi k}N\Big)=\frac{4}{h^2}\sin^2\!\Big(\frac{kh}2\Big),$$
+        os autovalores do laplaciano do anel que a <a href="dft.html#derivada">caixa da DFT</a> calculou. Para $k$ fixo e $N$ grande, $\sin(kh/2)\approx kh/2$ e
+        $$\lambda_k\approx\frac{4}{h^2}\cdot\frac{k^2h^2}4=k^2.$$
+        Os autovalores do grafo convergem para os do círculo, modo a modo, e com eles as soluções. O limite contínuo, que a caixa do anel mostrou nos gráficos, aqui aparece no espectro.</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Complete duas linhas: a solução espectral (transformar, multiplicar por $e^{-k^2t}$, voltar) e o passo das diferenças finitas. O primeiro teste usa um dado com solução exata conhecida, $\cos x+\tfrac12\sin 3x$, e compara os dois métodos. O segundo mostra a caixa virando suave. No fim, a energia e a distância até a média, instante a instante.</p>
+      <div class="pycell" data-title="O calor no círculo, com FFT"
+           data-starter="../py/calor_circulo_lacunas.py"
+           data-solution="../py/calor_circulo_solucao.py"></div>
+      <p>Repare no resultado do primeiro bloco. O método espectral acerta até o arredondamento, com <b>um</b> passo, porque o dado é um polinômio trigonométrico e a fórmula é exata; as diferenças finitas precisam de algumas centenas de passos (a condição $\Delta t\le h^2/2$ não perdoa) e ainda erram na quarta casa. Quando o dado é suave, Fourier é difícil de bater.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Resolvendo com a série</p>
+        <p>Resolva $-u''+u=f$ no círculo para $f(x)=\operatorname{sinal}(x)$ (a onda quadrada). Escreva $u$ como série de senos e diga quão lisa ela é.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>A onda quadrada tem $f=\frac4\pi\sum_{n\ \text{ímpar}}\frac{\sin nx}n$. Dividindo cada coeficiente por $n^2+1$,
+          $$u(x)=\frac4\pi\sum_{n\ \text{ímpar}}\frac{\sin nx}{n\,(n^2+1)}.$$
+          Os coeficientes caem como $1/n^3$. Como $\sum n\cdot n^{-3}$ converge, a série derivada ainda converge uniformemente, e $u$ é de classe $C^1$ com $u''$ tendo um salto onde $f$ salta — exatamente duas derivadas melhor que o dado, como anunciado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A condição de compatibilidade</p>
+        <p>Mostre que $u''=f$ tem solução periódica se e somente se $\int_{-\pi}^{\pi}f=0$, e que nesse caso a solução é única a menos de constante. Depois obtenha o mesmo fato sem Fourier, integrando a equação no período.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Em coeficientes, $-k^2c_k(u)=c_k(f)$. Para $k\ne0$ isso determina $c_k(u)=-c_k(f)/k^2$. Para $k=0$ sobra $0=c_0(f)$: ou $f$ tem média zero, ou não há solução. Tendo, $c_0(u)$ é livre, que é a constante aditiva.</p>
+          <p>Sem Fourier: integre $u''=f$ de $-\pi$ a $\pi$. O lado esquerdo é $u'(\pi)-u'(-\pi)=0$, pela periodicidade de $u'$. Logo $\int f=0$. É a mesma conta — o caso $k=0$ da série <em>é</em> a integral no período.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Quanto tempo até esfriar</p>
+        <p>Com dado inicial $f(x)=1+\cos x+\tfrac12\cos 5x$, escreva $u(x,t)$ e determine o instante a partir do qual a solução difere da média por menos de $1\%$ (em módulo, no pior ponto).</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Cada modo decai com $e^{-k^2t}$:
+          $$u(x,t)=1+e^{-t}\cos x+\tfrac12e^{-25t}\cos5x.$$
+          A média é $1$. O desvio máximo é no máximo $e^{-t}+\tfrac12e^{-25t}$, e o segundo termo é desprezível já em $t$ pequeno: em $t=0{,}2$ ele vale $3\cdot10^{-3}$. Resolvendo $e^{-t}=0{,}01$ sai $t=\ln100\approx4{,}6$. O modo rápido some quase imediatamente; quem decide o tempo de espera é sempre o modo <em>mais lento</em>.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. A energia só cai</p>
+        <p>Use Parseval para mostrar que $\dfrac{d}{dt}\|u(\cdot,t)\|^2=-2\,\|u_x(\cdot,t)\|^2\le0$, e diga quando a derivada é zero.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Por Parseval, $\|u\|^2=\sum_k|c_k(f)|^2e^{-2k^2t}$. Derivando termo a termo,
+          $$\frac{d}{dt}\|u\|^2=\sum_k(-2k^2)\,|c_k(f)|^2e^{-2k^2t}=-2\sum_k k^2|c_k(t)|^2=-2\,\|u_x\|^2,$$
+          porque $c_k(u_x)=ik\,c_k(u)$ e $|ik\,c_k|^2=k^2|c_k|^2$. A derivada é zero só quando todos os modos com $k\ne0$ são nulos, isto é, quando $u$ é constante — o equilíbrio. (Esta é a versão contínua do argumento de energia que apareceu em <a href="separacao-variaveis.html">separação de variáveis</a>.)</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Para trás não dá</p>
+        <p>Fixe $T>0$ e considere o dado $f_N(x)=\frac1N\cos(Nx)$, cuja norma vai a zero quando $N$ cresce. Resolva o calor <em>para trás</em> (isto é, procure $u$ com $u(\cdot,T)=f_N$ e $u_t=u_{xx}$) e calcule $\|u(\cdot,0)\|$. Conclua que o problema para trás não depende continuamente do dado.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Se $u(\cdot,T)=f_N$ então, andando para trás, $c_N(u(0))=\frac1{2N}e^{+N^2T}$ (e o mesmo para $-N$). Logo
+          $$\|u(\cdot,0)\|=\frac{1}{\sqrt2\,N}\,e^{N^2T}\longrightarrow\infty,$$
+          enquanto $\|f_N\|=\frac1{\sqrt2\,N}\to0$. Dados finais arbitrariamente pequenos exigem dados iniciais arbitrariamente grandes: não há dependência contínua, e o problema é mal posto. Na prática, é por isso que não se reconstrói o passado térmico de um objeto a partir da foto de agora.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. O núcleo é um semigrupo</p>
+        <p>Mostre que $K_t*K_s=K_{t+s}$ e interprete. O que isso diz sobre resolver até $t$ e depois continuar até $t+s$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Em coeficientes é uma linha: $c_k(K_t*K_s)=c_k(K_t)\,c_k(K_s)=e^{-k^2t}e^{-k^2s}=e^{-k^2(t+s)}=c_k(K_{t+s})$. Como duas funções com os mesmos coeficientes são iguais, vale a identidade.</p>
+          <p>A interpretação é a propriedade de semigrupo: evoluir o calor por $t$ e depois por $s$ é o mesmo que evoluir por $t+s$ de uma vez. O estado em $t$ contém tudo o que é preciso para prever o futuro — a equação não tem memória do caminho, só do presente.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="serie-fourier.html">Série de Fourier</a></li>
+            <li><a href="calor-fourier.html">O calor no grafo em anel, com Fourier</a></li>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li class="soon">Convergência de séries de Fourier (em breve)</li>
+            <li><a href="lista-fourier-calor.html">Lista de exercícios: Fourier, calor e ondas</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

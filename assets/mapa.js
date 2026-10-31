@@ -61,7 +61,7 @@
       desc: "Componentes conexas, gargalos e o vetor de Fiedler. Com demo interativa e Python." },
     { id: "anel", lane: "calor", col: 3, label: "O grafo em anel\ne o limite contínuo", href: "paginas/calor-grafo-anel.html", trails: ["calor", "numerico"],
       desc: "Modos de Fourier no grafo em anel e o limite N → ∞ (o círculo), que dá u_t = k u_xx. Com demo e Python." },
-    { id: "fourier", lane: "calor", col: 4, label: "Calor na reta:\nFourier e núcleo", href: null, trails: ["calor"],
+    { id: "fourier", lane: "calor", col: 5, label: "Calor na reta:\nFourier e núcleo", href: null, trails: ["calor"],
       desc: "A equação do calor em ℝ: transformada de Fourier, núcleo gaussiano e propagação com velocidade infinita." },
     { id: "sep", lane: "calor", col: 4, row: 1, label: "Separação de\nvariáveis", href: "paginas/separacao-variaveis.html", trails: ["calor"],
       desc: "O calor numa barra: u = X(x)T(t), autovalores (nπ/ℓ)², soma dos modos e coeficientes por ortogonalidade. Com demo e Python." },
@@ -73,6 +73,8 @@
       desc: "O laplaciano do grafo em anel é circulante: Fourier desacopla as EDOs e a solução é uma convolução. Com Python editável." },
     { id: "serief", lane: "disc", col: 5, label: "Série de\nFourier", href: "paginas/serie-fourier.html", trails: ["fdiscreto", "calor"],
       desc: "As funções e^{ikx} como base ortonormal, os coeficientes como produto interno, decaimento e suavidade, Gibbs e o aliasing da DFT." },
+    { id: "calorcirc", lane: "calor", col: 4, label: "O calor\nno círculo", href: "paginas/calor-circulo.html", trails: ["calor", "fdiscreto"],
+      desc: "A EDP vira infinitas EDOs: cada modo decai como e^{-k²t}. Suavização instantânea, decaimento para a média, irreversibilidade e o núcleo do calor. Com Python." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -97,9 +99,10 @@
     ["burgers", "lc"], ["lc", "weak"], ["weak", "rh"], ["rh", "lwr"],
     ["hj", "el"], ["el", "hl"], ["hl", "visc"], ["el", "acaod"],
     ["char2", "class"], ["char2", "wave2"], ["char2", "ma"], ["newton", "wave2"],
-    ["grafo", "spec"], ["spec", "anel"], ["anel", "fourier"], ["anel", "sep"], ["sep", "fourier"], ["sep", "listafc"], ["calorf", "listafc"],
+    ["grafo", "spec"], ["spec", "anel"], ["anel", "calorcirc"], ["anel", "sep"], ["sep", "listafc"], ["calorf", "listafc"],
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["dft", "serief"], ["anel", "serief"],
+    ["serief", "calorcirc"], ["sep", "calorcirc"], ["calorcirc", "fourier"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 
