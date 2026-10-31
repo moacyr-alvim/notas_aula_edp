@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O princípio do máximo — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O princípio do máximo</h1>
+        <p class="lede">O calor nunca cria um valor novo: o mais quente só pode esfriar, o mais frio só pode esquentar, e a faixa entre os dois só encolhe. No grafo é uma conta de uma linha; no contínuo, é o fato que a série de Fourier esconde.</p>
+        <p class="meta">Ajuda ler antes: <a href="difusao-grafos.html">Difusão em grafos</a> e <a href="calor-circulo.html">O calor no círculo</a>. Leitura de uns 20 minutos.</p>
+      </header>
+
+
+      <h2 id="enunciado" data-toc="O enunciado">O enunciado</h2>
+      <p>A <a href="calor-circulo.html">solução por Fourier</a> olha o calor modo a modo: cada harmônico murcha com a sua taxa. Há outra lente, que olha ponto a ponto e enxerga uma coisa que a série esconde — <b>o calor nunca cria um valor novo</b>. Tudo o que aparece em $t>0$ já estava entre o mínimo e o máximo do dado inicial.</p>
+      <p>No grafo, com $\dot u=-cLu$:
+      $$\min_i u_i(0)\ \le\ u_i(t)\ \le\ \max_i u_i(0)\qquad\text{para todo }i\text{ e todo }t\ge0.$$
+      No círculo, com $u_t=u_{xx}$:
+      $$\min_x f\ \le\ u(x,t)\ \le\ \max_x f\qquad\text{para todo }x\text{ e todo }t\ge0.$$
+      Mais do que isso: o máximo é uma função não crescente do tempo e o mínimo é não decrescente, de modo que a faixa entre os dois só encolhe.</p>
+
+      <figure class="fig">
+<svg viewBox="0 0 540 248" role="img" aria-labelledby="figmaxt" style="width:100%;height:auto;max-width:540px;display:block;margin:0 auto">
+  <title id="figmaxt">Perfis do calor no círculo em vários instantes, todos dentro da faixa entre o mínimo e o máximo iniciais</title>
+  <rect x="52.0" y="56.1" width="440.0" height="133.8" style="fill:var(--carac)" fill-opacity=".10"/>
+  <line x1="52.0" y1="56.1" x2="492.0" y2="56.1" style="stroke:var(--carac)" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <line x1="52.0" y1="189.9" x2="492.0" y2="189.9" style="stroke:var(--carac)" stroke-width="1.4" stroke-dasharray="5 4"/>
+  <line x1="52.0" y1="147.3" x2="492.0" y2="147.3" style="stroke:var(--choque)" stroke-width="1.6"/>
+  <polyline points="52.0,189.9 53.7,189.9 55.4,189.9 57.2,189.9 58.9,189.9 60.6,189.9 62.3,189.9 64.0,189.9 65.8,189.9 67.5,189.9 69.2,189.9 70.9,189.9 72.6,189.9 74.3,189.9 76.1,189.9 77.8,189.9 79.5,189.9 81.2,189.9 82.9,189.9 84.7,189.9 86.4,189.9 88.1,189.9 89.8,189.9 91.5,189.9 93.2,189.9 95.0,189.9 96.7,189.9 98.4,189.9 100.1,189.9 101.8,189.9 103.6,189.9 105.3,189.9 107.0,189.9 108.7,189.9 110.4,189.9 112.2,189.9 113.9,189.9 115.6,189.9 117.3,189.9 119.0,189.9 120.8,189.9 122.5,189.9 124.2,189.9 125.9,189.9 127.6,189.9 129.3,189.9 131.1,189.9 132.8,189.9 134.5,189.9 136.2,189.9 137.9,189.9 139.7,189.9 141.4,189.9 143.1,189.9 144.8,189.9 146.5,189.9 148.2,189.9 150.0,189.9 151.7,189.9 153.4,189.9 155.1,189.9 156.8,189.9 158.6,189.9 160.3,189.9 162.0,189.9 163.7,189.9 165.4,189.9 167.2,189.9 168.9,189.9 170.6,189.9 172.3,189.9 174.0,189.9 175.8,189.9 177.5,189.9 179.2,189.9 180.9,189.9 182.6,189.9 184.3,189.9 186.1,189.9 187.8,189.9 189.5,189.9 191.2,189.9 192.9,56.1 194.7,56.1 196.4,56.1 198.1,56.1 199.8,56.1 201.5,56.1 203.2,56.1 205.0,56.1 206.7,56.1 208.4,56.1 210.1,56.1 211.8,56.1 213.6,56.1 215.3,56.1 217.0,56.1 218.7,56.1 220.4,56.1 222.2,56.1 223.9,56.1 225.6,56.1 227.3,56.1 229.0,56.1 230.8,56.1 232.5,56.1 234.2,56.1 235.9,56.1 237.6,56.1 239.3,56.1 241.1,56.1 242.8,56.1 244.5,56.1 246.2,56.1 247.9,56.1 249.7,56.1 251.4,56.1 253.1,56.1 254.8,56.1 256.5,56.1 258.2,56.1 260.0,56.1 261.7,56.1 263.4,56.1 265.1,56.1 266.8,56.1 268.6,56.1 270.3,56.1 272.0,56.1 273.7,56.1 275.4,56.1 277.2,56.1 278.9,56.1 280.6,56.1 282.3,56.1 284.0,56.1 285.8,56.1 287.5,56.1 289.2,56.1 290.9,56.1 292.6,56.1 294.3,56.1 296.1,56.1 297.8,56.1 299.5,56.1 301.2,56.1 302.9,56.1 304.7,56.1 306.4,56.1 308.1,56.1 309.8,56.1 311.5,56.1 313.2,56.1 315.0,56.1 316.7,56.1 318.4,56.1 320.1,56.1 321.8,56.1 323.6,56.1 325.3,56.1 327.0,56.1 328.7,56.1 330.4,56.1 332.2,189.9 333.9,189.9 335.6,189.9 337.3,189.9 339.0,189.9 340.8,189.9 342.5,189.9 344.2,189.9 345.9,189.9 347.6,189.9 349.3,189.9 351.1,189.9 352.8,189.9 354.5,189.9 356.2,189.9 357.9,189.9 359.7,189.9 361.4,189.9 363.1,189.9 364.8,189.9 366.5,189.9 368.2,189.9 370.0,189.9 371.7,189.9 373.4,189.9 375.1,189.9 376.8,189.9 378.6,189.9 380.3,189.9 382.0,189.9 383.7,189.9 385.4,189.9 387.2,189.9 388.9,189.9 390.6,189.9 392.3,189.9 394.0,189.9 395.8,189.9 397.5,189.9 399.2,189.9 400.9,189.9 402.6,189.9 404.3,189.9 406.1,189.9 407.8,189.9 409.5,189.9 411.2,189.9 412.9,189.9 414.7,189.9 416.4,189.9 418.1,189.9 419.8,189.9 421.5,189.9 423.2,189.9 425.0,189.9 426.7,189.9 428.4,189.9 430.1,189.9 431.8,189.9 433.6,189.9 435.3,189.9 437.0,189.9 438.7,189.9 440.4,189.9 442.2,189.9 443.9,189.9 445.6,189.9 447.3,189.9 449.0,189.9 450.8,189.9 452.5,189.9 454.2,189.9 455.9,189.9 457.6,189.9 459.3,189.9 461.1,189.9 462.8,189.9 464.5,189.9 466.2,189.9 467.9,189.9 469.7,189.9 471.4,189.9 473.1,189.9 474.8,189.9 476.5,189.9 478.2,189.9 480.0,189.9 481.7,189.9 483.4,189.9 485.1,189.9 486.8,189.9 488.6,189.9 490.3,189.9 492.0,189.9" fill="none" style="stroke:var(--ink)" stroke-width="2.6"/>
+  <polyline points="52.0,189.9 53.7,189.9 55.4,189.9 57.2,189.9 58.9,189.9 60.6,189.9 62.3,189.9 64.0,189.9 65.8,189.9 67.5,189.9 69.2,189.9 70.9,189.9 72.6,189.9 74.3,189.9 76.1,189.9 77.8,189.9 79.5,189.9 81.2,189.9 82.9,189.9 84.7,189.9 86.4,189.9 88.1,189.9 89.8,189.9 91.5,189.9 93.2,189.9 95.0,189.9 96.7,189.9 98.4,189.9 100.1,189.9 101.8,189.9 103.6,189.9 105.3,189.9 107.0,189.9 108.7,189.9 110.4,189.9 112.2,189.9 113.9,189.9 115.6,189.9 117.3,189.9 119.0,189.8 120.8,189.8 122.5,189.8 124.2,189.8 125.9,189.7 127.6,189.7 129.3,189.6 131.1,189.5 132.8,189.4 134.5,189.3 136.2,189.1 137.9,188.9 139.7,188.7 141.4,188.4 143.1,188.0 144.8,187.6 146.5,187.1 148.2,186.6 150.0,185.9 151.7,185.2 153.4,184.3 155.1,183.3 156.8,182.2 158.6,180.9 160.3,179.4 162.0,177.8 163.7,176.1 165.4,174.1 167.2,171.9 168.9,169.6 170.6,167.1 172.3,164.3 174.0,161.4 175.8,158.3 177.5,155.0 179.2,151.5 180.9,147.9 182.6,144.2 184.3,140.3 186.1,136.3 187.8,132.3 189.5,128.2 191.2,124.0 192.9,119.9 194.7,115.8 196.4,111.7 198.1,107.7 199.8,103.8 201.5,100.0 203.2,96.3 205.0,92.7 206.7,89.4 208.4,86.2 210.1,83.1 211.8,80.3 213.6,77.7 215.3,75.2 217.0,73.0 218.7,70.9 220.4,69.1 222.2,67.4 223.9,65.9 225.6,64.5 227.3,63.3 229.0,62.2 230.8,61.3 232.5,60.5 234.2,59.8 235.9,59.2 237.6,58.6 239.3,58.2 241.1,57.8 242.8,57.5 244.5,57.3 246.2,57.0 247.9,56.9 249.7,56.7 251.4,56.6 253.1,56.5 254.8,56.4 256.5,56.4 258.2,56.3 260.0,56.3 261.7,56.3 263.4,56.3 265.1,56.3 266.8,56.4 268.6,56.4 270.3,56.5 272.0,56.6 273.7,56.7 275.4,56.9 277.2,57.0 278.9,57.3 280.6,57.5 282.3,57.8 284.0,58.2 285.8,58.6 287.5,59.2 289.2,59.8 290.9,60.5 292.6,61.3 294.3,62.2 296.1,63.3 297.8,64.5 299.5,65.9 301.2,67.4 302.9,69.1 304.7,70.9 306.4,73.0 308.1,75.2 309.8,77.7 311.5,80.3 313.2,83.1 315.0,86.2 316.7,89.4 318.4,92.7 320.1,96.3 321.8,100.0 323.6,103.8 325.3,107.7 327.0,111.7 328.7,115.8 330.4,119.9 332.2,124.0 333.9,128.2 335.6,132.3 337.3,136.3 339.0,140.3 340.8,144.2 342.5,147.9 344.2,151.5 345.9,155.0 347.6,158.3 349.3,161.4 351.1,164.3 352.8,167.1 354.5,169.6 356.2,171.9 357.9,174.1 359.7,176.1 361.4,177.8 363.1,179.4 364.8,180.9 366.5,182.2 368.2,183.3 370.0,184.3 371.7,185.2 373.4,185.9 375.1,186.6 376.8,187.1 378.6,187.6 380.3,188.0 382.0,188.4 383.7,188.7 385.4,188.9 387.2,189.1 388.9,189.3 390.6,189.4 392.3,189.5 394.0,189.6 395.8,189.7 397.5,189.7 399.2,189.8 400.9,189.8 402.6,189.8 404.3,189.8 406.1,189.9 407.8,189.9 409.5,189.9 411.2,189.9 412.9,189.9 414.7,189.9 416.4,189.9 418.1,189.9 419.8,189.9 421.5,189.9 423.2,189.9 425.0,189.9 426.7,189.9 428.4,189.9 430.1,189.9 431.8,189.9 433.6,189.9 435.3,189.9 437.0,189.9 438.7,189.9 440.4,189.9 442.2,189.9 443.9,189.9 445.6,189.9 447.3,189.9 449.0,189.9 450.8,189.9 452.5,189.9 454.2,189.9 455.9,189.9 457.6,189.9 459.3,189.9 461.1,189.9 462.8,189.9 464.5,189.9 466.2,189.9 467.9,189.9 469.7,189.9 471.4,189.9 473.1,189.9 474.8,189.9 476.5,189.9 478.2,189.9 480.0,189.9 481.7,189.9 483.4,189.9 485.1,189.9 486.8,189.9 488.6,189.9 490.3,189.9 492.0,189.9" fill="none" style="stroke:var(--carac)" stroke-width="1.8" opacity="0.82"/>
+  <polyline points="52.0,189.8 53.7,189.8 55.4,189.8 57.2,189.7 58.9,189.7 60.6,189.7 62.3,189.7 64.0,189.6 65.8,189.6 67.5,189.6 69.2,189.5 70.9,189.5 72.6,189.4 74.3,189.4 76.1,189.3 77.8,189.2 79.5,189.2 81.2,189.1 82.9,189.0 84.7,188.9 86.4,188.7 88.1,188.6 89.8,188.5 91.5,188.3 93.2,188.2 95.0,188.0 96.7,187.8 98.4,187.6 100.1,187.3 101.8,187.1 103.6,186.8 105.3,186.5 107.0,186.2 108.7,185.8 110.4,185.5 112.2,185.1 113.9,184.6 115.6,184.2 117.3,183.7 119.0,183.2 120.8,182.6 122.5,182.0 124.2,181.4 125.9,180.7 127.6,180.0 129.3,179.2 131.1,178.5 132.8,177.6 134.5,176.7 136.2,175.8 137.9,174.8 139.7,173.8 141.4,172.8 143.1,171.7 144.8,170.5 146.5,169.3 148.2,168.0 150.0,166.7 151.7,165.4 153.4,164.0 155.1,162.5 156.8,161.0 158.6,159.5 160.3,157.9 162.0,156.3 163.7,154.6 165.4,152.9 167.2,151.1 168.9,149.3 170.6,147.5 172.3,145.6 174.0,143.7 175.8,141.8 177.5,139.8 179.2,137.9 180.9,135.9 182.6,133.9 184.3,131.8 186.1,129.8 187.8,127.7 189.5,125.7 191.2,123.6 192.9,121.6 194.7,119.5 196.4,117.5 198.1,115.4 199.8,113.4 201.5,111.4 203.2,109.4 205.0,107.5 206.7,105.5 208.4,103.6 210.1,101.8 211.8,99.9 213.6,98.2 215.3,96.4 217.0,94.7 218.7,93.0 220.4,91.4 222.2,89.9 223.9,88.3 225.6,86.9 227.3,85.5 229.0,84.1 230.8,82.9 232.5,81.6 234.2,80.5 235.9,79.4 237.6,78.4 239.3,77.4 241.1,76.5 242.8,75.7 244.5,75.0 246.2,74.3 247.9,73.7 249.7,73.1 251.4,72.6 253.1,72.2 254.8,71.9 256.5,71.7 258.2,71.5 260.0,71.4 261.7,71.3 263.4,71.4 265.1,71.5 266.8,71.7 268.6,71.9 270.3,72.2 272.0,72.6 273.7,73.1 275.4,73.7 277.2,74.3 278.9,75.0 280.6,75.7 282.3,76.5 284.0,77.4 285.8,78.4 287.5,79.4 289.2,80.5 290.9,81.6 292.6,82.9 294.3,84.1 296.1,85.5 297.8,86.9 299.5,88.3 301.2,89.9 302.9,91.4 304.7,93.0 306.4,94.7 308.1,96.4 309.8,98.2 311.5,99.9 313.2,101.8 315.0,103.6 316.7,105.5 318.4,107.5 320.1,109.4 321.8,111.4 323.6,113.4 325.3,115.4 327.0,117.5 328.7,119.5 330.4,121.6 332.2,123.6 333.9,125.7 335.6,127.7 337.3,129.8 339.0,131.8 340.8,133.9 342.5,135.9 344.2,137.9 345.9,139.8 347.6,141.8 349.3,143.7 351.1,145.6 352.8,147.5 354.5,149.3 356.2,151.1 357.9,152.9 359.7,154.6 361.4,156.3 363.1,157.9 364.8,159.5 366.5,161.0 368.2,162.5 370.0,164.0 371.7,165.4 373.4,166.7 375.1,168.0 376.8,169.3 378.6,170.5 380.3,171.7 382.0,172.8 383.7,173.8 385.4,174.8 387.2,175.8 388.9,176.7 390.6,177.6 392.3,178.5 394.0,179.2 395.8,180.0 397.5,180.7 399.2,181.4 400.9,182.0 402.6,182.6 404.3,183.2 406.1,183.7 407.8,184.2 409.5,184.6 411.2,185.1 412.9,185.5 414.7,185.8 416.4,186.2 418.1,186.5 419.8,186.8 421.5,187.1 423.2,187.3 425.0,187.6 426.7,187.8 428.4,188.0 430.1,188.2 431.8,188.3 433.6,188.5 435.3,188.6 437.0,188.7 438.7,188.9 440.4,189.0 442.2,189.1 443.9,189.2 445.6,189.2 447.3,189.3 449.0,189.4 450.8,189.4 452.5,189.5 454.2,189.5 455.9,189.6 457.6,189.6 459.3,189.6 461.1,189.7 462.8,189.7 464.5,189.7 466.2,189.7 467.9,189.8 469.7,189.8 471.4,189.8 473.1,189.8 474.8,189.8 476.5,189.8 478.2,189.8 480.0,189.8 481.7,189.8 483.4,189.8 485.1,189.8 486.8,189.8 488.6,189.8 490.3,189.8 492.0,189.8" fill="none" style="stroke:var(--carac)" stroke-width="1.8" opacity="0.69"/>
+  <polyline points="52.0,177.7 53.7,177.6 55.4,177.5 57.2,177.3 58.9,177.2 60.6,177.0 62.3,176.8 64.0,176.6 65.8,176.4 67.5,176.2 69.2,176.0 70.9,175.7 72.6,175.4 74.3,175.1 76.1,174.8 77.8,174.5 79.5,174.2 81.2,173.9 82.9,173.5 84.7,173.1 86.4,172.7 88.1,172.3 89.8,171.9 91.5,171.5 93.2,171.0 95.0,170.6 96.7,170.1 98.4,169.6 100.1,169.1 101.8,168.6 103.6,168.1 105.3,167.5 107.0,167.0 108.7,166.4 110.4,165.8 112.2,165.2 113.9,164.6 115.6,164.0 117.3,163.4 119.0,162.7 120.8,162.1 122.5,161.4 124.2,160.8 125.9,160.1 127.6,159.4 129.3,158.7 131.1,158.0 132.8,157.3 134.5,156.5 136.2,155.8 137.9,155.1 139.7,154.3 141.4,153.6 143.1,152.8 144.8,152.0 146.5,151.2 148.2,150.5 150.0,149.7 151.7,148.9 153.4,148.1 155.1,147.3 156.8,146.5 158.6,145.7 160.3,144.9 162.0,144.1 163.7,143.3 165.4,142.5 167.2,141.7 168.9,140.9 170.6,140.1 172.3,139.3 174.0,138.5 175.8,137.7 177.5,136.9 179.2,136.1 180.9,135.3 182.6,134.6 184.3,133.8 186.1,133.0 187.8,132.3 189.5,131.5 191.2,130.8 192.9,130.0 194.7,129.3 196.4,128.6 198.1,127.9 199.8,127.2 201.5,126.5 203.2,125.8 205.0,125.2 206.7,124.5 208.4,123.9 210.1,123.3 211.8,122.7 213.6,122.1 215.3,121.5 217.0,121.0 218.7,120.5 220.4,119.9 222.2,119.4 223.9,118.9 225.6,118.5 227.3,118.0 229.0,117.6 230.8,117.2 232.5,116.8 234.2,116.4 235.9,116.1 237.6,115.8 239.3,115.5 241.1,115.2 242.8,114.9 244.5,114.7 246.2,114.5 247.9,114.3 249.7,114.1 251.4,113.9 253.1,113.8 254.8,113.7 256.5,113.6 258.2,113.6 260.0,113.5 261.7,113.5 263.4,113.5 265.1,113.6 266.8,113.6 268.6,113.7 270.3,113.8 272.0,113.9 273.7,114.1 275.4,114.3 277.2,114.5 278.9,114.7 280.6,114.9 282.3,115.2 284.0,115.5 285.8,115.8 287.5,116.1 289.2,116.4 290.9,116.8 292.6,117.2 294.3,117.6 296.1,118.0 297.8,118.5 299.5,118.9 301.2,119.4 302.9,119.9 304.7,120.5 306.4,121.0 308.1,121.5 309.8,122.1 311.5,122.7 313.2,123.3 315.0,123.9 316.7,124.5 318.4,125.2 320.1,125.8 321.8,126.5 323.6,127.2 325.3,127.9 327.0,128.6 328.7,129.3 330.4,130.0 332.2,130.8 333.9,131.5 335.6,132.3 337.3,133.0 339.0,133.8 340.8,134.6 342.5,135.3 344.2,136.1 345.9,136.9 347.6,137.7 349.3,138.5 351.1,139.3 352.8,140.1 354.5,140.9 356.2,141.7 357.9,142.5 359.7,143.3 361.4,144.1 363.1,144.9 364.8,145.7 366.5,146.5 368.2,147.3 370.0,148.1 371.7,148.9 373.4,149.7 375.1,150.5 376.8,151.2 378.6,152.0 380.3,152.8 382.0,153.6 383.7,154.3 385.4,155.1 387.2,155.8 388.9,156.5 390.6,157.3 392.3,158.0 394.0,158.7 395.8,159.4 397.5,160.1 399.2,160.8 400.9,161.4 402.6,162.1 404.3,162.7 406.1,163.4 407.8,164.0 409.5,164.6 411.2,165.2 412.9,165.8 414.7,166.4 416.4,167.0 418.1,167.5 419.8,168.1 421.5,168.6 423.2,169.1 425.0,169.6 426.7,170.1 428.4,170.6 430.1,171.0 431.8,171.5 433.6,171.9 435.3,172.3 437.0,172.7 438.7,173.1 440.4,173.5 442.2,173.9 443.9,174.2 445.6,174.5 447.3,174.8 449.0,175.1 450.8,175.4 452.5,175.7 454.2,176.0 455.9,176.2 457.6,176.4 459.3,176.6 461.1,176.8 462.8,177.0 464.5,177.2 466.2,177.3 467.9,177.5 469.7,177.6 471.4,177.7 473.1,177.8 474.8,177.8 476.5,177.9 478.2,177.9 480.0,177.9 481.7,178.0 483.4,177.9 485.1,177.9 486.8,177.9 488.6,177.8 490.3,177.8 492.0,177.7" fill="none" style="stroke:var(--carac)" stroke-width="1.8" opacity="0.56"/>
+  <polyline points="52.0,150.8 53.7,150.8 55.4,150.8 57.2,150.8 58.9,150.8 60.6,150.8 62.3,150.7 64.0,150.7 65.8,150.7 67.5,150.6 69.2,150.6 70.9,150.6 72.6,150.5 74.3,150.5 76.1,150.5 77.8,150.4 79.5,150.4 81.2,150.3 82.9,150.3 84.7,150.2 86.4,150.2 88.1,150.1 89.8,150.1 91.5,150.0 93.2,150.0 95.0,149.9 96.7,149.8 98.4,149.8 100.1,149.7 101.8,149.6 103.6,149.6 105.3,149.5 107.0,149.4 108.7,149.4 110.4,149.3 112.2,149.2 113.9,149.2 115.6,149.1 117.3,149.0 119.0,148.9 120.8,148.8 122.5,148.8 124.2,148.7 125.9,148.6 127.6,148.5 129.3,148.4 131.1,148.4 132.8,148.3 134.5,148.2 136.2,148.1 137.9,148.0 139.7,147.9 141.4,147.8 143.1,147.8 144.8,147.7 146.5,147.6 148.2,147.5 150.0,147.4 151.7,147.3 153.4,147.2 155.1,147.1 156.8,147.1 158.6,147.0 160.3,146.9 162.0,146.8 163.7,146.7 165.4,146.6 167.2,146.5 168.9,146.5 170.6,146.4 172.3,146.3 174.0,146.2 175.8,146.1 177.5,146.0 179.2,146.0 180.9,145.9 182.6,145.8 184.3,145.7 186.1,145.6 187.8,145.6 189.5,145.5 191.2,145.4 192.9,145.3 194.7,145.3 196.4,145.2 198.1,145.1 199.8,145.1 201.5,145.0 203.2,144.9 205.0,144.9 206.7,144.8 208.4,144.7 210.1,144.7 211.8,144.6 213.6,144.6 215.3,144.5 217.0,144.5 218.7,144.4 220.4,144.4 222.2,144.3 223.9,144.3 225.6,144.2 227.3,144.2 229.0,144.1 230.8,144.1 232.5,144.1 234.2,144.0 235.9,144.0 237.6,144.0 239.3,143.9 241.1,143.9 242.8,143.9 244.5,143.9 246.2,143.8 247.9,143.8 249.7,143.8 251.4,143.8 253.1,143.8 254.8,143.8 256.5,143.8 258.2,143.8 260.0,143.7 261.7,143.7 263.4,143.7 265.1,143.8 266.8,143.8 268.6,143.8 270.3,143.8 272.0,143.8 273.7,143.8 275.4,143.8 277.2,143.8 278.9,143.9 280.6,143.9 282.3,143.9 284.0,143.9 285.8,144.0 287.5,144.0 289.2,144.0 290.9,144.1 292.6,144.1 294.3,144.1 296.1,144.2 297.8,144.2 299.5,144.3 301.2,144.3 302.9,144.4 304.7,144.4 306.4,144.5 308.1,144.5 309.8,144.6 311.5,144.6 313.2,144.7 315.0,144.7 316.7,144.8 318.4,144.9 320.1,144.9 321.8,145.0 323.6,145.1 325.3,145.1 327.0,145.2 328.7,145.3 330.4,145.3 332.2,145.4 333.9,145.5 335.6,145.6 337.3,145.6 339.0,145.7 340.8,145.8 342.5,145.9 344.2,146.0 345.9,146.0 347.6,146.1 349.3,146.2 351.1,146.3 352.8,146.4 354.5,146.5 356.2,146.5 357.9,146.6 359.7,146.7 361.4,146.8 363.1,146.9 364.8,147.0 366.5,147.1 368.2,147.1 370.0,147.2 371.7,147.3 373.4,147.4 375.1,147.5 376.8,147.6 378.6,147.7 380.3,147.8 382.0,147.8 383.7,147.9 385.4,148.0 387.2,148.1 388.9,148.2 390.6,148.3 392.3,148.4 394.0,148.4 395.8,148.5 397.5,148.6 399.2,148.7 400.9,148.8 402.6,148.8 404.3,148.9 406.1,149.0 407.8,149.1 409.5,149.2 411.2,149.2 412.9,149.3 414.7,149.4 416.4,149.4 418.1,149.5 419.8,149.6 421.5,149.6 423.2,149.7 425.0,149.8 426.7,149.8 428.4,149.9 430.1,150.0 431.8,150.0 433.6,150.1 435.3,150.1 437.0,150.2 438.7,150.2 440.4,150.3 442.2,150.3 443.9,150.4 445.6,150.4 447.3,150.5 449.0,150.5 450.8,150.5 452.5,150.6 454.2,150.6 455.9,150.6 457.6,150.7 459.3,150.7 461.1,150.7 462.8,150.8 464.5,150.8 466.2,150.8 467.9,150.8 469.7,150.8 471.4,150.8 473.1,150.9 474.8,150.9 476.5,150.9 478.2,150.9 480.0,150.9 481.7,150.9 483.4,150.9 485.1,150.9 486.8,150.9 488.6,150.9 490.3,150.9 492.0,150.8" fill="none" style="stroke:var(--carac)" stroke-width="1.8" opacity="0.43"/>
+  <g font-family="sans-serif" font-size="13" style="fill:var(--ink-soft)">
+    <text x="58.0" y="71.1">máximo inicial</text>
+    <text x="58.0" y="182.9">mínimo inicial</text>
+    <text x="496.0" y="151.3" style="fill:var(--choque)">média</text>
+    <text x="516" y="209.9" text-anchor="end">x</text>
+  </g>
+</svg>
+<figcaption>O calor no círculo partindo de uma caixa. Cada perfil seguinte é mais liso e mais baixo no topo, mais alto no fundo: a faixa entre o mínimo e o máximo só encolhe, e tudo converge para a média. Nenhuma curva sai da faixa inicial — é o princípio do máximo.</figcaption>
+</figure>
+
+
+      <h2 id="grafo" data-toc="No grafo">No grafo, é uma linha</h2>
+      <p>Seja $i$ um vértice onde $u$ atinge o máximo num dado instante. O laplaciano ali é
+      $$(Lu)_i=\sum_{j\sim i}c_{ij}\,(u_i-u_j)\ \ge\ 0,$$
+      porque todo vizinho está abaixo (ou no mesmo nível) e os pesos $c_{ij}$ são positivos. Como $\dot u_i=-c\,(Lu)_i$, segue
+      $$\boxed{\,\dot u_i\le0\ \text{no vértice mais quente.}\,}$$
+      <b>O mais quente só pode esfriar.</b> No vértice mais frio o sinal se inverte e ele só pode esquentar. Na metáfora dos tanques da <a href="difusao-grafos.html">página da difusão</a>, é evidente: o tanque mais cheio tem todos os canos descendo para fora dele, então só perde água.</p>
+      <p>Daí sai o enunciado. A função $M(t)=\max_i u_i(t)$ não cresce e $m(t)=\min_i u_i(t)$ não decresce, então a solução fica presa na faixa inicial para sempre. Três consequências que vale destacar:</p>
+      <ul>
+        <li><b>Nenhum extremo novo.</b> Não aparece um pico onde não havia, nem uma oscilação que ultrapasse o dado. Difusão não faz <em>overshoot</em>.</li>
+        <li><b>Positividade.</b> Se $u(0)\ge0$ — uma concentração, uma temperatura absoluta —, então $u(t)\ge0$ sempre. O modelo não produz valores sem sentido físico.</li>
+        <li><b>Rigidez do empate.</b> Se em algum instante $\dot u_i=0$ no máximo, todos os vizinhos estão no mesmo nível; repetindo o argumento pelo grafo conexo, $u$ é constante. Ou o máximo cai, ou tudo já está em equilíbrio.</li>
+      </ul>
+
+      <h2 id="esquema" data-toc="O esquema explícito">O esquema explícito: estabilidade é ser uma média</h2>
+      <p>O método de Euler explícito para $\dot u=-Lu$ dá
+      $$u_i^{n+1}=u_i^n-r\sum_{j\sim i}(u_i^n-u_j^n)=\big(1-r\,d_i\big)\,u_i^n+r\sum_{j\sim i}u_j^n,\qquad r=c\,\Delta t,$$
+      com $d_i$ o grau do vértice (na discretização do calor num anel com espaçamento $h$, $r=\Delta t/h^2$). Repare no que é essa expressão: os coeficientes do lado direito somam $1$. Se todos forem <b>não negativos</b>, isto é, se
+      $$r\,d_i\le1,$$
+      o valor novo é uma <b>média ponderada</b> dos valores antigos — e uma média nunca sai da faixa dos números que ela mistura. O esquema herda o princípio do máximo exatamente sob essa condição. No anel, $d_i=2$, e a condição é a conhecida $r\le\tfrac12$.</p>
+      <p>Passando disso, o coeficiente central $1-r\,d_i$ fica negativo e a mistura deixa de ser média: o esquema pode fabricar valores fora da faixa, e é o que ele faz. No anel, aplique o passo ao modo serrilhado $u_j=(-1)^j$: cada vizinho vale o oposto, e
+      $$u^{n+1}=(1-4r)\,u^n.$$
+      Para $r>\tfrac12$ o fator $|1-4r|$ passa de $1$ e a serrilha cresce a cada passo, trocando de sinal — a instabilidade que a <a href="cfl.html">condição CFL</a> descreve é a mesma coisa que a violação do princípio do máximo discreto. Estabilidade, aqui, é literalmente a propriedade de ser uma média.</p>
+
+      <h2 id="continuo" data-toc="No contínuo">No contínuo, e por que Fourier não vê</h2>
+      <p>O argumento pontual tem a mesma cara. Num instante em que $u(\cdot,t)$ atinge um máximo interior em $x_0$, o cálculo de uma variável dá $u_{xx}(x_0,t)\le0$ (um máximo tem concavidade para baixo), e a equação diz
+      $$u_t(x_0,t)=u_{xx}(x_0,t)\le0.$$
+      O ponto mais quente só pode esfriar, como no grafo. Esse raciocínio é quase uma demonstração; o "quase" está no caso de igualdade, porque $u_t\le0$ num instante não impede, sozinho, que o máximo suba logo adiante. O truque clássico conserta: aplique o argumento a $v=u-\varepsilon t$, que satisfaz $v_t-v_{xx}=-\varepsilon&lt;0$ e portanto não pode ter máximo interior algum; depois faça $\varepsilon\to0$.</p>
+
+      <aside class="box">
+        <p class="tag">O que a série de Fourier não enxerga</p>
+        <p>Pela fórmula da <a href="calor-circulo.html#nucleo">página anterior</a>, $u(\cdot,t)=K_t*f$ com $K_t$ de média $1$. Se soubermos que $K_t\ge0$, o princípio do máximo sai de imediato: uma convolução com um núcleo positivo de média $1$ é uma <em>média ponderada</em> dos valores de $f$ — a mesma frase do esquema explícito. Acontece que a positividade de
+        $$K_t(x)=1+2\sum_{k\ge1}e^{-k^2t}\cos kx$$
+        não é visível nessa série: os termos alternam de sinal conforme $x$, e só com trabalho (é uma função teta de Jacobi) se mostra que a soma nunca é negativa. Fourier dá o decaimento da energia em uma linha e esconde a positividade; a conta pontual dá a positividade e não diz nada sobre modos.</p>
+        <p>Há um caminho bonito ligando as duas lentes: o esquema explícito com $r\le\tfrac12$ produz, a cada passo, uma média ponderada com pesos não negativos, e o núcleo discreto correspondente é não negativo. Fazendo $h\to0$ com $r$ fixo, esses núcleos convergem para $K_t$ — e um limite de funções não negativas é não negativo. O discreto paga de volta o que deve ao contínuo.</p>
+      </aside>
+
+      <h2 id="consequencias" data-toc="O que ele dá">O que ele dá de brinde</h2>
+      <p>O princípio do máximo não é uma curiosidade: é a ferramenta que dá as três coisas que se quer de um problema bem posto, em uma norma que a energia não alcança.</p>
+      <ul>
+        <li><b>Unicidade.</b> Se $u$ e $v$ resolvem o calor com o mesmo dado inicial, a diferença $w=u-v$ resolve com dado zero; pelo princípio, $0\le w\le0$, logo $w\equiv0$.</li>
+        <li><b>Estabilidade na norma do máximo.</b> Aplicado à diferença de soluções com dados diferentes, ele dá
+        $$\max_x|u(x,t)-v(x,t)|\ \le\ \max_x|f(x)-g(x)|:$$
+        um erro no dado nunca é amplificado. Compare com o argumento de energia, que dá o mesmo em norma $L^2$ — aqui a garantia é ponto a ponto, que costuma ser o que interessa na prática.</li>
+        <li><b>Comparação (monotonia).</b> Se $f\le g$ em toda parte, então $u\le v$ para todo $t$. Soluções não se cruzam: a ordem inicial é preservada.</li>
+      </ul>
+      <p>E ele falha, como tem que falhar, para trás no tempo. A função $u(x,t)=e^{t}\cos x$ resolve $u_t=-u_{xx}$ e começa dentro de $[-1,1]$, mas cresce sem limite (exercício 5). É a mesma irreversibilidade que a série mostrou com o fator $e^{+k^2t}$, vista pela outra lente.</p>
+
+      <h2 id="adiante" data-toc="Para onde vai">Para onde isso vai</h2>
+      <p>O princípio do máximo é, no fundo, um fato sobre o laplaciano, não sobre o tempo. Em equilíbrio, quando $u_t=0$, ele diz que uma função com $\Delta u\ge0$ não tem máximo interior — o que está por trás da propriedade do valor médio das funções harmônicas e do princípio do máximo para equações elípticas.</p>
+      <p>E ele reaparece com outro nome na trilha variacional. A unicidade das <a href="hopf-lax.html">soluções de viscosidade</a> de Hamilton–Jacobi vem de um <b>princípio de comparação</b>, que é este enunciado em outra roupa: se duas soluções estão ordenadas no começo, continuam ordenadas. A própria definição de solução de viscosidade — testar com funções suaves que tocam $u$ por cima ou por baixo — é feita para que esse tipo de argumento funcione sem derivadas.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O mínimo também</p>
+        <p>Refaça o argumento do grafo para o vértice mais frio e conclua que $m(t)=\min_i u_i(t)$ é não decrescente. Depois explique, em uma frase, por que os dois juntos dizem que a amplitude $M(t)-m(t)$ nunca aumenta.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>No vértice $i$ de mínimo, todo vizinho está acima, então $(Lu)_i=\sum_j c_{ij}(u_i-u_j)\le0$ e $\dot u_i=-c(Lu)_i\ge0$: o mais frio só pode esquentar. Logo $m$ não decresce.</p>
+          <p>Como $M$ não cresce e $m$ não decresce, a diferença $M-m$ não cresce: a faixa ocupada pela solução só encolhe. É a versão em norma do máximo do que a energia diz em norma $L^2$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O passo grande demais fabrica extremos</p>
+        <p>No anel com $N$ par, aplique um passo do esquema explícito ao dado serrilhado $u_j=(-1)^j$. (a) Mostre que $u^{n+1}=(1-4r)u^n$. (b) Para que $r$ o esquema respeita o princípio do máximo? (c) Com $r=0{,}6$, quantos passos até a amplitude dobrar?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Para a serrilha, os dois vizinhos de $j$ valem $-u_j$, então $\sum_{j\sim i}(u_i-u_j)=2(u_j-(-u_j))=4u_j$ e $u_j^{n+1}=u_j^n-4r\,u_j^n$.</p>
+          <p>(b) O fator é $|1-4r|$, que é $\le1$ exatamente quando $0\le r\le\tfrac12$ — a mesma condição que torna os coeficientes do passo não negativos. Para $r\le\tfrac12$ a amplitude não cresce; acima disso, cresce.</p>
+          <p>(c) Com $r=0{,}6$, $|1-4r|=1{,}4$. Dobrar exige $1{,}4^n\ge2$, isto é, $n\ge\ln2/\ln1{,}4\approx2{,}06$: três passos. A instabilidade não é lenta.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Unicidade de graça</p>
+        <p>Mostre que o problema do calor no círculo tem no máximo uma solução (suave) com um dado inicial dado, usando só o princípio do máximo. Depois obtenha o mesmo resultado pelo argumento de energia e compare o que cada um exige.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Se $u$ e $v$ resolvem com o mesmo $f$, então $w=u-v$ resolve o calor com dado zero. Pelo princípio, $\min_x 0\le w\le\max_x 0$, isto é, $w\equiv0$.</p>
+          <p>Por energia: $\frac{d}{dt}\tfrac12\|w\|^2=\langle w,w_{xx}\rangle=-\|w_x\|^2\le0$, então $\|w(t)\|\le\|w(0)\|=0$. Os dois funcionam; o de energia pede uma integração por partes (e que as integrais façam sentido), o do máximo pede que exista um ponto de máximo, o que no círculo é de graça por compacidade. Na reta inteira, nenhum dos dois é automático, e aí é preciso impor crescimento controlado no infinito.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Soluções não se cruzam</p>
+        <p>Sejam $u$ e $v$ soluções do calor com dados $f\le g$. Mostre que $u(x,t)\le v(x,t)$ para todo $t\ge0$. Dê um exemplo em que a desigualdade é estrita em $t>0$ mesmo começando com $f=g$ em alguns pontos.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>A diferença $w=v-u$ resolve o calor com dado $g-f\ge0$. Pelo princípio do máximo aplicado ao mínimo, $w(x,t)\ge\min_x(g-f)\ge0$. Logo $u\le v$ sempre.</p>
+          <p>Exemplo: $f\equiv0$ e $g$ uma caixa não negativa que vale zero em metade do círculo. Em $t=0$ elas coincidem nessa metade, mas para $t>0$ o calor de $g$ se espalha por todo o círculo (o núcleo é positivo em toda parte), e aí $v>0=u$ em todo ponto. A difusão tem velocidade de propagação infinita: o que acontece num pedaço é sentido em todos os outros imediatamente, por menor que seja o efeito.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Para trás, nada feito</p>
+        <p>Verifique que $u(x,t)=e^{t}\cos x$ resolve $u_t=-u_{xx}$ com $u(x,0)=\cos x$. Por que isso não contradiz o princípio do máximo? O que a conta diz sobre resolver o calor de trás para a frente?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$u_t=e^t\cos x$ e $-u_{xx}=+e^t\cos x$, então a equação vale. O dado inicial está em $[-1,1]$, mas $\max_x u(x,t)=e^t\to\infty$: a faixa inicial não é respeitada.</p>
+          <p>Não há contradição porque a equação não é a do calor — o sinal do laplaciano está trocado, e é esse sinal que faz o argumento funcionar. No máximo interior, $u_{xx}\le0$ dá $u_t\le0$ para $u_t=u_{xx}$ e $u_t\ge0$ para $u_t=-u_{xx}$: nesta, o mais quente esquenta ainda mais.</p>
+          <p>Como $u_t=-u_{xx}$ é a equação do calor com o tempo invertido, a conta diz que ir para trás amplifica os extremos em vez de aplainá-los. Com $\cos(Nx)$ no lugar de $\cos x$ o crescimento é $e^{N^2t}$, que é a mesma explosão vista na série.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="calor-circulo.html">O calor no círculo</a></li>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li class="soon">Soluções de viscosidade (em breve)</li>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+</body>
+</html>

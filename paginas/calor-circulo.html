@@ -70,7 +70,7 @@
       <h2 id="nucleo" data-toc="O núcleo do calor">O núcleo do calor</h2>
       <p>A solução multiplicou cada coeficiente por $e^{-k^2t}$. Pela propriedade "<a href="serie-fourier.html#propriedades">convolução vira produto</a>", multiplicar os coeficientes é convolver as funções. Então existe uma função $K_t$, com coeficientes exatamente $e^{-k^2t}$, tal que
       $$u(\cdot,t)=K_t*f,\qquad K_t(x)=\sum_{k\in\mathbb Z}e^{-k^2t}\,e^{ikx}=1+2\sum_{k\ge1}e^{-k^2t}\cos kx.$$
-      É o <b>núcleo do calor no círculo</b>. A segunda forma, com cossenos, mostra que ele é real e par. Sua média é $1$, porque $c_0(K_t)=1$ — por isso a convolução preserva a média. Ele é positivo, embora isso não seja óbvio na série (a fórmula acima é uma função teta de Jacobi).</p>
+      É o <b>núcleo do calor no círculo</b>. A segunda forma, com cossenos, mostra que ele é real e par. Sua média é $1$, porque $c_0(K_t)=1$ — por isso a convolução preserva a média. Ele é positivo, embora isso não seja óbvio na série (a fórmula acima é uma função teta de Jacobi) — e dessa positividade sai o <a href="principio-maximo.html">princípio do máximo</a>, que é o assunto da próxima caixa.</p>
       <p>Os dois extremos valem a pena. Quando $t\to\infty$, só o termo $k=0$ sobrevive e $K_t\to1$: convolver com a função constante $1$ é tomar a média, que é o decaimento da seção anterior. Quando $t\to0^+$, todos os coeficientes tendem a $1$, a série deixa de convergir como função e $K_t$ concentra toda a sua massa perto de $x=0$: ela é uma <em>aproximação da identidade</em>, e $K_t*f\to f$. Na reta, em vez do círculo, essa mesma conta dá a gaussiana $\frac{1}{\sqrt{4\pi t}}e^{-x^2/4t}$ — é a caixinha do calor na reta <small>(em breve)</small>.</p>
 
       <aside class="box">

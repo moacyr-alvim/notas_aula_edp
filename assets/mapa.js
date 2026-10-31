@@ -71,6 +71,8 @@
       desc: "O shift S, a base de Fourier e a convolução circular virando produto ponto a ponto. Com Python editável." },
     { id: "calorf", lane: "disc", col: 4, label: "O calor no grafo\nem anel, com Fourier", href: "paginas/calor-fourier.html", trails: ["fdiscreto", "calor"],
       desc: "O laplaciano do grafo em anel é circulante: Fourier desacopla as EDOs e a solução é uma convolução. Com Python editável." },
+    { id: "maxp", lane: "calor", col: 5, row: 1, label: "O princípio\ndo máximo", href: "paginas/principio-maximo.html", trails: ["calor"],
+      desc: "O calor nunca cria um valor novo. Prova de uma linha no grafo, o esquema explícito como média ponderada, o caso contínuo e o que a série de Fourier esconde." },
     { id: "serief", lane: "disc", col: 5, label: "Série de\nFourier", href: "paginas/serie-fourier.html", trails: ["fdiscreto", "calor"],
       desc: "As funções e^{ikx} como base ortonormal, os coeficientes como produto interno, decaimento e suavidade, Gibbs e o aliasing da DFT." },
     { id: "calorcirc", lane: "calor", col: 4, label: "O calor\nno círculo", href: "paginas/calor-circulo.html", trails: ["calor", "fdiscreto"],
@@ -103,6 +105,7 @@
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["dft", "serief"], ["anel", "serief"],
     ["serief", "calorcirc"], ["sep", "calorcirc"], ["calorcirc", "fourier"],
+    ["calorcirc", "maxp"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 

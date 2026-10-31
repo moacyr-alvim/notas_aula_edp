@@ -72,7 +72,8 @@
       <ul>
         <li><b>Nada se perde.</b> As linhas de $L$ somam zero, então $\frac{d}{dt}\sum_i u_i=0$: a quantidade só é redistribuída.</li>
         <li><b>Simétrica e positiva.</b> $u^\top Lu=\|Bu\|^2=\sum_{i\sim j}(u_i-u_j)^2\ge0$. Os autovalores são reais, $0=\lambda_1\le\lambda_2\le\dots\le\lambda_n$, e os autovetores são ortogonais. O autovalor $0$ vem do vetor constante: $L\mathbf 1=0$.</li>
-        <li><b>Tudo se alisa.</b> $\frac{d}{dt}\tfrac12\|u\|^2=-c\,u^\top Lu\le0$: as diferenças só diminuem.</li>
+        <li><b>Nada de extremos novos.</b> No vértice mais quente todos os vizinhos estão abaixo, então $(Lu)_i\ge0$ e $\dot u_i\le0$: o mais quente só pode esfriar, e o mais frio só pode esquentar. É o <a href="principio-maximo.html">princípio do máximo</a>, com as suas consequências.</li>
+<li><b>Tudo se alisa.</b> $\frac{d}{dt}\tfrac12\|u\|^2=-c\,u^\top Lu\le0$: as diferenças só diminuem.</li>
       </ul>
 
       <h2 id="solucao" data-toc="A solução, modo a modo">A solução, modo a modo</h2>
