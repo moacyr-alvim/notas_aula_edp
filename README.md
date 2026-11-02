@@ -43,6 +43,7 @@ index.html            mapa de conceitos (página inicial)
 paginas/              uma página por tópico (HTML escrito à mão)
 py/                   os códigos Python das células (edite aqui; o site carrega esses arquivos)
                       calor_circulo_*.py resolve o calor no círculo com FFT (espectral x diferenças finitas)
+                      burgers_viscosa_*.py pseudoespectral e Cole–Hopf para Burgers viscosa
 assets/
   style.css           visual (claro/escuro automático)
   site.js             tema, índice lateral, fórmulas

@@ -77,6 +77,8 @@
       desc: "As funções e^{ikx} como base ortonormal, os coeficientes como produto interno, decaimento e suavidade, Gibbs e o aliasing da DFT." },
     { id: "calorcirc", lane: "calor", col: 4, label: "O calor\nno círculo", href: "paginas/calor-circulo.html", trails: ["calor", "fdiscreto"],
       desc: "A EDP vira infinitas EDOs: cada modo decai como e^{-k²t}. Suavização instantânea, decaimento para a média, irreversibilidade e o núcleo do calor. Com Python." },
+    { id: "edpsf", lane: "disc", col: 5, row: 1, label: "EDPs lineares\ncom Fourier", href: "paginas/edps-fourier.html", trails: ["fdiscreto", "calor"],
+      desc: "Exercícios resolvidos: transporte, calor com fonte e reação, a corda de comprimento ℓ, onda amortecida, Hadamard, e Burgers viscosa por Cole–Hopf." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -105,6 +107,7 @@
     ["conv", "dft"], ["dft", "calorf"], ["anel", "calorf"],
     ["dft", "serief"], ["anel", "serief"],
     ["serief", "calorcirc"], ["sep", "calorcirc"], ["calorcirc", "fourier"],
+    ["serief", "edpsf"], ["calorcirc", "edpsf"],
     ["calorcirc", "maxp"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];

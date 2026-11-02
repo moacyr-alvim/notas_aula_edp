@@ -83,6 +83,7 @@ need = {
     "paginas/classificacao.html": ["tema", "toc"],
     "paginas/hamilton-jacobi.html": ["demo-lei", "l-fluxo", "l-uL", "l-uR", "l-t", "l-play", "l-alt", "l-readout", "l-flux", "l-prof", "l-xt", "tema", "toc"],
     "paginas/calor-circulo.html": ["tema", "toc"],
+    "paginas/edps-fourier.html": ["tema", "toc"],
     "paginas/principio-maximo.html": ["tema", "toc"],
     "paginas/serie-fourier.html": ["demo-sf", "sf-dado", "sf-n", "sf-nv", "sf-play", "sf-readout", "sf-perfil", "sf-espectro", "tema", "toc"],
     "paginas/separacao-variaveis.html": ["demo-sep", "sv-preset", "sv-n", "sv-nv", "sv-t", "sv-tv", "sv-play", "sv-readout", "sv-u-canvas", "sv-a-canvas", "tema", "toc"],

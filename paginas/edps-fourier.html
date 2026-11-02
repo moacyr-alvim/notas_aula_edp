@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EDPs lineares com Fourier — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>EDPs lineares com Fourier: uma série de exercícios</h1>
+        <p class="lede">Expandir, resolver a EDO de cada modo, remontar. A receita vale para transporte, calor com fonte, corda vibrante, onda amortecida e Laplace — e, no fim, para a Burgers viscosa, que não é linear mas se deixa linearizar.</p>
+        <p class="meta">Usa a <a href="serie-fourier.html">série de Fourier</a> e o método de <a href="calor-circulo.html">o calor no círculo</a>. Soluções recolhíveis; a última parte tem uma célula de Python.</p>
+      </header>
+
+
+      <h2 id="receita" data-toc="A receita">A receita, em três passos</h2>
+      <p>Todas as equações desta página são lineares e de coeficientes constantes, e por isso a base de Fourier as diagonaliza. O procedimento é sempre o mesmo:</p>
+      <ol>
+        <li><b>Expandir.</b> Escreva a incógnita como série, com os coeficientes dependendo do tempo (ou da outra variável): $u(x,t)=\sum_k c_k(t)e^{ikx}$.</li>
+        <li><b>Resolver a EDO de cada modo.</b> Cada derivada em $x$ vira um fator, e a EDP vira uma família de equações ordinárias independentes, uma para cada $k$.</li>
+        <li><b>Remontar.</b> Some a série de volta e leia o que ela diz: o que decai, o que oscila, o que cresce.</li>
+      </ol>
+      <table class="tabela">
+        <thead><tr><th>Operador</th><th>Vira</th><th>Efeito no modo $k$</th></tr></thead>
+        <tbody>
+          <tr><td>$\partial_x$</td><td>$ik$</td><td>gira a fase em $90^\circ$ e multiplica por $|k|$</td></tr>
+          <tr><td>$\partial_x^2$</td><td>$-k^2$</td><td>fator real negativo: amortece</td></tr>
+          <tr><td>$\partial_x^3$</td><td>$-ik^3$</td><td>imaginário puro: dispersa</td></tr>
+          <tr><td>$u\mapsto u*g$</td><td>$c_k\mapsto c_k\,\hat g_k$</td><td>filtra cada modo</td></tr>
+          <tr><td>$u\mapsto u^2$</td><td>convolução</td><td><b>mistura</b> os modos (não linear)</td></tr>
+        </tbody>
+      </table>
+      <p>A última linha é o aviso: enquanto a equação for linear, os modos não conversam entre si e tudo é álgebra. Quando aparece um produto, eles passam a conversar, e aí a história muda — é o assunto do último exercício.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Transporte periódico: o que <em>não</em> acontece</p>
+        <p>Resolva $u_t+c\,u_x=0$ no círculo, com $u(x,0)=f(x)$, expandindo em série. (a) Escreva $c_k(t)$. (b) O que acontece com $|c_k(t)|$? (c) Some a série e reconheça a solução. (d) Compare com o calor: por que aqui não há suavização nem decaimento?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Substituindo, $\dot c_k+c\,(ik)c_k=0$, logo $c_k(t)=c_k(f)\,e^{-ikct}$.</p>
+          <p>(b) $|e^{-ikct}|=1$, então $|c_k(t)|=|c_k(f)|$ para sempre: <b>nenhum modo perde amplitude</b>. Só as fases giram, e cada modo gira a uma velocidade proporcional a $k$.</p>
+          <p>(c) Pela propriedade da translação, $e^{-ikct}c_k(f)$ são os coeficientes de $f(\cdot-ct)$. Somando, $u(x,t)=f(x-ct)$ — a solução que o método das características já tinha dado, agora saindo da álgebra dos modos.</p>
+          <p>(d) No calor o fator é $e^{-k^2t}$, real e menor que $1$, e esmaga os modos altos: por isso suaviza e decai. Aqui o fator tem módulo $1$: a equação só <em>transporta</em> informação, não a destrói. A irreversibilidade do calor e a reversibilidade do transporte estão escritas no módulo do multiplicador.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Calor com fonte, e calor com reação</p>
+        <p>No círculo: (a) resolva $u_t=u_{xx}+g(x)$ com $g$ dada e independente do tempo, e diga quando existe estado estacionário; (b) resolva $u_t=u_{xx}+a\,u$ com $a>0$ constante, e descubra quais modos crescem.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) O modo $k$ satisfaz $\dot c_k=-k^2c_k+g_k$, uma EDO linear de primeira ordem. Para $k\ne0$,
+          $$c_k(t)=\frac{g_k}{k^2}+\Big(c_k(0)-\frac{g_k}{k^2}\Big)e^{-k^2t},$$
+          que tende ao estacionário $g_k/k^2$. Para $k=0$ não há amortecimento: $\dot c_0=g_0$, logo $c_0(t)=c_0(0)+g_0\,t$. A média cresce linearmente a menos que $g$ tenha média zero — num anel isolado, o calor injetado não tem para onde ir. <b>Existe estado estacionário exatamente quando $\int g=0$</b>, e ele é a solução de $u''=-g$ da <a href="calor-circulo.html#edo">página anterior</a>, a menos de constante.</p>
+          <p>(b) Agora $\dot c_k=(a-k^2)c_k$, logo $c_k(t)=c_k(0)e^{(a-k^2)t}$. Os modos com $k^2&lt;a$ <b>crescem</b>; os demais decaem. Se $a&lt;1$, só a média cresce e o perfil ainda se alisa; se $a>1$, modos com estrutura espacial crescem, e o que se vê emergir é o modo de maior taxa, $k=0$ à parte. É o mecanismo elementar por trás da formação de padrões: a difusão escolhe uma escala.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A corda de comprimento $\ell$ com as pontas presas</p>
+        <p>Resolva $u_{tt}=c^2u_{xx}$ em $[0,\ell]$ com $u(0,t)=u(\ell,t)=0$, $u(x,0)=f(x)$ e $u_t(x,0)=g(x)$.</p>
+        <p><b>Dica:</b> estenda $f$ e $g$ a $[-\ell,\ell]$ de forma <em>ímpar</em> e depois periodicamente, com período $2\ell$. Como a equação não muda sob $x\mapsto-x$, uma solução que começa ímpar permanece ímpar; e toda função ímpar e $2\ell$-periódica se anula em $x=0$ e em $x=\ell$. A condição de contorno deixa de ser imposta e passa a ser automática. Na série, sobram só os senos $\sin(n\pi x/\ell)$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Com a extensão ímpar, escreva $u(x,t)=\sum_{n\ge1}T_n(t)\sin\!\big(n\pi x/\ell\big)$. Como $\partial_x^2$ multiplica cada seno por $-(n\pi/\ell)^2$, a equação dá
+          $$\ddot T_n=-\omega_n^2\,T_n,\qquad \omega_n=\frac{n\pi c}{\ell},$$
+          o oscilador harmônico. Com $f=\sum b_n\sin(n\pi x/\ell)$ e $g=\sum d_n\sin(n\pi x/\ell)$,
+          $$u(x,t)=\sum_{n\ge1}\Big(b_n\cos\omega_nt+\frac{d_n}{\omega_n}\sin\omega_nt\Big)\sin\frac{n\pi x}{\ell}.$$</p>
+          <p>Três leituras. <b>Nada decai</b>: os fatores têm módulo limitado e não tendem a zero, e de fato a energia se conserva. <b>As frequências são múltiplas inteiras</b> de $\omega_1$, e é por isso que uma corda produz uma nota com harmônicos, e não um ruído. E escrevendo $\cos\omega_nt\,\sin(n\pi x/\ell)=\tfrac12[\sin(n\pi(x-ct)/\ell)+\sin(n\pi(x+ct)/\ell)]$, a série se separa em duas ondas que andam em sentidos opostos: é <a href="onda-dalembert.html">d'Alembert</a>, e as reflexões nas pontas são as imagens da extensão ímpar passando por ali.</p>
+          <p><small>Uma ressalva sobre a extensão: ela é um artifício, não um modelo — a corda não existe fora de $[0,\ell]$. E ela pode ser menos lisa que o dado: mesmo com $f$ suave em $[0,\ell]$, a extensão ímpar costuma ter quina nas pontas, e é isso que limita o decaimento dos $b_n$. Para contorno de Neumann (pontas livres) a extensão certa é a <em>par</em>, e aí sobram cossenos.</small></p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Dedilhada ou percutida: por que violão e piano soam diferente</p>
+        <p>Na corda do exercício anterior: (a) para a corda <b>dedilhada</b>, $g=0$ e $f$ triangular com pico de altura $h$ em $x=a$, mostre que
+        $$b_n=\frac{2h\,\ell^2}{\pi^2n^2\,a(\ell-a)}\,\sin\frac{n\pi a}{\ell}.$$
+        (b) O que acontece se a corda for dedilhada em $a=\ell/5$? (c) Para a corda <b>percutida</b>, $f=0$ e $g$ concentrada perto de $x=a$ (um martelo), estime como as amplitudes decaem com $n$ e compare com (a).</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) É a integral $b_n=\frac2\ell\int_0^\ell f\sin(n\pi x/\ell)dx$ em dois pedaços lineares; integrando por partes duas vezes em cada pedaço, os termos de borda se cancelam e sobra a expressão do enunciado. O essencial são os dois fatores: $1/n^2$, do bico do triângulo, e $\sin(n\pi a/\ell)$, que depende de <em>onde</em> se dedilha.</p>
+          <p>(b) Com $a=\ell/5$, o fator $\sin(n\pi/5)$ se anula para $n=5,10,15,\dots$: o quinto harmônico e seus múltiplos <b>somem</b>. A regra é geral e intuitiva: dedilhar num nó de um modo é não excitar aquele modo. É por isso que o ponto em que se toca a corda muda o timbre sem mudar a nota, e por isso que se evita tocar exatamente sobre nós importantes.</p>
+          <p>(c) Com $f=0$, a amplitude do modo $n$ é $d_n/\omega_n$. Para um martelo estreito perto de $a$, $d_n=\frac2\ell\int g\sin(n\pi x/\ell)dx\approx\frac{2v}\ell\sin(n\pi a/\ell)$, praticamente constante em $n$; dividindo por $\omega_n\propto n$, a amplitude cai como $1/n$. Contra $1/n^2$ da dedilhada, isso é bem mais energia nos harmônicos altos — um som mais brilhante. A diferença entre dar à corda uma <em>forma</em> e dar a ela uma <em>velocidade</em> está inteira nessa potência.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Onda amortecida: quem ainda oscila</p>
+        <p>Resolva $u_{tt}+2\gamma\,u_t=c^2u_{xx}$ na mesma corda, com $\gamma>0$. (a) Escreva a EDO do modo $n$ e resolva. (b) Quais modos oscilam e quais apenas decaem? (c) Todos os modos oscilantes decaem com a mesma taxa — qual? Compare com o calor.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\ddot T_n+2\gamma\dot T_n+\omega_n^2T_n=0$, o oscilador amortecido. As raízes são $-\gamma\pm\sqrt{\gamma^2-\omega_n^2}$.</p>
+          <p>(b) Se $\omega_n>\gamma$, as raízes são complexas e o modo oscila dentro de um envelope que decai; se $\omega_n&lt;\gamma$, são reais e negativas, e o modo só decai, sem oscilar. Como $\omega_n$ cresce com $n$, os modos <b>altos</b> é que oscilam, e os baixos podem estar superamortecidos — o contrário do que a intuição costuma sugerir. O limiar é $n>\gamma\ell/(\pi c)$.</p>
+          <p>(c) Para todos os modos oscilantes o envelope é $e^{-\gamma t}$: a taxa <b>não depende de $n$</b>. É uma diferença marcante em relação ao calor, onde a taxa $e^{-k^2t}$ cresce com o quadrado da frequência e os modos altos somem primeiro. Aqui o som todo se apaga junto, mantendo o timbre; lá, o perfil se alisa antes de desaparecer.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Laplace numa faixa, e o exemplo de Hadamard</p>
+        <p>Considere $u_{xx}+u_{yy}=0$ na faixa $y\ge0$, periódica em $x$. (a) Escreva a EDO do modo $k$ em $y$ e resolva. (b) Tome o dado de Cauchy $u(x,0)=\frac1n\sin(nx)$ e $u_y(x,0)=0$ e escreva a solução. (c) O dado tende a zero uniformemente quando $n\to\infty$. E a solução em $y=1$? O que isso diz sobre o problema de Cauchy para Laplace?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $c_k''(y)-k^2c_k(y)=0$, logo $c_k(y)=A_ke^{ky}+B_ke^{-ky}$. Note a diferença crucial para o calor: ali o modo $k$ dava uma exponencial <em>decrescente</em> no tempo; aqui aparece também uma exponencial <b>crescente</b> em $y$, com taxa $|k|$.</p>
+          <p>(b) Com esse dado, $u(x,y)=\frac1n\cosh(ny)\sin(nx)$.</p>
+          <p>(c) O dado tem norma $1/n\to0$, mas em $y=1$ a solução vale $\frac{\cosh n}n\approx\frac{e^n}{2n}$, que explode. Um dado arbitrariamente pequeno produz uma solução arbitrariamente grande: o problema de Cauchy para a equação de Laplace é <b>mal posto</b>, e esse é o exemplo clássico de Hadamard. É o irmão elíptico do calor para trás — e a razão de o problema natural para Laplace ser de <em>contorno</em> (dar $u$ na borda de uma região), não de valor inicial. Numa faixa limitada $0\le y\le H$ com $u$ dada nas duas bordas, a combinação de $e^{ky}$ e $e^{-ky}$ fica determinada e tudo se comporta bem.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. Burgers viscosa: quando os modos conversam</p>
+        <p>Agora a não linear: $u_t+u\,u_x=\varepsilon\,u_{xx}$ no círculo, com $\varepsilon>0$. (a) Escrevendo $uu_x=\big(\tfrac{u^2}2\big)_x$, mostre que
+        $$\dot c_k=-\varepsilon k^2c_k-\frac{ik}2\sum_{m}c_m\,c_{k-m},$$
+        e explique por que isso <em>não</em> é um conjunto de EDOs independentes. (b) <b>Dica — transformação de Cole–Hopf:</b> verifique que, se $\varphi$ resolve a equação do calor $\varphi_t=\varepsilon\varphi_{xx}$ e $\varphi>0$, então
+        $$u=-2\varepsilon\,\frac{\varphi_x}{\varphi}=-2\varepsilon\,(\ln\varphi)_x$$
+        resolve Burgers viscosa. (c) Conclua como resolver o problema de valor inicial e diga qual é o dado para $\varphi$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) O coeficiente de um produto é a convolução dos coeficientes: $c_k(u^2)=\sum_m c_mc_{k-m}$. Derivando em $x$, multiplica-se por $ik$, e com o $\tfrac12$ sai a fórmula. O termo viscoso é diagonal, mas a soma acopla <b>todos</b> os modos: a equação de cada $c_k$ envolve todos os outros. Não há como resolver modo a modo, e é justamente essa mistura que transporta energia das frequências baixas para as altas, formando o choque.</p>
+          <p>(b) Escreva $\psi=\ln\varphi$, de modo que $u=-2\varepsilon\psi_x$. De $\varphi_t=\varepsilon\varphi_{xx}$ e $\varphi_{xx}/\varphi=\psi_{xx}+\psi_x^2$ vem
+          $$\psi_t=\varepsilon\big(\psi_{xx}+\psi_x^2\big).$$
+          Derivando em $x$ e multiplicando por $-2\varepsilon$:
+          $$u_t=-2\varepsilon^2\big(\psi_{xxx}+2\psi_x\psi_{xx}\big).$$
+          Por outro lado, $u\,u_x=(-2\varepsilon\psi_x)(-2\varepsilon\psi_{xx})=4\varepsilon^2\psi_x\psi_{xx}$ e $\varepsilon u_{xx}=-2\varepsilon^2\psi_{xxx}$. Somando os dois primeiros, os termos com $\psi_x\psi_{xx}$ se cancelam e sobra exatamente $\varepsilon u_{xx}$.</p>
+          <p>(c) Invertendo a relação, $\varphi=\exp\big(-\frac1{2\varepsilon}\int^x u\big)$. Então: tome $F_0(x)=\int_0^xu_0$, ponha $\varphi_0=e^{-F_0/2\varepsilon}$, resolva o <b>calor</b> com esse dado (o que a série de Fourier faz em uma linha, multiplicando cada coeficiente por $e^{-\varepsilon k^2t}$) e volte com $u=-2\varepsilon\varphi_x/\varphi$. Uma equação não linear resolvida exatamente, de graça, porque uma mudança de variável a linearizou. No caso periódico, basta que $u_0$ tenha média zero para que $F_0$ e $\varphi_0$ sejam periódicas — e a média de $u$ se conserva, então ela permanece zero.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">8. O limite sem viscosidade, e Hopf–Lax de volta</p>
+        <p>Continuando: na reta, o calor com núcleo gaussiano dá
+        $$\varphi(x,t)=\frac1{\sqrt{4\pi\varepsilon t}}\int \exp\!\Big(-\frac{1}{2\varepsilon}\Big[F_0(y)+\frac{(x-y)^2}{2t}\Big]\Big)dy.$$
+        Use o método de Laplace (quando $\varepsilon\to0$, a integral é dominada pela vizinhança do mínimo do colchete) para descobrir para onde tende $u=-2\varepsilon\varphi_x/\varphi$.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Chame $G(y)=F_0(y)+\dfrac{(x-y)^2}{2t}$. Quando $\varepsilon\to0$, o fator $e^{-G/2\varepsilon}$ concentra toda a massa da integral em torno do ponto $y^*$ onde $G$ é mínima. Derivando em $x$ (só o quadrado depende de $x$) e dividindo,
+          $$u=-2\varepsilon\frac{\varphi_x}{\varphi}\ \longrightarrow\ \frac{x-y^*}{t},\qquad y^*=\arg\min_y\Big\{F_0(y)+\frac{(x-y)^2}{2t}\Big\}.$$
+          É exatamente a <a href="hopf-lax.html">fórmula de Hopf–Lax</a>, com $F_0$ no papel do dado de Hamilton–Jacobi. Ou seja: a solução de entropia não precisa ser escolhida por um critério imposto de fora — ela <b>aparece</b> como limite das soluções viscosas, que são únicas e sem ambiguidade nenhuma. O mínimo que a fórmula toma é a sombra, em $\varepsilon\to0$, da integral que o calor fazia.</p>
+          <p>Quando há dois pontos de mínimo empatados, a integral recebe contribuição dos dois, mas no limite vence o menor — e é no salto de $y^*$ que mora o choque. A ambiguidade das soluções fracas desaparece porque, para $\varepsilon>0$, nunca houve ambiguidade.</p>
+        </div>
+      </details>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>O exercício 7 diz que Burgers viscosa não se resolve modo a modo — mas a transformada ainda é a melhor ferramenta <em>numérica</em> para ela. O método pseudoespectral faz o produto $u^2$ no espaço físico e a derivada no espectro, com um filtro antirrecobrimento. Complete duas linhas: o termo não linear e a volta de Cole–Hopf. O programa compara os dois caminhos — o solver não linear e a fórmula exata — e depois mostra o choque viscoso afinando quando $\varepsilon$ diminui.</p>
+      <div class="pycell" data-title="Burgers viscosa: pseudoespectral e Cole–Hopf"
+           data-starter="../py/burgers_viscosa_lacunas.py"
+           data-solution="../py/burgers_viscosa_solucao.py"></div>
+      <p>Os dois métodos concordam até a sétima casa, o que é uma boa evidência de que a verificação algébrica do exercício 7 está certa. E repare no detalhe prático escondido no código: $\varphi_0=e^{-F_0/2\varepsilon}$ estoura a precisão da máquina quando $\varepsilon$ é pequeno — a fórmula de Cole–Hopf é exata, mas calculá-la diretamente é delicado justamente no regime em que ela mais interessa.</p>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="serie-fourier.html">Série de Fourier</a></li>
+            <li><a href="calor-circulo.html">O calor no círculo</a></li>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="onda-dalembert.html">Onda e d'Alembert</a></li>
+            <li><a href="hopf-lax.html">Fórmula de Hopf–Lax</a></li>
+            <li><a href="lista-fourier-calor.html">Lista de exercícios: Fourier, calor e ondas</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

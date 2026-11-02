@@ -73,6 +73,10 @@ dif = float(re.search(r"erro diferencas finitas = ([0-9.eE+-]+)", s).group(1))
 check("calor no círculo: espectral é exato até o arredondamento", esp < 1e-12, f"erro={esp:.1e}")
 check("calor no círculo: diferenças finitas erram bem mais", dif > 100 * esp, f"erro={dif:.1e}")
 
+s, _ = rodar("burgers_viscosa_solucao.py")
+difs = [float(m) for m in re.findall(r"Cole-Hopf = ([0-9.eE+-]+)", s)]
+check("Burgers viscosa: pseudoespectral = Cole-Hopf (dois métodos independentes)", difs and max(difs) < 1e-5, f"máx={max(difs):.1e}")
+
 # versões com lacunas: devem rodar (sem explodir erro) mesmo incompletas
 s, _ = rodar("cfl_lacunas.py")
 check("cfl_lacunas roda com o código incompleto", True)
