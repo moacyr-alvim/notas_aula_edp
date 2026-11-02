@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Schrödinger no poço infinito — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Schrödinger no poço infinito: de onde vêm os níveis de energia</h1>
+        <p class="lede">A mesma base de senos da corda de pontas presas, com um $i$ na frente da derivada no tempo. Os autovalores viram níveis de energia, as ocupações nunca mudam, e o espectro de inteiros faz o estado inteiro se reconstruir sozinho.</p>
+        <p class="meta">Usa a base de senos de <a href="edps-fourier.html">EDPs lineares com Fourier</a> e a receita de <a href="calor-circulo.html">o calor no círculo</a>. Leitura de uns 25 minutos, com a demo.</p>
+      </header>
+
+
+      <h2 id="equacao" data-toc="A equação">O que a equação diz</h2>
+      <p>Uma partícula presa numa caixa: ela pode estar em qualquer ponto de $[0,\ell]$, mas não pode sair. Em mecânica quântica o estado dessa partícula é uma função complexa $\psi(x,t)$, e o que ela significa é o seu módulo ao quadrado:
+      $$|\psi(x,t)|^2\,dx=\text{probabilidade de encontrar a partícula entre }x\text{ e }x+dx.$$
+      Por isso $\int_0^\ell|\psi|^2dx=1$ sempre: a partícula está em algum lugar. A equação que governa $\psi$ é a de <b>Schrödinger</b>,
+      $$i\hbar\,\psi_t=-\frac{\hbar^2}{2m}\,\psi_{xx},$$
+      com $\psi(0,t)=\psi(\ell,t)=0$ — a probabilidade de estar na parede, ou fora dela, é zero.</p>
+
+      <aside class="box">
+        <p class="tag">Quase o calor, mas com um $i$</p>
+        <p>Compare com $u_t=u_{xx}$. É a mesma equação, a menos de um fator imaginário na frente da derivada no tempo, e esse fator muda tudo. No calor, o modo $k$ ganha o fator $e^{-k^2t}$, real e menor que $1$: decai. Aqui ele ganha $e^{-ik^2t}$, de módulo $1$: <b>gira</b>. Nada decai, nada se alisa, nada é esquecido — e, ao contrário do calor, a equação pode ser resolvida para trás no tempo tão bem quanto para a frente. Um $i$ separa a irreversibilidade da reversibilidade.</p>
+      </aside>
+
+      <p>Para enxergar as contas sem carregar constantes, use unidades em que $\hbar=1$ e $2m=1$, e um poço de comprimento $\pi$. A equação fica
+      $$i\,\psi_t=-\psi_{xx},\qquad \psi(0,t)=\psi(\pi,t)=0,$$
+      e no fim voltamos às unidades físicas para ver os números.</p>
+
+      <h2 id="modos" data-toc="Os níveis">Os níveis de energia são os harmônicos de uma corda</h2>
+      <p>O contorno é o mesmo da <a href="edps-fourier.html#exercicios">corda de pontas presas</a>, então a base é a mesma: estenda $\psi$ de forma ímpar, com período $2\pi$, e sobram os senos. Escreva
+      $$\psi(x,t)=\sum_{n\ge1}c_n(t)\,\varphi_n(x),\qquad \varphi_n(x)=\sqrt{\tfrac2\pi}\,\sin(nx),$$
+      com $\varphi_n$ normalizada ($\int_0^\pi\varphi_n^2=1$). Como $-\partial_x^2\varphi_n=n^2\varphi_n$, cada modo satisfaz
+      $$i\,\dot c_n=n^2c_n\qquad\Longrightarrow\qquad c_n(t)=c_n(0)\,e^{-i\,n^2t}.$$
+      Comparando com $i\dot c_n=E_nc_n$, lê-se a energia do modo $n$:
+      $$\boxed{\,E_n=n^2\quad\text{(em unidades físicas, }E_n=\frac{n^2\pi^2\hbar^2}{2m\ell^2}\text{).}\,}$$</p>
+
+      <p>Vale parar aqui, porque é o ponto principal da caixa. <b>A energia só pode assumir esses valores</b>, e a razão é inteiramente clássica: $E_n$ são os autovalores de $-\partial_x^2$ com as pontas presas, exatamente os mesmos $\lambda_n=(n\pi/\ell)^2$ que dão os harmônicos de uma corda de violão. A discretização não veio da física quântica — veio da <em>condição de contorno</em>. Uma corda presa nas duas pontas só vibra em certas frequências; uma partícula presa numa caixa só tem certas energias. O que a mecânica quântica acrescenta é a ponte entre as duas coisas, $E=\hbar\omega$: a frequência de cada modo passa a ser lida como energia.</p>
+
+      <aside class="box">
+        <p class="tag">Números para sentir a escala</p>
+        <p>Um elétron ($m=9{,}11\times10^{-31}$ kg) numa caixa de $\ell=1$ nm tem
+        $$E_1=\frac{\pi^2\hbar^2}{2m\ell^2}\approx6{,}0\times10^{-20}\ \text{J}\approx0{,}38\ \text{eV},$$
+        e os níveis seguintes valem $4E_1$, $9E_1$, $16E_1$: a escala do elétron-volt, que é a das ligações químicas e da luz visível. Para uma bolinha de $1$ g numa caixa de $10$ cm, a mesma fórmula dá $E_1\approx5{,}5\times10^{-63}$ J: níveis tão próximos que nenhuma medida os distingue do contínuo. A discretização está sempre lá; o que muda é se dá para enxergá-la.</p>
+      </aside>
+
+      <h2 id="evolucao" data-toc="A evolução">A solução, e o que ela conserva</h2>
+      <p>Juntando tudo,
+      $$\boxed{\,\psi(x,t)=\sum_{n\ge1}c_n(0)\,e^{-i\,n^2t}\,\varphi_n(x),\qquad c_n(0)=\langle\varphi_n,\psi_0\rangle.\,}$$
+      Mesma receita de sempre — projete, resolva modo a modo, remonte. Só que aqui os fatores têm módulo $1$, e isso tem três consequências.</p>
+      <ul>
+        <li><b>A probabilidade total se conserva.</b> Por Parseval, $\int|\psi|^2=\sum_n|c_n(t)|^2=\sum_n|c_n(0)|^2$. A identidade que no calor media energia aqui garante que a partícula não some. É a <em>unitariedade</em>.</li>
+        <li><b>As ocupações dos níveis nunca mudam.</b> $|c_n(t)|=|c_n(0)|$: a probabilidade de medir a energia $E_n$ é a mesma para sempre. Só as <em>fases</em> giram — e é das diferenças de fase que vem todo o movimento.</li>
+        <li><b>Estados estacionários são mesmo estacionários.</b> Se $\psi_0=\varphi_n$, então $\psi=e^{-in^2t}\varphi_n$ e $|\psi|^2=\varphi_n^2$ não depende do tempo. A função de onda gira, a densidade de probabilidade fica parada.</li>
+      </ul>
+      <p>E se houver dois níveis ocupados? Com $\psi_0=\frac1{\sqrt2}(\varphi_1+\varphi_2)$,
+      $$|\psi|^2=\tfrac12\varphi_1^2+\tfrac12\varphi_2^2+\varphi_1\varphi_2\cos\big((E_2-E_1)t\big),$$
+      e a densidade <b>balança</b> de um lado para o outro do poço com frequência $(E_2-E_1)/\hbar$. É a regra de Bohr para a luz emitida numa transição, aparecendo aqui como simples batimento entre dois modos — a mesma matemática de duas cordas quase afinadas.</p>
+
+      <h2 id="dispersao" data-toc="n² em vez de n">Por que $n^2$ muda tudo</h2>
+      <p>Na corda, $\omega_n\propto n$; aqui, $E_n\propto n^2$. A diferença parece pequena e é enorme.</p>
+      <p>Na corda, todas as componentes de um pulso andam com a mesma velocidade $c$, e por isso o pulso <em>viaja sem se deformar</em> — é d'Alembert. Aqui, cada componente anda com velocidade diferente (a velocidade de grupo é $dE/dk=2k$, nestas unidades): um pacote concentrado se <b>espalha</b>. Isso é dispersão, e é por isso que uma partícula livre não fica localizada: a incerteza em posição cresce sozinha.</p>
+      <p>Mas $n^2$ é <em>inteiro</em>, e aí vem a surpresa. Em $t=2\pi$, todas as fases valem $e^{-i\,n^2\,2\pi}=1$, seja qual for $n$:
+      $$\psi(x,2\pi)=\psi(x,0).$$
+      <b>O estado se reconstrói exatamente.</b> Um pacote que se espalhou, bateu nas paredes, virou uma bagunça de interferência — volta a ser ele mesmo, sem erro nenhum. É o <b>ressurgimento quântico</b>, e ele existe porque o espectro é feito de inteiros. Em unidades físicas o período é $T_{\text{res}}=4m\ell^2/(\pi\hbar)$.</p>
+      <p>Na metade do caminho acontece algo igualmente bonito. Em $t=\pi$, as fases viram $e^{-i\pi n^2}=(-1)^{n^2}=(-1)^n$, e como $\sin(n(\pi-x))=-(-1)^n\sin(nx)$,
+      $$\psi(x,\pi)=-\psi_0(\pi-x):$$
+      o pacote reaparece <b>espelhado</b>, do outro lado do poço. Entre esses instantes há ainda os ressurgimentos fracionários, em que o pacote se divide em várias cópias menores de si mesmo.</p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, $|\psi(x,t)|^2$ dentro do poço, com o perfil inicial tracejado. À direita, os níveis $E_n=n^2$, com barras de ocupação $|c_n|^2$ — e repare que essas barras <b>não se mexem</b>, por mais que a densidade dance: as ocupações são constantes, só as fases giram. A escala vertical da direita é a energia, então dá para ver os níveis se afastando conforme $n^2$.</p>
+
+      <div class="demo" id="demo-qw">
+        <div class="controls">
+          <label>Estado inicial
+            <select id="qw-estado" aria-label="Estado inicial"></select>
+          </label>
+          <label>t
+            <input type="range" id="qw-t" min="0" max="6.2832" step="0.002" value="0" aria-label="Tempo">
+            <output id="qw-tv">0,00</output>
+          </label>
+          <button id="qw-play" type="button">▶ Animar</button>
+          <button id="qw-espelho" type="button">t = π (espelho)</button>
+          <button id="qw-ressurg" type="button">t = 2π (ressurgimento)</button>
+        </div>
+        <div class="panels two">
+          <canvas id="qw-dens" role="img" aria-label="Densidade de probabilidade dentro do poço no instante t"></canvas>
+          <canvas id="qw-niveis" role="img" aria-label="Níveis de energia E = n ao quadrado com as ocupações"></canvas>
+        </div>
+        <div class="readout" id="qw-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac)"></i>|ψ(x,t)|²</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>perfil inicial</span>
+          <span><i style="border-color:var(--carac);border-top-width:7px"></i>ocupação do nível</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li>No <b>estado fundamental</b>, anime: a densidade não se mexe nem um pouco. A função de onda está girando no plano complexo o tempo todo, mas $|\psi|^2$ não percebe.</li>
+        <li>Na <b>superposição de dois níveis</b>, a densidade balança de um lado para o outro, com período $2\pi/3$ — e a barra de ocupação continua imóvel em $1/2$ e $1/2$.</li>
+        <li>No <b>pacote parado</b>, veja-o espalhar e virar uma bagunça. Então clique em <b>$t=\pi$</b>: lá está ele de novo, espelhado. E em <b>$t=2\pi$</b>, exatamente como começou.</li>
+        <li>No <b>pacote com impulso</b>, o pacote atravessa o poço e bate nas paredes. Repare nas franjas de interferência quando o que vai e o que volta se superpõem — e no fato de que, mesmo depois de toda essa confusão, o ressurgimento acontece na hora certa.</li>
+      </ol>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O estado fundamental não está parado</p>
+        <p>Calcule $E_1$ para um elétron numa caixa de $1$ nm, em eV. Depois explique por que $E_1\ne0$: por que a partícula não pode simplesmente ficar em repouso no fundo da caixa? <b>Dica:</b> pense em que função de onda teria energia zero e veja se ela respeita o contorno.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$E_1=\dfrac{\pi^2\hbar^2}{2m\ell^2}$. Com $\hbar=1{,}055\times10^{-34}$ J·s, $m=9{,}11\times10^{-31}$ kg e $\ell=10^{-9}$ m, sai $E_1\approx6{,}0\times10^{-20}$ J, e dividindo por $1{,}602\times10^{-19}$ J/eV, $E_1\approx0{,}38$ eV.</p>
+          <p>Energia zero exigiria $\psi_{xx}=0$, isto é, $\psi$ afim; com $\psi(0)=\psi(\pi)=0$ a única opção é $\psi\equiv0$, que não é estado nenhum (a probabilidade total seria zero). Ou seja: <b>o contorno proíbe o repouso</b>. É a versão matemática do princípio da incerteza — confinar em $\Delta x\sim\ell$ obriga um momento típico $\Delta p\gtrsim\hbar/\ell$, e portanto uma energia $\sim\hbar^2/m\ell^2$. É essa energia de ponto zero que impede o átomo de colapsar.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Batimento entre dois níveis</p>
+        <p>Para $\psi_0=\frac1{\sqrt2}(\varphi_1+\varphi_2)$, deduza a fórmula de $|\psi|^2$ dada no texto e calcule o período do balanço. Em unidades físicas, que frequência tem a luz emitida na transição $n=2\to n=1$ de um elétron numa caixa de $1$ nm?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\psi=\frac1{\sqrt2}(e^{-iE_1t}\varphi_1+e^{-iE_2t}\varphi_2)$, e
+          $$|\psi|^2=\tfrac12\varphi_1^2+\tfrac12\varphi_2^2+\varphi_1\varphi_2\,\mathrm{Re}\,e^{-i(E_2-E_1)t}=\tfrac12\varphi_1^2+\tfrac12\varphi_2^2+\varphi_1\varphi_2\cos\big((E_2-E_1)t\big).$$
+          Os dois primeiros termos são fixos; o terceiro oscila com frequência angular $E_2-E_1=4-1=3$, isto é, período $2\pi/3\approx2{,}09$ nas unidades da página.</p>
+          <p>Em unidades físicas, $E_2-E_1=3E_1\approx1{,}13$ eV, e $\nu=(E_2-E_1)/h\approx2{,}7\times10^{14}$ Hz — luz infravermelha próxima, de comprimento de onda em torno de $1{,}1\ \mu$m. A caixa de 1 nm é um modelo grosseiro, mas acerta a ordem de grandeza das transições eletrônicas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. O ressurgimento, e por que ele é exato</p>
+        <p>(a) Mostre que $\psi(x,t+2\pi)=\psi(x,t)$ para qualquer estado inicial. (b) Mostre que $\psi(x,\pi)=-\psi_0(\pi-x)$. (c) O que aconteceria com o ressurgimento se as energias fossem $E_n=n^2+\alpha$ com $\alpha$ constante? E se fossem $E_n=n^{2}+\sqrt n$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Cada coeficiente ganha o fator $e^{-in^2(t+2\pi)}=e^{-in^2t}e^{-2\pi i n^2}$, e $n^2$ é inteiro, então o segundo fator é $1$. Todos os modos voltam juntos.</p>
+          <p>(b) Em $t=\pi$ o fator é $e^{-i\pi n^2}=(-1)^{n^2}=(-1)^n$ (porque $n^2$ e $n$ têm a mesma paridade). E $\sin(n(\pi-x))=\sin n\pi\cos nx-\cos n\pi\sin nx=-(-1)^n\sin nx$, isto é, $\varphi_n(\pi-x)=-(-1)^n\varphi_n(x)$. Logo
+          $$\psi(x,\pi)=\sum_nc_n(-1)^n\varphi_n(x)=-\sum_nc_n\varphi_n(\pi-x)=-\psi_0(\pi-x).$$</p>
+          <p>(c) Com $E_n=n^2+\alpha$, cada modo ganha o fator global $e^{-i\alpha t}$, que é o <em>mesmo</em> para todos: ele não afeta $|\psi|^2$, e o ressurgimento continua em $2\pi$. Já com $E_n=n^2+\sqrt n$ as fases deixam de ser comensuráveis, e não há instante em que todas voltem ao início ao mesmo tempo: o ressurgimento exato <b>desaparece</b>, restando apenas retornos aproximados. O poço infinito é especial porque seu espectro é feito de inteiros.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Partícula na metade esquerda</p>
+        <p>Suponha que a partícula esteja uniformemente distribuída na metade esquerda do poço, $\psi_0=\sqrt{2/\pi}$ para $0&lt;x&lt;\pi/2$ e $0$ depois. (a) Calcule $c_n$. (b) Qual a probabilidade de medir a energia $E_1$? (c) A soma $\sum|c_n|^2$ converge rápido? O que isso diz sobre a energia média?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $c_n=\int_0^{\pi/2}\sqrt{\tfrac2\pi}\sin(nx)\sqrt{\tfrac2\pi}\,dx=\dfrac2\pi\cdot\dfrac{1-\cos(n\pi/2)}n$.</p>
+          <p>(b) $c_1=\dfrac2\pi$, logo $|c_1|^2=\dfrac4{\pi^2}\approx0{,}405$: cerca de $40\%$ de chance de medir a energia mais baixa.</p>
+          <p>(c) Os $c_n$ caem como $1/n$ (o dado tem um salto em $x=\pi/2$), então $\sum|c_n|^2$ converge, mas $\langle E\rangle=\sum n^2|c_n|^2$ <b>diverge</b>: a energia média é infinita. Faz sentido — um salto na função de onda custaria energia cinética infinita. É o mesmo fenômeno da seção de decaimento e suavidade, agora com consequência física: estados fisicamente razoáveis precisam ser contínuos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Calor e Schrödinger, lado a lado</p>
+        <p>Compare as soluções de $u_t=u_{xx}$ e de $i\psi_t=-\psi_{xx}$ no mesmo poço, com o mesmo dado inicial. (a) Quais os multiplicadores de cada modo? (b) O que acontece com um dado descontínuo em cada caso, logo depois de $t=0$? (c) Qual das duas pode ser resolvida para trás no tempo, e por quê?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Calor: $e^{-n^2t}$, real, em $(0,1)$ para $t>0$. Schrödinger: $e^{-in^2t}$, de módulo $1$.</p>
+          <p>(b) No calor, o fator $e^{-n^2t}$ esmaga os modos altos e a solução fica $C^\infty$ instantaneamente: o salto some. Em Schrödinger, $|c_n|$ não muda, então o conteúdo de alta frequência permanece — a solução não fica mais lisa, apenas redistribui as fases. O salto não desaparece: ele se transforma em oscilações.</p>
+          <p>(c) Só Schrödinger. Para trás, o calor pede $e^{+n^2t}$, que explode (o problema é mal posto); Schrödinger pede $e^{+in^2t}$, que continua tendo módulo $1$ — basta conjugar. A equação é reversível, e de fato $\overline{\psi(x,-t)}$ resolve a mesma equação. A seta do tempo do calor vem de o multiplicador ser real; a ausência dela, em Schrödinger, vem de ele ser um número de módulo $1$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="edps-fourier.html">EDPs lineares com Fourier</a></li>
+            <li><a href="calor-circulo.html">O calor no círculo</a></li>
+            <li><a href="separacao-variaveis.html">Separação de variáveis</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="serie-fourier.html">Série de Fourier</a></li>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="onda-dalembert.html">Onda e d'Alembert</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/qw-core.js"></script>
+  <script src="../assets/qw-demo.js"></script>
+</body>
+</html>

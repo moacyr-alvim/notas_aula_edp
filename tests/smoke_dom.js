@@ -195,6 +195,18 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["sf-dado"].value = "triangulo"; env.byId["sf-dado"].fire("input"); await wait(30);
     check("sf-demo: no triângulo mostra erro máximo e decaimento 1/n²", rd().includes("1/n²") && rd().includes("erro máximo"), rd().slice(0, 160));
   }
+  /* ---- poço infinito ---- */
+  {
+    const env = makeEnv(["demo-qw", "qw-estado", "qw-t", "qw-tv", "qw-play", "qw-espelho", "qw-ressurg", "qw-readout", "qw-dens", "qw-niveis"], []);
+    run(env, "qw-core.js"); env.sandbox.window.QWCore = env.sandbox.QWCore || vm.runInContext("QWCore", env.sandbox);
+    env.byId["qw-t"].value = "0";
+    let err = null; try { run(env, "qw-demo.js"); await wait(40); } catch (e) { err = e; }
+    check("qw-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["qw-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("qw-demo: em t = 0 avisa o ressurgimento e mostra a norma 1", rd().includes("ressurgimento") && rd().includes("1,000"), rd().slice(0, 160));
+    env.byId["qw-espelho"].fire("click"); await wait(40);
+    check("qw-demo: o botão do espelho leva a t = π", rd().includes("espelho"), rd().slice(0, 160));
+  }
   /* ---- Hopf–Lax ---- */
   {
     const env = makeEnv(["demo-hl", "hl-dado", "hl-t", "hl-tv", "hl-x", "hl-xv", "hl-play", "hl-readout", "hl-g", "hl-perfil"], []);
@@ -243,7 +255,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 32 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 32);
+    check("mapa: SVG gerado com os 33 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 33);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 8);
   }
   /* ---- executor de Python ---- */

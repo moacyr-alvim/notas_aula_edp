@@ -64,6 +64,8 @@ assets/
   sep-core.js         séries de senos do calor numa barra, testável em Node
   sf-core.js          séries de Fourier: coeficientes fechados, energia (Parseval), Gibbs; testável em Node
   sf-demo.js          demo da soma parcial e do espectro log-log
+  qw-core.js          poço infinito: base de senos, fases e^{-in²t}, ocupações e observáveis; testável em Node
+  qw-demo.js          demo da densidade e dos níveis de energia
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
   hl-demo.js          demo do mínimo que salta (a função minimizada e o perfil)
   sep-demo.js         demo da separação de variáveis: soma de N modos e amplitudes que murcham

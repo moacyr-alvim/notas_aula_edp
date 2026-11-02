@@ -79,6 +79,8 @@
       desc: "A EDP vira infinitas EDOs: cada modo decai como e^{-k²t}. Suavização instantânea, decaimento para a média, irreversibilidade e o núcleo do calor. Com Python." },
     { id: "edpsf", lane: "disc", col: 5, row: 1, label: "EDPs lineares\ncom Fourier", href: "paginas/edps-fourier.html", trails: ["fdiscreto", "calor"],
       desc: "Exercícios resolvidos: transporte, calor com fonte e reação, a corda de comprimento ℓ, onda amortecida, Hadamard, e Burgers viscosa por Cole–Hopf." },
+    { id: "poco", lane: "disc", col: 6, label: "Schrödinger no\npoço infinito", href: "paginas/poco-infinito.html", trails: ["fdiscreto"],
+      desc: "Os níveis de energia como autovalores do laplaciano com pontas presas, ocupações constantes, dispersão n² e o ressurgimento quântico. Com demo." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -108,6 +110,7 @@
     ["dft", "serief"], ["anel", "serief"],
     ["serief", "calorcirc"], ["sep", "calorcirc"], ["calorcirc", "fourier"],
     ["serief", "edpsf"], ["calorcirc", "edpsf"],
+    ["edpsf", "poco"],
     ["calorcirc", "maxp"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
