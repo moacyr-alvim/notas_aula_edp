@@ -1,5 +1,5 @@
 /* Demo do poço infinito.  Depende de qw-core.js.
- * Esquerda: |ψ(x,t)|², com o perfil inicial tracejado.
+ * Esquerda: Re ψ(x,t) dentro do envelope ±|ψ|, com o envelope inicial tracejado.
  * Direita: os níveis de energia E_n = n², com barras de ocupação |c_n|² (que não mudam com t). */
 (function () {
   "use strict";
@@ -39,11 +39,11 @@
     return n.some(isNaN) ? hex : "rgba(" + n.join(",") + "," + a + ")";
   }
 
-  function densidade(c, t, col) {
+  function onda(c, t, col) {
     var S = prep(cD), ctx = S.ctx, cx = { l: 30, tp: 14, w: S.w - 30 - 16, h: S.h - 14 - 26 };
-    var d0 = Q.densidade(c, xs, 0), d = Q.densidade(c, xs, t);
-    var topo = Math.max.apply(null, d0) * 1.45;
-    var Xf = function (x) { return cx.l + x / PI * cx.w; }, Yf = function (v) { return cx.tp + (1 - v / topo) * cx.h; };
+    var k0 = Q.componentes(c, xs, 0), k = Q.componentes(c, xs, t);
+    var topo = Math.max.apply(null, k0.env) * 1.15;
+    var Xf = function (x) { return cx.l + x / PI * cx.w; }, Yf = function (v) { return cx.tp + (1 - (v + topo) / (2 * topo)) * cx.h; };
     ctx.strokeStyle = col.rule; ctx.lineWidth = 1; ctx.fillStyle = col.soft;
     ctx.textAlign = "center"; ctx.textBaseline = "top";
     [[0, "0"], [PI / 2, "π/2"], [PI, "π"]].forEach(function (p) {
@@ -51,21 +51,33 @@
       ctx.beginPath(); ctx.moveTo(px, cx.tp); ctx.lineTo(px, cx.tp + cx.h); ctx.stroke();
       ctx.fillText(p[1], px, cx.tp + cx.h + 6);
     });
-    ctx.fillStyle = alpha(col.ink, .10); ctx.fillRect(cx.l, cx.tp, cx.w, cx.h);   // o poço
+    ctx.fillStyle = alpha(col.ink, .07); ctx.fillRect(cx.l, cx.tp, cx.w, cx.h);     // o poço
     ctx.strokeStyle = col.ink; ctx.lineWidth = 3;
     ctx.beginPath(); ctx.moveTo(Xf(0), cx.tp); ctx.lineTo(Xf(0), cx.tp + cx.h);
-    ctx.moveTo(Xf(PI), cx.tp); ctx.lineTo(Xf(PI), cx.tp + cx.h); ctx.stroke();    // paredes
+    ctx.moveTo(Xf(PI), cx.tp); ctx.lineTo(Xf(PI), cx.tp + cx.h); ctx.stroke();      // paredes
     ctx.save(); ctx.beginPath(); ctx.rect(cx.l, cx.tp - 2, cx.w, cx.h + 4); ctx.clip();
-    ctx.strokeStyle = alpha(col.soft, .9); ctx.lineWidth = 1.4; ctx.setLineDash([3, 4]); ctx.beginPath();
-    for (i = 0; i < xs.length; i++) { var y0 = Yf(d0[i]); if (i) ctx.lineTo(Xf(xs[i]), y0); else ctx.moveTo(Xf(xs[i]), y0); }
+    ctx.strokeStyle = alpha(col.soft, .6); ctx.lineWidth = 1; ctx.setLineDash([2, 4]);
+    ctx.beginPath(); ctx.moveTo(cx.l, Yf(0)); ctx.lineTo(cx.l + cx.w, Yf(0)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.beginPath();                                                                // envelope ±|ψ|
+    for (i = 0; i < xs.length; i++) ctx.lineTo(Xf(xs[i]), Yf(k.env[i]));
+    for (i = xs.length - 1; i >= 0; i--) ctx.lineTo(Xf(xs[i]), Yf(-k.env[i]));
+    ctx.closePath(); ctx.fillStyle = alpha(col.carac, .17); ctx.fill();
+    ctx.strokeStyle = alpha(col.carac, .85); ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    for (i = 0; i < xs.length; i++) { var e1 = Yf(k.env[i]); if (i) ctx.lineTo(Xf(xs[i]), e1); else ctx.moveTo(Xf(xs[i]), e1); }
+    ctx.stroke();
+    ctx.beginPath();
+    for (i = 0; i < xs.length; i++) { var e2 = Yf(-k.env[i]); if (i) ctx.lineTo(Xf(xs[i]), e2); else ctx.moveTo(Xf(xs[i]), e2); }
+    ctx.stroke();
+    ctx.strokeStyle = alpha(col.soft, .9); ctx.lineWidth = 1.3; ctx.setLineDash([3, 4]);  // envelope inicial
+    ctx.beginPath();
+    for (i = 0; i < xs.length; i++) { var e3 = Yf(k0.env[i]); if (i) ctx.lineTo(Xf(xs[i]), e3); else ctx.moveTo(Xf(xs[i]), e3); }
     ctx.stroke(); ctx.setLineDash([]);
-    ctx.beginPath(); ctx.moveTo(Xf(0), Yf(0));
-    for (i = 0; i < xs.length; i++) ctx.lineTo(Xf(xs[i]), Yf(d[i]));
-    ctx.lineTo(Xf(PI), Yf(0)); ctx.closePath();
-    ctx.fillStyle = alpha(col.carac, .22); ctx.fill();
-    ctx.strokeStyle = col.carac; ctx.lineWidth = 2.6; ctx.stroke();
+    ctx.strokeStyle = col.ink; ctx.lineWidth = 2.4; ctx.beginPath();                 // Re ψ
+    for (i = 0; i < xs.length; i++) { var r = Yf(k.re[i]); if (i) ctx.lineTo(Xf(xs[i]), r); else ctx.moveTo(Xf(xs[i]), r); }
+    ctx.stroke();
     ctx.restore();
-    ctx.fillStyle = col.ink; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText("|ψ|²", cx.l + 6, 0);
+    ctx.fillStyle = col.ink; ctx.textAlign = "left"; ctx.textBaseline = "top"; ctx.fillText("ψ", cx.l + 6, 0);
     ctx.textAlign = "right"; ctx.textBaseline = "bottom"; ctx.fillText("x", S.w - 4, S.h - 2);
   }
 
@@ -95,7 +107,7 @@
   function desenha() {
     var c = coef(), t = parseFloat(rT.value), col = cores();
     oT.textContent = fmt(t);
-    densidade(c, t, col); niveis(c, col);
+    onda(c, t, col); niveis(c, col);
     var perto = function (a) { return Math.abs(t - a) < 0.02; };
     var txt = "<span>t = <b>" + fmt(t) + "</b></span>"
             + "<span>⟨E⟩ = <b>" + fmt(Q.energiaMedia(c), 2) + "</b></span>"

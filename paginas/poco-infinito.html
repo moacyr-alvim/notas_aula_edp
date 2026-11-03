@@ -84,7 +84,7 @@
       o pacote reaparece <b>espelhado</b>, do outro lado do poço. Entre esses instantes há ainda os ressurgimentos fracionários, em que o pacote se divide em várias cópias menores de si mesmo.</p>
 
       <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
-      <p>À esquerda, $|\psi(x,t)|^2$ dentro do poço, com o perfil inicial tracejado. À direita, os níveis $E_n=n^2$, com barras de ocupação $|c_n|^2$ — e repare que essas barras <b>não se mexem</b>, por mais que a densidade dance: as ocupações são constantes, só as fases giram. A escala vertical da direita é a energia, então dá para ver os níveis se afastando conforme $n^2$.</p>
+      <p>À esquerda, a função de onda dentro do poço: a curva escura é a parte real de $\psi(x,t)$, e a faixa clara é o envelope $\pm|\psi|$, cujo quadrado da altura é a densidade de probabilidade. Mostrar $\psi$, e não só $|\psi|^2$, é essencial aqui — é na fase que mora o movimento, e ela some quando se olha apenas o módulo. O envelope inicial fica tracejado para comparação. À direita, os níveis $E_n=n^2$, com barras de ocupação $|c_n|^2$ — e repare que essas barras <b>não se mexem</b>, por mais que a onda dance: as ocupações são constantes, só as fases giram. A escala vertical da direita é a energia, então dá para ver os níveis se afastando conforme $n^2$.</p>
 
       <div class="demo" id="demo-qw">
         <div class="controls">
@@ -105,18 +105,19 @@
         </div>
         <div class="readout" id="qw-readout" aria-live="polite"></div>
         <div class="legend">
-          <span><i style="border-color:var(--carac)"></i>|ψ(x,t)|²</span>
-          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>perfil inicial</span>
+          <span><i style="border-color:var(--ink)"></i>Re ψ(x,t)</span>
+          <span><i style="border-color:var(--carac)"></i>envelope ±|ψ|</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>envelope inicial</span>
           <span><i style="border-color:var(--carac);border-top-width:7px"></i>ocupação do nível</span>
         </div>
       </div>
 
       <p>Quatro coisas para tentar:</p>
       <ol>
-        <li>No <b>estado fundamental</b>, anime: a densidade não se mexe nem um pouco. A função de onda está girando no plano complexo o tempo todo, mas $|\psi|^2$ não percebe.</li>
-        <li>Na <b>superposição de dois níveis</b>, a densidade balança de um lado para o outro, com período $2\pi/3$ — e a barra de ocupação continua imóvel em $1/2$ e $1/2$.</li>
-        <li>No <b>pacote parado</b>, veja-o espalhar e virar uma bagunça. Então clique em <b>$t=\pi$</b>: lá está ele de novo, espelhado. E em <b>$t=2\pi$</b>, exatamente como começou.</li>
-        <li>No <b>pacote com impulso</b>, o pacote atravessa o poço e bate nas paredes. Repare nas franjas de interferência quando o que vai e o que volta se superpõem — e no fato de que, mesmo depois de toda essa confusão, o ressurgimento acontece na hora certa.</li>
+        <li>No <b>estado fundamental</b>, anime. A parte real de $\psi$ sobe e desce o tempo todo, mas o envelope não se mexe nem um pouco: é a frase "a função de onda gira, a densidade de probabilidade fica parada", agora em movimento. Uma medição de posição não distinguiria dois instantes quaisquer.</li>
+        <li>Na <b>superposição de dois níveis</b>, o envelope balança de um lado para o outro, com período $2\pi/3$ — e a barra de ocupação continua imóvel em $1/2$ e $1/2$.</li>
+        <li>Compare o <b>pacote parado</b> com o <b>pacote com impulso</b> em $t=0$: o envelope dos dois é <em>exatamente o mesmo</em>, porque eles diferem pelo fator $e^{6ix}$, de módulo $1$. Só a parte real denuncia a diferença — um é um bolo liso, o outro é cheio de ondulações. Essa fase invisível é o que faz um deles atravessar o poço enquanto o outro só se espalha no lugar. Nenhuma medição de posição em $t=0$ distinguiria os dois; o movimento seguinte distingue.</li>
+        <li>No pacote com impulso, deixe andar e veja as franjas de interferência quando o que vai e o que volta se superpõem. Depois clique em <b>$t=\pi$</b>: lá está o pacote de novo, espelhado. E em <b>$t=2\pi$</b>, exatamente como começou.</li>
       </ol>
 
       <h2 id="exercicios">Exercícios</h2>

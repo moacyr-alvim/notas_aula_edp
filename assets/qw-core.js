@@ -82,6 +82,15 @@
   function densidade(c, xs, t) {
     return xs.map(function (x) { var z = psi(c, x, t); return z.re * z.re + z.im * z.im; });
   }
+  /* parte real, parte imaginária e envelope |ψ|: é na parte real que a fase aparece */
+  function componentes(c, xs, t) {
+    var re = [], im = [], env = [];
+    xs.forEach(function (x) {
+      var z = psi(c, x, t);
+      re.push(z.re); im.push(z.im); env.push(Math.sqrt(z.re * z.re + z.im * z.im));
+    });
+    return { re: re, im: im, env: env };
+  }
 
   /* observáveis */
   function norma(c) { var s = 0; for (var i = 0; i < c.length; i++) s += c[i].re * c[i].re + c[i].im * c[i].im; return s; }
@@ -99,7 +108,7 @@
   }
   function ocupacao(c) { return c.map(function (z) { return z.re * z.re + z.im * z.im; }); }
 
-  return { ESTADOS: ESTADOS, phi: phi, coeficientes: coeficientes, psi: psi, densidade: densidade,
+  return { ESTADOS: ESTADOS, phi: phi, coeficientes: coeficientes, psi: psi, densidade: densidade, componentes: componentes,
            norma: norma, energiaMedia: energiaMedia, posicaoMedia: posicaoMedia, ocupacao: ocupacao,
            RESSURG: RESSURG, ESPELHO: ESPELHO, NMODOS: NMODOS };
 });
