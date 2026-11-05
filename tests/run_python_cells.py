@@ -73,6 +73,16 @@ dif = float(re.search(r"erro diferencas finitas = ([0-9.eE+-]+)", s).group(1))
 check("calor no círculo: espectral é exato até o arredondamento", esp < 1e-12, f"erro={esp:.1e}")
 check("calor no círculo: diferenças finitas erram bem mais", dif > 100 * esp, f"erro={dif:.1e}")
 
+s, _ = rodar("fokker_planck_solucao.py")
+med = float(re.search(r"media simulada\s*= ([-0-9.eE+]+)", s).group(1))
+var = float(re.search(r"variancia simulada = ([-0-9.eE+]+)", s).group(1))
+boltz = float(re.search(r"erro max vs Boltzmann = ([0-9.eE+-]+)", s).group(1))
+invd = float(re.search(r"erro max vs 1/D = ([0-9.eE+-]+)", s).group(1))
+check("passeio: média simulada ≈ a t = 0,5", abs(med - 0.5) < 0.03, f"média={med}")
+check("passeio: variância simulada ≈ 2Dt = 0,5", abs(var - 0.5) < 0.03, f"var={var}")
+check("Fokker-Planck: o estacionário do poço duplo é Boltzmann", boltz < 5e-3, f"erro={boltz:.1e}")
+check("Fokker-Planck: sem viés e com D variável, ρ ∝ 1/D", invd < 5e-3, f"erro={invd:.1e}")
+
 s, _ = rodar("burgers_viscosa_solucao.py")
 difs = [float(m) for m in re.findall(r"Cole-Hopf = ([0-9.eE+-]+)", s)]
 check("Burgers viscosa: pseudoespectral = Cole-Hopf (dois métodos independentes)", difs and max(difs) < 1e-5, f"máx={max(difs):.1e}")

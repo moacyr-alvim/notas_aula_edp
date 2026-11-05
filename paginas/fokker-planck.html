@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Passeio aleatório e Fokker–Planck — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Passeio aleatório e Fokker–Planck</h1>
+        <p class="lede">Um caminhante sorteia, a cada instante, se dá um passo para a direita ou para a esquerda. Encolhendo o passo e o relógio na proporção certa — o relógio com o quadrado do passo —, essa regra boba vira uma EDP que transporta e espalha ao mesmo tempo.</p>
+        <p class="meta">Ajuda ler antes: <a href="difusao-grafos.html">Difusão em grafos</a> e <a href="principio-maximo.html">O princípio do máximo</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="passeio" data-toc="O caminhante">Um caminhante numa grade</h2>
+      <p>Um bêbado sai de um poste. A cada segundo ele dá um passo para a direita, um passo para a esquerda, ou fica onde está — e sorteia qual a cada vez. A pergunta é sempre a mesma: <b>onde ele está depois de muito tempo?</b> Não a posição exata, que é aleatória, mas a <em>distribuição</em> das posições — e essa é uma quantidade determinística, que obedece a uma equação.</p>
+      <p>Vamos montar o modelo com todo o cuidado, porque é dos detalhes que a EDP sai. O espaço é uma grade de pontos
+      $$x_j=j\,h,\qquad j\in\mathbb Z,$$
+      e o tempo anda de $\tau$ em $\tau$. Num sítio $x$, o caminhante</p>
+      <ul>
+        <li>pula para $x+h$ com probabilidade $p(x)$;</li>
+        <li>pula para $x-h$ com probabilidade $q(x)$;</li>
+        <li>fica parado com a probabilidade que sobra, $1-p(x)-q(x)$.</li>
+      </ul>
+      <p>As três somam $1$, como têm que somar. Deixamos $p$ e $q$ dependerem do lugar: é assim que o modelo sabe que num ponto há um empurrão para a direita e em outro o terreno é mais lento.</p>
+
+      <p>A quantidade que vamos acompanhar é
+      $$P_j(t)=\text{probabilidade de o caminhante estar em }x_j\text{ no instante }t.$$
+      Se preferir pensar em muita gente em vez de um sorteio só, pense em $N$ caminhantes independentes soltos ao mesmo tempo: $P_j$ é então a <em>fração</em> deles que está em $x_j$. As duas leituras dão a mesma conta, e a segunda é a que explica o nome "densidade".</p>
+
+      <aside class="box atencao">
+        <p class="tag">$P$ ou $\rho$?</p>
+        <p>Duas coisas parecidas que convém não confundir. $P_j$ é uma <b>probabilidade</b>: um número entre $0$ e $1$, e a soma sobre todos os sítios dá $1$. No limite contínuo quem sobrevive é a <b>densidade</b>
+        $$\rho(x,t)\approx\frac{P_j(t)}{h},$$
+        probabilidade <em>por unidade de comprimento</em>, cuja integral dá $1$. Dividir por $h$ é o que impede tudo de ir a zero quando a grade fica fina: cada sítio recebe menos, mas também ocupa menos espaço. Como a relação é linear, as duas satisfazem a mesma equação, e vamos escrever as contas com $P$ e ler o resultado como $\rho$.</p>
+      </aside>
+
+      <p>Vale comparar com a <a href="difusao-grafos.html">difusão em grafos</a>, que já fez algo parecido. Lá o tempo era <b>contínuo</b> e só o espaço era discreto — um sistema de EDOs, $\dot u=-cLu$, o que se costuma chamar de modelo <em>semidiscreto</em>. Aqui tudo é discreto: espaço e relógio. E a quantidade transportada é outra: lá era temperatura, com condutâncias simétricas; aqui é probabilidade, e $p\ne q$ é permitido. Essa assimetria vai virar, daqui a pouco, um termo de transporte.</p>
+      <p>Um detalhe que parece inocente: deixar o caminhante <b>ficar parado</b>. Esse passeio preguiçoso já apareceu na <a href="principio-maximo.html">página do princípio do máximo</a>, como leitura do esquema explícito, e aqui ele volta a ser útil — por um motivo que a demo mostra melhor do que qualquer explicação.</p>
+
+      <h2 id="mestra" data-toc="A equação mestra">A equação mestra: quem chega</h2>
+      <p>Para estar em $x$ no instante $t+\tau$ só há três histórias possíveis, e elas são mutuamente exclusivas: ou o caminhante estava em $x-h$ e pulou para a direita, ou estava em $x+h$ e pulou para a esquerda, ou já estava em $x$ e não saiu. Somando as três probabilidades:
+      $$\boxed{\;\begin{aligned}P(x,t+\tau)=\;&p(x-h)\,P(x-h,t)+q(x+h)\,P(x+h,t)\\[1mm]&+\big[1-p(x)-q(x)\big]\,P(x,t).\end{aligned}\;}$$
+      É a <b>equação mestra</b> do passeio. Ela não tem nada de profundo: é contabilidade de chegadas.</p>
+      <p>Mas repare <em>onde</em> as probabilidades estão avaliadas. O termo que vem da esquerda traz $p(x-h)$, e não $p(x)$: quem decide se o pulo acontece é o sítio <b>de onde o caminhante saiu</b>, não aquele onde ele chega. Parece um detalhe de escrituração. É ele que decide a forma da EDP no fim — e vai reaparecer, com consequências, na caixa sobre o $D$ dentro das derivadas e na equação para trás.</p>
+      <p>Note também que a massa se conserva automaticamente: cada sítio distribui exatamente o que tem, nem mais nem menos, e $\sum_j P_j$ não muda nunca. Em linguagem de matrizes, a matriz do passo tem <b>colunas</b> somando $1$ — o lado conservativo da estocasticidade que a página do princípio do máximo discutiu pelas linhas.</p>
+
+      <h2 id="limite" data-toc="O limite h → 0">Encolhendo o passo</h2>
+      <p>Agora o limite. Há um truque de escrita que deixa a conta de três linhas: dê nome ao que <em>sai</em> de cada sítio,
+      $$F=p\,P\quad(\text{sai pela direita}),\qquad G=q\,P\quad(\text{sai pela esquerda}).$$
+      Com eles, subtraindo $P(x,t)$ dos dois lados da equação mestra e usando $1-p-q$:
+      $$P(x,t+\tau)-P(x,t)=\underbrace{\big[F(x-h)-F(x)\big]}_{\text{chega da esquerda, menos o que sai}}+\underbrace{\big[G(x+h)-G(x)\big]}_{\text{chega da direita, menos o que sai}}.$$
+      Cada colchete é a <em>mesma</em> função em dois pontos vizinhos — e aí é só Taylor:
+      $$\begin{aligned}F(x-h)-F(x)&=-h\,F_x+\tfrac{h^2}2F_{xx}+O(h^3),\\[1mm] G(x+h)-G(x)&=+h\,G_x+\tfrac{h^2}2G_{xx}+O(h^3).\end{aligned}$$
+      Somando, e do lado esquerdo $P(x,t+\tau)-P(x,t)=\tau\,P_t+O(\tau^2)$:
+      $$\tau\,P_t=h\,\partial_x\big[(q-p)P\big]+\frac{h^2}2\,\partial_{xx}\big[(p+q)P\big]+\cdots$$
+      Dividindo por $\tau$:
+      $$P_t=\frac h\tau\,\partial_x\big[(q-p)P\big]+\frac{h^2}{2\tau}\,\partial_{xx}\big[(p+q)P\big]+\cdots$$</p>
+
+      <p>Tudo depende, agora, do que acontece com os dois prefatores quando $h\to0$. Dê nome a eles:
+      $$\begin{aligned}a(x)&=\frac h\tau\big(p(x)-q(x)\big)&&\text{a \textbf{deriva}},\\[2mm] D(x)&=\frac{h^2}{2\tau}\big(p(x)+q(x)\big)&&\text{a \textbf{difusão}}.\end{aligned}$$
+      Para a equação limite existir e ser interessante, esses dois números têm que se acomodar em valores finitos e não nulos. Isso <b>amarra</b> a relação entre $h$ e $\tau$, e também o tamanho do viés.</p>
+
+      <aside class="box">
+        <p class="tag">A escala difusiva: por que $\tau\sim h^2$</p>
+        <p>Da definição de $D$ sai $\tau=\dfrac{h^2(p+q)}{2D}$: o relógio precisa encolher com o <b>quadrado</b> do passo. E então, de $a$, vem $p-q=\dfrac{a\tau}h=O(h)$: o viés precisa encolher <b>linearmente</b>. Um passeio quase simétrico, com um desequilíbrio minúsculo que, repetido muitas vezes, produz o transporte.</p>
+        <p>A raiz quadrada explica tudo. Em $n$ passos de tamanho $h$ com sinais sorteados, as idas e vindas se cancelam em grande parte e o caminhante se afasta tipicamente $\sqrt n\,h$, não $nh$. Para percorrer uma distância fixa ele precisa, então, de $n\approx(L/h)^2$ passos — e o relógio tem que ser $\tau\approx t/n\sim h^2$ para que isso leve um tempo fixo.</p>
+        <p>Escolher outra escala dá outra equação, ou nenhuma. Com $\tau=\lambda h$ (a <b>escala hiperbólica</b>), $D=h^2/(2\tau)\to0$ e sobra só
+        $$\rho_t+(a\rho)_x=0,$$
+        a <a href="equacao-transporte.html">equação de transporte</a>: o mesmo passeio, olhado na outra escala de tempo, é pura advecção. Com $\tau=h^3$, $D\to\infty$ e não há limite nenhum. Esse par de escalas não é uma particularidade do passeio: é a mesma dicotomia $\Delta t\sim h$ (hiperbólico) contra $\Delta t\sim h^2$ (parabólico) que aparece na <a href="cfl.html">condição CFL</a> e no esquema explícito do calor. Agora com um motivo probabilístico por trás.</p>
+      </aside>
+
+      <h2 id="fp" data-toc="Fokker–Planck">A equação de Fokker–Planck</h2>
+      <p>Com os nomes dados e $h\to0$, o que sobra é
+      $$\boxed{\,\rho_t=-\,\partial_x\big(a(x)\,\rho\big)+\partial_{xx}\big(D(x)\,\rho\big).\,}$$
+      É a <b>equação de Fokker–Planck</b>, também chamada de equação progressiva de Kolmogorov. Ela descreve a densidade de probabilidade de uma partícula que é empurrada por um campo $a$ e sacudida ao acaso com intensidade $D$ — um grão de pólen na água, o preço de um ativo, a concentração de um poluente levado pelo vento e espalhado pela turbulência.</p>
+      <p>Três leituras, todas úteis:</p>
+      <ul>
+        <li><b>É uma lei de conservação.</b> Escrevendo $J=a\rho-\partial_x(D\rho)$, a equação vira
+        $$\rho_t+J_x=0,$$
+        exatamente a forma das <a href="leis-conservacao.html">leis de conservação</a>, com um fluxo que tem duas partes: uma de transporte ($a\rho$, a corrente carrega) e uma de difusão ($-\partial_x(D\rho)$, que desce o gradiente). A massa total nunca muda — e isso não é uma hipótese, é a soma das colunas da matriz do passo.</li>
+        <li><b>A positividade é de graça.</b> $\rho$ é um limite de probabilidades, que são não negativas desde que $p,q\ge0$. Essa mesma condição — "os coeficientes do passo não podem ser negativos" — é a que aparecia como estabilidade na <a href="principio-maximo.html">página do princípio do máximo</a>. Positividade, estabilidade e "ser uma distribuição de probabilidade" continuam sendo a mesma desigualdade.</li>
+        <li><b>Com $a=0$ e $D$ constante, é a equação do calor.</b> Simplesmente $\rho_t=D\rho_{xx}$. O <a href="calor-grafo-anel.html">grafo em anel</a> chegou nela pelo lado semidiscreto; aqui chegamos pelo lado totalmente discreto, e de brinde ganhamos o significado do núcleo gaussiano: ele é a lei de probabilidade de onde o caminhante está.</li>
+      </ul>
+
+      <aside class="box">
+        <p class="tag">O teorema central do limite disfarçado</p>
+        <p>Tome o passeio simétrico, $p=q=\tfrac12$. Depois de $n$ passos, a posição é uma soma de $n$ parcelas independentes valendo $\pm h$ com a mesma chance: média zero e variância $h^2$ cada. Logo
+        $$\mathbb E[X_n]=0,\qquad \operatorname{Var}(X_n)=n\,h^2=\frac t\tau\,h^2=2Dt,$$
+        usando $D=h^2/(2\tau)$. O teorema central do limite diz que essa soma tende a uma gaussiana — e a gaussiana de média $0$ e variância $2Dt$ é exatamente
+        $$\rho(x,t)=\frac1{\sqrt{4\pi Dt}}\,e^{-x^2/4Dt},$$
+        o núcleo da equação do calor. <b>O núcleo do calor é o teorema central do limite.</b> Não é uma analogia: é a mesma afirmação, dita uma vez em probabilidade e outra em EDP.</p>
+        <p>Há um caminho ainda mais direto, pela <a href="convolucao.html">convolução</a>: a distribuição depois de $n$ passos é a convolução $n$ vezes da distribuição de um passo, e convolução vira produto do lado de Fourier. A transformada de um passo é $\cos(kh)$, a de $n$ passos é $\cos^n(kh)$, e
+        $$\cos^n(kh)=\Big(1-\tfrac{k^2h^2}2+\cdots\Big)^n\longrightarrow e^{-Dk^2t},$$
+        que é o fator com que cada modo decai na <a href="calor-circulo.html">solução por Fourier</a>. O exercício 5 faz a conta com cuidado.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="Veja o limite">Veja o limite acontecer</h2>
+      <p>À esquerda, a distribuição <em>exata</em> do passeio depois de $n$ passos — as barras saem de iterar a equação mestra, sem sorteio nenhum — e, por cima, a gaussiana de Fokker–Planck com a mesma deriva e a mesma difusão. À direita, sete trajetórias sorteadas de verdade, a faixa $a\,t\pm\sqrt{2Dt}$ (um desvio padrão) e, em vermelho, o instante que o painel da esquerda está mostrando: <b>o histograma é o corte vertical do feixe de trajetórias</b>. A difusão está fixa em $D=0{,}25$; o que você mexe é o refinamento da grade e o viés.</p>
+
+      <div class="demo" id="demo-fp">
+        <div class="controls">
+          <label>Passo da grade
+            <select id="fp-h" aria-label="Tamanho do passo h">
+              <option value="0.4">h = 0,4</option>
+              <option value="0.2" selected>h = 0,2</option>
+              <option value="0.1">h = 0,1</option>
+              <option value="0.05">h = 0,05</option>
+            </select>
+          </label>
+          <label>Viés a
+            <input type="range" id="fp-a" min="-1" max="1" step="0.05" value="0.5" aria-label="Deriva a">
+            <output id="fp-av">0,50</output>
+          </label>
+          <label>Preguiça
+            <select id="fp-s" aria-label="Probabilidade de andar">
+              <option value="0.5" selected>fica parado metade das vezes</option>
+              <option value="1">anda sempre</option>
+            </select>
+          </label>
+          <label>t
+            <input type="range" id="fp-t" min="0.05" max="2" step="0.01" value="1" aria-label="Tempo">
+            <output id="fp-tv">1,00</output>
+          </label>
+          <button id="fp-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="fp-dist" role="img" aria-label="Distribuição do passeio em barras e a gaussiana de Fokker-Planck"></canvas>
+          <canvas id="fp-traj" role="img" aria-label="Trajetórias sorteadas do caminhante e a faixa de um desvio padrão"></canvas>
+        </div>
+        <div class="readout" id="fp-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac);border-top-width:7px"></i>distribuição exata do passeio</span>
+          <span><i style="border-color:var(--ink)"></i>gaussiana de Fokker–Planck</span>
+          <span><i style="border-color:var(--ink-soft)"></i>trajetórias sorteadas</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>faixa a·t ± √(2Dt)</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li><b>Refine a grade.</b> Com $h=0{,}4$ são poucas barras largas e a gaussiana passa longe de algumas delas. Divida $h$ por dois e olhe o "erro máx. na densidade": ele cai por volta de <b>quatro vezes</b> a cada refinamento. A convergência é de segunda ordem em $h$ — melhor do que o $O(h)$ que a conta de Taylor parecia prometer, porque o primeiro termo descartado vem multiplicado por $q-p$, que já é da ordem de $h$.</li>
+        <li><b>Mexa no viés.</b> A nuvem inteira anda com velocidade $a$, e a largura não muda nem um pouco: ela só depende de $D$. Transporte e difusão são independentes, e é isso que a soma de dois termos na equação está dizendo.</li>
+        <li><b>Ponha o viés em zero e anime.</b> A largura cresce como $\sqrt t$, não como $t$ — a faixa desenhada à direita é uma parábola deitada. Difundir é muito mais lento que andar, e o teorema central do limite é o responsável.</li>
+        <li><b>Tire a preguiça.</b> Escolha "anda sempre" ($p+q=1$): as barras viram um pente, metade dos sítios fica com probabilidade <em>exatamente</em> zero. É a <b>paridade</b> — depois de $n$ passos o caminhante só pode estar num sítio de mesma paridade que $n$ —, e refinar a grade não conserta nada. A distribuição continua certa "no atacado", mas não converge ponto a ponto. A preguiça é o ingrediente que quebra a periodicidade, e é a mesma observação que, na página do princípio do máximo, aparecia como aperiodicidade na teoria de Perron–Frobenius.</li>
+      </ol>
+
+      <h2 id="equilibrio" data-toc="O equilíbrio">Para onde o caminhante converge</h2>
+      <p>Pergunta natural: existe uma distribuição que não muda mais? Ela precisa ter $\rho_t=0$, isto é, $J_x=0$, isto é, fluxo constante. Numa reta onde nada entra nem sai pelas pontas, essa constante é zero, e a condição de equilíbrio fica
+      $$J=a\rho-\partial_x(D\rho)=0.$$
+      Com $D$ constante e uma deriva que vem de um potencial, $a=-V'(x)$ — a partícula é empurrada ladeira abaixo —, isso é
+      $$D\,\rho_x=-V'\rho\quad\Longrightarrow\quad(\ln\rho)_x=-\frac{V'}D\quad\Longrightarrow\quad\boxed{\,\rho_\infty(x)=\frac1Z\,e^{-V(x)/D}.\,}$$
+      É a <b>distribuição de Boltzmann</b>, com $Z$ a constante que faz a integral dar $1$. Vale a pena parar um segundo nisso: começamos com um bêbado numa grade e terminamos na fórmula central da física estatística. A relação de Einstein $D=k_BT/\gamma$ completa a tradução e transforma o expoente em $-V/k_BT$: a temperatura é, literalmente, o tamanho do sacolejo.</p>
+      <p>O equilíbrio não é entre forças, é entre dois efeitos opostos: a deriva empilha as partículas no fundo do poço, a difusão as espalha de volta. $\rho_\infty$ é onde os dois empatam ponto a ponto — não só na média, mas com o fluxo nulo em cada $x$, o que se chama <b>balanço detalhado</b>. No caso particular $V=\gamma x^2/2$, isto é $a=-\gamma x$ (o processo de <b>Ornstein–Uhlenbeck</b>), a resposta é uma gaussiana de variância $D/\gamma$: a partícula presa por uma mola e chacoalhada não para no fundo, ela fica tremendo numa vizinhança de tamanho previsível.</p>
+
+      <aside class="box">
+        <p class="tag">Por que $D$ fica <em>dentro</em> das derivadas</p>
+        <p>Quando $D$ é constante, $\partial_{xx}(D\rho)=D\rho_{xx}$ e a distinção não importa. Quando $D$ varia com $x$, importa muito:
+        $$\partial_{xx}(D\rho)=D\rho_{xx}+\partial_x\big(D_x\,\rho\big),$$
+        e o segundo pedaço é um termo de <b>transporte extra</b>, com velocidade $D_x$, que não estava em lugar nenhum do modelo. Qual das duas equações é a certa?</p>
+        <p>O passeio responde sem hesitar, e a resposta está naquele detalhe da equação mestra: a probabilidade de pular é avaliada no sítio <b>de onde se sai</b>. Tome um passeio sem viés nenhum, $p=q=s(x)/2$, em que o caminhante é ágil de um lado e lento do outro — $D(x)=\dfrac{h^2s(x)}{2\tau}$ varia, mas nada o empurra para lado nenhum. A equação é $\rho_t=\partial_{xx}(D\rho)$, e o equilíbrio ($J=0$, ou seja $D\rho$ constante) é
+        $$\rho_\infty\propto\frac1{D(x)}.$$
+        <b>Ele se acumula onde anda devagar.</b> Soa estranho — não há força alguma —, mas é só contabilidade: em equilíbrio, o que passa de cada sítio para o vizinho tem que empatar com o que volta, $p_j P_j=q_{j+1}P_{j+1}$, e com $p=q=s/2$ isso é $s_jP_j=s_{j+1}P_{j+1}$, ou seja $sP$ constante. Quem é lento precisa de mais gente parada ali para despachar a mesma quantidade. É a razão de haver mais carro parado no trecho congestionado, sem que ninguém esteja sendo puxado para lá.</p>
+        <p>Essa ambiguidade tem nome na teoria de processos estocásticos — é a diferença entre as convenções de Itô e de Stratonovich, e cada uma dá uma equação diferente para o mesmo ruído. Do lado do passeio não há ambiguidade nenhuma: basta perguntar de onde o caminhante veio.</p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">A outra equação: olhar para trás</p>
+        <p>Há uma segunda pergunta, tão natural quanto a primeira, e ela dá outra EDP. Em vez de "onde ele vai estar", pergunte "quanto vale, em média, um prêmio $f$ pago na posição final":
+        $$v(x,t)=\mathbb E\big[f(X_T)\ \big|\ X_t=x\big].$$
+        Condicionando no primeiro passo — e agora os coeficientes são os do sítio <em>onde estamos</em>, $x$, multiplicando os valores nos destinos —
+        $$v(x,t)=p(x)\,v(x+h,t+\tau)+q(x)\,v(x-h,t+\tau)+[1-p-q]\,v(x,t+\tau),$$
+        e o mesmo Taylor de antes dá
+        $$-v_t=a(x)\,v_x+D(x)\,v_{xx}.$$
+        É a <b>equação para trás</b> (de Kolmogorov), resolvida de $T$ para $0$ a partir do dado final $v(x,T)=f(x)$. Compare com Fokker–Planck: ali $a$ e $D$ estão <em>dentro</em> das derivadas, aqui estão <em>fora</em>. Não é descuido de notação — os dois operadores são adjuntos um do outro, $\int(\mathcal L^*\rho)\,v=\int\rho\,(\mathcal Lv)$, e é por isso que
+        $$\frac{d}{dt}\int\rho\,v\,dx=0:$$
+        dá no mesmo empurrar a densidade para a frente ou o prêmio para trás (exercício 6). A fórmula $u^n_i=\mathbb E[u^0_{X_n}]$ da página do princípio do máximo é a versão discreta disso, e é também a equação para trás que, com $x=\ln S$, vira Black–Scholes.</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>São três experimentos. O primeiro solta vinte mil caminhantes na grade e compara o histograma com a gaussiana; complete as probabilidades $p$ e $q$ que produzem a deriva $a$ e a difusão $D$ pedidas. O segundo resolve Fokker–Planck num poço duplo até relaxar e confere contra Boltzmann; complete a linha do fluxo $J$. O terceiro usa o mesmo programa sem deriva nenhuma, mas com $D$ variável, para ver o acúmulo onde se anda devagar.</p>
+      <div class="pycell" data-title="Passeio aleatório, Fokker–Planck e Boltzmann"
+           data-starter="../py/fokker_planck_lacunas.py"
+           data-solution="../py/fokker_planck_solucao.py"></div>
+      <p>No poço duplo, repare que o numérico e $e^{-V/D}$ coincidem até a terceira casa, e que a distribuição tem duas corcovas, nos mínimos de $V$ — o caminhante passa quase todo o tempo em um dos dois poços e, de vez em quando, salta de um para o outro. O tempo típico entre saltos cresce como $e^{\Delta V/D}$ (a fórmula de Kramers), o que explica por que reações químicas são tão sensíveis à temperatura.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. A escala não é escolha</p>
+        <p>(a) Refaça o limite com $\tau=\lambda h$ e $p-q$ fixo: o que acontece com $D=h^2/2\tau$, e que equação sobra? (b) E com $\tau=h^3$? (c) Em que sentido essas duas escalas são as mesmas que aparecem na condição CFL do esquema explícito?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $D=h^2/(2\lambda h)=h/2\lambda\to0$, enquanto $a=(h/\tau)(p-q)=(p-q)/\lambda$ fica finito. A difusão desaparece e sobra $\rho_t+(a\rho)_x=0$: transporte puro. Faz sentido — nessa escala o caminhante dá menos passos por unidade de tempo, e o espalhamento, que é $\sqrt n\,h$, não tem tempo de acontecer.</p>
+          <p>(b) $D=h^2/(2h^3)=1/(2h)\to\infty$. Não há limite: qualquer concentração inicial se espalharia instantaneamente por toda a reta. O relógio rápido demais faz o caminhante dar passos demais.</p>
+          <p>(c) O esquema explícito do calor exige $\Delta t\le h^2/2$, e o de transporte exige $\Delta t\le h/|c|$. São as mesmas duas relações, $\Delta t\sim h^2$ e $\Delta t\sim h$, e pelo mesmo motivo: em ambos os casos o passo do tempo tem que casar com o alcance real da informação na equação. A CFL não é um defeito dos métodos numéricos — é a escala intrínseca do fenômeno.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Média e variância, direto da EDP</p>
+        <p>Com $a$ e $D$ constantes e $\rho$ decaindo rápido no infinito, mostre, integrando por partes, que
+        $$\frac{d}{dt}\langle x\rangle=a,\qquad \frac{d}{dt}\langle x^2\rangle=2a\langle x\rangle+2D,$$
+        e conclua $\langle x\rangle=at$ e $\operatorname{Var}=2Dt$. Depois compare com o passeio, cuja variância exata depois de $n$ passos é $2Dt-a^2\tau t$: o que acontece com a diferença quando $h\to0$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>$\dfrac{d}{dt}\displaystyle\int x\rho=\int x\big[-(a\rho)_x+D\rho_{xx}\big]=\int a\rho+0=a$, usando uma integração por partes no primeiro termo e duas no segundo (os termos de borda somem porque $\rho$ e $\rho_x$ decaem).</p>
+          <p>Do mesmo jeito, $\displaystyle\int x^2\big[-(a\rho)_x\big]=2a\int x\rho$ e $\displaystyle\int x^2 D\rho_{xx}=2D\int\rho=2D$. Então $\langle x^2\rangle'=2a\langle x\rangle+2D=2a^2t+2D$, que integra para $\langle x^2\rangle=a^2t^2+2Dt$, e $\operatorname{Var}=\langle x^2\rangle-\langle x\rangle^2=2Dt$.</p>
+          <p>No passeio, cada passo contribui com variância $h^2(p+q)-h^2(p-q)^2$; somando $n=t/\tau$ deles sai $2Dt-a^2\tau t$. Como $\tau\sim h^2\to0$, a correção $a^2\tau t$ desaparece — mas ela é <em>negativa</em>, isto é, o passeio é sempre um pouco menos espalhado que a gaussiana. É o efeito do viés: um passo que é dado sistematicamente para o mesmo lado rende menos dispersão. Sem viés, $a=0$, a variância do passeio é <em>exatamente</em> $2Dt$, sem erro nenhum.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Boltzmann e o poço harmônico</p>
+        <p>(a) Com $D$ constante e $a=-V'$, mostre que a única densidade estacionária de fluxo nulo é $\rho_\infty\propto e^{-V/D}$. (b) Faça o caso $V=\gamma x^2/2$ e ache a variância de $\rho_\infty$. (c) O que acontece se $V$ for limitado na reta inteira — por exemplo $V(x)=-e^{-x^2}$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $J=0$ dá $a\rho=D\rho_x$, ou seja $\rho_x/\rho=-V'/D$, e integrando, $\ln\rho=-V/D+\text{const}$.</p>
+          <p>(b) $\rho_\infty\propto e^{-\gamma x^2/2D}$, uma gaussiana com $\sigma^2=D/\gamma$. Mola mais dura (ou sacolejo menor) significa nuvem mais apertada, e a dependência é linear nos dois. Esse é o processo de Ornstein–Uhlenbeck, e a mesma conta, em finanças, descreve um ativo com reversão à média.</p>
+          <p>(c) Se $V$ é limitado, $e^{-V/D}$ é limitado por baixo por uma constante positiva, e sua integral sobre $\mathbb R$ diverge: <b>não existe</b> distribuição estacionária. A partícula fica um tempo na cova, mas sempre acaba escapando, e a nuvem se espalha para sempre como na difusão livre. Para prender a partícula, o potencial precisa crescer no infinito — e crescer rápido o suficiente para que $e^{-V/D}$ seja integrável.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Acumular onde se anda devagar</p>
+        <p>Considere o passeio sem viés, $p(x)=q(x)=s(x)/2$, com $s$ variando de ponto a ponto. (a) Que EDP sai do limite? (b) Mostre que o estado estacionário é $\rho_\infty\propto1/D$. (c) Dê o argumento discreto, com $p_jP_j=q_{j+1}P_{j+1}$. (d) Em que a equação $\rho_t=D(x)\rho_{xx}$ difere dessa, e qual delas o passeio produz?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Como $p-q=0$, a deriva é nula e sobra $\rho_t=\partial_{xx}(D\rho)$ com $D=h^2s/2\tau$.</p>
+          <p>(b) O fluxo é $J=-\partial_x(D\rho)$; anulá-lo dá $D\rho$ constante, isto é, $\rho_\infty\propto1/D$.</p>
+          <p>(c) Em equilíbrio, o que atravessa cada ligação para a direita tem que empatar com o que atravessa para a esquerda: $p_jP_j=q_{j+1}P_{j+1}$. Com $p=q=s/2$ isso vira $s_jP_j=s_{j+1}P_{j+1}$, ou seja, $sP$ não depende de $j$. Como $D\propto s$, segue $P\propto1/D$. Repare que a conta discreta nem precisou de limite: o acúmulo é um fato do passeio, não um artefato da EDP.</p>
+          <p>(d) $\partial_{xx}(D\rho)=D\rho_{xx}+\partial_x(D_x\rho)$: a equação "ingênua" $\rho_t=D\rho_{xx}$ é a mesma menos um transporte de velocidade $D_x$, e ela teria $\rho_\infty$ constante, sem acúmulo nenhum. O passeio produz a primeira, porque na equação mestra a probabilidade de pular é a do sítio de onde se sai. Sempre que $D$ variar, vale conferir de onde a equação veio antes de escrevê-la.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O núcleo do calor pela convolução</p>
+        <p>Passeio simétrico, $p=q=\tfrac12$. (a) Explique por que a distribuição depois de $n$ passos é a convolução $n$ vezes da distribuição de um passo. (b) Mostre que a transformada de Fourier de um passo é $\widehat\mu(k)=\cos(kh)$. (c) Tome o limite de $\widehat\mu(k)^n$ com $n=t/\tau$ e $\tau=h^2/2D$, e reconheça o resultado.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) A posição depois de $n$ passos é a soma de $n$ incrementos independentes, e a densidade de uma soma de variáveis independentes é a convolução das densidades — foi exatamente esse o exemplo probabilístico da <a href="convolucao.html">página da convolução</a>.</p>
+          <p>(b) Um passo vale $+h$ ou $-h$ com probabilidade $\tfrac12$; sua transformada é $\tfrac12e^{ikh}+\tfrac12e^{-ikh}=\cos(kh)$.</p>
+          <p>(c) Convolução vira produto, então a transformada depois de $n$ passos é $\cos^n(kh)$. Tomando logaritmo,
+          $$n\ln\cos(kh)=n\ln\Big(1-\tfrac{k^2h^2}2+O(h^4)\Big)=-n\,\tfrac{k^2h^2}2+O(nh^4)=-\frac t\tau\cdot\frac{k^2h^2}2+O(th^2)\longrightarrow-Dk^2t,$$
+          porque $h^2/2\tau=D$. Logo $\widehat\rho(k,t)=e^{-Dk^2t}$, que é precisamente o fator de decaimento de cada modo na solução do calor — e sua transformada inversa é a gaussiana de variância $2Dt$. Três caminhos (equação mestra, teorema central do limite, Fourier) para o mesmo núcleo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Para a frente e para trás</p>
+        <p>(a) Deduza a equação para trás $-v_t=av_x+Dv_{xx}$ a partir do condicionamento no primeiro passo. (b) Mostre, integrando por partes, que $\frac{d}{dt}\int\rho v\,dx=0$ quando $\rho$ resolve Fokker–Planck para a frente e $v$ resolve a equação para trás. (c) Que afirmação sobre esperanças isso é?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) De $v(x,t)=p\,v(x+h,t+\tau)+q\,v(x-h,t+\tau)+(1-p-q)v(x,t+\tau)$, expanda tudo em torno de $(x,t)$: os termos de ordem zero cancelam com $v(x,t)$ à esquerda, sobra
+          $$0=\tau v_t+h(p-q)v_x+\tfrac{h^2}2(p+q)v_{xx}+\cdots$$
+          Dividindo por $\tau$ e usando os mesmos $a$ e $D$: $v_t+av_x+Dv_{xx}=0$. Repare que agora $a$ e $D$ ficam fora das derivadas, porque os coeficientes eram avaliados em $x$, não nos sítios vizinhos.</p>
+          <p>(b) $\dfrac{d}{dt}\displaystyle\int\rho v=\int\rho_tv+\int\rho v_t=\int\big[-(a\rho)_x+(D\rho)_{xx}\big]v-\int\rho\big[av_x+Dv_{xx}\big]$. Integrando por partes uma vez o primeiro termo e duas vezes o segundo, os dois pedaços viram $\int\rho\,[av_x+Dv_{xx}]$, que cancela com o terceiro. Os operadores são adjuntos.</p>
+          <p>(c) Que $\int\rho(\cdot,t)v(\cdot,t)=\mathbb E[f(X_T)]$ não depende de $t$: dá no mesmo levar a densidade de $0$ até $T$ e integrar contra $f$, ou levar o prêmio de $T$ até $0$ e integrar contra a densidade inicial. Para um prêmio só, a segunda é muito mais barata — e é por isso que, em finanças, se resolve a equação para trás (Black–Scholes) e não Fokker–Planck.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. O esquema explícito era um passeio</p>
+        <p>Tome o esquema explícito do calor, $u^{n+1}_j=(1-2r)u^n_j+r\,u^n_{j+1}+r\,u^n_{j-1}$ com $r=\Delta t/h^2$. (a) Para que $p$, $q$ e probabilidade de ficar parado ele é exatamente a equação mestra de um passeio? (b) Que valor de $D$ ele produz, com $\tau=\Delta t$? (c) Traduza a condição $r\le\tfrac12$ para a linguagem do passeio. (d) E $r=\tfrac12$, o que é?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $p=q=r$ e ficar parado com probabilidade $1-2r$. É simétrico, então não há deriva.</p>
+          <p>(b) $D=\dfrac{h^2}{2\tau}(p+q)=\dfrac{h^2}{2\Delta t}\cdot2r=\dfrac{h^2 r}{\Delta t}=1$, com $r=\Delta t/h^2$ — o que era de esperar, já que o esquema aproxima $u_t=u_{xx}$.</p>
+          <p>(c) É "as três probabilidades têm que ser não negativas": $1-2r\ge0$. Passar de $\tfrac12$ é pedir uma probabilidade negativa de ficar parado, o que não quer dizer nada — e o esquema responde fabricando valores fora da faixa inicial, como a <a href="principio-maximo.html">página do princípio do máximo</a> mostrou.</p>
+          <p>(d) É o passeio sem preguiça nenhuma, $p=q=\tfrac12$. Ele é estável, mas tem o problema de paridade que a demo mostra: o modo serrilhado não decai (seu fator é $1-4r=-1$), e as duas sub-redes evoluem sem conversar. Estabilidade não é tudo; um pouco de preguiça faz bem ao esquema e ao caminhante.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+            <li><a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="leis-conservacao.html">Leis de conservação</a></li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/fp-core.js"></script>
+  <script src="../assets/fp-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>
