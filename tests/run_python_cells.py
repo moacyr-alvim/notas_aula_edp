@@ -73,6 +73,21 @@ dif = float(re.search(r"erro diferencas finitas = ([0-9.eE+-]+)", s).group(1))
 check("calor no círculo: espectral é exato até o arredondamento", esp < 1e-12, f"erro={esp:.1e}")
 check("calor no círculo: diferenças finitas erram bem mais", dif > 100 * esp, f"erro={dif:.1e}")
 
+s, _ = rodar("transformada_reta_solucao.py")
+for nome, esperado in (("triangulo", 0.5477), ("exponencial", 0.7071), ("gaussiana", 0.5000)):
+    v = float(re.search(nome + r"\s+Dx\*Dk = ([0-9.]+)", s).group(1))
+    check(f"transformada: {nome} tem Δx·Δk = {esperado}", abs(v - esperado) < 2e-3, f"{v}")
+erro_g = float(re.search(r"gaussiana\s+erro relativo da FFT = ([0-9.eE+-]+)", s).group(1))
+check("transformada: a FFT da gaussiana bate com a fórmula", erro_g < 1e-12, f"erro={erro_g:.1e}")
+
+s, _ = rodar("calor_reta_solucao.py")
+linhas = re.findall(r"^\s*([0-9.]+)\s+([0-9.eE+-]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s*$", s, re.M)
+check("calor na reta: a FFT bate com a fórmula da função erro", all(float(l[1]) < 2e-4 for l in linhas), str([l[1] for l in linhas]))
+check("calor na reta: a massa se conserva", all(abs(float(l[2]) - 2) < 1e-5 for l in linhas), str([l[2] for l in linhas]))
+circ = re.findall(r"^\s*([0-9.]+)\s+([0-9.]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s*$", s, re.M)
+check("calor na reta: no círculo o desvio da média é 2|c1|exp(-Dt)",
+      all(abs(float(a) - float(b)) / float(b) < 0.02 for _, _, a, b in circ[-2:]), str(circ[-2:]))
+
 s, _ = rodar("passeio_aleatorio_solucao.py")
 dmed = float(re.search(r"D medido = ([0-9.eE+-]+)", s).group(1))
 incl = float(re.search(r"inclinacao no log-log = ([0-9.eE+-]+)", s).group(1))

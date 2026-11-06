@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O calor na reta: Fourier e o núcleo — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O calor na reta: Fourier e o núcleo</h1>
+        <p class="lede">Numa barra infinita não há bordas para selecionar os modos, e todas as frequências entram. A transformada de Fourier troca a EDP por uma EDO em cada k, e a volta para o espaço entrega uma única fórmula: convolver com um sino gaussiano que cresce como a raiz do tempo.</p>
+        <p class="meta">Ajuda ler antes: <a href="transformada-fourier.html">A transformada de Fourier na reta</a> e <a href="calor-circulo.html">O calor no círculo</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="reta" data-toc="Sem bordas">Uma barra sem pontas</h2>
+      <p>Até agora o calor sempre morou num lugar apertado: um <a href="difusao-grafos.html">grafo</a>, um <a href="calor-grafo-anel.html">anel</a>, um <a href="calor-circulo.html">círculo</a>, uma <a href="separacao-variaveis.html">barra com as pontas seguradas</a>. Agora vamos resolver
+      $$u_t=D\,u_{xx},\qquad x\in\mathbb R,\qquad u(x,0)=f(x),$$
+      numa barra infinita: <b>sem bordas e sem dar voltas</b>. É o caso que aparece sempre que o domínio é grande comparado com a distância que o calor percorre no tempo que nos interessa — e é também, como veremos, a equação que o <a href="passeio-aleatorio.html">passeio aleatório</a> produziu no limite.</p>
+      <p>Repare que os métodos anteriores não servem como estão. A separação de variáveis precisava das bordas para selecionar os modos: eram elas que diziam "só valem $\operatorname{sen}(n\pi x/\ell)$". A série de Fourier precisava da periodicidade. Aqui não há nem uma coisa nem outra, e <b>todas</b> as frequências são admissíveis. É exatamente para isso que serve a <a href="transformada-fourier.html">transformada de Fourier na reta</a>: ela é a série com o pente de frequências preenchido.</p>
+
+      <h2 id="receita" data-toc="Uma EDO para cada k">Uma EDO para cada $k$</h2>
+      <p>A receita é a mesma de sempre, e é curta. Transforme a equação em $x$, lembrando que cada derivada vira um fator $ik$:
+      $$\widehat{u_{xx}}=(ik)^2\,\widehat u=-k^2\,\widehat u.$$
+      O tempo é só um parâmetro passageiro — a transformada não mexe nele —, de modo que a EDP vira
+      $$\boxed{\;\frac{\partial\widehat u}{\partial t}(k,t)=-D\,k^2\,\widehat u(k,t)\;}$$
+      que é, <em>para cada $k$ fixo</em>, a EDO mais simples do mundo. Sua solução é
+      $$\widehat u(k,t)=e^{-Dk^2t}\;\widehat u(k,0)=e^{-Dk^2t}\,\widehat f(k).$$</p>
+      <p>Está resolvido. A equação do calor, no espaço de Fourier, é apenas uma <b>multiplicação</b>: cada onda $e^{ikx}$ segue seu caminho sozinha, encolhendo exponencialmente, com uma taxa $Dk^2$ que cresce com o <em>quadrado</em> da frequência. Uma ondulação com o dobro da frequência morre quatro vezes mais rápido. É o mesmo $e^{-Dk^2t}$ do <a href="calor-circulo.html">círculo</a>, com uma única diferença: lá $k$ só podia ser inteiro, aqui ele varre toda a reta.</p>
+      <p>A hierarquia entre as frequências explica tudo o que vem a seguir. Qualquer detalhe fino do dado inicial mora nas frequências altas, e essas são aniquiladas quase instantaneamente; o que sobrevive é a parte suave, de $k$ pequeno. O calor é uma máquina de esquecer detalhes, e esquece primeiro os menores.</p>
+
+      <h2 id="nucleo" data-toc="O núcleo gaussiano">Voltando para o espaço: o núcleo</h2>
+      <p>Falta desfazer a transformada. E aqui entra a melhor linha da tabela de propriedades: <b>produto de um lado é convolução do outro</b>. Como $\widehat u$ é o produto de $\widehat f$ por $e^{-Dk^2t}$, a solução é $f$ convolvida com a função cuja transformada é $e^{-Dk^2t}$.</p>
+      <p>Que função é essa? Já sabemos: gaussiana vira gaussiana. A fórmula da caixinha anterior diz que $\widehat{g_w}(k)=w\sqrt{2\pi}\,e^{-w^2k^2/2}$; escolhendo $w^2=2Dt$ para casar o expoente, e dividindo pela constante, a transformada inversa de $e^{-Dk^2t}$ é
+      $$G_t(x)=\frac{1}{\sqrt{4\pi Dt}}\;e^{-x^2/4Dt},$$
+      e portanto
+      $$\boxed{\;u(x,t)=(G_t*f)(x)=\frac{1}{\sqrt{4\pi Dt}}\int_{-\infty}^{\infty}e^{-(x-y)^2/4Dt}\,f(y)\,dy.\;}$$
+      $G_t$ é o <b>núcleo do calor</b> na reta (ou núcleo de Gauss–Weierstrass). Uma única fórmula resolve o problema para qualquer dado inicial.</p>
+      <p>Vale ler a fórmula em palavras, porque ela é muito mais intuitiva do que parece: <em>a temperatura em $x$ no instante $t$ é uma média ponderada de toda a temperatura inicial, com peso gaussiano centrado em $x$ e de largura $\sqrt{4Dt}$</em>. No instante inicial o peso é um pico infinitamente fino e $u=f$; conforme o tempo passa, o sino vai alargando e misturando regiões cada vez mais distantes. <b>Difundir é borrar com um sino que cresce.</b></p>
+
+      <h2 id="demo" data-toc="Veja acontecer">Veja acontecer</h2>
+      <p>À esquerda, a solução na reta (o dado inicial fica tracejado) e, se você pedir, a mesma conta no círculo de período $2\pi$, com as paredes de uma volta marcadas. À direita, o espectro $|\widehat u(k,t)|$ em escala logarítmica, com o multiplicador $e^{-Dk^2t}$ tracejado: é ele que vai comendo as frequências de fora para dentro. A difusão está fixa em $D=\tfrac14$, o que deixa a largura do sino igual a $\sqrt t$ redondinho.</p>
+
+      <div class="demo" id="demo-cr">
+        <div class="controls">
+          <label>Dado inicial
+            <select id="cr-dado" aria-label="Dado inicial"></select>
+          </label>
+          <label>t
+            <input type="range" id="cr-t" min="0.02" max="8" step="0.01" value="0.3" aria-label="Tempo">
+            <output id="cr-tv">0,30</output>
+          </label>
+          <label>Comparar com o círculo
+            <select id="cr-circulo" aria-label="Mostrar também a solução no círculo">
+              <option value="nao" selected>só a reta</option>
+              <option value="sim">reta e círculo</option>
+            </select>
+          </label>
+          <button id="cr-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="cr-u" role="img" aria-label="A solução na reta e, opcionalmente, no círculo"></canvas>
+          <canvas id="cr-k" role="img" aria-label="O espectro da solução em escala logarítmica"></canvas>
+        </div>
+        <div class="readout" id="cr-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>solução na reta</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>dado inicial</span>
+          <span><i style="border-color:var(--choque)"></i>solução no círculo</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>multiplicador e^(−Dk²t)</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li><b>Anime a caixa.</b> O canto vira redondo <em>imediatamente</em> — não existe instante algum, por menor que seja, em que a solução ainda tenha um bico. No painel da direita dá para ver por quê: o multiplicador já cortou tudo o que estava acima de $k\approx1/\sqrt{Dt}$, e eram justamente as frequências altas que faziam o canto.</li>
+        <li><b>Escolha "tudo concentrado num ponto".</b> Essa é a solução fundamental, o próprio $G_t$, e o espectro dela é o puro multiplicador: a delta tem todas as frequências com peso $1$. Repare que a altura cai como $1/\sqrt t$ enquanto a largura cresce como $\sqrt t$ — o produto, que é a massa, não muda.</li>
+        <li><b>Use os dois pulsos.</b> Enquanto $\sqrt{4Dt}$ é menor que a distância entre eles, são dois montes independentes; quando a largura alcança a separação, eles se fundem num só. A escala $\sqrt{4Dt}$ é literalmente o alcance da conversa.</li>
+        <li><b>Ligue o círculo.</b> No começo as duas curvas são indistinguíveis: a nuvem ainda não sabe que o mundo dá voltas. Quando $\sqrt{4Dt}$ chega perto de $\pi$, elas se separam — e aí a diferença é definitiva, porque a do círculo para numa média positiva e a da reta continua descendo para zero.</li>
+      </ol>
+
+      <h2 id="olhar" data-toc="O que o núcleo diz">Quatro coisas que o núcleo diz</h2>
+      <p><b>1. A massa se conserva.</b> Como $\int G_t=1$ para todo $t$, integrar a convolução dá $\int u(\cdot,t)=\int f$. Em linguagem de Fourier é a mesma coisa olhando o modo $k=0$: $\widehat u(0,t)=e^{0}\widehat f(0)=\widehat f(0)$. O calor se espalha, mas não some.</p>
+      <p><b>2. A suavização é instantânea.</b> $G_t$ é infinitamente derivável para $t>0$, e convolver com uma função lisa produz uma função lisa — as derivadas caem todas sobre o núcleo, que aguenta quantas vierem. Então, para <em>qualquer</em> dado inicial, por mais quebrado que seja, a solução é $C^\infty$ no instante seguinte. Do lado de Fourier é a mesma frase: multiplicar por $e^{-Dk^2t}$ faz a cauda do espectro despencar mais rápido que qualquer potência, e já vimos que isso é o mesmo que ser lisa. É a diferença mais marcante entre o calor e a <a href="onda-dalembert.html">equação da onda</a>, que transporta os bicos para sempre.</p>
+      <p><b>3. A propagação tem velocidade infinita.</b> A gaussiana nunca é exatamente zero. Se o dado inicial é um pulso confinado numa caixinha, então para todo $x$, por mais distante que esteja, e para todo $t>0$, por menor que seja, já existe $u(x,t)>0$. Isso é fisicamente falso — o calor não se propaga mais rápido que a luz — e é o preço que o modelo cobra por ser tão simples. Mas é um defeito benigno: a conta do exercício 4 mostra que esses valores são absurdamente pequenos, do tipo $e^{-10^{12}}$. O passeio aleatório explica a origem do defeito: o caminhante discreto não pode se afastar mais que $n$ passos, mas a gaussiana-limite, que é só a aproximação da binomial, não sabe disso.</p>
+      <p><b>4. A solução é autossemelhante.</b> O núcleo depende de $x$ e $t$ só por meio da combinação $\xi=x/\sqrt{4Dt}$:
+      $$G_t(x)=\frac1{\sqrt{4\pi Dt}}\,e^{-\xi^2}=\frac1{\sqrt{4Dt}}\;\Phi(\xi),\qquad \Phi(\xi)=\frac{e^{-\xi^2}}{\sqrt\pi}.$$
+      Em palavras: o perfil é <em>sempre o mesmo</em>, só esticado por $\sqrt{4Dt}$ na horizontal e achatado pelo mesmo fator na vertical. Reescalando os eixos, todas as curvas de todos os instantes caem exatamente umas sobre as outras — a célula de Python desenha esse colapso. E não é coincidência que isto seja a mesma autossemelhança das trajetórias brownianas: as duas vêm da mesma linha da tabela, a regra de escala, que só existe porque a reta não tem tamanho próprio.</p>
+
+      <aside class="box">
+        <p class="tag">O núcleo é a lei do caminhante</p>
+        <p>Compare o núcleo com o que a página do <a href="passeio-aleatorio.html">passeio aleatório</a> obteve: a posição do caminhante no instante $t$ é gaussiana de média zero e variância $2Dt$. A densidade dessa gaussiana é
+        $$\frac1{\sqrt{2\pi\cdot2Dt}}e^{-x^2/(2\cdot2Dt)}=\frac1{\sqrt{4\pi Dt}}e^{-x^2/4Dt}=G_t(x).$$
+        São a mesma função. Logo a fórmula da solução pode ser lida assim:
+        $$u(x,t)=\int G_t(x-y)f(y)\,dy=\mathbb E\big[f(x+B_t)\big],$$
+        isto é: <b>a temperatura em $x$ é a média do dado inicial visto por um caminhante browniano que parte de $x$</b>. Para saber quanto vale $u$ num ponto, solte muitos caminhantes ali, veja onde cada um está no instante $t$, anote o valor inicial naquele lugar e tire a média.</p>
+        <p>Essa leitura é a versão contínua da fórmula $u^n_i=\mathbb E[u^0_{X_n}]$ do <a href="principio-maximo.html">princípio do máximo</a>, e explica de graça por que o máximo nunca cresce: média de valores nunca passa do maior deles. É também a forma mais simples da <b>fórmula de Feynman–Kac</b>, que resolve EDPs por esperanças, e é a porta por onde se chega a Black–Scholes.</p>
+      </aside>
+
+      <h2 id="enrolado" data-toc="O círculo é a reta enrolada">O círculo é a reta enrolada</h2>
+      <p>Falta amarrar esta caixinha com a do <a href="calor-circulo.html">calor no círculo</a>, e a ponte é simples de enunciar: <b>um caminhante no círculo é um caminhante na reta que a gente olha a menos de voltas</b>. Estar no ponto $x$ do círculo significa estar em $x$, ou em $x+2\pi$, ou em $x-2\pi$, ou em qualquer $x+2\pi m$ da reta. Somando todas essas possibilidades,
+      $$G_t^{\text{círculo}}(x)=\sum_{m\in\mathbb Z}G_t(x+2\pi m).$$
+      O núcleo do círculo é o da reta <b>enrolado</b>. (Do lado de Fourier, essa mesma identidade é $\frac1{2\pi}\sum_k e^{-Dk^2t}e^{ikx}$, com $k$ inteiro — a soma de Poisson: enrolar o espaço é discretizar a frequência.)</p>
+      <p>A demo mostra as duas consequências práticas. Enquanto $\sqrt{4Dt}\ll\pi$, só a parcela $m=0$ importa, e as duas soluções coincidem com erro invisível: num tempo curto, ninguém percebe a curvatura do mundo. Mas os destinos finais são opostos, e vale guardar a tabela:</p>
+      <table class="tabela">
+        <thead><tr><th></th><th>No círculo</th><th>Na reta</th></tr></thead>
+        <tbody>
+          <tr><td>frequências</td><td>$k$ inteiro, com um menor não nulo ($k=1$)</td><td>$k$ real, chegando tão perto de $0$ quanto se queira</td></tr>
+          <tr><td>para onde vai</td><td>para a média $\frac1{2\pi}\int f$</td><td>para zero</td></tr>
+          <tr><td>com que rapidez</td><td>$e^{-Dt}$, exponencial</td><td>$1/\sqrt t$, lentíssima</td></tr>
+        </tbody>
+      </table>
+      <p>A razão da diferença cabe numa frase: <b>no círculo existe uma frequência mais baixa possível, e na reta não</b>. No círculo, passado o transitório, só sobrevive o modo $k=1$, e ele decai como $e^{-Dt}$ — a célula de Python confere isso com quatro casas, prevendo o desvio como $2|c_1|e^{-Dt}$. Na reta sempre há modos com $k$ quase zero, que quase não decaem, e são eles que seguram a solução perto de zero mas sem nunca deixá-la chegar lá. É a mesma observação da caixinha anterior, agora com consequência física: o círculo tem uma escala própria, o seu perímetro; a reta não tem nenhuma.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Três experimentos: a solução pela FFT contra a fórmula fechada com a função erro, o colapso autossemelhante e a comparação entre a reta e o círculo. A lacuna é o coração do método — o multiplicador que resolve a EDO em cada $k$.</p>
+      <div class="pycell" data-title="O núcleo do calor, o colapso e o círculo"
+           data-starter="../py/calor_reta_lacunas.py"
+           data-solution="../py/calor_reta_solucao.py"></div>
+      <p>Repare, na primeira tabela, que a massa fica em $2{,}000000$ em todos os instantes e que o erro contra a fórmula exata é de $10^{-5}$ ou menos. Na terceira, o desvio da média no círculo bate com $2|c_1|e^{-Dt}$ em quatro algarismos a partir de $t=10$: depois que os harmônicos altos morrem, sobra um só, e dá para prever o resto da história de cabeça.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O degrau e a função erro</p>
+        <p>Tome $f(x)=1$ para $x&lt;0$ e $0$ para $x>0$. (a) Use a fórmula do núcleo para mostrar que
+        $$u(x,t)=\tfrac12\Big(1-\operatorname{erf}\Big(\tfrac{x}{\sqrt{4Dt}}\Big)\Big),\qquad \operatorname{erf}(z)=\frac2{\sqrt\pi}\int_0^z e^{-s^2}ds.$$
+        (b) Quanto vale $u(0,t)$? (c) Que distância a "frente" (digamos, o ponto onde $u=0{,}1$) percorre em tempo $t$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $u(x,t)=\int_{-\infty}^{0}G_t(x-y)dy$. Troque $s=(x-y)/\sqrt{4Dt}$: o intervalo $y\in(-\infty,0)$ vira $s\in(x/\sqrt{4Dt},\infty)$, e $dy=\sqrt{4Dt}\,ds$, de modo que
+          $$u=\frac1{\sqrt\pi}\int_{x/\sqrt{4Dt}}^{\infty}e^{-s^2}ds=\tfrac12\Big(1-\operatorname{erf}\big(x/\sqrt{4Dt}\big)\Big).$$</p>
+          <p>(b) $\operatorname{erf}(0)=0$, logo $u(0,t)=\tfrac12$ para todo $t>0$: a interface fica parada na média dos dois lados, por simetria.</p>
+          <p>(c) O perfil depende só de $\xi=x/\sqrt{4Dt}$, então o ponto onde $u=0{,}1$ está num $\xi$ fixo (aqui $\xi\approx0{,}906$), ou seja, em $x\approx0{,}906\sqrt{4Dt}$. A frente anda como $\sqrt t$, e não com velocidade constante: para ir duas vezes mais longe, espere quatro vezes mais. É a mesma lei do passeio aleatório, e por isso o cheiro leva uma semana para atravessar a sala.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Para onde vai, e com que pressa</p>
+        <p>Suponha $f\ge0$ integrável, com $\int f=M$. (a) Mostre que $\max_x u(x,t)\le M/\sqrt{4\pi Dt}$, e que para $t$ grande vale aproximadamente a igualdade. (b) Conclua que $u\to0$ em toda a reta, mas que a massa continua $M$ — para onde ela foi? (c) No círculo de perímetro $2\pi$ a mesma massa não vai a zero: para onde ela vai, e por que a diferença?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $u(x,t)=\int G_t(x-y)f(y)dy\le\max G_t\cdot\int f=M/\sqrt{4\pi Dt}$. Para $t$ grande, $f$ é estreito comparado com a largura do núcleo e funciona como se fosse uma delta de massa $M$, de modo que $u\approx M\,G_t$ e a desigualdade fica apertada.</p>
+          <p>(b) O máximo vai a zero como $1/\sqrt t$, logo $u\to0$ ponto a ponto. A massa não sumiu: ela se espalhou por uma região de largura $\sqrt{4Dt}$, que cresce sem limite. Altura vezes largura continua $M$ — é só a massa fugindo para o infinito, devagar.</p>
+          <p>(c) No círculo não há para onde fugir, e a massa se reparte igualmente: $u\to M/2\pi$, a média. A diferença é que o círculo é finito, e isso se traduz em haver uma frequência mínima $k=1$; a convergência para a média acontece na taxa $e^{-Dt}$ desse modo. Na reta, modos com $k$ arbitrariamente pequeno decaem arbitrariamente devagar, e o resultado líquido é a lei $1/\sqrt t$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Autossemelhança</p>
+        <p>(a) Verifique que $G_t(x)=\frac1{\sqrt{4Dt}}\Phi\big(x/\sqrt{4Dt}\big)$ com $\Phi(\xi)=e^{-\xi^2}/\sqrt\pi$. (b) Mostre, usando a regra de escala da transformada, que se $u(x,t)$ resolve a equação então $u_\lambda(x,t)=\lambda\,u(\lambda x,\lambda^2t)$ também resolve. (c) Que simetria da equação do calor isso revela, e o que ela tem a ver com $\tau\sim h^2$ do passeio aleatório?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Substituição direta: $e^{-x^2/4Dt}=e^{-\xi^2}$ quando $\xi=x/\sqrt{4Dt}$, e o prefator $1/\sqrt{4\pi Dt}$ é $\frac1{\sqrt{4Dt}}\cdot\frac1{\sqrt\pi}$.</p>
+          <p>(b) Derivando, $\partial_t u_\lambda=\lambda^3u_t(\lambda x,\lambda^2t)$ e $\partial_{xx}u_\lambda=\lambda^3u_{xx}(\lambda x,\lambda^2t)$: os dois ganham o mesmo fator $\lambda^3$, e a equação sobrevive. O fator $\lambda$ na frente é o que preserva a massa.</p>
+          <p>(c) Que a equação do calor é invariante pela escala "espaço $\lambda$, tempo $\lambda^2$" — a mesma do movimento browniano e a mesma que obrigava $\tau\sim h^2$ no passeio. Não poderia ser diferente: a EDP tem uma derivada no tempo e duas no espaço, e para os dois lados se equilibrarem o tempo tem que contar em dobro. Toda a história do $\sqrt t$ está nessa contagem de derivadas.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Infinitamente rápido, mas desprezível</p>
+        <p>Um pulso de calor é solto na origem de uma barra de ferro ($D\approx1{,}2\times10^{-5}\,\mathrm{m^2/s}$). (a) Explique por que a fórmula diz que, um microssegundo depois, já há calor a um metro de distância. (b) Estime o tamanho de $u$ nesse ponto, comparado com o pico. (c) Isso invalida o modelo?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Porque $e^{-x^2/4Dt}$ é estritamente positivo para todo $x$ e todo $t>0$: a gaussiana não tem suporte compacto, e a convolução espalha qualquer massa para todo lado instantaneamente.</p>
+          <p>(b) Com $t=10^{-6}$ s, $4Dt=4{,}8\times10^{-11}\,\mathrm{m^2}$, e em $x=1$ m o expoente é $-x^2/4Dt\approx-2\times10^{10}$. O valor é $e^{-2\times10^{10}}$ vezes o pico — um número com dez bilhões de zeros depois da vírgula. Nenhum instrumento, nem nenhum átomo, distingue isso de zero.</p>
+          <p>(c) Não para o que o modelo se propõe. É um defeito conhecido e inofensivo em escalas humanas: existem modelos corrigidos (a equação do telégrafo, por exemplo, com uma segunda derivada no tempo) que propagam com velocidade finita, ao custo de perder a simplicidade. A lição é a de sempre — um modelo não precisa ser verdadeiro em todos os regimes, precisa ser útil no regime em que é usado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O método das imagens</p>
+        <p>Agora na semirreta $x>0$. (a) Para resolver com $u(0,t)=0$, estenda $f$ de forma <b>ímpar</b> a toda a reta e resolva ali; mostre que a solução se anula em $x=0$ e que a fórmula resultante é
+        $$u(x,t)=\int_0^\infty\big[G_t(x-y)-G_t(x+y)\big]f(y)\,dy.$$
+        (b) E para a borda isolada, $u_x(0,t)=0$? (c) Que relação isso tem com a corda de extremidades fixas da <a href="edps-fourier.html">caixinha de exercícios de Fourier</a>?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Se $\tilde f$ é ímpar, a solução $\tilde u=G_t*\tilde f$ também é ímpar em $x$ para todo $t$ (o núcleo é par, e a convolução de par com ímpar é ímpar), e toda função ímpar vale zero na origem. Restrita a $x>0$, $\tilde u$ resolve a equação com o dado certo e com a borda certa. Escrevendo a integral sobre a reta e dobrando a parte negativa, com $\tilde f(-y)=-f(y)$, aparecem os dois termos: o real em $y$ e a sua <em>imagem</em> refletida em $-y$, com sinal trocado.</p>
+          <p>(b) Estenda de forma <b>par</b>: a derivada de uma função par se anula na origem. A fórmula fica com um sinal de mais, $G_t(x-y)+G_t(x+y)$ — a imagem reflete sem trocar de sinal, como numa parede que devolve tudo em vez de absorver.</p>
+          <p>(c) É exatamente o mesmo truque. Lá, a corda presa em $0$ e $\ell$ foi resolvida estendendo o dado de forma ímpar e periódica de período $2\ell$; as duas bordas obrigam a refletir infinitas vezes, e é por isso que aparece uma soma de imagens — que, no caso do calor no círculo, é a soma sobre as voltas desta mesma caixinha. Espelhar e enrolar são duas receitas de uma coisa só: resolver na reta e depois dobrar o domínio no formato desejado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Enrolando o núcleo</p>
+        <p>(a) Mostre que $K_t(x)=\sum_m G_t(x+2\pi m)$ é periódica de período $2\pi$ e resolve a equação do calor. (b) Mostre que $\int_{-\pi}^{\pi}K_t=1$. (c) Calcule os coeficientes de Fourier de $K_t$ e conclua que $K_t(x)=\frac1{2\pi}\sum_k e^{-Dk^2t}e^{ikx}$. (d) Use isso para prever o desvio da média, em $t$ grande, do calor no círculo partindo de uma caixa.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Trocar $x$ por $x+2\pi$ só reindexa a soma, então $K_t$ é periódica; e cada parcela resolve a equação, logo a soma também (a convergência é excelente, porque as parcelas distantes são gaussianas minúsculas).</p>
+          <p>(b) $\int_{-\pi}^{\pi}\sum_m G_t(x+2\pi m)dx=\sum_m\int_{-\pi+2\pi m}^{\pi+2\pi m}G_t=\int_{\mathbb R}G_t=1$: as janelas deslocadas ladrilham a reta exatamente uma vez.</p>
+          <p>(c) $c_k=\frac1{2\pi}\int_{-\pi}^{\pi}K_te^{-ikx}dx$; abrindo a soma e juntando as janelas como em (b), isso é $\frac1{2\pi}\int_{\mathbb R}G_t(x)e^{-ikx}dx=\frac1{2\pi}\widehat{G_t}(k)=\frac1{2\pi}e^{-Dk^2t}$. Essa é a fórmula da soma de Poisson no caso gaussiano, e ela diz que as duas descrições do calor no círculo — enrolar o núcleo, ou somar os modos — são a mesma.</p>
+          <p>(d) Partindo de uma caixa de meia largura $1$, os coeficientes iniciais são $c_k=\operatorname{sen}(k)/(\pi k)$, e a solução é $\sum_k c_ke^{-Dk^2t}e^{ikx}$. Para $t$ grande só sobram $k=0$ (a média) e $k=\pm1$, de modo que
+          $$u-\text{média}\approx2c_1e^{-Dt}\cos x,\qquad 2c_1=\frac{2\operatorname{sen}1}\pi\approx0{,}536.$$
+          O maior desvio é então $0{,}536\,e^{-Dt}$ — que é exatamente o número que a célula de Python confirma a partir de $t=10$.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="transformada-fourier.html">A transformada de Fourier na reta</a></li>
+            <li><a href="calor-circulo.html">O calor no círculo</a></li>
+            <li><a href="passeio-aleatorio.html">O passeio aleatório e o movimento browniano</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+            <li><a href="edps-fourier.html">EDPs lineares com Fourier</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/cr-core.js"></script>
+  <script src="../assets/cr-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

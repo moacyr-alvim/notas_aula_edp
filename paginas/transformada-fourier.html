@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A transformada de Fourier na reta — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A transformada de Fourier na reta</h1>
+        <p class="lede">O que acontece com a série de Fourier quando o período vai para o infinito: o pente de frequências fica denso, a soma vira integral, e o resultado é a ferramenta que resolve EDPs em domínios sem borda.</p>
+        <p class="meta">Ajuda ler antes: <a href="serie-fourier.html">Série de Fourier</a> e <a href="convolucao.html">Convolução</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="limite" data-toc="Da série para a integral">Quando o período vai para o infinito</h2>
+      <p>A <a href="serie-fourier.html">série de Fourier</a> resolve funções periódicas. Mas quase nada do que interessa é periódico: um pulso que acontece uma vez, uma gaussiana, um degrau, a temperatura numa barra infinita. A saída é a mais natural possível — tratar uma função qualquer como periódica de período <em>enorme</em>, e ver o que sobrevive quando o período vai para o infinito.</p>
+      <p>Comece com $f$ definida em $[-L,L]$ e estendida periodicamente. A série é
+      $$f(x)=\sum_{n\in\mathbb Z}c_n\,e^{ik_nx},\qquad k_n=\frac{\pi n}L,\qquad c_n=\frac1{2L}\int_{-L}^{L}f(x)\,e^{-ik_nx}\,dx.$$
+      As frequências permitidas são os pontos $k_n$, espaçados de $\Delta k=\pi/L$. <b>Aumentar $L$ aproxima esses pontos</b>: o pente de frequências vai ficando fino, e no limite ele preenche a reta.</p>
+      <p>Agora o truque de escrita. Defina
+      $$\widehat f(k)=\int_{-\infty}^{\infty}f(x)\,e^{-ikx}\,dx,$$
+      que é a integral do coeficiente <em>sem</em> o fator $1/2L$ — supondo que $f$ morre longe o bastante para a integral existir. Então $c_n=\widehat f(k_n)/2L$, e como $\dfrac1{2L}=\dfrac{\Delta k}{2\pi}$,
+      $$f(x)=\sum_n \widehat f(k_n)\,e^{ik_nx}\,\frac{\Delta k}{2\pi}.$$
+      Olhe bem para o lado direito: é uma <b>soma de Riemann</b>. Quando $L\to\infty$ o espaçamento $\Delta k$ vai a zero e a soma vira integral:
+      $$f(x)=\frac1{2\pi}\int_{-\infty}^{\infty}\widehat f(k)\,e^{ikx}\,dk.$$</p>
+      <p>Vale entender o que aconteceu com cada modo individual. O coeficiente $c_n$ foi a zero — nenhuma frequência isolada tem peso próprio. O que sobreviveu foi a <b>densidade</b> $\widehat f(k)/2\pi$, peso por unidade de frequência; exatamente o mesmo movimento que, no <a href="passeio-aleatorio.html">passeio aleatório</a>, trocou a probabilidade $P_j$ de um sítio pela densidade $\rho=P_j/h$. Periódico tem espectro de linhas; não periódico tem espectro contínuo.</p>
+
+      <h2 id="convencao" data-toc="O par de fórmulas">O par de fórmulas</h2>
+      <p>De um lado a análise, do outro a síntese:
+      $$\boxed{\;\widehat f(k)=\int_{-\infty}^{\infty}f(x)\,e^{-ikx}\,dx,\qquad\quad f(x)=\frac1{2\pi}\int_{-\infty}^{\infty}\widehat f(k)\,e^{ikx}\,dk.\;}$$
+      A primeira pergunta "quanto de $e^{ikx}$ tem em $f$"; a segunda remonta $f$ empilhando as ondas de volta. Repare na simetria: só mudam o sinal do expoente e o fator $1/2\pi$.</p>
+
+      <aside class="box atencao">
+        <p class="tag">Onde fica o $2\pi$</p>
+        <p>Cada livro põe o $2\pi$ num lugar. Há quem use $\tfrac1{\sqrt{2\pi}}$ nas duas fórmulas, para deixá-las idênticas a menos do sinal; há quem escreva $e^{-2\pi i\xi x}$ e, aí, o $2\pi$ some das duas. Nenhuma é mais certa — elas diferem por constantes e por uma troca de variável $k=2\pi\xi$. Escolhemos esta porque deixa a regra da derivada no formato mais limpo, $\widehat{f'}=ik\widehat f$, sem constante nenhuma pendurada. Ao comparar fórmulas com outra fonte, o primeiro passo é sempre conferir a convenção.</p>
+        <p>Quanto à existência: se $\int|f|&lt;\infty$, a integral de $\widehat f$ converge para todo $k$ e define uma função contínua. Para $f$ apenas de quadrado integrável — o caso de $\operatorname{sen}(x)/x$, por exemplo — a integral precisa ser entendida como um limite, e é nesse espaço que a transformada fica perfeitamente simétrica (é o que a identidade de Plancherel, lá embaixo, diz).</p>
+      </aside>
+
+      <h2 id="propriedades" data-toc="Catálogo de propriedades">Um catálogo de propriedades</h2>
+      <p>Esta é a terceira vez que esta tabela aparece, e é de propósito: a <a href="dft.html">transformada discreta</a>, a <a href="serie-fourier.html">série</a> e a transformada na reta fazem as mesmas coisas, pelo mesmo motivo — todas são coordenadas numa base de autovetores do deslocamento. Compare coluna com coluna.</p>
+
+      <table class="tabela">
+        <thead><tr><th>Propriedade</th><th>Transformada na reta</th><th>Série de Fourier</th><th>Fourier discreto</th></tr></thead>
+        <tbody>
+          <tr><td>linearidade</td><td>$\widehat{\alpha f+\beta g}=\alpha\widehat f+\beta\widehat g$</td><td>igual</td><td>igual</td></tr>
+          <tr><td>função real</td><td>$\widehat f(-k)=\overline{\widehat f(k)}$</td><td>$c_{-k}=\overline{c_k}$</td><td>$\hat u_{N-k}=\overline{\hat u_k}$</td></tr>
+          <tr><td>translação</td><td>$\widehat{f(\cdot-a)}=e^{-ika}\,\widehat f$</td><td>$e^{-ika}\,c_k$</td><td>$\omega^{-lk}\,\hat u_k$</td></tr>
+          <tr><td>modulação</td><td>$\widehat{e^{imx}f}=\widehat f(k-m)$</td><td>$c_{k-m}$</td><td>$\hat u_{k-m}$</td></tr>
+          <tr><td>derivada</td><td>$\widehat{f'}=ik\,\widehat f$</td><td>$ik\,c_k$</td><td>$i\operatorname{sen}\theta\;\hat u_k$</td></tr>
+          <tr><td>convolução</td><td>$\widehat{f*g}=\widehat f\,\widehat g$</td><td>$c_k\,d_k$</td><td>$\sqrt N\,\hat u_k\hat v_k$</td></tr>
+          <tr><td>produto</td><td>$\widehat{fg}=\frac1{2\pi}\widehat f*\widehat g$</td><td>$\sum_m c_m d_{k-m}$</td><td>convolução circular</td></tr>
+          <tr><td>Parseval (Plancherel)</td><td>$\int f\overline g=\frac1{2\pi}\int\widehat f\,\overline{\widehat g}$</td><td>$\sum_k\overline{c_k}d_k$</td><td>$\langle\hat u,\hat v\rangle$</td></tr>
+          <tr><td><b>escala</b></td><td>$\widehat{f(a\,\cdot)}=\frac1{|a|}\widehat f(k/a)$</td><td>não existe</td><td>não existe</td></tr>
+          <tr><td><b>multiplicar por $x$</b></td><td>$\widehat{xf}=i\,\dfrac{d\widehat f}{dk}$</td><td>não existe</td><td>não existe</td></tr>
+        </tbody>
+      </table>
+
+      <p>As duas últimas linhas são a novidade, e a razão delas é geométrica: <b>a reta não tem escala própria, e o círculo tem</b>. Num círculo de perímetro $2\pi$, esticar a função por um fator $a$ não faz sentido — ela sairia do domínio. Na reta faz, e a transformada responde comprimindo na mesma medida. Essa linha da tabela é a origem da autossemelhança do <a href="passeio-aleatorio.html">movimento browniano</a> e, na <a href="calor-reta.html">próxima caixinha</a>, do fato de o núcleo do calor na reta ser sempre o mesmo perfil, só reescalado.</p>
+
+      <details>
+        <summary>As demonstrações (todas de uma linha)</summary>
+        <div class="body">
+          <p><b>Translação.</b> $\int f(x-a)e^{-ikx}dx$; troque $y=x-a$, e sai $e^{-ika}\int f(y)e^{-iky}dy$.</p>
+          <p><b>Derivada.</b> Integre por partes: $\int f'e^{-ikx}dx=\big[fe^{-ikx}\big]_{-\infty}^{\infty}+ik\int fe^{-ikx}dx$, e o termo de borda some porque $f\to0$.</p>
+          <p><b>Convolução.</b> $\int\!\!\int f(y)g(x-y)\,dy\,e^{-ikx}dx$; troque a ordem (Fubini) e escreva $e^{-ikx}=e^{-iky}e^{-ik(x-y)}$: as duas integrais se separam.</p>
+          <p><b>Escala.</b> Em $\int f(ax)e^{-ikx}dx$ troque $y=ax$: sai $\frac1{|a|}\int f(y)e^{-i(k/a)y}dy$.</p>
+          <p><b>Multiplicar por $x$.</b> Derive $\widehat f(k)=\int fe^{-ikx}dx$ em relação a $k$ dentro da integral: aparece $-ix$ multiplicando $f$.</p>
+        </div>
+      </details>
+
+      <h2 id="exemplos" data-toc="Quatro exemplos">Quatro exemplos para guardar</h2>
+      <p>Todos com uma largura $w$ para brincar, e todos pares, o que faz $\widehat f$ ser real.</p>
+      <table class="tabela">
+        <thead><tr><th>$f(x)$</th><th>$\widehat f(k)$</th><th>Como $\widehat f$ cai</th><th>Por quê</th></tr></thead>
+        <tbody>
+          <tr><td>caixa: $1$ se $|x|&lt;w$</td><td>$\dfrac{2\operatorname{sen}(wk)}{k}$</td><td>$1/k$</td><td>$f$ dá um salto</td></tr>
+          <tr><td>triângulo: $(1-|x|/w)_+$</td><td>$\dfrac4w\dfrac{\operatorname{sen}^2(wk/2)}{k^2}$</td><td>$1/k^2$</td><td>$f$ tem um bico</td></tr>
+          <tr><td>exponencial: $e^{-|x|/w}$</td><td>$\dfrac{2w}{1+w^2k^2}$</td><td>$1/k^2$</td><td>$f$ tem um bico</td></tr>
+          <tr><td>gaussiana: $e^{-x^2/2w^2}$</td><td>$w\sqrt{2\pi}\,e^{-w^2k^2/2}$</td><td>mais rápido que qualquer potência</td><td>$f$ é lisa</td></tr>
+        </tbody>
+      </table>
+      <p>A regra da última coluna é a mesma que a página da série demonstrou, e agora ela vale na reta: <b>quanto mais lisa a função, mais rápido a transformada morre</b>. Cada derivada que existe e é integrável custa um fator $1/k$ a mais na cauda, e isso é a linha "derivada" da tabela lida ao contrário.</p>
+      <p>Repare também numa coincidência que não é coincidência: o triângulo é a caixa convolvida com ela mesma (dividida por $w$), e a transformada dele é o quadrado da transformada da caixa. É a linha "convolução" funcionando — e é também o motivo de o triângulo ser mais liso que a caixa, porque convolver sempre suaviza.</p>
+
+      <aside class="box">
+        <p class="tag">A gaussiana é a sua própria transformada</p>
+        <p>Tome $g(x)=e^{-x^2/2}$. A graça é que dá para achar $\widehat g$ sem calcular integral nenhuma, só com duas linhas da tabela. Comece pela EDO que $g$ satisfaz:
+        $$g'(x)=-x\,g(x).$$
+        Transforme os dois lados. À esquerda, pela regra da derivada, $ik\,\widehat g$. À direita, pela regra de multiplicar por $x$, $-i\,\widehat g\,'(k)$. Igualando,
+        $$ik\,\widehat g=-i\,\widehat g\,'\quad\Longrightarrow\quad \widehat g\,'=-k\,\widehat g.$$
+        <b>É a mesma EDO</b>, agora na variável $k$. Logo $\widehat g(k)=\widehat g(0)\,e^{-k^2/2}$, e $\widehat g(0)=\int e^{-x^2/2}dx=\sqrt{2\pi}$. Ou seja,
+        $$\widehat g=\sqrt{2\pi}\;g.$$
+        A gaussiana é autofunção da transformada de Fourier. Junte com a regra de escala e você tem todas as gaussianas: a estreita em $x$ vira larga em $k$, e vice-versa. Essa é a conta que a <a href="calor-reta.html">próxima caixinha</a> vai usar para inverter $e^{-Dk^2t}$ e achar o núcleo do calor.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="A gangorra">A gangorra das larguras</h2>
+      <p>À esquerda $f$, à direita $\widehat f$, e em cada painel a faixa que mede a largura daquele lado. Mexa em $w$ e olhe as duas faixas ao mesmo tempo: elas nunca apertam juntas.</p>
+
+      <div class="demo" id="demo-tf">
+        <div class="controls">
+          <label>Função
+            <select id="tf-forma" aria-label="Forma da função"></select>
+          </label>
+          <label>Largura w
+            <input type="range" id="tf-w" min="0.3" max="3" step="0.05" value="1" aria-label="Largura">
+            <output id="tf-wv">1,00</output>
+          </label>
+        </div>
+        <div class="panels two">
+          <canvas id="tf-f" role="img" aria-label="A função f e a faixa que mede a sua largura"></canvas>
+          <canvas id="tf-k" role="img" aria-label="A transformada de f e a faixa que mede a sua largura"></canvas>
+        </div>
+        <div class="readout" id="tf-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>a função e a sua transformada</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>faixa ±Δx, ±Δk</span>
+        </div>
+      </div>
+
+      <p>Três coisas para tentar:</p>
+      <ol>
+        <li><b>Aperte a largura.</b> Com qualquer das formas, diminuir $w$ espreme $f$ e espalha $\widehat f$ — e o produto $\Delta x\,\Delta k$ no mostrador <em>não muda nem um pouco</em>. Ele mede a forma, não o tamanho; é a linha "escala" da tabela em ação.</li>
+        <li><b>Troque de forma.</b> A gaussiana dá exatamente $0{,}5$, o menor valor possível. A exponencial dá $1/\sqrt2\approx0{,}707$ e o triângulo $\sqrt{3/10}\approx0{,}548$. Nenhuma função consegue ficar abaixo de $\tfrac12$, e só a gaussiana empata.</li>
+        <li><b>Escolha a caixa.</b> O mostrador diz $\Delta k=\infty$. Não é bug: a cauda $1/k$ do $\operatorname{sen}(wk)/k$ é tão gorda que a integral $\int k^2|\widehat f|^2\,dk$ diverge. Um salto em $f$ custa banda infinita — e é a mesma razão pela qual a caixa é o pior caso no cálculo numérico, lá embaixo.</li>
+      </ol>
+
+      <h2 id="incerteza" data-toc="Por que a gangorra existe">Por que a gangorra existe</h2>
+      <p>Defina as larguras como desvios padrão das "energias" de cada lado:
+      $$\Delta x^2=\frac{\int x^2|f|^2dx}{\int|f|^2dx},\qquad \Delta k^2=\frac{\int k^2|\widehat f|^2dk}{\int|\widehat f|^2dk}.$$
+      A segunda tem uma leitura que dispensa a transformada. Como $\widehat{f'}=ik\widehat f$, o numerador é $\int|\widehat{f'}|^2$, e por Parseval isso é $2\pi\int|f'|^2$. O denominador, pelo mesmo motivo, é $2\pi\int|f|^2$. Logo
+      $$\boxed{\;\Delta k^2=\frac{\int|f'|^2dx}{\int|f|^2dx}.\;}$$
+      <b>A largura em frequência é a energia da derivada.</b> Fica claro na hora por que a caixa tem $\Delta k$ infinito: a derivada dela é um par de deltas, e delta não tem energia finita. E por que o triângulo e a exponencial, que só têm bicos, escapam: a derivada deles dá saltos, mas continua sendo uma função.</p>
+      <p>O produto, então, compara $\int x^2|f|^2$ com $\int|f'|^2$: a primeira integral cresce quando $f$ se espalha, a segunda quando $f$ é íngreme. Não dá para diminuir as duas ao mesmo tempo, e a conta exata (uma aplicação de Cauchy–Schwarz, no exercício 5) dá
+      $$\Delta x\,\Delta k\ \ge\ \tfrac12,$$
+      com igualdade <em>somente</em> para gaussianas. Em mecânica quântica, o momento é $p=\hbar k$, e essa desigualdade vira $\Delta x\,\Delta p\ge\hbar/2$: o <b>princípio da incerteza de Heisenberg</b>, que assim não é um fato misterioso sobre partículas, e sim um fato sobre ondas — vale igualmente para um sinal de rádio ou para um pulso de som. O pacote de ondas do <a href="poco-infinito.html">poço infinito</a> já era um exemplo: estreitá-lo no espaço obrigava a usar mais níveis de energia.</p>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>O programa calcula as quatro transformadas com a FFT e compara com as fórmulas, mede o produto $\Delta x\,\Delta k$ para várias larguras e desenha as caudas em log-log. A lacuna é a armadilha clássica de usar FFT para aproximar uma integral: a FFT supõe que a amostra começa em $x=0$, e a nossa começa em $x=-L$.</p>
+      <div class="pycell" data-title="FFT, as fórmulas fechadas e a gangorra"
+           data-starter="../py/transformada_reta_lacunas.py"
+           data-solution="../py/transformada_reta_solucao.py"></div>
+      <p>Rodando sem a correção, repare numa pista interessante: o erro é de $200\%$, mas <b>Parseval continua batendo</b>. É que faltava só a fase — o módulo de cada coeficiente estava certo o tempo todo, e energia não enxerga fase. Depois de corrigir, o erro relativo cai para $3\times10^{-4}$ na caixa e para $3\times10^{-15}$ na gaussiana: a mesma hierarquia de lisura da tabela, agora medida em erro numérico.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Transladar e modular</p>
+        <p>(a) Mostre que $\widehat{f(\cdot-a)}(k)=e^{-ika}\widehat f(k)$ e conclua que $|\widehat f|$ não muda quando a função é deslocada. (b) Mostre que $\widehat{e^{imx}f}(k)=\widehat f(k-m)$. (c) Use (a) para explicar por que, na célula de Python, esquecer a correção de fase estraga a transformada mas não estraga Parseval.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Troca de variável $y=x-a$ na integral. Como $|e^{-ika}|=1$, o módulo não muda: deslocar no tempo não muda o conteúdo de frequências, só o "relógio" de cada onda. É por isso que o ouvido não distingue duas gravações idênticas que começam em instantes diferentes.</p>
+          <p>(b) $\int e^{imx}f(x)e^{-ikx}dx=\int f(x)e^{-i(k-m)x}dx$. Multiplicar por uma onda desloca o espectro — é o princípio da modulação em rádio AM.</p>
+          <p>(c) Amostrar a partir de $x_0=-L$ em vez de $0$ é exatamente transladar a função, e por (a) isso multiplica cada $\widehat f(k)$ por $e^{-ikx_0}$, de módulo $1$. O resultado fica com todas as fases erradas (e, como $e^{-ikx_0}$ gira rápido em $k$, o gráfico oscila sem sentido), mas $|\widehat f|$ fica intacto — e Parseval só olha para $|\widehat f|$.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Lisura e cauda</p>
+        <p>(a) Deduza $\widehat{f'}=ik\widehat f$ integrando por partes. (b) Conclua que, se $f$ tem $p$ derivadas integráveis, $|\widehat f(k)|$ decai mais rápido que $1/|k|^p$. (c) Confira nos quatro exemplos da tabela: por que a caixa dá $1/k$ e o triângulo $1/k^2$? (d) O que isso diz sobre a função cuja transformada é $e^{-|k|}$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\int f'e^{-ikx}dx=\big[fe^{-ikx}\big]-\int f\cdot(-ik)e^{-ikx}dx=ik\widehat f$, com o termo de borda nulo porque $f\to0$.</p>
+          <p>(b) Aplicando $p$ vezes, $\widehat{f^{(p)}}=(ik)^p\widehat f$. Se $f^{(p)}$ é integrável, sua transformada é limitada e tende a zero (lema de Riemann–Lebesgue), logo $|k|^p|\widehat f|\to0$.</p>
+          <p>(c) A caixa não tem nem a primeira derivada como função — ela é uma soma de deltas —, então o argumento dá só $p=0$, e de fato a cauda é $1/k$. O triângulo tem derivada (uma função degrau, integrável), então $p=1$ e a cauda é $1/k^2$. A gaussiana tem todas, e por isso cai mais rápido que qualquer potência.</p>
+          <p>(d) $e^{-|k|}$ tem um bico em $k=0$, e a regra, lida na direção contrária (a transformada inversa é a mesma coisa a menos de constantes), diz que a função correspondente cai como $1/x^2$. De fato é $\dfrac1\pi\dfrac1{1+x^2}$, a lorentziana — a mesma lista da tabela, de trás para frente.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. A gaussiana com largura</p>
+        <p>(a) Refaça a conta da caixa para $g_w(x)=e^{-x^2/2w^2}$, usando a regra de escala em vez de repetir a EDO. (b) Verifique que $\Delta x=w/\sqrt2$ e $\Delta k=1/(w\sqrt2)$, e portanto $\Delta x\,\Delta k=\tfrac12$. (c) O que acontece com $\widehat{g_w}$ quando $w\to0$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $g_w(x)=g(x/w)$ com $g(x)=e^{-x^2/2}$. Pela regra de escala com $a=1/w$: $\widehat{g_w}(k)=w\,\widehat g(wk)=w\sqrt{2\pi}\,e^{-w^2k^2/2}$.</p>
+          <p>(b) $|g_w|^2=e^{-x^2/w^2}$ é gaussiana de variância $w^2/2$, logo $\Delta x=w/\sqrt2$. Do mesmo jeito, $|\widehat{g_w}|^2\propto e^{-w^2k^2}$ tem variância $1/(2w^2)$, e $\Delta k=1/(w\sqrt2)$. O produto é $\tfrac12$ para todo $w$ — a gangorra está perfeitamente equilibrada.</p>
+          <p>(c) A função vira um pico cada vez mais estreito e a transformada vira cada vez mais plana: $\widehat{g_w}\to0$ pontualmente, mas se antes normalizarmos a área ($g_w/w\sqrt{2\pi}$, que tende à delta de Dirac) a transformada tende à constante $1$. A delta tem todas as frequências, com o mesmo peso — é o caso limite do salto da caixa.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Convolver é suavizar</p>
+        <p>Seja $\chi$ a caixa que vale $1$ em $|x|&lt;w/2$. (a) Calcule $\chi*\chi$ e reconheça a forma. (b) Confirme pela tabela que $\widehat{\chi*\chi}=(\widehat\chi)^2$ e confira com as fórmulas. (c) Que forma tem $\chi*\chi*\chi$, e como cai a transformada dela? (d) Qual é o limite de convolver a caixa com ela mesma muitas vezes, depois de reescalar?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $(\chi*\chi)(x)=\int\chi(y)\chi(x-y)dy$ é o comprimento da interseção de dois intervalos de tamanho $w$ afastados de $x$: vale $w-|x|$ para $|x|&lt;w$ e zero fora. É o triângulo, de altura $w$.</p>
+          <p>(b) $\widehat\chi(k)=2\operatorname{sen}(wk/2)/k$, e o quadrado é $4\operatorname{sen}^2(wk/2)/k^2$ — que é exatamente $w$ vezes a fórmula do triângulo normalizado da tabela. Bate.</p>
+          <p>(c) A transformada é $(\widehat\chi)^3$, que cai como $1/k^3$; a função é uma parábola por pedaços, com duas derivadas contínuas. Cada convolução acrescenta uma derivada e um fator $1/k$ na cauda.</p>
+          <p>(d) Uma gaussiana. Convolver $n$ vezes e reescalar por $\sqrt n$ é <em>exatamente</em> somar $n$ variáveis aleatórias independentes uniformes e normalizar — é o teorema central do limite, e do lado de Fourier ele vira $\widehat\chi(k/\sqrt n)^n\to e^{-\sigma^2k^2/2}$. A mesma conta do <a href="passeio-aleatorio.html">passeio aleatório</a>, com a caixa no lugar dos dois saltos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. A desigualdade</p>
+        <p>(a) Mostre, integrando por partes, que $\int x\,f\,f'\,dx=-\tfrac12\int f^2dx$ para $f$ real que morre no infinito. (b) Aplique Cauchy–Schwarz a $\int x f\,f'$ e conclua $\Delta x\,\Delta k\ge\tfrac12$. (c) Em que caso Cauchy–Schwarz dá igualdade, e que equação isso impõe a $f$? Resolva-a.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\int x f f'=\int x\big(\tfrac12 f^2\big)'=\big[\tfrac x2f^2\big]-\tfrac12\int f^2=-\tfrac12\int f^2$.</p>
+          <p>(b) Por Cauchy–Schwarz, $\left|\int (xf)\,f'\right|\le\sqrt{\int x^2f^2}\sqrt{\int (f')^2}$. Usando (a) do lado esquerdo e dividindo tudo por $\int f^2$:
+          $$\tfrac12\le\sqrt{\frac{\int x^2f^2}{\int f^2}}\cdot\sqrt{\frac{\int (f')^2}{\int f^2}}=\Delta x\cdot\Delta k,$$
+          pela fórmula enquadrada da seção anterior.</p>
+          <p>(c) Cauchy–Schwarz dá igualdade quando os dois vetores são proporcionais: $f'=-c\,x f$ para alguma constante $c>0$. Essa é a EDO da gaussiana, e a solução é $f=Ae^{-cx^2/2}$. Por isso a gaussiana é a única forma que empata — e por isso ela aparece em todo lugar onde se procura o melhor compromisso entre concentrar no tempo e concentrar na frequência, de janelas de análise de sinais a pulsos de laser.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Uma integral de presente</p>
+        <p>Aplique Parseval à caixa $f=1$ em $|x|&lt;w$ para calcular
+        $$\int_{-\infty}^{\infty}\frac{\operatorname{sen}^2u}{u^2}\,du.$$
+        (Dica: calcule os dois lados da identidade e troque a variável no fim.)</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>Do lado do espaço, $\int|f|^2dx=2w$. Do lado da frequência, $\dfrac1{2\pi}\int\left|\dfrac{2\operatorname{sen}(wk)}k\right|^2dk=\dfrac2\pi\int\dfrac{\operatorname{sen}^2(wk)}{k^2}dk$. Igualando,
+          $$\int\frac{\operatorname{sen}^2(wk)}{k^2}dk=\pi w.$$
+          Agora troque $u=wk$, com $dk=du/w$ e $k^2=u^2/w^2$: o integrando vira $w\operatorname{sen}^2u/u^2$, e sobra
+          $$\int\frac{\operatorname{sen}^2u}{u^2}\,du=\pi.$$
+          Uma integral que dá trabalho por métodos elementares, resolvida só por contabilidade de energia. Repare que ela converge porque $\operatorname{sen}^2u/u^2$ cai como $1/u^2$ — mas $\int|\operatorname{sen} u/u|\,du$ diverge, e é exatamente por isso que a transformada da caixa vive em $L^2$ e não em $L^1$, como a caixa de aviso lá em cima mencionou.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="serie-fourier.html">Série de Fourier</a></li>
+            <li><a href="convolucao.html">Convolução</a></li>
+            <li><a href="dft.html">Transformada de Fourier discreta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="calor-reta.html">O calor na reta: Fourier e o núcleo</a></li>
+            <li><a href="poco-infinito.html">Schrödinger no poço infinito</a></li>
+            <li><a href="edps-fourier.html">EDPs lineares com Fourier</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/tf-core.js"></script>
+  <script src="../assets/tf-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

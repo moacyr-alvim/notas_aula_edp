@@ -86,6 +86,8 @@ need = {
     "paginas/edps-fourier.html": ["tema", "toc"],
     "paginas/poco-infinito.html": ["demo-qw", "qw-estado", "qw-t", "qw-tv", "qw-play", "qw-espelho", "qw-ressurg", "qw-readout", "qw-dens", "qw-niveis", "tema", "toc"],
     "paginas/principio-maximo.html": ["tema", "toc"],
+    "paginas/transformada-fourier.html": ["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k", "tema", "toc"],
+    "paginas/calor-reta.html": ["demo-cr", "cr-dado", "cr-t", "cr-tv", "cr-circulo", "cr-play", "cr-readout", "cr-u", "cr-k", "tema", "toc"],
     "paginas/passeio-aleatorio.html": ["demo-fp", "fp-h", "fp-s", "fp-zoom", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
     "paginas/fokker-planck.html": ["demo-fp", "fp-h", "fp-a", "fp-av", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
     "paginas/serie-fourier.html": ["demo-sf", "sf-dado", "sf-n", "sf-nv", "sf-play", "sf-readout", "sf-perfil", "sf-espectro", "tema", "toc"],

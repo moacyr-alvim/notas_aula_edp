@@ -207,6 +207,33 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["qw-espelho"].fire("click"); await wait(40);
     check("qw-demo: o botão do espelho leva a t = π", rd().includes("espelho"), rd().slice(0, 160));
   }
+  /* ---- transformada de Fourier na reta ---- */
+  {
+    const env = makeEnv(["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k"], []);
+    run(env, "tf-core.js"); env.sandbox.window.TFCore = env.sandbox.TFCore || vm.runInContext("TFCore", env.sandbox);
+    env.byId["tf-w"].value = "1";
+    let err = null; try { run(env, "tf-demo.js"); await wait(40); } catch (e) { err = e; }
+    check("tf-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["tf-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("tf-demo: a gaussiana dá Δx·Δk = 0,5", rd().includes("0,5000"), rd().slice(0, 160));
+    env.byId["tf-forma"].value = "caixa"; env.byId["tf-forma"].fire("input"); await wait(40);
+    check("tf-demo: a caixa dá Δk infinito", rd().includes("∞"), rd().slice(0, 200));
+  }
+  /* ---- o calor na reta ---- */
+  {
+    const env = makeEnv(["demo-cr", "cr-dado", "cr-t", "cr-tv", "cr-circulo", "cr-play", "cr-readout", "cr-u", "cr-k"], []);
+    run(env, "cr-core.js"); env.sandbox.window.CRCore = env.sandbox.CRCore || vm.runInContext("CRCore", env.sandbox);
+    env.byId["cr-t"].value = "1"; env.byId["cr-circulo"].value = "nao";
+    let err = null; try { run(env, "cr-demo.js"); await wait(40); } catch (e) { err = e; }
+    check("cr-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["cr-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("cr-demo: em t = 1 a largura √(4Dt) é 1 e a altura 0,843",
+          rd().includes("1,000") && rd().includes("0,843"), rd().slice(0, 200));
+    env.byId["cr-circulo"].value = "sim"; env.byId["cr-circulo"].fire("input"); await wait(40);
+    check("cr-demo: no círculo, mostra a média 0,318", rd().includes("0,318"), rd().slice(0, 240));
+    env.byId["cr-dado"].value = "degrau"; env.byId["cr-dado"].fire("input"); await wait(40);
+    check("cr-demo: o degrau avisa que não cabe num círculo", rd().includes("não cabe"), rd().slice(0, 240));
+  }
   /* ---- o passeio aleatório: a demo sem viés, com preguiça e zoom (página 1) ---- */
   {
     const env = makeEnv(["demo-fp", "fp-h", "fp-s", "fp-zoom", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj"], []);
@@ -281,7 +308,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 35 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 35);
+    check("mapa: SVG gerado com os 36 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 36);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

@@ -82,7 +82,7 @@
       $$D=\frac{h^2s}{2\tau}\qquad\text{(a \textbf{difusão})}.$$
       Para a equação limite existir e não ser trivial, esse número tem que se acomodar num valor finito e não nulo quando $h\to0$. Isso <b>amarra</b> a relação entre o passo e o relógio: $\tau$ tem que encolher como $h^2$. E aí o termo de erro, $h^4/\tau\sim h^2$, vai a zero, e o que sobra é</p>
       $$\boxed{\;\rho_t=D\,\rho_{xx}.\;}$$
-      <p>A <b>equação do calor</b>. Ela já apareceu aqui de três outros jeitos — como limite da <a href="calor-grafo-anel.html">difusão num grafo em anel</a>, resolvida por <a href="calor-circulo.html">Fourier no círculo</a>, e como a equação que não deixa ninguém criar um máximo novo. Mas repare no cenário, que é novo: o caminhante anda pela grade inteira, sem bordas e sem dar voltas, de modo que esta é a equação do calor <b>na reta toda</b>, e não num anel. A caixinha do calor na reta, que ainda vem, vai chegar nela por Fourier; aqui ela caiu de um sorteio. Agora ela aparece como <b>a lei de um sorteio repetido</b>, e de brinde ganhamos o significado probabilístico do núcleo gaussiano: ele é a distribuição de onde o bêbado está.</p>
+      <p>A <b>equação do calor</b>. Ela já apareceu aqui de três outros jeitos — como limite da <a href="calor-grafo-anel.html">difusão num grafo em anel</a>, resolvida por <a href="calor-circulo.html">Fourier no círculo</a>, e como a equação que não deixa ninguém criar um máximo novo. Mas repare no cenário, que é novo: o caminhante anda pela grade inteira, sem bordas e sem dar voltas, de modo que esta é a equação do calor <b>na reta toda</b>, e não num anel. A caixinha do <a href="calor-reta.html">calor na reta</a> chega na mesma equação por outro caminho, a <a href="transformada-fourier.html">transformada de Fourier</a>; aqui ela caiu de um sorteio. Agora ela aparece como <b>a lei de um sorteio repetido</b>, e de brinde ganhamos o significado probabilístico do núcleo gaussiano: ele é a distribuição de onde o bêbado está.</p>
 
       <aside class="box">
         <p class="tag">A escala difusiva: por que $\tau\sim h^2$</p>
@@ -97,8 +97,8 @@
         $$\mathbb E[X_n]=0,\qquad \operatorname{Var}(X_n)=n\,h^2s=\frac t\tau\,h^2s=2Dt,$$
         usando $D=h^2s/2\tau$ — e repare que essa igualdade é <em>exata</em>, não aproximada. O teorema central do limite diz que uma soma de muitas parcelas independentes tende a uma gaussiana; a gaussiana de média $0$ e variância $2Dt$ é
         $$\rho(x,t)=\frac1{\sqrt{4\pi Dt}}\,e^{-x^2/4Dt},$$
-        que é exatamente o <b>núcleo da equação do calor na reta</b> — a solução que começa toda concentrada num ponto só. <b>O núcleo do calor é o teorema central do limite.</b> Não é uma analogia: é a mesma afirmação, dita uma vez em probabilidade e outra em EDP.</p>
-        <p>E há um terceiro caminho, pela <a href="convolucao.html">convolução</a>: a distribuição depois de $n$ passos é a convolução $n$ vezes da de um passo, e convolução vira produto do lado de Fourier. Sai $\cos^n(kh)\to e^{-Dk^2t}$ — na reta o número de onda $k$ varre todos os reais, e cada um é amortecido por esse fator, que é o mesmo que, <a href="calor-circulo.html">no círculo</a>, age sobre os modos inteiros $k=0,\pm1,\pm2,\dots$ As duas contas se encontram, aliás: um caminhante no círculo é um caminhante na reta olhado a menos de voltas, e por isso o núcleo do círculo é o da reta <b>enrolado</b>, somando as cópias de quem já deu uma volta a mais. A conta do limite é o exercício 3.</p>
+        que é exatamente o <b><a href="calor-reta.html">núcleo da equação do calor na reta</a></b> — a solução que começa toda concentrada num ponto só. <b>O núcleo do calor é o teorema central do limite.</b> Não é uma analogia: é a mesma afirmação, dita uma vez em probabilidade e outra em EDP.</p>
+        <p>E há um terceiro caminho, pela <a href="convolucao.html">convolução</a>: a distribuição depois de $n$ passos é a convolução $n$ vezes da de um passo, e convolução vira produto do lado de Fourier. Sai $\cos^n(kh)\to e^{-Dk^2t}$, que é exatamente o multiplicador com que a <a href="transformada-fourier.html">transformada na reta</a> resolve o calor — lá $k$ varre todos os reais, e <a href="calor-circulo.html">no círculo</a> só os inteiros, porque enrolar o espaço discretiza a frequência. A conta do limite é o exercício 3.</p>
       </aside>
 
       <h2 id="browniano" data-toc="Movimento browniano">O que sobra da trajetória: o movimento browniano</h2>
@@ -267,7 +267,7 @@
           <h4>Para onde ir depois</h4>
           <ul>
             <li><a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a></li>
-            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="calor-reta.html">O calor na reta: Fourier e o núcleo</a></li>
             <li><a href="cfl.html">Condição CFL</a></li>
           </ul>
         </div>

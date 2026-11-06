@@ -44,6 +44,8 @@ paginas/              uma página por tópico (HTML escrito à mão)
 py/                   os códigos Python das células (edite aqui; o site carrega esses arquivos)
                       calor_circulo_*.py resolve o calor no círculo com FFT (espectral x diferenças finitas)
                       burgers_viscosa_*.py pseudoespectral e Cole–Hopf para Burgers viscosa
+                      transformada_reta_*.py FFT contra as fórmulas fechadas, e o produto Δx·Δk
+                      calor_reta_*.py o núcleo pela FFT, o colapso autossemelhante e reta contra círculo
                       passeio_aleatorio_*.py caminhantes na grade, gaussiana e a lei da raiz quadrada
                       fokker_planck_*.py poço duplo (Boltzmann) e D variável sem viés
 assets/
@@ -68,6 +70,10 @@ assets/
   sf-demo.js          demo da soma parcial e do espectro log-log
   qw-core.js          poço infinito: base de senos, fases e^{-in²t}, ocupações e observáveis; testável em Node
   qw-demo.js          demo da densidade e dos níveis de energia
+  tf-core.js          transformada na reta: quatro formas, larguras Δx e Δk, integração de conferência; testável em Node
+  tf-demo.js          demo da gangorra: f e û lado a lado, com as faixas de largura
+  cr-core.js          calor na reta: função erro, núcleo gaussiano, soluções fechadas e a versão enrolada no círculo
+  cr-demo.js          demo da difusão na reta e do espectro, com a comparação opcional com o círculo
   fp-core.js          passeio aleatório: equação mestra, gaussiana de Fokker–Planck e trajetórias; testável em Node
   fp-demo.js          demo do passeio, nas duas páginas da raia: os controles de viés, preguiça e zoom são opcionais
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
