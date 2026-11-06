@@ -95,7 +95,16 @@
         </tbody>
       </table>
       <p>A regra da última coluna é a mesma que a página da série demonstrou, e agora ela vale na reta: <b>quanto mais lisa a função, mais rápido a transformada morre</b>. Cada derivada que existe e é integrável custa um fator $1/k$ a mais na cauda, e isso é a linha "derivada" da tabela lida ao contrário.</p>
-      <p>Repare também numa coincidência que não é coincidência: o triângulo é a caixa convolvida com ela mesma (dividida por $w$), e a transformada dele é o quadrado da transformada da caixa. É a linha "convolução" funcionando — e é também o motivo de o triângulo ser mais liso que a caixa, porque convolver sempre suaviza.</p>
+      <p>Repare também numa coincidência que não é coincidência: o triângulo é a caixa convolvida com ela mesma (dividida por $w$), e a transformada dele é o quadrado da transformada da caixa. É a linha "convolução" funcionando — e é também o motivo de o triângulo ser mais liso que a caixa: elevar ao quadrado uma cauda que decai faz o expoente dobrar, e $1/k$ vira $1/k^2$. Mas essa frase pede cuidado na hora de generalizar.</p>
+
+      <aside class="box atencao">
+        <p class="tag">Convolver sempre suaviza?</p>
+        <p>Assim, solto, não. O que a tabela garante é só $|\widehat h|=|\widehat f|\,|\widehat g|$, e daí saem quatro afirmações diferentes, que convém não confundir umas com as outras.</p>
+        <p><b>A lisura nunca piora.</b> Se o núcleo $g$ é uma <em>função integrável</em>, o lema de Riemann–Lebesgue (exercício 2) obriga $\widehat g(k)\to0$ no infinito. Então a cauda de $\widehat h$ é sempre menor que a de $\widehat f$, e nesse sentido — o da lisura, que é o que a cauda mede — convolver nunca estraga nada e quase sempre melhora.</p>
+        <p><b>Mas "passa-baixa" não é obrigatório.</b> Tome o chapéu mexicano, a segunda derivada de uma gaussiana, cuja transformada é $-k^2e^{-k^2/2}$: vale zero em $k=0$, tem um pico em $k=\sqrt2$ e esmaga o resto — privilegia uma faixa intermediária. Convolver uma caixa com ele dá a figura que o olho chama de "mais afiada", e é literalmente o realce de bordas da edição de imagens. E, no entanto, essa saída é $C^\infty$: ela é a segunda derivada de uma caixa <em>suavizada</em>, com todas as derivadas finitas, enquanto a caixa original não tem nem a primeira. O filtro não tirou lisura; tirou o <b>fundo liso</b> — repare que $\widehat g(0)=0$, ou seja $\int g=0$, e a saída tem média zero — deixando só o que acontece perto das bordas. Afiada aos olhos, lisa para o cálculo.</p>
+        <p><b>No discreto a história é outra.</b> O filtro de diferença $h=(1,-1)$ da <a href="convolucao.html">página da convolução</a> tem $|\widehat h(\theta)|=2|\operatorname{sen}(\theta/2)|$, que vale $2$ na frequência de Nyquist: ele <em>amplifica mesmo</em> o serrilhado, e por isso realça variações. Não há contradição com o primeiro item — lá o eixo das frequências é compacto, não existe um infinito para onde $\widehat h$ seja obrigada a cair, e Riemann–Lebesgue não tem o que dizer. Na reta, o análogo do filtro de diferença é derivar, que é convolver com $\delta'$ — e $\delta'$ não é função nenhuma.</p>
+        <p><b>Com ela mesma, sempre.</b> O caso do triângulo é o único em que não há ressalva: $\widehat{f*f}=(\widehat f)^2$, e o expoente da cauda dobra. Convolvendo a caixa $n$ vezes, a cauda vira $1/k^n$ e aparecem $n-1$ derivadas contínuas. Esse é o sentido em que a frase "convolver suaviza" é segura.</p>
+      </aside>
 
       <aside class="box">
         <p class="tag">A gaussiana é a sua própria transformada</p>
@@ -199,7 +208,7 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">4. Convolver é suavizar</p>
+        <p class="tag">4. Convolver com ela mesma</p>
         <p>Seja $\chi$ a caixa que vale $1$ em $|x|&lt;w/2$. (a) Calcule $\chi*\chi$ e reconheça a forma. (b) Confirme pela tabela que $\widehat{\chi*\chi}=(\widehat\chi)^2$ e confira com as fórmulas. (c) Que forma tem $\chi*\chi*\chi$, e como cai a transformada dela? (d) Qual é o limite de convolver a caixa com ela mesma muitas vezes, depois de reescalar?</p>
       </aside>
       <details>
@@ -207,7 +216,7 @@
         <div class="body">
           <p>(a) $(\chi*\chi)(x)=\int\chi(y)\chi(x-y)dy$ é o comprimento da interseção de dois intervalos de tamanho $w$ afastados de $x$: vale $w-|x|$ para $|x|&lt;w$ e zero fora. É o triângulo, de altura $w$.</p>
           <p>(b) $\widehat\chi(k)=2\operatorname{sen}(wk/2)/k$, e o quadrado é $4\operatorname{sen}^2(wk/2)/k^2$ — que é exatamente $w$ vezes a fórmula do triângulo normalizado da tabela. Bate.</p>
-          <p>(c) A transformada é $(\widehat\chi)^3$, que cai como $1/k^3$; a função é uma parábola por pedaços, com duas derivadas contínuas. Cada convolução acrescenta uma derivada e um fator $1/k$ na cauda.</p>
+          <p>(c) A transformada é $(\widehat\chi)^3$, que cai como $1/k^3$; a função é uma parábola por pedaços, com duas derivadas contínuas. Cada convolução com ela mesma acrescenta uma derivada e um fator $1/k$ na cauda — e é só nesse caso, o da função consigo mesma, que a melhora é automática.</p>
           <p>(d) Uma gaussiana. Convolver $n$ vezes e reescalar por $\sqrt n$ é <em>exatamente</em> somar $n$ variáveis aleatórias independentes uniformes e normalizar — é o teorema central do limite, e do lado de Fourier ele vira $\widehat\chi(k/\sqrt n)^n\to e^{-\sigma^2k^2/2}$. A mesma conta do <a href="passeio-aleatorio.html">passeio aleatório</a>, com a caixa no lugar dos dois saltos.</p>
         </div>
       </details>
