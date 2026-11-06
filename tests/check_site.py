@@ -8,6 +8,12 @@ import json, pathlib, re, subprocess, sys
 from html.parser import HTMLParser
 
 root = pathlib.Path(__file__).resolve().parent.parent
+
+# A versão de KaTeX que o CDN serve. Mudar aqui é uma decisão deliberada — e conferir
+# fórmula localmente com OUTRA versão instalada não vale como conferência: foi assim que
+# um apóstrofo sem base (\widehat g\,') passou batido, renderizando no 0.16.47 e falhando no 0.16.11.
+KATEX = "0.16.11"
+
 fails = 0
 def check(name, ok, info=""):
     global fails
@@ -110,6 +116,12 @@ for href in json.loads(out):
     path = root / href.split("#")[0]
     ok = path.exists() and (("#" not in href) or href.split("#")[1] in parsed[path].ids)
     check(f"mapa: link {href}", ok)
+
+# todas as páginas têm que pedir a MESMA versão de KaTeX, e a declarada lá em cima
+for path in sorted(parsed):
+    pedidas = set(re.findall(r"katex@([0-9.]+)", path.read_text(encoding="utf-8")))
+    if pedidas:
+        check(f"{path.relative_to(root)}: pede KaTeX {KATEX}", pedidas == {KATEX}, f"pediu {sorted(pedidas)}")
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)
