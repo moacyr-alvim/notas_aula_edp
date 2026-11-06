@@ -89,6 +89,8 @@
       desc: "O bêbado na grade: a equação mestra, a escala τ ~ h², a equação do calor como lei de um sorteio e o movimento browniano, contínuo e sem derivada em ponto algum." },
     { id: "fp", lane: "estoc", col: 3, label: "Deriva, ruído\ne Fokker–Planck", href: "paginas/fokker-planck.html", trails: ["estocastico"],
       desc: "O caminhante parcial: viés e ruído desigual, a forma divergente, o equilíbrio de Boltzmann e o acúmulo onde se anda devagar." },
+    { id: "eds", lane: "estoc", col: 4, label: "EDS e\nFokker–Planck", href: "paginas/eds-fokker-planck.html", trails: ["estocastico"],
+      desc: "O fio e a nuvem: o dicionário entre a equação diferencial estocástica e a EDP da densidade, desmontado em transporte mais calor, com Ornstein–Uhlenbeck, browniano geométrico e o dilema de Itô." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -122,7 +124,7 @@
     ["edpsf", "poco"],
     ["calorcirc", "maxp"],
     ["grafo", "passeio"],
-    ["passeio", "fp"],
+    ["passeio", "fp"], ["fp", "eds"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 

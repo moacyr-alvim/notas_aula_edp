@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equações diferenciais estocásticas e Fokker–Planck — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>Equações diferenciais estocásticas e Fokker–Planck</h1>
+        <p class="lede">De um lado, uma regra para sortear uma trajetória; do outro, uma EDP para a densidade de onde ela está. O dicionário entre os dois se desmonta em duas metades conhecidas — só deriva dá transporte, só ruído dá calor — e remonta nos exemplos clássicos.</p>
+        <p class="meta">Ajuda ler antes: <a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a> e <a href="transformada-fourier.html">A transformada de Fourier na reta</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="objeto" data-toc="O fio e a nuvem">Dois objetos, não um</h2>
+      <p>A caixinha do <a href="passeio-aleatorio.html">passeio aleatório</a> produziu duas coisas ao mesmo tempo, e a demo dela mostrava as duas lado a lado: à direita, um feixe de <b>trajetórias</b> sorteadas; à esquerda, a <b>distribuição</b> das posições. Vale insistir que são objetos de tipos diferentes, porque é dessa diferença que esta caixinha trata.</p>
+      <ul>
+        <li>$X(t)$ é uma <b>função aleatória do tempo</b> — um fio sorteado. Rodar o sorteio de novo dá outro fio. Não existe "a" trajetória; existe uma distribuição de trajetórias.</li>
+        <li>$\rho(x,t)$ é uma <b>função determinística</b> de duas variáveis — a nuvem. Ela não é sorteada: é a lei de onde o fio está, e sai sempre igual.</li>
+      </ul>
+      <p>Uma <b>equação diferencial estocástica</b> (EDS) é uma regra para sortear o fio, passo a passo. A equação de <b>Fokker–Planck</b> é a EDP que a nuvem obedece. Nenhuma das duas é mais fundamental que a outra — elas respondem a perguntas diferentes, e é bom saber de antemão qual escolher:</p>
+      <ul>
+        <li>Perguntas sobre <em>onde</em> a partícula está num instante — densidades, médias, equilíbrios — são da EDP. E tem um prêmio: <b>a EDP é linear mesmo quando a EDS é feia</b>. Dois dados iniciais somados dão a soma das soluções, o que o fio não obedece de jeito nenhum.</li>
+        <li>Perguntas sobre o <em>caminho</em> — quando ele cruza um nível pela primeira vez, qual o máximo atingido, quanto tempo passou acima de um valor — são do lado da EDS. Elas não são perguntas sobre $\rho(\cdot,t)$ em instante nenhum, e sim sobre a trajetória inteira.</li>
+      </ul>
+
+      <h2 id="dicionario" data-toc="O dicionário">O dicionário</h2>
+      <p>A tradução entre os dois lados é esta, e é o centro da caixinha:
+      $$\boxed{\;dX=b(X)\,dt+\sigma(X)\,dB\qquad\Longleftrightarrow\qquad \rho_t=-\partial_x\big(b\,\rho\big)+\tfrac12\partial_{xx}\big(\sigma^2\rho\big).\;}$$
+      À esquerda, a receita de um passo: em um tempinho $dt$, a posição anda $b\,dt$ por causa da deriva e sorteia um pedaço de tamanho típico $\sigma\sqrt{dt}$ por causa do ruído, com $B$ o <a href="passeio-aleatorio.html">movimento browniano</a>. À direita, a lei da nuvem. É exatamente a equação que o passeio aleatório produziu: a deriva $b$ é o limite de $\frac h\tau(p-q)$ e $\sigma^2=2D$ é o limite de $\frac{h^2}\tau(p+q)$.</p>
+      <p>Repare na assimetria das potências: a deriva entra com $dt$ e o ruído com $\sqrt{dt}$. Não é capricho de notação — é a escala difusiva do passeio, a mesma que obrigava $\tau\sim h^2$. Em tempos curtos o ruído <em>domina</em> a deriva, porque $\sqrt{dt}\gg dt$; em tempos longos é o contrário. (Na célula de Python, trocar $\sqrt{dt}$ por $dt$ é o erro clássico, e o estrago é visível a olho nu.)</p>
+      <p>O jeito mais rápido de entender o dicionário é desmontá-lo: desligue o ruído, depois desligue a deriva, e veja que cada metade é uma equação que você já conhece.</p>
+
+      <h2 id="deriva" data-toc="Só deriva: transporte">Só deriva: a equação do transporte</h2>
+      <p>Ponha $\sigma=0$. A EDS deixa de ser estocástica — não sobra nada para sortear — e vira a EDO
+      $$\dot x=b(x),$$
+      cuja solução é uma curva só, determinística, para cada ponto de partida. E a equação da nuvem fica
+      $$\rho_t+\partial_x\big(b\,\rho\big)=0,$$
+      que é a <a href="equacao-transporte.html">equação do transporte</a> em forma de conservação. A interpretação é imediata e vale guardar: <b>as características da EDP são as trajetórias da EDO</b>. O método das características, lá do começo do livro, é literalmente "siga as partículas" — e aqui as partículas existem de verdade.</p>
+      <p>Há uma pergunta a mais: a densidade muda ao longo de uma trajetória? Muda, e de um jeito que o fluxo decide. Derivando $\rho$ sobre a curva $X(t)$,
+      $$\frac{d}{dt}\rho\big(X(t),t\big)=\rho_t+b\,\rho_x=-b'(x)\,\rho,$$
+      ou seja: onde o fluxo <b>comprime</b> ($b'&lt;0$) a densidade cresce, e onde ele <b>estica</b> ($b'>0$) ela diminui. Equivalentemente, $\rho\cdot J=\rho_0$ com $J$ o jacobiano do fluxo — é a conservação de massa vista do referencial que anda junto, e o exercício 1 faz a conta.</p>
+      <p>Repare no que <em>não</em> acontece aqui: nada suaviza. A nuvem é levada, deformada, comprimida — mas cada detalhe do dado inicial sobrevive para sempre, só mudando de lugar. É por isso que nesta metade do dicionário moram os bicos, os choques e as singularidades das <a href="leis-conservacao.html">leis de conservação</a>: sem ruído, se o fluxo comprimir demais, a densidade vira um pico infinito e ninguém a impede.</p>
+
+      <h2 id="ruido" data-toc="Só ruído: calor">Só ruído: a equação do calor</h2>
+      <p>Agora o contrário: $b=0$ e $\sigma$ constante. A EDS é $dX=\sigma\,dB$ — browniano puro — e a nuvem obedece
+      $$\rho_t=\frac{\sigma^2}2\,\rho_{xx},$$
+      a equação do calor, que a <a href="calor-reta.html">caixinha do calor na reta</a> resolveu inteira: o núcleo é a gaussiana de variância $\sigma^2t$, a suavização é instantânea e a largura cresce como $\sqrt t$. Tudo o que na metade anterior era preservado, aqui é apagado.</p>
+      <p>E então <b>Fokker–Planck é a soma das duas metades</b>: um termo que carrega e um que espalha, um hiperbólico e um parabólico, as duas grandes linhas do livro dentro da mesma equação. Olhando assim, a demo da caixinha anterior — a nuvem que anda sem mudar de largura — é literalmente as duas metades trabalhando sem se atrapalhar.</p>
+
+      <h2 id="lineares" data-toc="A família linear">A família linear, resolvida</h2>
+      <p>O caso em que tudo sai em fórmula fechada é o da deriva <em>linear</em>:
+      $$dX=\big(\mu-\gamma X\big)\,dt+\sigma\,dB.$$
+      Se o dado inicial for gaussiano, a solução continua gaussiana para sempre — basta então acompanhar dois números. Pelas equações dos momentos (exercício 2),
+      $$m(t)=m_0e^{-\gamma t}+\frac\mu\gamma\big(1-e^{-\gamma t}\big),\qquad v(t)=v_0e^{-2\gamma t}+\frac{\sigma^2}{2\gamma}\big(1-e^{-2\gamma t}\big).$$
+      Com $\gamma=0$ isso vira $m=m_0+\mu t$ e $v=v_0+\sigma^2t$, o browniano com deriva. Com $\mu=0$ e $\gamma>0$ é o processo de <b>Ornstein–Uhlenbeck</b>: a média volta ao zero exponencialmente e a variância <em>satura</em> em $\sigma^2/2\gamma$, em vez de crescer para sempre. É o modelo de tudo que é chacoalhado mas preso — a partícula na armadilha óptica, a velocidade de um grão de pólen, a taxa de juros que reverte à média.</p>
+
+      <aside class="box">
+        <p class="tag">Ornstein–Uhlenbeck por Fourier: características no espectro</p>
+        <p>Vale resolver o OU com a ferramenta nova, porque a conta é bonita e junta três linhas do livro. A EDP é
+        $$\rho_t=\gamma\,\partial_x(x\rho)+\frac{\sigma^2}2\rho_{xx}.$$
+        O que atrapalha é o $x$ multiplicando $\rho$ — coeficiente variável, justamente o que Fourier não costuma digerir. Mas aqui ele é <em>linear</em>, e a <a href="transformada-fourier.html">tabela de propriedades</a> tem uma linha para isso: multiplicar por $x$ vira derivar em $k$. Transformando,
+        $$\widehat\rho_t=-\gamma k\,\widehat\rho_k-\frac{\sigma^2}2k^2\,\widehat\rho.$$
+        Some a segunda derivada: sobrou uma EDP de <b>primeira ordem</b> em $(k,t)$ — e primeira ordem a gente resolve por <a href="caracteristicas-1a-ordem.html">características</a>. As curvas são $\dot k=\gamma k$, isto é $k(t)=k_0e^{\gamma t}$: no espectro, a informação <em>foge para as frequências altas</em>, onde o segundo termo a esmaga. Ao longo delas,
+        $$\frac{d}{dt}\widehat\rho=-\frac{\sigma^2}2k(t)^2\widehat\rho\quad\Longrightarrow\quad \widehat\rho(k,t)=\widehat\rho_0\big(ke^{-\gamma t}\big)\,\exp\Big[-\frac{\sigma^2k^2}{4\gamma}\big(1-e^{-2\gamma t}\big)\Big].$$
+        Partindo de um ponto, $\widehat\rho_0(k)=e^{-ikx_0}$, e a resposta é a transformada de uma gaussiana de média $x_0e^{-\gamma t}$ e variância $\frac{\sigma^2}{2\gamma}(1-e^{-2\gamma t})$ — as fórmulas de cima. Conferi contra a EDP resolvida em diferenças finitas (cinco casas) e contra duzentos mil caminhos simulados (três casas, que é o que o Monte Carlo dá).</p>
+        <p>Guarde o mecanismo, que reaparece: <b>deriva linear no espaço vira transporte no espectro</b>. É a mesma dualidade da linha "multiplicar por $x$", e é por isso que problemas gaussianos são tão fáceis dos dois lados.</p>
+      </aside>
+
+      <h2 id="gbm" data-toc="Browniano geométrico">O browniano geométrico e o desconto de $\sigma^2/2$</h2>
+      <p>Último exemplo, e o mais consequente: um preço que varia em <em>proporção</em> ao seu próprio valor,
+      $$dS=\mu S\,dt+\sigma S\,dB.$$
+      Faz sentido como modelo — uma ação de 100 reais oscila dez vezes mais, em reais, do que uma de 10 reais — e é o modelo de Black e Scholes. Os coeficientes agora dependem de $S$, mas de um jeito que uma troca de variável conserta: com $x=\ln S$, o processo vira
+      $$dx=\Big(\mu-\frac{\sigma^2}2\Big)dt+\sigma\,dB,$$
+      browniano com deriva. Logo $\ln S$ é gaussiano e $S$ é <b>lognormal</b>. O exercício 3 faz a troca de variável direto na EDP, e lá dá para ver de onde vem o termo estranho: ele <em>nasce</em> do termo de segunda derivada, e não existiria se a difusão fosse constante.</p>
+      <p>Esse $-\sigma^2/2$ parece um detalhe técnico e é dinheiro. Dele sai a diferença entre a média e a mediana:
+      $$\mathbb E[S_t]=S_0e^{\mu t},\qquad \text{mediana}(S_t)=S_0e^{(\mu-\sigma^2/2)t}.$$
+      A média cresce com $\mu$; o caminho <em>típico</em> cresce com $\mu-\sigma^2/2$, que é menos. Não há contradição: a média é puxada para cima por uma cauda fina de valores enormes, e a maioria dos caminhos fica abaixo dela. Com $\mu=10\%$ ao ano e volatilidade $\sigma=40\%$, a deriva do caminho típico é $10\%-8\%=2\%$: quase todo o retorno esperado mora na cauda. É também o lugar onde a convenção de Itô tem consequência monetária — em Stratonovich esse desconto não apareceria —, e a caixa a seguir explica por que Itô é a convenção certa para este problema.</p>
+
+      <h2 id="demo" data-toc="O fio e a nuvem">Veja o fio e a nuvem</h2>
+      <p>À esquerda, nove caminhos sorteados com Euler–Maruyama, o tempo correndo na horizontal, mais a média e a faixa de um desvio padrão; em vermelho, o instante mostrado ao lado. À direita, a densidade exata da EDP — com $X$ na <b>mesma vertical</b>, para o perfil ser literalmente o corte do feixe — e, em cinza, o histograma de quatrocentos caminhos naquele instante. <b>O histograma dos fios é a nuvem</b>: é o dicionário, desenhado.</p>
+
+      <div class="demo" id="demo-eds">
+        <div class="controls">
+          <label>Exemplo
+            <select id="eds-ex" aria-label="Exemplo"></select>
+          </label>
+          <label>t
+            <input type="range" id="eds-t" min="0.02" max="2" step="0.01" value="0.6" aria-label="Tempo">
+            <output id="eds-tv">0,60</output>
+          </label>
+          <button id="eds-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="eds-paths" role="img" aria-label="Caminhos sorteados, com a média e a faixa de um desvio padrão"></canvas>
+          <canvas id="eds-dens" role="img" aria-label="A densidade exata e o histograma dos caminhos no instante mostrado"></canvas>
+        </div>
+        <div class="readout" id="eds-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>caminhos e densidade exata</span>
+          <span><i style="border-color:var(--ink-soft);border-top-width:7px"></i>histograma de 400 caminhos</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>média e faixa de um desvio</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li><b>Comece por "só deriva".</b> Os nove caminhos não são sorteados: são nove soluções da mesma EDO, partindo de pontos diferentes. Eles nunca se cruzam, nunca tremem, e convergem todos para zero. Olhe a nuvem: ela encolhe <em>e fica mais alta</em>, porque a massa é a mesma e o fluxo está comprimindo. Esse é o jacobiano do exercício 1 acontecendo.</li>
+        <li><b>Passe para Ornstein–Uhlenbeck.</b> É a mesma deriva, agora com ruído. Os caminhos tremem, a nuvem para de encolher a certa altura, e o mostrador diz onde: o desvio de equilíbrio $\sqrt{\sigma^2/2\gamma}$. A competição entre a deriva que comprime e o ruído que espalha tem um empate, e ele é esse.</li>
+        <li><b>Compare com o browniano com deriva.</b> Aqui não há empate nenhum: a nuvem anda e alarga sem parar, porque nada a puxa de volta. A diferença entre "ter" e "não ter" um ponto de equilíbrio é a diferença entre $\gamma>0$ e $\gamma=0$ — uma letra na equação.</li>
+        <li><b>Termine no browniano geométrico.</b> A nuvem fica torta: cauda longa para cima, parede em zero. O mostrador compara a média com a mediana, e a distância entre as duas é exatamente o $-\sigma^2/2$ da seção anterior. Repare que nenhum caminho cruza o zero — um preço que varia em proporção a si mesmo não tem como mudar de sinal.</li>
+      </ol>
+
+      <aside class="box">
+        <p class="tag">Itô, Stratonovich, e o que o passeio resolve do dilema</p>
+        <p>Agora que a EDS existe como objeto, cabe o aviso. Escrever $dX=b\,dt+\sigma(X)\,dB$ <em>parece</em> definir um processo, mas não define quando $\sigma$ depende de $X$. O segundo termo teria que ser o limite de somas $\sum\sigma(X_{t_i^*})(B_{t_{i+1}}-B_{t_i})$, e <b>o limite depende de onde se avalia $\sigma$ dentro de cada subintervalo</b> — porque os incrementos são de tamanho $\sqrt{\Delta t}$, e não $\Delta t$, e a correlação entre onde se está e para onde o ruído leva não some no limite. Avaliar no extremo esquerdo é a convenção de <b>Itô</b>; no ponto médio, a de <b>Stratonovich</b>. A família inteira cabe num número: sem deriva, o equilíbrio é
+        $$\rho_\infty\propto D^{-\alpha},\qquad \alpha=1\ (\text{Itô}),\quad \tfrac12\ (\text{Stratonovich}),\quad 0\ (\text{Fick}),$$
+        com $D=\sigma^2/2$. São três previsões experimentais diferentes para a mesma equação escrita. A segunda parte da célula de Python mede isso: simulando $dX=\sigma(X)dB$ dos dois jeitos, com o mesmo sorteio, saem duas densidades de equilíbrio distintas, cada uma batendo com o seu $\alpha$ e errando feio o do vizinho.</p>
+        <p><b>No passeio aleatório não há nada para interpretar.</b> A equação mestra é uma soma finita de probabilidades, e $p$ está avaliada onde o caminhante <em>está</em>, porque não existe outro lugar: ele sorteia antes de pular, não depois. A convenção não é escolhida, é consequência — e a consequência é Itô. Todo processo de Markov cujo sorteio depende do sítio atual é de Itô, e é essa não antecipação que a integral de Itô formaliza.</p>
+        <p>Mas a ambiguidade não evapora: <b>ela muda de lugar</b>, e vira uma pergunta sobre o modelo. Dois passeios igualmente honestos, com a mesma $D(x)$, dão respostas opostas — e os dois são de Itô, porque o que muda entre eles não é a convenção, é a <b>deriva</b>:</p>
+        <table class="tabela">
+          <thead><tr><th>onde mora a desigualdade</th><th>a EDS equivalente (de Itô)</th><th>equilíbrio</th></tr></thead>
+          <tbody>
+            <tr><td>na preguiça de cada <b>sítio</b></td><td>$dX=\sqrt{2D(X)}\,dB$</td><td>$\rho_\infty\propto1/D$</td></tr>
+            <tr><td>no peso de cada <b>ligação</b></td><td>$dX=D'(X)\,dt+\sqrt{2D(X)}\,dB$</td><td>$\rho_\infty$ uniforme</td></tr>
+          </tbody>
+        </table>
+        <p>A segunda linha é a nossa <a href="difusao-grafos.html">difusão em grafos</a>, onde as condutâncias moram nas arestas, e a deriva $D'(X)$ aparece sozinha, sem ninguém pô-la à mão (é o exercício 7 da <a href="fokker-planck.html">caixinha anterior</a>). A família inteira é a mesma história, $dX=(1-\alpha)D'(X)\,dt+\sqrt{2D(X)}\,dB$. Ou seja: a pergunta sobre convenções só existe para quem escreve a equação <em>sem</em> deriva e pede para interpretá-la. Um modelo microscópico nunca faz isso — ele tem a deriva que tem.</p>
+        <p>E quem desempata, no fim, é a física. Para uma partícula num fluido <em>isotérmico</em> de viscosidade variável, o equilíbrio tem que ser uniforme, porque Boltzmann com potencial nulo dá $\rho$ constante e a viscosidade afeta a cinética, não o equilíbrio — isso força o modelo das ligações. Já um organismo que anda mais devagar em certas regiões não está em equilíbrio térmico com nada, e aí o acúmulo em $1/D$ acontece mesmo. Mesma $D(x)$, respostas opostas, e quem decide é o mecanismo.</p>
+      </aside>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>Duas partes. A primeira simula os quatro exemplos por Euler–Maruyama e compara o histograma com a densidade exata; a lacuna é a potência de $dt$ que acompanha o ruído, que é o erro clássico de quem implementa isso pela primeira vez — deixei o erro escrito no lugar, para você rodar e ver. A segunda mede Itô contra Stratonovich, simulando $dX=\sigma(X)dB$ dos dois jeitos com o mesmo sorteio.</p>
+      <div class="pycell" data-title="Euler–Maruyama, e Itô contra Stratonovich medido"
+           data-starter="../py/eds_lacunas.py"
+           data-solution="../py/eds_solucao.py"></div>
+      <p>Com o erro da lacuna, a variância do browniano sai $0{,}00056$ em vez de $0{,}5625$ — mil vezes menor, que é exatamente o fator $dt$ a mais. Corrigido, os quatro exemplos batem com as fórmulas em três casas. E na segunda parte os números são inequívocos: o histograma de Itô erra $5\%$ contra $D^{-1}$ e $33\%$ contra a uniforme; o de Stratonovich erra $6\%$ contra $D^{-1/2}$ e $18\%$ contra as outras duas.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Sem ruído, a densidade segue o jacobiano</p>
+        <p>Com $\sigma=0$ e $\rho_t+\partial_x(b\rho)=0$. (a) Mostre que ao longo de uma trajetória $\dot X=b(X)$ vale $\frac{d}{dt}\rho(X(t),t)=-b'(X)\rho$. (b) Seja $J(t)=\partial X(t)/\partial x_0$ o jacobiano do fluxo; mostre que $\dot J=b'(X)J$ e conclua que $\rho\,J$ é constante ao longo da trajetória. (c) Faça o caso $b=-\gamma x$ e confira com a demo. (d) O que acontece se duas trajetórias se encontram?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\frac{d}{dt}\rho(X(t),t)=\rho_t+\dot X\rho_x=\rho_t+b\rho_x$. Da EDP, $\rho_t=-(b\rho)_x=-b'\rho-b\rho_x$, e os termos com $\rho_x$ cancelam.</p>
+          <p>(b) Derivando $\dot X=b(X)$ em relação a $x_0$: $\dot J=b'(X)J$. Então $\frac{d}{dt}(\rho J)=\dot\rho J+\rho\dot J=-b'\rho J+\rho b'J=0$. Isso é a conservação de massa na forma lagrangiana: a massa de um pedacinho, $\rho\,\Delta x$, não muda, e $\Delta x$ é esticado pelo fator $J$.</p>
+          <p>(c) Com $b=-\gamma x$: $X(t)=x_0e^{-\gamma t}$, $J=e^{-\gamma t}$, logo $\rho=\rho_0e^{\gamma t}$ — a densidade cresce exponencialmente enquanto a nuvem encolhe. É o que o mostrador da demo informa: a variância cai como $e^{-2\gamma t}$ e o pico sobe como $e^{\gamma t}$.</p>
+          <p>(d) Então $J\to0$ e $\rho\to\infty$: a densidade estoura num pico. É o que acontece nas <a href="leis-conservacao.html">leis de conservação</a> quando as características se cruzam, e é exatamente o que um pouquinho de ruído impede — com $\sigma>0$, a suavização instantânea do termo de segunda ordem não deixa a densidade virar delta.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. A família linear pelos momentos</p>
+        <p>Para $dX=(\mu-\gamma X)dt+\sigma\,dB$, use a EDP e integração por partes para mostrar
+        $$\frac{d}{dt}\langle x\rangle=\mu-\gamma\langle x\rangle,\qquad \frac{d}{dt}\langle x^2\rangle=2\mu\langle x\rangle-2\gamma\langle x^2\rangle+\sigma^2,$$
+        e deduza as fórmulas de $m(t)$ e $v(t)$ do texto. (b) Confira o limite $\gamma\to0$. (c) Qual é a variância de equilíbrio, e por que ela não depende de $\mu$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\frac{d}{dt}\int x\rho=\int x\big[-\partial_x((\mu-\gamma x)\rho)+\tfrac{\sigma^2}2\rho_{xx}\big]=\int(\mu-\gamma x)\rho+0=\mu-\gamma\langle x\rangle$, com uma integração por partes no primeiro termo e duas no segundo. Para $x^2$ sai $2\int x(\mu-\gamma x)\rho+\sigma^2$. A primeira é linear e dá $m(t)=m_0e^{-\gamma t}+\frac\mu\gamma(1-e^{-\gamma t})$; substituindo na segunda e resolvendo, $\langle x^2\rangle-m^2=v$ satisfaz $\dot v=-2\gamma v+\sigma^2$, cuja solução é a do texto.</p>
+          <p>(b) Com $\gamma\to0$, $\frac\mu\gamma(1-e^{-\gamma t})\to\mu t$ e $\frac{\sigma^2}{2\gamma}(1-e^{-2\gamma t})\to\sigma^2t$: browniano com deriva, como tem que ser.</p>
+          <p>(c) $v_\infty=\sigma^2/2\gamma$, que não depende de $\mu$ porque a deriva constante só desloca a nuvem — quem a comprime é o termo $-\gamma x$, e quem a espalha é o ruído. A posição de equilíbrio depende de $\mu$ (é $\mu/\gamma$), a largura não.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. De onde vem o $-\sigma^2/2$</p>
+        <p>Para $dS=\mu S\,dt+\sigma S\,dB$, a EDP é $\rho_t=-\partial_S(\mu S\rho)+\tfrac12\partial_{SS}(\sigma^2S^2\rho)$. Escreva a densidade na variável $x=\ln S$, lembrando que densidades mudam com o jacobiano: $f(x,t)=S\,\rho(S,t)$. (a) Mostre que $f$ satisfaz $f_t=-(\mu-\tfrac{\sigma^2}2)f_x+\tfrac{\sigma^2}2f_{xx}$. (b) De qual termo veio o $-\sigma^2/2$? (c) Conclua que $S$ é lognormal e calcule média e mediana.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $S=e^x$ vale $\partial_S=e^{-x}\partial_x$, e substituindo $\rho=e^{-x}f$ nos dois termos a conta sai em algumas linhas. Vale a pena fazê-la devagar: o termo de transporte contribui com $-\mu f_x$ e o de difusão, depois de abrir as duas derivadas, contribui com $\tfrac{\sigma^2}2f_{xx}+\tfrac{\sigma^2}2f_x$ — e é esse último pedaço que, passando para o lado do transporte, vira o desconto.</p>
+          <p>(b) Do termo de <b>segunda</b> derivada. Ele não é só difusão: quando o coeficiente $\sigma^2S^2$ varia com $S$, abrir $\partial_{SS}(\sigma^2S^2\rho)$ produz um transporte, exatamente como na caixinha anterior produzia o acúmulo em $1/D$. O $-\sigma^2/2$ não é uma correção misteriosa — é o mesmo fenômeno de sempre, visto noutra variável.</p>
+          <p>(c) A equação em $x$ tem coeficientes constantes, logo $x$ é gaussiano de média $\ln S_0+(\mu-\tfrac{\sigma^2}2)t$ e variância $\sigma^2t$. Então $S=e^x$ é lognormal, a mediana é $e^{\text{média de }x}=S_0e^{(\mu-\sigma^2/2)t}$, e a média é $e^{m+v/2}=S_0e^{\mu t}$ — o $v/2$ devolve exatamente o que o desconto tinha tirado.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Uma difusão que não fica negativa</p>
+        <p>O processo de Feller, usado para taxas de juros e para populações: $dX=\gamma(\theta-X)dt+\sigma\sqrt X\,dB$, com $X>0$. (a) Escreva a EDP. (b) Ache a densidade estacionária impondo fluxo nulo. (c) Que distribuição é essa, e qual a sua média? (d) Por que $\sqrt X$ e não uma constante?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $\rho_t=-\partial_x\big(\gamma(\theta-x)\rho\big)+\tfrac12\partial_{xx}\big(\sigma^2x\rho\big)$.</p>
+          <p>(b) Fluxo nulo: $\gamma(\theta-x)\rho=\tfrac12\partial_x(\sigma^2x\rho)$. Pondo $g=\sigma^2x\rho$, isso é $\frac{g'}{g}=\frac{2\gamma\theta}{\sigma^2}\frac1x-\frac{2\gamma}{\sigma^2}$, e integrando, $g\propto x^{2\gamma\theta/\sigma^2}e^{-2\gamma x/\sigma^2}$. Logo
+          $$\rho_\infty(x)\propto x^{\frac{2\gamma\theta}{\sigma^2}-1}\,e^{-\frac{2\gamma}{\sigma^2}x}.$$</p>
+          <p>(c) É uma distribuição <b>gama</b>, de forma $k=2\gamma\theta/\sigma^2$ e taxa $\lambda=2\gamma/\sigma^2$. A média é $k/\lambda=\theta$ — a reversão à média funciona, como esperado. Repare que, se $k&lt;1$, a densidade explode (de forma integrável) perto de zero: com ruído grande demais, o processo passa muito tempo encostado no zero.</p>
+          <p>(d) Porque o ruído precisa desaparecer onde $X$ desaparece. Com $\sigma$ constante o processo cruzaria o zero e viraria negativo, o que não faz sentido nem para uma taxa nem para uma população. O fator $\sqrt X$ desliga o sorteio exatamente onde ele seria perigoso — e a deriva $\gamma\theta>0$ empurra de volta para dentro.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Perguntas que a nuvem não responde</p>
+        <p>Seja $dX=\sigma\,dB$ começando em $x\in(0,L)$, e pare o processo ao tocar $0$ ou $L$. (a) Por que "qual a chance de tocar $L$ primeiro" <em>não</em> é uma pergunta sobre $\rho(\cdot,t)$ em nenhum instante? (b) Mostre que a resposta $u(x)$ satisfaz $u''=0$ e ache-a. (c) Idem para o tempo médio $T(x)$, que satisfaz $\tfrac{\sigma^2}2T''=-1$. (d) Que equação, das duas do dicionário, essas duas são parentes?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Porque ela depende da trajetória inteira, e não da posição num instante: duas trajetórias podem estar no mesmo lugar em $t$ e ter históricos diferentes quanto a já terem tocado a borda. Perguntas assim vivem do lado do fio.</p>
+          <p>(b) Condicionando num tempinho $dt$ e usando que o incremento é simétrico, $u$ é a média dos valores vizinhos — a mesma propriedade do valor médio do <a href="principio-maximo.html">princípio do máximo</a> —, o que no limite dá $u''=0$. Com $u(0)=0$ e $u(L)=1$: $u(x)=x/L$. Note que a resposta não depende de $\sigma$: sacudir mais rápido não muda a chance, só o tempo.</p>
+          <p>(c) Contando o tempo gasto, $T(x)=dt+\mathbb E[T(X_{dt})]$, o que dá $\tfrac{\sigma^2}2T''=-1$, e com $T(0)=T(L)=0$ sai $T(x)=\dfrac{x(L-x)}{\sigma^2}$, máximo no meio, $L^2/4\sigma^2$. De novo o quadrado da distância.</p>
+          <p>(d) Da <b>equação para trás</b>, a adjunta de Fokker–Planck, que a <a href="fokker-planck.html">caixinha anterior</a> deduziu. É ela que calcula esperanças de coisas que acontecem no futuro, resolvendo de trás para a frente — e é por isso que questões de trajetória, apesar de não serem perguntas sobre $\rho$, ainda assim viram EDPs. A fórmula de Feynman–Kac é a forma geral desse truque.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a></li>
+            <li><a href="passeio-aleatorio.html">O passeio aleatório e o movimento browniano</a></li>
+            <li><a href="calor-reta.html">O calor na reta: Fourier e o núcleo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="equacao-transporte.html">Equação de transporte</a></li>
+            <li><a href="leis-conservacao.html">Leis de conservação</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/eds-core.js"></script>
+  <script src="../assets/eds-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

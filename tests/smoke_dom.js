@@ -207,6 +207,20 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["qw-espelho"].fire("click"); await wait(40);
     check("qw-demo: o botão do espelho leva a t = π", rd().includes("espelho"), rd().slice(0, 160));
   }
+  /* ---- equações diferenciais estocásticas: o fio e a nuvem ---- */
+  {
+    const env = makeEnv(["demo-eds", "eds-ex", "eds-t", "eds-tv", "eds-play", "eds-readout", "eds-paths", "eds-dens"], []);
+    run(env, "eds-core.js"); env.sandbox.window.EDSCore = env.sandbox.EDSCore || vm.runInContext("EDSCore", env.sandbox);
+    env.byId["eds-t"].value = "0.6";
+    let err = null; try { run(env, "eds-demo.js"); await wait(60); } catch (e) { err = e; }
+    check("eds-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["eds-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("eds-demo: só deriva avisa que a nuvem é carregada", rd().includes("carregada"), rd().slice(0, 200));
+    env.byId["eds-ex"].value = "ou"; env.byId["eds-ex"].fire("input"); await wait(60);
+    check("eds-demo: o OU mostra o desvio de equilíbrio 0,593", rd().includes("0,593"), rd().slice(0, 220));
+    env.byId["eds-ex"].value = "gbm"; env.byId["eds-ex"].fire("input"); await wait(60);
+    check("eds-demo: o GBM compara média e mediana", rd().includes("mediana"), rd().slice(0, 240));
+  }
   /* ---- transformada de Fourier na reta ---- */
   {
     const env = makeEnv(["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k"], []);
@@ -308,7 +322,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 36 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 36);
+    check("mapa: SVG gerado com os 37 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 37);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

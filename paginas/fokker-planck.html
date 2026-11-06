@@ -150,39 +150,10 @@
         <p>O passeio responde sem hesitar, e a resposta é aquele detalhe da equação mestra: a probabilidade de pular é a do sítio <b>de onde se sai</b>. Tome um passeio <em>sem viés nenhum</em>, $p=q=s(x)/2$, em que o caminhante é ágil de um lado e lento do outro — $D(x)=h^2s(x)/2\tau$ varia, mas nada o empurra para lado algum. A equação é $\rho_t=\partial_{xx}(D\rho)$, e o equilíbrio ($J=0$, ou seja $D\rho$ constante) é
         $$\rho_\infty\propto\frac1{D(x)}.$$
         <b>Ele se acumula onde anda devagar.</b> Soa estranho — não há força alguma —, mas é só contabilidade: em equilíbrio, o que passa de cada sítio para o vizinho tem que empatar com o que volta, $p_j P_j=q_{j+1}P_{j+1}$, e com $p=q=s/2$ isso é $s_jP_j=s_{j+1}P_{j+1}$, ou seja $sP$ constante. Quem é lento precisa de mais gente parada ali para despachar a mesma quantidade por segundo. É a razão de haver mais carro parado no trecho congestionado, sem que ninguém esteja sendo puxado para lá.</p>
-        <p>Essa ambiguidade tem nome na teoria de processos estocásticos — é o dilema de Itô contra Stratonovich. A caixa seguinte conta o que o passeio resolve dele, e o que não resolve.</p>
+        <p>Essa ambiguidade tem nome na teoria de processos estocásticos — é o dilema de Itô contra Stratonovich —, e a <a href="eds-fokker-planck.html">caixinha sobre equações diferenciais estocásticas</a> conta o que o passeio resolve dele, o que não resolve, e por que os dois passeios do exercício 7 são ambos de Itô.</p>
       </aside>
 
-      <aside class="box">
-        <p class="tag">Itô, Stratonovich, e o que o passeio resolve do dilema</p>
-        <p>Escrever $dX=b(X)\,dt+\sigma(X)\,dB$ parece definir um processo, mas não define. O problema é o segundo termo: ele teria que ser o limite de somas $\sum\sigma(X_{t_i^*})\,(B_{t_{i+1}}-B_{t_i})$, e <b>o limite depende de onde se avalia $\sigma$ dentro de cada subintervalo</b>. Numa integral de Riemann comum isso não importaria; aqui importa porque o browniano tem incrementos de tamanho $\sqrt{\Delta t}$, e não $\Delta t$, de modo que a correlação entre onde se está e para onde o ruído leva não desaparece no limite. Avaliar no extremo esquerdo é a convenção de <b>Itô</b>; no ponto médio, a de <b>Stratonovich</b>. Há uma família inteira entre elas, e ela se resume num número: sem deriva nenhuma, o equilíbrio é
-        $$\rho_\infty\propto D^{-\alpha},\qquad \alpha=1\ (\text{Itô}),\quad \alpha=\tfrac12\ (\text{Stratonovich}),\quad \alpha=0\ (\text{Fick}).$$
-        A mesma frase "a partícula difunde com difusividade $D(x)$" pode então significar acúmulo em $1/D$, em $1/\sqrt D$, ou acúmulo nenhum. Não é sutileza de notação: são três previsões experimentais diferentes.</p>
-        <p><b>No passeio não há nada para interpretar.</b> A equação mestra é uma soma finita de probabilidades, e $p$ está avaliada onde o caminhante <em>está</em>, porque não existe outro lugar onde avaliá-la: ele sorteia antes de pular, não depois. O limite sai determinado, e sai na forma de Itô. A convenção não é escolhida — é uma consequência.</p>
-        <p><b>Mas a ambiguidade não evapora: ela muda de lugar.</b> Deixa de ser uma questão de notação e vira uma questão de modelo, que continua em aberto até se dizer <em>onde mora a desigualdade</em>. Dois passeios igualmente naturais, com a mesma $D(x)$:</p>
-        <table class="tabela">
-          <thead><tr><th>o que varia</th><th>a matriz do passo</th><th>equilíbrio</th><th>no contínuo</th></tr></thead>
-          <tbody>
-            <tr><td>a preguiça de cada <b>sítio</b></td><td>colunas somam $1$, linhas não; assimétrica</td><td>$\rho_\infty\propto1/D$</td><td>$\rho_t=\partial_{xx}(D\rho)$</td></tr>
-            <tr><td>o peso de cada <b>ligação</b>, igual nos dois sentidos</td><td>duplamente estocástica e <b>simétrica</b></td><td>$\rho_\infty$ uniforme</td><td>$\rho_t=\partial_x(D\,\partial_x\rho)$</td></tr>
-          </tbody>
-        </table>
-        <p>A segunda linha é a nossa própria <a href="difusao-grafos.html">difusão em grafos</a>, onde as condutâncias moram nas arestas — e é por isso que lá o equilíbrio era uniforme e aqui é $1/D$. Não é contradição: são modelos microscópicos diferentes, e a matriz denuncia qual é qual, porque ser simétrica é justamente ter balanço detalhado em relação à distribuição uniforme (exercícios 6 e 7).</p>
-        <p>E aqui vai a precisão que arruma tudo: <b>os dois passeios da tabela são de Itô</b>. Todo processo de Markov cujo sorteio depende do sítio em que se está é de Itô, porque nenhum deles espia o resultado antes de decidir — é exatamente essa não antecipação que a integral de Itô formaliza. O que muda de um passeio para o outro não é a convenção: é a <b>deriva</b>. O de cima é $dX=\sqrt{2D(X)}\,dB$, sem deriva nenhuma; o de baixo é $dX=D'(X)\,dt+\sqrt{2D(X)}\,dB$, com uma deriva que ninguém pôs à mão e que nasce da assimetria dos pesos (exercício 7). E a família inteira é essa mesma história:
-        $$dX=(1-\alpha)\,D'(X)\,dt+\sqrt{2D(X)}\,dB\ \ \text{(de Itô)}\qquad\Longrightarrow\qquad\rho_\infty\propto D^{-\alpha}.$$
-        A pergunta sobre convenções só aparece quando alguém escreve uma equação <em>sem</em> deriva e pede para interpretá-la. Um modelo microscópico nunca faz isso: ele tem a deriva que tem.</p>
-
-        <p>Quem desempata, então, é a física. Para uma partícula num fluido <em>isotérmico</em> de viscosidade variável, o equilíbrio tem que ser uniforme — Boltzmann com potencial nulo dá $\rho$ constante, e a viscosidade afeta a cinética, não o equilíbrio —, o que força o modelo das ligações. Já um organismo que anda mais devagar em certas regiões não está em equilíbrio térmico com coisa alguma, e aí o acúmulo em $1/D$ acontece mesmo; é o efeito conhecido em matéria ativa, do tipo "bactéria se acumula onde nada devagar". Mesma $D(x)$, respostas opostas, e quem decide é o mecanismo. O passeio não dissolve o dilema: ele o converte de uma escolha de notação numa <b>pergunta física respondível</b>, que já é um progresso e tanto.</p>
-      </aside>
-
-      <aside class="box">
-        <p class="tag">A forma abreviada: $dX=a\,dt+\sqrt{2D}\,dB$</p>
-        <p>Existe um jeito de escrever o <em>caminhante</em>, e não a densidade. Em um intervalo curto $dt$, a posição anda $a\,dt$ por causa do viés e sorteia um pedaço de tamanho típico $\sqrt{2D\,dt}$ por causa do ruído. Escreve-se isso como
-        $$dX_t=a(X_t)\,dt+\sqrt{2D(X_t)}\,dB_t,$$
-        uma <b>equação diferencial estocástica</b>, com $B$ o <a href="passeio-aleatorio.html">movimento browniano</a> da caixinha anterior. Fokker–Planck é a equação que a <em>densidade</em> de $X_t$ satisfaz; as duas dizem a mesma coisa, uma acompanhando um caminhante, a outra acompanhando a multidão. E quando $D$ varia, é aqui que a ambiguidade de Itô × Stratonovich aparece de forma gritante: $\sqrt{2D(X_t)}$ está avaliado <em>antes</em> do pulo, e é essa escolha — a mesma do nosso sítio de origem — que dá a Fokker–Planck com $D$ dentro das derivadas.</p>
-      </aside>
-
-      <aside class="box">
+                  <aside class="box">
         <p class="tag">A outra equação: olhar para trás</p>
         <p>Há uma segunda pergunta, tão natural quanto a primeira, e ela dá outra EDP. Em vez de "onde ele vai estar", pergunte "quanto vale, em média, um prêmio $f$ pago na posição final":
         $$v(x,t)=\mathbb E\big[f(X_T)\ \big|\ X_t=x\big].$$
@@ -317,8 +288,8 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
+            <li><a href="eds-fokker-planck.html">Equações diferenciais estocásticas e Fokker–Planck</a></li>
             <li><a href="calor-reta.html">O calor na reta: Fourier e o núcleo</a></li>
-            <li><a href="equacao-transporte.html">Equação de transporte</a></li>
             <li><a href="cfl.html">Condição CFL</a></li>
           </ul>
         </div>

@@ -93,6 +93,7 @@ need = {
     "paginas/poco-infinito.html": ["demo-qw", "qw-estado", "qw-t", "qw-tv", "qw-play", "qw-espelho", "qw-ressurg", "qw-readout", "qw-dens", "qw-niveis", "tema", "toc"],
     "paginas/principio-maximo.html": ["tema", "toc"],
     "paginas/transformada-fourier.html": ["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k", "tema", "toc"],
+    "paginas/eds-fokker-planck.html": ["demo-eds", "eds-ex", "eds-t", "eds-tv", "eds-play", "eds-readout", "eds-paths", "eds-dens", "tema", "toc"],
     "paginas/calor-reta.html": ["demo-cr", "cr-dado", "cr-t", "cr-tv", "cr-circulo", "cr-play", "cr-readout", "cr-u", "cr-k", "tema", "toc"],
     "paginas/passeio-aleatorio.html": ["demo-fp", "fp-h", "fp-s", "fp-zoom", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
     "paginas/fokker-planck.html": ["demo-fp", "fp-h", "fp-a", "fp-av", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
@@ -116,6 +117,15 @@ for href in json.loads(out):
     path = root / href.split("#")[0]
     ok = path.exists() and (("#" not in href) or href.split("#")[1] in parsed[path].ids)
     check(f"mapa: link {href}", ok)
+
+# o cifrão do real abre matemática no KaTeX e engole a frase: não usar "R$", e conferir
+# que o número de cifrões é par (um ímpar denuncia um delimitador solto)
+for path in sorted(parsed):
+    txt = path.read_text(encoding="utf-8")
+    corpo = txt[txt.find("<main"):txt.find("</main>")] if "<main" in txt else txt
+    moeda = re.search(r"R\$\s*[0-9]", corpo)   # \mathbb R$ seguido de espaço é outra coisa
+    check(f"{path.relative_to(root)}: sem cifrão de moeda (usar 'reais')", not moeda, moeda.group(0) if moeda else "")
+    check(f"{path.relative_to(root)}: número par de cifrões", corpo.count("$") % 2 == 0, f"{corpo.count('$')} cifrões")
 
 # todas as páginas têm que pedir a MESMA versão de KaTeX, e a declarada lá em cima
 for path in sorted(parsed):

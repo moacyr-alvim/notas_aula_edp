@@ -73,6 +73,17 @@ dif = float(re.search(r"erro diferencas finitas = ([0-9.eE+-]+)", s).group(1))
 check("calor no círculo: espectral é exato até o arredondamento", esp < 1e-12, f"erro={esp:.1e}")
 check("calor no círculo: diferenças finitas erram bem mais", dif > 100 * esp, f"erro={dif:.1e}")
 
+s, _ = rodar("eds_solucao.py")
+mlog = float(re.search(r"E\[ln S\] simulado ([-+0-9.]+), exato ([-+0-9.]+)", s).group(1))
+elog = float(re.search(r"E\[ln S\] simulado ([-+0-9.]+), exato ([-+0-9.]+)", s).group(2))
+check("EDS: Euler-Maruyama reproduz E[ln S] = (mu - sigma^2/2)t", abs(mlog - elog) < 0.02, f"{mlog} vs {elog}")
+linhas = re.findall(r"^  (Ito|Stratonovich)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s*$", s, re.M)
+alvo = {"Ito": 1, "Stratonovich": 2}
+for nome, *erros in linhas:
+    e = [float(v) for v in erros]
+    melhor = e.index(min(e)) + 1
+    check(f"EDS: o histograma de {nome} escolhe o alpha certo", melhor == alvo[nome], f"erros {e}")
+
 s, _ = rodar("transformada_reta_solucao.py")
 for nome, esperado in (("triangulo", 0.5477), ("exponencial", 0.7071), ("gaussiana", 0.5000)):
     v = float(re.search(nome + r"\s+Dx\*Dk = ([0-9.]+)", s).group(1))

@@ -46,6 +46,7 @@ py/                   os códigos Python das células (edite aqui; o site carreg
                       burgers_viscosa_*.py pseudoespectral e Cole–Hopf para Burgers viscosa
                       transformada_reta_*.py FFT contra as fórmulas fechadas, e o produto Δx·Δk
                       calor_reta_*.py o núcleo pela FFT, o colapso autossemelhante e reta contra círculo
+                      eds_*.py Euler–Maruyama para quatro exemplos, e Itô contra Stratonovich medido
                       passeio_aleatorio_*.py caminhantes na grade, gaussiana e a lei da raiz quadrada
                       fokker_planck_*.py poço duplo (Boltzmann) e D variável sem viés
 assets/
@@ -74,6 +75,8 @@ assets/
   tf-demo.js          demo da gangorra: f e û lado a lado, com as faixas de largura
   cr-core.js          calor na reta: função erro, núcleo gaussiano, soluções fechadas e a versão enrolada no círculo
   cr-demo.js          demo da difusão na reta e do espectro, com a comparação opcional com o círculo
+  eds-core.js         EDS: a família linear, a lognormal, Euler–Maruyama e o resíduo de Fokker–Planck; testável em Node
+  eds-demo.js         demo do fio e da nuvem: caminhos à esquerda, densidade e histograma à direita
   fp-core.js          passeio aleatório: equação mestra, gaussiana de Fokker–Planck e trajetórias; testável em Node
   fp-demo.js          demo do passeio, nas duas páginas da raia: os controles de viés, preguiça e zoom são opcionais
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
