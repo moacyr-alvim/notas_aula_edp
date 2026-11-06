@@ -147,10 +147,28 @@
         <p>Chegou a hora da surpresa que o ruído desigual reservava. Quando $D$ é constante, $\partial_{xx}(D\rho)=D\rho_{xx}$ e a distinção não importa. Quando $D$ varia com $x$, importa muito:
         $$\partial_{xx}(D\rho)=D\rho_{xx}+\partial_x\big(D_x\,\rho\big),$$
         e o segundo pedaço é um <b>transporte extra</b>, com velocidade $D_x$, que não estava em lugar nenhum do modelo. Qual das duas equações é a certa?</p>
-        <p>O passeio responde sem hesitar, e a resposta é aquele detalhe da equação mestra: a probabilidade de pular é a do sítio <b>de onde se sai</b>. Tome um passeio <em>sem viés nenhum</em>, $p=q=s(x)/2$, em que o caminhante é ágil de um lado e lento do outro — $D(x)=\dfrac{h^2s(x)}{2\tau}$ varia, mas nada o empurra para lado algum. A equação é $\rho_t=\partial_{xx}(D\rho)$, e o equilíbrio ($J=0$, ou seja $D\rho$ constante) é
+        <p>O passeio responde sem hesitar, e a resposta é aquele detalhe da equação mestra: a probabilidade de pular é a do sítio <b>de onde se sai</b>. Tome um passeio <em>sem viés nenhum</em>, $p=q=s(x)/2$, em que o caminhante é ágil de um lado e lento do outro — $D(x)=h^2s(x)/2\tau$ varia, mas nada o empurra para lado algum. A equação é $\rho_t=\partial_{xx}(D\rho)$, e o equilíbrio ($J=0$, ou seja $D\rho$ constante) é
         $$\rho_\infty\propto\frac1{D(x)}.$$
         <b>Ele se acumula onde anda devagar.</b> Soa estranho — não há força alguma —, mas é só contabilidade: em equilíbrio, o que passa de cada sítio para o vizinho tem que empatar com o que volta, $p_j P_j=q_{j+1}P_{j+1}$, e com $p=q=s/2$ isso é $s_jP_j=s_{j+1}P_{j+1}$, ou seja $sP$ constante. Quem é lento precisa de mais gente parada ali para despachar a mesma quantidade por segundo. É a razão de haver mais carro parado no trecho congestionado, sem que ninguém esteja sendo puxado para lá.</p>
-        <p>Essa ambiguidade tem nome na teoria de processos estocásticos — é a diferença entre as convenções de Itô e de Stratonovich, e cada uma dá uma equação diferente para o mesmo ruído. Do lado do passeio não há ambiguidade nenhuma: basta perguntar de onde o caminhante veio.</p>
+        <p>Essa ambiguidade tem nome na teoria de processos estocásticos — é o dilema de Itô contra Stratonovich. A caixa seguinte conta o que o passeio resolve dele, e o que não resolve.</p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">Itô, Stratonovich, e o que o passeio resolve do dilema</p>
+        <p>Escrever $dX=b(X)\,dt+\sigma(X)\,dB$ parece definir um processo, mas não define. O problema é o segundo termo: ele teria que ser o limite de somas $\sum\sigma(X_{t_i^*})\,(B_{t_{i+1}}-B_{t_i})$, e <b>o limite depende de onde se avalia $\sigma$ dentro de cada subintervalo</b>. Numa integral de Riemann comum isso não importaria; aqui importa porque o browniano tem incrementos de tamanho $\sqrt{\Delta t}$, e não $\Delta t$, de modo que a correlação entre onde se está e para onde o ruído leva não desaparece no limite. Avaliar no extremo esquerdo é a convenção de <b>Itô</b>; no ponto médio, a de <b>Stratonovich</b>. Há uma família inteira entre elas, e ela se resume num número: sem deriva nenhuma, o equilíbrio é
+        $$\rho_\infty\propto D^{-\alpha},\qquad \alpha=1\ (\text{Itô}),\quad \alpha=\tfrac12\ (\text{Stratonovich}),\quad \alpha=0\ (\text{Fick}).$$
+        A mesma frase "a partícula difunde com difusividade $D(x)$" pode então significar acúmulo em $1/D$, em $1/\sqrt D$, ou acúmulo nenhum. Não é sutileza de notação: são três previsões experimentais diferentes.</p>
+        <p><b>No passeio não há nada para interpretar.</b> A equação mestra é uma soma finita de probabilidades, e $p$ está avaliada onde o caminhante <em>está</em>, porque não existe outro lugar onde avaliá-la: ele sorteia antes de pular, não depois. O limite sai determinado, e sai na forma de Itô. A convenção não é escolhida — é uma consequência.</p>
+        <p><b>Mas a ambiguidade não evapora: ela muda de lugar.</b> Deixa de ser uma questão de notação e vira uma questão de modelo, que continua em aberto até se dizer <em>onde mora a desigualdade</em>. Dois passeios igualmente naturais, com a mesma $D(x)$:</p>
+        <table class="tabela">
+          <thead><tr><th>o que varia</th><th>a matriz do passo</th><th>equilíbrio</th><th>no contínuo</th></tr></thead>
+          <tbody>
+            <tr><td>a preguiça de cada <b>sítio</b></td><td>colunas somam $1$, linhas não; assimétrica</td><td>$\rho_\infty\propto1/D$</td><td>$\rho_t=\partial_{xx}(D\rho)$</td></tr>
+            <tr><td>o peso de cada <b>ligação</b>, igual nos dois sentidos</td><td>duplamente estocástica e <b>simétrica</b></td><td>$\rho_\infty$ uniforme</td><td>$\rho_t=\partial_x(D\,\partial_x\rho)$</td></tr>
+          </tbody>
+        </table>
+        <p>A segunda linha é a nossa própria <a href="difusao-grafos.html">difusão em grafos</a>, onde as condutâncias moram nas arestas — e é por isso que lá o equilíbrio era uniforme e aqui é $1/D$. Não é contradição: são modelos microscópicos diferentes, e a matriz denuncia qual é qual, porque ser simétrica é justamente ter balanço detalhado em relação à distribuição uniforme (exercícios 6 e 7).</p>
+        <p>Quem desempata, então, é a física. Para uma partícula num fluido <em>isotérmico</em> de viscosidade variável, o equilíbrio tem que ser uniforme — Boltzmann com potencial nulo dá $\rho$ constante, e a viscosidade afeta a cinética, não o equilíbrio —, o que força o modelo das ligações. Já um organismo que anda mais devagar em certas regiões não está em equilíbrio térmico com coisa alguma, e aí o acúmulo em $1/D$ acontece mesmo; é o efeito conhecido em matéria ativa, do tipo "bactéria se acumula onde nada devagar". Mesma $D(x)$, respostas opostas, e quem decide é o mecanismo. O passeio não dissolve o dilema: ele o converte de uma escolha de notação numa <b>pergunta física respondível</b>, que já é um progresso e tanto.</p>
       </aside>
 
       <aside class="box">
@@ -233,7 +251,7 @@
           <p>(a) Como $p-q=0$, a deriva é nula e sobra $\rho_t=\partial_{xx}(D\rho)$ com $D=h^2s/2\tau$.</p>
           <p>(b) O fluxo é $J=-\partial_x(D\rho)$; anulá-lo dá $D\rho$ constante, isto é, $\rho_\infty\propto1/D$.</p>
           <p>(c) Em equilíbrio, o que atravessa cada ligação para a direita tem que empatar com o que atravessa para a esquerda: $p_jP_j=q_{j+1}P_{j+1}$. Com $p=q=s/2$ isso vira $s_jP_j=s_{j+1}P_{j+1}$, ou seja, $sP$ não depende de $j$. Como $D\propto s$, segue $P\propto1/D$. Repare que a conta discreta nem precisou de limite: o acúmulo é um fato do passeio, não um artefato da EDP.</p>
-          <p>(d) $\partial_{xx}(D\rho)=D\rho_{xx}+\partial_x(D_x\rho)$: a equação "ingênua" $\rho_t=D\rho_{xx}$ é a mesma menos um transporte de velocidade $D_x$, e ela teria $\rho_\infty$ constante, sem acúmulo nenhum. O passeio produz a primeira, porque na equação mestra a probabilidade de pular é a do sítio de onde se sai. Sempre que $D$ variar, vale conferir de onde a equação veio antes de escrevê-la.</p>
+          <p>(d) $\partial_{xx}(D\rho)=D\rho_{xx}+\partial_x(D_x\rho)$: a equação "ingênua" $\rho_t=D\rho_{xx}$ é a mesma menos um transporte de velocidade $D_x$, e ela teria $\rho_\infty$ constante, sem acúmulo nenhum. Este passeio produz a primeira, porque na equação mestra a probabilidade de pular é a do sítio de onde se sai. Mas repare no <em>este</em>: o exercício 7 monta um passeio igualmente honesto, com a mesma $D(x)$, que produz a outra. Sempre que $D$ variar, vale conferir de onde a equação veio antes de escrevê-la.</p>
         </div>
       </details>
 
@@ -263,6 +281,23 @@
           <p>(b) A linha $j$ soma $p_{j-1}+q_{j+1}+1-p_j-q_j$, que vale $1$ exatamente quando $p_{j-1}-p_j=q_j-q_{j+1}$ para todo $j$ — em particular, sempre que $p$ e $q$ forem constantes em $j$. Linhas somando $1$ quer dizer $M\mathbf 1=\mathbf 1$, isto é, o vetor constante é estacionário: a distribuição uniforme não muda.</p>
           <p>(c) Num anel com $p$ e $q$ constantes, aplicar $M$ ao vetor constante dá $p+q+(1-p-q)=1$ vezes a constante. A uniforme é estacionária mesmo com viés, e isso não é contraditório: o viés produz um fluxo constante dando voltas no anel, e fluxo constante não muda a densidade. É o estado estacionário <em>sem</em> balanço detalhado — a roda gira, mas a distribuição não muda.</p>
           <p>(d) Porque a esperança é uma soma sobre destinos ponderada pelas probabilidades do sítio atual: $v_i(t)=\sum_jM_{ji}v_j(t+\tau)$, que é $v(t)=M^{\mathsf T}v(t+\tau)$. Densidades andam com $M$, funções andam com $M^{\mathsf T}$, e o produto $\sum_iP_iv_i$ é a quantidade que não muda. No contínuo, isso vira a adjunção entre Fokker–Planck e a equação para trás.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">7. O mesmo $D$, outro passeio</p>
+        <p>Agora a desigualdade mora nas <b>ligações</b>, e não nos sítios: atravessar a ligação entre $j$ e $j+1$ tem peso $w_{j+1/2}$, o mesmo nos dois sentidos. Ou seja, $p_j=w_{j+1/2}$ e $q_j=w_{j-1/2}$. (a) Mostre que a matriz do passo é simétrica, e que a distribuição uniforme é estacionária. (b) Calcule $D$ e $a$ no limite, e mostre que <em>aparece uma deriva</em>, $a=D'(x)$, mesmo sem ninguém ter posto viés nenhum. (c) Substitua em Fokker–Planck e mostre que sobra a lei de Fick, $\rho_t=\partial_x(D\,\partial_x\rho)$. (d) Compare com o exercício 4: mesma $D(x)$, equilíbrios diferentes. O que decide?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $M_{j+1,j}=w_{j+1/2}=M_{j,j+1}$, e a diagonal é $1-w_{j+1/2}-w_{j-1/2}$: a matriz é simétrica. Como as colunas somam $1$, as linhas também somam, e $M\mathbf 1=\mathbf 1$ — o vetor constante é estacionário. Pelo balanço detalhado fica ainda mais claro: $p_jP_j=q_{j+1}P_{j+1}$ vira $w_{j+1/2}P_j=w_{j+1/2}P_{j+1}$, isto é, $P_j=P_{j+1}$.</p>
+          <p>(b) A agilidade é $s_j=w_{j+1/2}+w_{j-1/2}\approx2w(x)$, logo $D=\dfrac{h^2s}{2\tau}\approx\dfrac{h^2w(x)}{\tau}$. Já a assimetria é $p_j-q_j=w_{j+1/2}-w_{j-1/2}\approx h\,w'(x)$, de modo que
+          $$a=\frac h\tau\big(p_j-q_j\big)\approx\frac{h^2w'(x)}{\tau}=D'(x).$$
+          Essa deriva não foi posta à mão: ela nasce de o caminhante ter, num sítio, mais chance de sair para o lado da ligação mais forte.</p>
+          <p>(c) Com $a=D'$, $$\rho_t=-\partial_x(D'\rho)+\partial_{xx}(D\rho)=-\partial_x(D'\rho)+\partial_x\big(D'\rho+D\rho_x\big)=\partial_x\big(D\,\partial_x\rho\big).$$
+          Os dois termos com $D'$ se cancelam exatamente. Em palavras: a deriva escondida nas ligações é precisamente a que anula o acúmulo, e o resultado é a lei de Fick, cujo fluxo é $-D\rho_x$ e cujo equilíbrio é uniforme.</p>
+          <p>(d) Decide o mecanismo, não a matemática. Se a lentidão é uma propriedade do <em>lugar</em> onde o caminhante está (ele para mais ali), o equilíbrio é $\rho\propto1/D$; se é uma propriedade da <em>passagem</em> entre dois lugares (a ponte é estreita, nos dois sentidos), o equilíbrio é uniforme. As duas são equações do calor com coeficiente variável, as duas são limites de passeios aleatórios honestos, e nenhuma quantidade de álgebra escolhe entre elas — só a física do problema escolhe.</p>
         </div>
       </details>
 
