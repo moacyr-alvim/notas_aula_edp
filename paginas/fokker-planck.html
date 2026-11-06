@@ -168,6 +168,10 @@
           </tbody>
         </table>
         <p>A segunda linha é a nossa própria <a href="difusao-grafos.html">difusão em grafos</a>, onde as condutâncias moram nas arestas — e é por isso que lá o equilíbrio era uniforme e aqui é $1/D$. Não é contradição: são modelos microscópicos diferentes, e a matriz denuncia qual é qual, porque ser simétrica é justamente ter balanço detalhado em relação à distribuição uniforme (exercícios 6 e 7).</p>
+        <p>E aqui vai a precisão que arruma tudo: <b>os dois passeios da tabela são de Itô</b>. Todo processo de Markov cujo sorteio depende do sítio em que se está é de Itô, porque nenhum deles espia o resultado antes de decidir — é exatamente essa não antecipação que a integral de Itô formaliza. O que muda de um passeio para o outro não é a convenção: é a <b>deriva</b>. O de cima é $dX=\sqrt{2D(X)}\,dB$, sem deriva nenhuma; o de baixo é $dX=D'(X)\,dt+\sqrt{2D(X)}\,dB$, com uma deriva que ninguém pôs à mão e que nasce da assimetria dos pesos (exercício 7). E a família inteira é essa mesma história:
+        $$dX=(1-\alpha)\,D'(X)\,dt+\sqrt{2D(X)}\,dB\ \ \text{(de Itô)}\qquad\Longrightarrow\qquad\rho_\infty\propto D^{-\alpha}.$$
+        A pergunta sobre convenções só aparece quando alguém escreve uma equação <em>sem</em> deriva e pede para interpretá-la. Um modelo microscópico nunca faz isso: ele tem a deriva que tem.</p>
+
         <p>Quem desempata, então, é a física. Para uma partícula num fluido <em>isotérmico</em> de viscosidade variável, o equilíbrio tem que ser uniforme — Boltzmann com potencial nulo dá $\rho$ constante, e a viscosidade afeta a cinética, não o equilíbrio —, o que força o modelo das ligações. Já um organismo que anda mais devagar em certas regiões não está em equilíbrio térmico com coisa alguma, e aí o acúmulo em $1/D$ acontece mesmo; é o efeito conhecido em matéria ativa, do tipo "bactéria se acumula onde nada devagar". Mesma $D(x)$, respostas opostas, e quem decide é o mecanismo. O passeio não dissolve o dilema: ele o converte de uma escolha de notação numa <b>pergunta física respondível</b>, que já é um progresso e tanto.</p>
       </aside>
 
