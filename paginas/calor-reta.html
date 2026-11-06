@@ -22,7 +22,7 @@
     <main>
       <header>
         <h1>O calor na reta: Fourier e o núcleo</h1>
-        <p class="lede">Numa barra infinita não há bordas para selecionar os modos, e todas as frequências entram. A transformada de Fourier troca a EDP por uma EDO em cada k, e a volta para o espaço entrega uma única fórmula: convolver com um sino gaussiano que cresce como a raiz do tempo.</p>
+        <p class="lede">Numa barra infinita não há bordas para selecionar os modos, e todas as frequências entram. A transformada de Fourier troca a EDP por uma EDO em cada k, e a volta para o espaço entrega uma única fórmula: convoluir com um sino gaussiano que cresce como a raiz do tempo.</p>
         <p class="meta">Ajuda ler antes: <a href="transformada-fourier.html">A transformada de Fourier na reta</a> e <a href="calor-circulo.html">O calor no círculo</a>. Leitura de uns 25 minutos.</p>
       </header>
 
@@ -44,7 +44,7 @@
       <p>A hierarquia entre as frequências explica tudo o que vem a seguir. Qualquer detalhe fino do dado inicial mora nas frequências altas, e essas são aniquiladas quase instantaneamente; o que sobrevive é a parte suave, de $k$ pequeno. O calor é uma máquina de esquecer detalhes, e esquece primeiro os menores.</p>
 
       <h2 id="nucleo" data-toc="O núcleo gaussiano">Voltando para o espaço: o núcleo</h2>
-      <p>Falta desfazer a transformada. E aqui entra a melhor linha da tabela de propriedades: <b>produto de um lado é convolução do outro</b>. Como $\widehat u$ é o produto de $\widehat f$ por $e^{-Dk^2t}$, a solução é $f$ convolvida com a função cuja transformada é $e^{-Dk^2t}$.</p>
+      <p>Falta desfazer a transformada. E aqui entra a melhor linha da tabela de propriedades: <b>produto de um lado é convolução do outro</b>. Como $\widehat u$ é o produto de $\widehat f$ por $e^{-Dk^2t}$, a solução é $f$ convoluída com a função cuja transformada é $e^{-Dk^2t}$.</p>
       <p>Que função é essa? Já sabemos: gaussiana vira gaussiana. A fórmula da caixinha anterior diz que $\widehat{g_w}(k)=w\sqrt{2\pi}\,e^{-w^2k^2/2}$; escolhendo $w^2=2Dt$ para casar o expoente, e dividindo pela constante, a transformada inversa de $e^{-Dk^2t}$ é
       $$G_t(x)=\frac{1}{\sqrt{4\pi Dt}}\;e^{-x^2/4Dt},$$
       e portanto
@@ -95,7 +95,7 @@
 
       <h2 id="olhar" data-toc="O que o núcleo diz">Quatro coisas que o núcleo diz</h2>
       <p><b>1. A massa se conserva.</b> Como $\int G_t=1$ para todo $t$, integrar a convolução dá $\int u(\cdot,t)=\int f$. Em linguagem de Fourier é a mesma coisa olhando o modo $k=0$: $\widehat u(0,t)=e^{0}\widehat f(0)=\widehat f(0)$. O calor se espalha, mas não some.</p>
-      <p><b>2. A suavização é instantânea.</b> $G_t$ é infinitamente derivável para $t>0$, e convolver com uma função lisa produz uma função lisa — as derivadas caem todas sobre o núcleo, que aguenta quantas vierem. Então, para <em>qualquer</em> dado inicial, por mais quebrado que seja, a solução é $C^\infty$ no instante seguinte. Do lado de Fourier é a mesma frase: multiplicar por $e^{-Dk^2t}$ faz a cauda do espectro despencar mais rápido que qualquer potência, e já vimos que isso é o mesmo que ser lisa. É a diferença mais marcante entre o calor e a <a href="onda-dalembert.html">equação da onda</a>, que transporta os bicos para sempre.</p>
+      <p><b>2. A suavização é instantânea.</b> $G_t$ é infinitamente derivável para $t>0$, e convoluir com uma função lisa produz uma função lisa — as derivadas caem todas sobre o núcleo, que aguenta quantas vierem. Então, para <em>qualquer</em> dado inicial, por mais quebrado que seja, a solução é $C^\infty$ no instante seguinte. Do lado de Fourier é a mesma frase: multiplicar por $e^{-Dk^2t}$ faz a cauda do espectro despencar mais rápido que qualquer potência, e já vimos que isso é o mesmo que ser lisa. É a diferença mais marcante entre o calor e a <a href="onda-dalembert.html">equação da onda</a>, que transporta os bicos para sempre.</p>
       <p><b>3. A propagação tem velocidade infinita.</b> A gaussiana nunca é exatamente zero. Se o dado inicial é um pulso confinado numa caixinha, então para todo $x$, por mais distante que esteja, e para todo $t>0$, por menor que seja, já existe $u(x,t)>0$. Isso é fisicamente falso — o calor não se propaga mais rápido que a luz — e é o preço que o modelo cobra por ser tão simples. Mas é um defeito benigno: a conta do exercício 4 mostra que esses valores são absurdamente pequenos, do tipo $e^{-10^{12}}$. O passeio aleatório explica a origem do defeito: o caminhante discreto não pode se afastar mais que $n$ passos, mas a gaussiana-limite, que é só a aproximação da binomial, não sabe disso.</p>
       <p><b>4. A solução é autossemelhante.</b> O núcleo depende de $x$ e $t$ só por meio da combinação $\xi=x/\sqrt{4Dt}$:
       $$G_t(x)=\frac1{\sqrt{4\pi Dt}}\,e^{-\xi^2}=\frac1{\sqrt{4Dt}}\;\Phi(\xi),\qquad \Phi(\xi)=\frac{e^{-\xi^2}}{\sqrt\pi}.$$
