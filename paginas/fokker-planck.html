@@ -81,6 +81,15 @@
         <li><b>Sem viés e com ruído uniforme, é a equação do calor.</b> Com $a=0$ e $D$ constante sobra $\rho_t=D\rho_{xx}$, que é onde a <a href="passeio-aleatorio.html">caixinha anterior</a> terminou. Fokker–Planck é a equação do calor com dois acréscimos: uma corrente que empurra e um sacolejo que varia de lugar para lugar.</li>
       </ul>
 
+      <aside class="box">
+        <p class="tag">Por que esta caixinha argumenta no espaço, e não no espectro</p>
+        <p>Enquanto $a$ e $D$ são <b>constantes</b>, a <a href="transformada-fourier.html">transformada de Fourier</a> resolve tudo de uma vez, como fez com o <a href="calor-reta.html">calor na reta</a>. Transformando a equação, cada modo é multiplicado por
+        $$\underbrace{e^{-iakt}}_{\text{translada}}\cdot\underbrace{e^{-Dk^2t}}_{\text{amortece}}:$$
+        o primeiro fator tem módulo $1$ e só gira a fase, o que no espaço é deslocar; o segundo é real e menor que $1$, e esmaga os modos altos. <b>Transporte e difusão aparecem fatorados</b> — e isso é literalmente o que a demo mostra quando a nuvem anda sem mudar de largura. Os dois efeitos não se misturam porque, no espectro, cada um é um fator seu.</p>
+        <p>Mas repare no que acontece assim que $a$ ou $D$ dependem de $x$. Multiplicar por uma função de $x$ é <em>convoluir</em> do lado de Fourier, e a conta modo a modo acaba: os modos passam a conversar entre si, e não há mais multiplicador nenhum. É por isso que, daqui em diante, os argumentos desta caixinha são todos no espaço — fluxos, balanços entre vizinhos, contas de quem sai e quem chega.</p>
+        <p>Cuidado com a conclusão fácil, porém: Fourier não fica <em>inútil</em> com coeficientes variáveis, só deixa de entregar a solução de graça. Como ferramenta de cálculo ela continua ótima — a <a href="edps-fourier.html">célula da Burgers viscosa</a> resolve uma equação não linear fazendo os produtos no espaço e as derivadas no espectro, pulando de um lado para o outro a cada passo. O que se perde é a fórmula fechada modo a modo, não o método.</p>
+      </aside>
+
       <h2 id="demo" data-toc="Veja o viés">Veja o viés em ação</h2>
       <p>A mesma demo da caixinha anterior, agora com o viés liberado. À esquerda, a distribuição exata do passeio e a gaussiana de média $a\,t$ e variância $2Dt$; à direita, as trajetórias e a faixa $a\,t\pm\sqrt{2Dt}$. A difusão continua fixa em $D=0{,}25$.</p>
 
