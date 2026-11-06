@@ -97,6 +97,7 @@ need = {
     "paginas/transformada-fourier.html": ["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k", "tema", "toc"],
     "paginas/eds-fokker-planck.html": ["demo-eds", "eds-ex", "eds-t", "eds-tv", "eds-play", "eds-readout", "eds-paths", "eds-dens", "tema", "toc"],
     "paginas/calor-reta.html": ["demo-cr", "cr-dado", "cr-t", "cr-tv", "cr-circulo", "cr-play", "cr-readout", "cr-u", "cr-k", "tema", "toc"],
+    "paginas/feynman-kac.html": ["demo-fk", "fk-premio", "fk-desc", "fk-x", "fk-xv", "fk-t", "fk-tv", "fk-play", "fk-readout", "fk-paths", "fk-valor", "tema", "toc"],
     "paginas/passeio-aleatorio.html": ["demo-fp", "fp-h", "fp-s", "fp-zoom", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
     "paginas/fokker-planck.html": ["demo-fp", "fp-h", "fp-a", "fp-av", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj", "tema", "toc"],
     "paginas/serie-fourier.html": ["demo-sf", "sf-dado", "sf-n", "sf-nv", "sf-play", "sf-readout", "sf-perfil", "sf-espectro", "tema", "toc"],

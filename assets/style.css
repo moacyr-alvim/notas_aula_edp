@@ -116,6 +116,13 @@ main li { margin: .3rem 0; }
 
 /* fórmulas em bloco: rolagem horizontal em telas estreitas */
 .katex-display { overflow-x: auto; overflow-y: hidden; padding: .2rem 0; }
+/* Fórmula de bloco rola; fórmula EM LINHA não tinha como rolar, e uma grande (um
+   \left\{\begin{array} no meio de uma frase) empurrava a página inteira para fora da tela
+   no telefone. Virar caixa em linha cria o contêiner de rolagem sem tirar a fórmula da frase. */
+@media (max-width: 640px) {
+  main .katex { display: inline-block; max-width: 100%; overflow-x: auto; overflow-y: hidden; vertical-align: middle; }
+  main .katex-display > .katex { display: block; }
+}
 
 /* ---------- caixas ---------- */
 .box {
@@ -150,7 +157,10 @@ details > .body { padding: 0 1.1rem .8rem; border-top: 1px solid var(--rule); }
   padding: 1rem; margin: 1.6rem -.4rem; font-family: var(--sans);
 }
 .demo .controls { display: flex; flex-wrap: wrap; gap: .8rem 1.4rem; align-items: center; margin-bottom: .8rem; font-size: .92rem; }
-.demo .controls label { display: flex; align-items: center; gap: .5rem; }
+.demo .controls label { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+/* um <select> se dimensiona pela opção mais larga e, no telefone, empurra a página inteira
+   para fora da tela: trave-o na largura disponível */
+.demo .controls select { max-width: 100%; min-width: 0; }
 .demo .controls input[type=range] { width: min(320px, 60vw); accent-color: var(--carac); }
 .demo select, .demo button {
   font: inherit; padding: .25rem .6rem; border: 1px solid var(--rule); border-radius: 6px;

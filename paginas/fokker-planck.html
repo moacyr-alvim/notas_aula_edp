@@ -163,7 +163,7 @@
         $$-v_t=a(x)\,v_x+D(x)\,v_{xx}.$$
         É a <b>equação para trás</b> (de Kolmogorov), resolvida de $T$ para $0$ a partir do dado final $v(x,T)=f(x)$. Compare com Fokker–Planck: ali $a$ e $D$ estão <em>dentro</em> das derivadas, aqui estão <em>fora</em>. Não é descuido de notação — os dois operadores são adjuntos um do outro, $\int(\mathcal L^*\rho)\,v=\int\rho\,(\mathcal Lv)$, exatamente como $M$ e $M^{\mathsf T}$, e é por isso que
         $$\frac{d}{dt}\int\rho\,v\,dx=0:$$
-        dá no mesmo empurrar a densidade para a frente ou o prêmio para trás (exercício 5). A fórmula $u^n_i=\mathbb E[u^0_{X_n}]$ da página do princípio do máximo é a versão discreta disso, e é também a equação para trás que, com $x=\ln S$, vira Black–Scholes.</p>
+        dá no mesmo empurrar a densidade para a frente ou o prêmio para trás (exercício 5). A fórmula $u^n_i=\mathbb E[u^0_{X_n}]$ da página do princípio do máximo é a versão discreta disso, e é também a equação para trás que, com $x=\ln S$, vira Black–Scholes. A <a href="feynman-kac.html">caixinha de Feynman–Kac</a> acrescenta a ela o desconto e o pagamento ao longo do caminho, e é lá que esse caminho continua.</p>
       </aside>
 
       <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
@@ -289,8 +289,8 @@
           <h4>Para onde ir depois</h4>
           <ul>
             <li><a href="eds-fokker-planck.html">Equações diferenciais estocásticas e Fokker–Planck</a></li>
+            <li><a href="feynman-kac.html">A fórmula de Feynman–Kac</a></li>
             <li><a href="calor-reta.html">O calor na reta: Fourier e o núcleo</a></li>
-            <li><a href="cfl.html">Condição CFL</a></li>
           </ul>
         </div>
       </nav>

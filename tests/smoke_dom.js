@@ -221,6 +221,19 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["eds-ex"].value = "gbm"; env.byId["eds-ex"].fire("input"); await wait(60);
     check("eds-demo: o GBM compara média e mediana", rd().includes("mediana"), rd().slice(0, 240));
   }
+  /* ---- Feynman–Kac: o prêmio virando valor ---- */
+  {
+    const env = makeEnv(["demo-fk", "fk-premio", "fk-desc", "fk-x", "fk-xv", "fk-t", "fk-tv", "fk-play", "fk-readout", "fk-paths", "fk-valor"], []);
+    run(env, "fk-core.js"); env.sandbox.window.FKCore = env.sandbox.FKCore || vm.runInContext("FKCore", env.sandbox);
+    env.byId["fk-x"].value = "-0.5"; env.byId["fk-t"].value = "0.1";
+    let err = null; try { run(env, "fk-demo.js"); await wait(120); } catch (e) { err = e; }
+    check("fk-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["fk-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("fk-demo: na zona de perigo avisa que não há fórmula fechada", rd().includes("sem fórmula fechada"), rd().slice(0, 200));
+    check("fk-demo: mostra a EDP e o Monte Carlo lado a lado", /EDP/.test(rd()) && /Monte Carlo/.test(rd()), rd().slice(0, 200));
+    env.byId["fk-desc"].value = "constante"; env.byId["fk-desc"].fire("input"); await wait(120);
+    check("fk-demo: com r constante aparece a fórmula fechada", rd().includes("fórmula fechada:"), rd().slice(0, 240));
+  }
   /* ---- transformada de Fourier na reta ---- */
   {
     const env = makeEnv(["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k"], []);
@@ -322,7 +335,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 37 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 37);
+    check("mapa: SVG gerado com os 38 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 38);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

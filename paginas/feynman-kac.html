@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A fórmula de Feynman–Kac — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="../vendor/katex/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="../vendor/katex/katex.min.js"></script>
+  <script defer src="../vendor/katex/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>A fórmula de Feynman–Kac</h1>
+        <p class="lede">Esperança de um lado, EDP do outro. Três coisas podem acontecer numa viagem — ganhar no fim, receber no caminho, perder valor — e cada uma vira um termo da equação para trás. Lida ao contrário, a mesma fórmula é o único jeito de resolver EDP em dimensão alta.</p>
+        <p class="meta">Ajuda ler antes: <a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a> e <a href="eds-fokker-planck.html">Equações diferenciais estocásticas</a>. Leitura de uns 25 minutos.</p>
+      </header>
+
+
+      <h2 id="promessa" data-toc="Duas contas que já fizemos">Duas contas que já fizemos</h2>
+
+      <p>Num exercício da <a href="passeio-aleatorio.html">página do passeio</a>, um caminhante solto entre duas
+      paredes em $0$ e $L$ tinha probabilidade $u(x)=x/L$ de parar na parede da direita, e levava
+      $T(x)=x(L-x)/2D$ para parar em alguma delas. Os dois resultados saíram da mesma manobra: <b>condicionar
+      no primeiro passo</b>. A chance de terminar em $L$ saindo de $x$ é a média das chances dos vizinhos,
+      porque o caminhante vai para um deles e, de lá, o problema é o mesmo de antes.</p>
+
+      <p>Repare no que é estranho nisso. "Qual a chance de tocar $L$ antes de $0$" é uma pergunta sobre a
+      <em>trajetória inteira</em> — depende de onde ele esteve, não de onde ele está. Mesmo assim, a resposta
+      veio de uma EDP, $u''=0$, uma equação sobre funções de $x$. Esse é o truque que esta caixinha arruma e
+      generaliza, e ele tem nome: <b>fórmula de Feynman–Kac</b>.</p>
+
+      <aside class="box">
+        <p class="tag">O que já está no livro</p>
+        <p>A <a href="fokker-planck.html">caixinha de Fokker–Planck</a> já deduziu a metade fácil disso. Perguntando
+        "quanto vale, em média, um prêmio $g$ pago na posição final", com
+        $$v(x,t)=\mathbb E\big[g(X_T)\ \big|\ X_t=x\big],$$
+        o condicionamento no primeiro passo dá a <b>equação para trás</b>
+        $$-v_t=a(x)\,v_x+D(x)\,v_{xx},\qquad v(\cdot,T)=g,$$
+        que se resolve de $T$ para $0$ a partir do dado <em>final</em>. Ela é a adjunta de Fokker–Planck:
+        uma empurra a densidade para a frente, a outra puxa o prêmio para trás, e $\int\rho\,v$ não muda.</p>
+        <p>Nesta página o processo é sempre o browniano puro $dX=\sigma\,dB$ com $\sigma=1$, ou seja $a=0$ e
+        $D=\sigma^2/2=1/2$, só para não carregar letra à toa. Tudo o que vem abaixo vale igual com deriva e
+        com $D$ variável.</p>
+      </aside>
+
+      <h2 id="tres" data-toc="Três coisas na viagem">Três coisas podem acontecer na viagem</h2>
+
+      <p>Na equação para trás, a única coisa que se ganha é um prêmio no fim. Mas a vida tem mais verbos que
+      esse. Pense numa viagem que começa em $x$ no instante $t$ e termina em $T$, e liste tudo o que pode
+      acontecer de contábil no meio do caminho:</p>
+
+      <ol>
+        <li><b>Um prêmio no fim</b>, $g(X_T)$: você recebe conforme o lugar onde parou.</li>
+        <li><b>Um pagamento ao longo do caminho</b>, $f(x)$ por unidade de tempo: você recebe (ou paga) enquanto
+        anda, conforme por onde anda. O total é $\int_t^T f(X_s)\,ds$.</li>
+        <li><b>Uma perda contínua de valor</b>, a uma taxa $r(x)$: cada pedacinho de tempo gasto em $x$ multiplica
+        tudo o que você tem por $e^{-r(x)\,ds}$. Ao longo da viagem isso acumula o fator
+        $e^{-\int r(X_s)\,ds}$.</li>
+      </ol>
+
+      <p>A primeira a equação para trás já dá conta. A fórmula de Feynman–Kac é o que acontece quando se
+      coloca as três juntas.</p>
+
+      <aside class="box atencao">
+        <p class="tag">A fórmula</p>
+        <p>Para o processo $dX=a\,dt+\sigma\,dB$, defina
+        $$v(x,t)=\mathbb E\left[\underbrace{e^{-\int_t^Tr(X_u)du}\,g(X_T)}_{\text{o prêmio, descontado}}
+        \ +\ \underbrace{\int_t^T e^{-\int_t^sr(X_u)du}\,f(X_s)\,ds}_{\text{o que se recebe no caminho, descontado}}
+        \ \Bigg|\ X_t=x\right].$$
+        Então $v$ resolve
+        $$-v_t=\underbrace{a\,v_x+D\,v_{xx}}_{\text{o passeio}}\ \underbrace{-\ r\,v}_{\text{o desconto}}\ \underbrace{+\ f}_{\text{o pagamento}},
+        \qquad v(\cdot,T)=g.$$
+        Cada verbo da lista virou um termo da EDP, na mesma ordem: andar é a parte de segunda ordem, perder
+        valor é um termo de ordem zero com sinal de menos, receber é um termo sem $v$ nenhum. <b>E só.</b> A
+        fórmula não tem mais nada; o resto desta página é aprender a lê-la nos dois sentidos.</p>
+      </aside>
+
+      <h2 id="passo" data-toc="Dê um passo e espere">Dê um passo e espere</h2>
+
+      <p>A dedução é a mesma de sempre, e cabe em três linhas. No passeio de passo $h$ e tempo $\tau$, estando
+      em $x$ no instante $t$: primeiro você recebe $f(x)\tau$, depois sobrevive ao intervalo com o fator
+      $e^{-r(x)\tau}$, e aí o problema recomeça do vizinho para onde você foi. Isto é,</p>
+
+      $$v(x,t)=f(x)\tau+e^{-r(x)\tau}\Big[p\,v(x+h,t+\tau)+q\,v(x-h,t+\tau)+(1-p-q)\,v(x,t+\tau)\Big].$$
+
+      <p>O colchete é exatamente o que a página de Fokker–Planck já expandiu: ele vale
+      $v(x,t+\tau)+\tau\,[a\,v_x+D\,v_{xx}]$ a menos de ordens maiores. E $e^{-r\tau}=1-r\tau+\cdots$. Multiplicando
+      e jogando fora o que é de ordem $\tau^2$,</p>
+
+      $$v(x,t)=v(x,t+\tau)+\tau\big[a\,v_x+D\,v_{xx}-r\,v+f\big],$$
+
+      <p>que, dividido por $\tau$, é a fórmula. Note de onde vem o sinal de menos do desconto: ele não foi
+      escolhido, ele é o $-r\tau$ da exponencial. E note que $f$ entra sem $v$ junto porque o pagamento acontece
+      quer você tenha alguma coisa quer não.</p>
+
+      <aside class="box">
+        <p class="tag">O desconto é uma taxa de morte</p>
+        <p>Olhe de novo para o fator $e^{-\int r}$ e pergunte o que mais na matemática tem essa cara. É a
+        <b>probabilidade de sobreviver</b> a um processo que mata a uma taxa $r(x)$ por unidade de tempo: em
+        cada pedacinho $ds$ gasto em $x$, o caminhante morre com chance $r(x)\,ds$, e sobreviver à viagem toda
+        é sobreviver a todos os pedacinhos.</p>
+        <p>Então o mesmo termo $-rv$ tem duas leituras, e as duas são úteis:</p>
+        <ul>
+          <li><b>Dinheiro perdendo valor.</b> Todos os caminhos chegam, mas cada um chega carregando o peso
+          $e^{-\int r}$. É assim que juros entram num preço.</li>
+          <li><b>Caminhante que pode morrer.</b> Cada caminho ou chega inteiro ou não chega; quem não chega
+          paga zero, e a média é sobre todos, vivos e mortos.</li>
+        </ul>
+        <p>As duas dão <em>exatamente a mesma média</em> — é o mesmo $-rv$ —, mas não a mesma <b>variância</b>.
+        Pesar é melhor: em vez de sortear vida e morte, o peso já usa o valor esperado desse sorteio, e sorteio
+        a menos é variância a menos. A demo abaixo e o código mais adiante medem as duas; no teste que roda
+        junto com este site, pesar dá metade do erro de matar, com o mesmo número de caminhos.</p>
+        <p>Um bônus: com $r\ge0$ e $f=0$, o desconto só encolhe, então $|v|\le\max|g|$. O
+        <a href="principio-maximo.html">princípio do máximo</a> sobrevive ao desconto, e sobrevive <em>porque</em>
+        probabilidade de sobreviver é no máximo $1$.</p>
+      </aside>
+
+      <h2 id="saida" data-toc="Os problemas de saída">Os problemas de saída</h2>
+
+      <p>Até aqui a viagem acaba num instante marcado, $T$. Mas as duas contas do começo acabam quando o
+      caminhante <em>toca</em> uma parede, e isso é um horizonte que depende do caminho. A fórmula não muda:
+      troque $T$ pelo instante de saída e, como o problema deixa de depender de quando se começou, $v_t=0$ e
+      sobra uma EDO.</p>
+
+      <p>O proveito é que as quatro perguntas clássicas sobre o intervalo $(0,L)$ passam a ser a mesma pergunta
+      com botões diferentes:</p>
+
+      <table class="tabela">
+        <thead>
+          <tr><th>A pergunta</th><th>$g$ nas pontas</th><th>$f$</th><th>$r$</th><th>A equação</th><th>A resposta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>chance de sair por $L$</td><td>$1$ em $L$, $0$ em $0$</td><td>$0$</td><td>$0$</td><td>$D\,v''=0$</td><td>$x/L$</td></tr>
+          <tr><td>tempo médio até sair</td><td>$0$ nas duas</td><td>$1$</td><td>$0$</td><td>$D\,v''=-1$</td><td>$\dfrac{x(L-x)}{2D}$</td></tr>
+          <tr><td>custo acumulado até sair</td><td>$0$ nas duas</td><td>$c(x)$</td><td>$0$</td><td>$D\,v''=-c$</td><td>integre duas vezes</td></tr>
+          <tr><td>chance de sobreviver até sair</td><td>$1$ nas duas</td><td>$0$</td><td>$r$</td><td>$D\,v''=r\,v$</td><td>$\dfrac{\cosh\big(\kappa(x-\tfrac L2)\big)}{\cosh\big(\kappa\tfrac L2\big)}$</td></tr>
+        </tbody>
+      </table>
+
+      <p>Na última linha $\kappa=\sqrt{r/D}$, e vale olhar o que ela diz: a chance de sobreviver é mínima bem no
+      meio, onde vale $1/\cosh(\kappa L/2)$, porque é de lá que a saída demora mais. Quanto maior $r$, mais
+      fundo o poço no meio; com $r\to0$ a função vira a constante $1$, e ninguém morre.</p>
+
+      <p>Essas quatro linhas são o motivo de esta fórmula aparecer em todo canto. "Quanto tempo até quebrar",
+      "qual a chance de bater na meta antes de zerar", "quanto combustível gasto no trajeto", "qual a
+      probabilidade de o equipamento aguentar até a manutenção" — são todas a mesma EDO com botões diferentes.</p>
+
+      <h2 id="metodo" data-toc="Lida ao contrário">Lida ao contrário: um método numérico</h2>
+
+      <p>Até agora lemos a fórmula da direita para a esquerda: tenho uma esperança difícil, resolvo uma EDP.
+      Lida da esquerda para a direita ela diz o oposto, e é aí que ela ganha a vida: <b>tenho uma EDP difícil,
+      sorteio caminhos</b>. Para saber $v$ num ponto, simule muitos caminhos saindo dali, calcule o prêmio
+      descontado de cada um, e tire a média.</p>
+
+      <p>A pergunta é se isso compensa, e a resposta depende de quantas variáveis a EDP tem.</p>
+
+      <aside class="box atencao">
+        <p class="tag">Por que isso é a única saída em dimensão alta</p>
+        <p>Diferenças finitas precisam de uma grade. Com $m$ pontos por eixo e $d$ eixos, são $m^d$ pontos — e
+        $d=5$ com $m=100$ já dá $10^{10}$ pontos, que não cabem em lugar nenhum. É a <b>maldição da
+        dimensão</b>, e ela é fatal.</p>
+        <p>Monte Carlo não tem grade. O erro dele é $\sigma_{\text{pagamento}}/\sqrt N$, onde $N$ é o número de
+        caminhos — e <b>$d$ não aparece nessa conta</b>. Simular um caminho em dez dimensões custa dez vezes
+        mais que em uma, não $10^{10}$ vezes. Um milhão de caminhos dá três casas certas em qualquer dimensão.</p>
+        <p>O preço é o outro lado da mesma moeda: o Monte Carlo devolve <b>um número</b>, o valor num ponto, e
+        não a função inteira. A demo abaixo mostra exatamente essa troca — a EDP desenha a curva toda, os
+        caminhos marcam um ponto com uma barra de erro. Em dimensão baixa, a curva inteira é barata e a grade
+        ganha; em dimensão alta, só o ponto é possível, e um ponto é o que normalmente se quer.</p>
+        <p>E $1/\sqrt N$ é uma lei dura: para ganhar uma casa decimal é preciso <em>cem vezes</em> mais caminhos.
+        O código no fim da página mede essa inclinação.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="O prêmio virando valor">Veja o prêmio virar valor</h2>
+
+      <p>À esquerda, caminhos saindo de $(t,x)$ e correndo até o vencimento $T=1$, com o prêmio $g$ desenhado
+      deitado na borda da direita — é ele que cada caminho vai cobrar quando chegar lá. Na zona de perigo,
+      sombreada, o caminhante morre a uma taxa $r$, e quem morre para num $\times$ e não cobra nada. À direita,
+      o valor $v(\cdot,t)$ resolvido pela EDP, com $X$ na <b>mesma vertical</b>, o prêmio tracejado por trás, e
+      o ponto do Monte Carlo com a barra de dois erros padrão na altura do $x$ escolhido.</p>
+
+      <p>São quatro prêmios: o <b>degrau</b> paga $1$ se o caminhante terminar à direita de $0$; a <b>rampa</b>
+      paga o quanto ele passar de $0$; a <b>caixa</b> paga $1$ se ele terminar entre $-1$ e $1$; e o <b>sino</b>
+      paga tanto mais quanto mais perto de $0$ ele parar. Os três descontos são nenhum, $r=0{,}5$ em toda a
+      reta, e $r=1{,}5$ só à esquerda de $0$.</p>
+
+      <div class="demo" id="demo-fk">
+        <div class="controls">
+          <label>Prêmio
+            <select id="fk-premio" aria-label="Prêmio"></select>
+          </label>
+          <label>Desconto
+            <select id="fk-desc" aria-label="Desconto"></select>
+          </label>
+          <label>x
+            <input type="range" id="fk-x" min="-2.5" max="2.5" step="0.05" value="-0.5" aria-label="Posição inicial">
+            <output id="fk-xv">−0,50</output>
+          </label>
+          <label>t
+            <input type="range" id="fk-t" min="0" max="1" step="0.02" value="0.1" aria-label="Instante">
+            <output id="fk-tv">0,10</output>
+          </label>
+          <button id="fk-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="fk-paths" role="img" aria-label="Caminhos saindo do ponto escolhido até o vencimento, com o prêmio desenhado na borda direita"></canvas>
+          <canvas id="fk-valor" role="img" aria-label="O valor resolvido pela EDP, o prêmio tracejado, e o ponto do Monte Carlo com barra de erro"></canvas>
+        </div>
+        <div class="readout" id="fk-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--ink)"></i>caminhos vivos, e $v$ pela EDP</span>
+          <span><i style="border-color:var(--choque)"></i>quem morreu, e a zona de perigo</span>
+          <span><i style="border-top-style:dashed;border-color:var(--ink-soft)"></i>o prêmio $g$</span>
+          <span><i style="border-color:var(--carac)"></i>o instante de agora, e o Monte Carlo</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li><b>Aperte "Animar" e olhe só a curva da direita.</b> Ela sai do prêmio, que é um degrau, e vai
+        amaciando conforme sobra mais tempo — porque sobrar tempo é sobrar incerteza sobre onde o caminhante
+        vai parar. Em $t=T$ não há dúvida nenhuma, e $v$ é o próprio prêmio. É a equação do calor rodando, com
+        o tempo ao contrário.</li>
+        <li><b>Arraste o $x$ com a zona de perigo ligada.</b> O ponto azul do Monte Carlo passeia em cima da
+        curva escura, sempre. São duas contas que não se falam — uma resolve uma EDP numa grade, a outra sorteia
+        quatro mil caminhos — e dão o mesmo número. Essa é a fórmula, medida. A barra de erro do ponto quase
+        sempre fica <em>menor que o próprio ponto</em>: quatro mil caminhos já bastam para duas casas, e é por
+        isso que esse método é levado a sério.</li>
+        <li><b>Compare o desconto "nenhum" com o "em todo lugar".</b> A curva inteira só encolhe, por um fator
+        $e^{-r(T-t)}$ igual em todo ponto. Com $r$ constante o desconto não muda <em>o formato</em> de nada —
+        ele sai para fora da esperança (exercício 1).</li>
+        <li><b>Agora passe para a "zona de perigo" e compare com as duas.</b> Aqui o desconto deforma: do lado direito
+        quase não se sente, do lado esquerdo come quase tudo, e no meio há uma transição que nenhuma fórmula
+        fechada descreve. Repare que mesmo começando <em>fora</em> da zona, em $x>0$, o valor cai um pouco —
+        porque alguns caminhos visitam a zona e voltam. O caminhante não precisa morar no perigo para sofrer
+        dele.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+
+      <p>Três experimentos. O primeiro resolve a equação para trás com a zona de perigo por diferenças finitas
+      e compara com o Monte Carlo, ponto a ponto — é o caso sem fórmula fechada, em que os dois lados só têm um
+      ao outro. O segundo mede a chance de saída e o tempo médio no passeio da grade, onde a conta discreta dá
+      a resposta contínua exata, e confere contra $x/L$ e $x(L-x)/2D$. O terceiro mede a inclinação da lei
+      $1/\sqrt N$. A lacuna é a linha do peso de Feynman–Kac.</p>
+
+      <div class="pycell" data-title="Feynman–Kac nos dois sentidos: a EDP resolvendo esperanças, os caminhos resolvendo a EDP"
+           data-starter="../py/feynman_kac_lacunas.py"
+           data-solution="../py/feynman_kac_solucao.py"></div>
+
+      <p>Com a lacuna em branco o peso vale $1$, e o Monte Carlo passa a responder outra pergunta: ele dá a
+      média do prêmio <em>sem</em> desconto, que em $x=-0{,}5$ é $0{,}309$ contra os $0{,}159$ corretos — uma
+      discordância de $145$ desvios padrão, que não se confunde com ruído. Corrigido, o pior desacordo entre a
+      EDP e os caminhos cai para $1{,}6$ desvio. Na segunda parte, a chance medida erra no máximo $0{,}003$ e o
+      tempo médio $1\%$. Na terceira, a inclinação sai $-0{,}47$, com a lei dizendo $-0{,}5$.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. O desconto constante sai para fora</p>
+        <p>Suponha $r$ constante e $f=0$. (a) Mostre, direto da fórmula, que $v(x,t)=e^{-r(T-t)}w(x,t)$, onde $w$
+        é a solução <em>sem</em> desconto. (b) Confirme pela EDP: substitua e veja o termo $-rv$ se cancelar.
+        (c) Por que isso deixa de valer assim que $r$ depende de $x$?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $r$ constante, $\int_t^Tr\,du=r(T-t)$ não depende do caminho, então o fator
+          $e^{-r(T-t)}$ é uma constante e sai da esperança: $v=e^{-r(T-t)}\mathbb E[g(X_T)]=e^{-r(T-t)}w$.</p>
+          <p>(b) Com $v=e^{-r(T-t)}w$ temos $v_t=e^{-r(T-t)}(w_t+rw)$, e as derivadas em $x$ só carregam o fator.
+          Pondo na equação: $-(w_t+rw)=a\,w_x+D\,w_{xx}-rw$, e os dois $rw$ se cancelam, sobrando
+          $-w_t=a\,w_x+D\,w_{xx}$. É a equação sem desconto, como tinha que ser.</p>
+          <p>(c) Porque aí $\int_t^Tr(X_u)du$ <b>depende do caminho</b>: dois caminhos que terminam no mesmo
+          lugar pagam descontos diferentes conforme por onde passaram. O fator não é mais constante, não sai da
+          esperança, e passa a conversar com a difusão. É exatamente o que se vê na demo ao ligar a zona de
+          perigo: a curva não encolhe por igual, ela se deforma.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. O tempo de saída, agora de graça</p>
+        <p>Use a fórmula com $g=0$, $f=1$, $r=0$ e horizonte igual ao instante de saída de $(0,L)$. (a) Que
+        esperança é $v(x)$, em palavras? (b) Escreva a equação e resolva com $v(0)=v(L)=0$. (c) Se o
+        caminhante for duas vezes mais agitado ($D$ dobra), o que acontece com o tempo? E se o intervalo dobrar?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Com $f=1$ você "recebe" uma unidade por unidade de tempo, então o total recebido é o próprio
+          tempo gasto; $v(x)$ é o tempo médio até sair. Sem prêmio no fim e sem desconto, não há mais nada.</p>
+          <p>(b) A equação é $0=D\,v''+1$, ou seja $v''=-1/D$. Integrando duas vezes,
+          $v=-x^2/2D+\alpha x+\beta$, e as duas condições dão $\beta=0$ e $\alpha=L/2D$, isto é
+          $v(x)=\dfrac{x(L-x)}{2D}$ — que é a resposta do exercício do passeio, agora obtida sem condicionar
+          em nada.</p>
+          <p>(c) Dobrar $D$ divide o tempo por dois: agitação resolve linearmente. Dobrar $L$ multiplica por
+          quatro, porque $x(L-x)$ é quadrático. Distância custa <em>ao quadrado</em>, e essa é a assinatura da
+          difusão em todo lugar deste livro.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. Sobreviver até a borda</p>
+        <p>Agora $g=1$ nas duas pontas, $f=0$ e $r$ constante, com o mesmo horizonte de saída. (a) Explique por
+        que $v(x)$ é a probabilidade de sair vivo. (b) Verifique que
+        $v(x)=\cosh\big(\kappa(x-\tfrac L2)\big)/\cosh\big(\kappa\tfrac L2\big)$ com $\kappa=\sqrt{r/D}$ resolve
+        $D\,v''=rv$ com as condições certas. (c) O que acontece com $r\to0$ e com $r\to\infty$, e por quê?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Pela leitura de taxa de morte: o prêmio $1$ só é recebido por quem chega a uma ponta, e o fator
+          $e^{-\int r}$ é a chance de chegar vivo. A média de $1$ vezes a sobrevivência é a probabilidade de
+          sobreviver.</p>
+          <p>(b) $v''=\kappa^2\cosh(\kappa(x-L/2))/\cosh(\kappa L/2)=\kappa^2v$, e $D\kappa^2=r$, então
+          $D\,v''=rv$. Nas pontas, $x=0$ e $x=L$ dão $\cosh(\mp\kappa L/2)=\cosh(\kappa L/2)$, logo $v=1$ nas
+          duas. Por simetria o mínimo é em $x=L/2$, onde $v=1/\cosh(\kappa L/2)$.</p>
+          <p>(c) Com $r\to0$, $\kappa\to0$ e $\cosh\to1$: $v\equiv1$, ninguém morre. Com $r\to\infty$,
+          $\cosh(\kappa L/2)$ explode e $v\to0$ em todo ponto interior — só escapa quem já começa colado numa
+          ponta. O que interpola os dois é a comparação entre o tempo de morte, $1/r$, e o tempo de saída,
+          $L^2/8D$: sobrevive quem sai antes de morrer, e $\kappa L=\sqrt{rL^2/D}$ é justamente a raiz da razão
+          entre esses dois tempos.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. Por que pesar é melhor que matar</p>
+        <p>Dois jeitos de estimar $v$: (i) pesar cada caminho por $e^{-\int r}$; (ii) matar cada caminho com
+        taxa $r$ e pagar $0$ para os mortos. (a) Convença-se de que as médias são iguais. (b) Mostre que o
+        estimador (ii) é o (i) com um sorteio a mais por cima, e conclua pela <em>lei da variância total</em>
+        que a variância de (ii) é maior. (c) Nos testes deste site, com os mesmos quarenta mil caminhos, pesar
+        dá erro $0{,}0010$ e matar dá $0{,}0020$. Quantos caminhos o método (ii) precisaria para empatar?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Condicione no caminho: dado o trajeto, a chance de ter sobrevivido é exatamente
+          $e^{-\int r}$, então a média de (ii) sobre o sorteio de vida e morte, com o caminho fixo, é
+          $e^{-\int r}g$ — que é o que (i) usa. Tirando a média sobre os caminhos, as duas coincidem.</p>
+          <p>(b) Escrevendo $Y$ para o estimador (ii) e $C$ para o caminho, o item (a) diz
+          $\mathbb E[Y\mid C]=X$, onde $X$ é o estimador (i). A lei da variância total dá
+          $\operatorname{Var}(Y)=\operatorname{Var}(\mathbb E[Y\mid C])+\mathbb E[\operatorname{Var}(Y\mid C)]
+          =\operatorname{Var}(X)+\text{algo}\ge0$. O "algo" é a variância do sorteio de vida e morte, e só é
+          zero se $r=0$. Em palavras: (i) já fez a média do sorteio que (ii) ainda vai sortear, e integrar à
+          mão o que dá para integrar sempre bate em sortear.</p>
+          <p>(c) O erro cai como $1/\sqrt N$, então dobrar o erro é quadruplicar o $N$: cento e sessenta mil
+          caminhos. Esse fator quatro é de graça, e é só por ter escrito uma exponencial em vez de um sorteio.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. Quando a grade perde</p>
+        <p>Queremos três casas decimais. (a) Numa grade com $m$ pontos por eixo, quantos pontos há em $d$
+        dimensões? Ponha $m=100$ e $d=1,3,5,10$. (b) Quantos caminhos o Monte Carlo precisa para erro
+        $10^{-3}$, supondo que o pagamento tenha desvio padrão $1$? (c) A partir de que $d$ o Monte Carlo
+        ganha? (d) Por que, mesmo assim, ninguém usa Monte Carlo para a equação do calor em uma dimensão?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $m^d$ pontos: $10^2$, $10^6$, $10^{10}$ e $10^{20}$. Os dois últimos não existem em máquina
+          nenhuma — $10^{20}$ números em precisão dupla são $800$ exabytes.</p>
+          <p>(b) Erro $1/\sqrt N=10^{-3}$ dá $N=10^6$ caminhos, <b>em qualquer dimensão</b>. Com um custo por
+          caminho proporcional a $d$, o total cresce como $10^6d$: linear, não exponencial.</p>
+          <p>(c) Comparando $m^d$ com $10^6d$: em $d=3$ a grade empata ($10^6$ contra $3\times10^6$) e em $d=4$
+          ela já perde feio. Na prática a virada acontece por volta de $d=4$, e é por isso que problemas com
+          quatro ou cinco fontes de incerteza são resolvidos por sorteio em toda parte.</p>
+          <p>(d) Porque em uma dimensão a grade entrega a <b>função inteira</b> com $100$ pontos e erro muito
+          menor, enquanto o Monte Carlo entrega um ponto só, com três casas, depois de um milhão de caminhos.
+          Não é uma corrida pelo mesmo prêmio: cada método responde uma pergunta diferente, e a dimensão decide
+          qual pergunta ainda é respondível.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">6. Um ensaio para Black–Scholes</p>
+        <p>Tome o browniano geométrico $dS=\mu S\,dt+\sigma S\,dB$ da
+        <a href="eds-fokker-planck.html">caixinha de EDS</a>, e um prêmio $g(S_T)$ pago no vencimento, descontado
+        à taxa constante $r$. (a) Escreva a equação para trás em $S$, lembrando que agora $a=\mu S$ e
+        $D=\sigma^2S^2/2$. (b) Troque para $x=\ln S$ e mostre que os coeficientes ficam <em>constantes</em>.
+        (c) Que equação conhecida é essa, a menos do termo $-rv$ e de uma deriva? (d) O que ainda falta,
+        financeiramente, para isso ser a fórmula de Black–Scholes?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $-v_t=\mu S\,v_S+\tfrac12\sigma^2S^2v_{SS}-rv$, com $v(\cdot,T)=g$. Os coeficientes crescem com
+          $S$, o que é incômodo: nenhuma grade uniforme serve bem.</p>
+          <p>(b) Com $x=\ln S$, $\partial_S=\frac1S\partial_x$ e
+          $S^2\partial_{SS}=\partial_{xx}-\partial_x$. Substituindo,
+          $-v_t=\big(\mu-\tfrac{\sigma^2}2\big)v_x+\tfrac{\sigma^2}2v_{xx}-rv$: tudo constante. E a deriva que
+          aparece é aquela $\mu-\sigma^2/2$ que a caixinha de EDS já tinha encontrado no logaritmo — não é
+          coincidência, é a mesma conta.</p>
+          <p>(c) É a <a href="calor-reta.html">equação do calor na reta</a> com um transporte e um desconto
+          junto. Pelo exercício 1 o desconto sai para fora, e o transporte some num referencial que anda com a
+          deriva; sobra calor puro, que a gente sabe resolver com o núcleo gaussiano. Essa é, inteira, a razão
+          de existir uma fórmula fechada para Black–Scholes.</p>
+          <p>(d) Falta decidir <b>qual</b> $\mu$ usar. O preço de uma opção não pode depender de quanto cada um
+          acha que a ação vai subir — se dependesse, duas pessoas com opiniões diferentes fariam negócio e uma
+          delas ganharia sem risco. O argumento que fixa $\mu=r$, chamado de neutralidade ao risco, não é
+          matemática do passeio: é um argumento sobre não existir almoço grátis. É por onde a próxima caixinha
+          começa.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a></li>
+            <li><a href="eds-fokker-planck.html">Equações diferenciais estocásticas e Fokker–Planck</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+            <li><a href="calor-reta.html">A equação do calor na reta</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li class="soon">Black–Scholes (em breve)</li>
+            <li><a href="calor-reta.html">A equação do calor na reta</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/fk-core.js"></script>
+  <script src="../assets/fk-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+
+</body>
+</html>

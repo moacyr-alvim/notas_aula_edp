@@ -111,6 +111,16 @@ invd = float(re.search(r"erro max vs 1/D = ([0-9.eE+-]+)", s).group(1))
 check("Fokker-Planck: o estacionário do poço duplo é Boltzmann", boltz < 5e-3, f"erro={boltz:.1e}")
 check("Fokker-Planck: sem viés e com D variável, ρ ∝ 1/D", invd < 5e-3, f"erro={invd:.1e}")
 
+s, _ = rodar("feynman_kac_solucao.py")
+sig = float(re.search(r"pior discordancia = ([0-9.eE+-]+) sigmas", s).group(1))
+du = float(re.search(r"erro max da chance = ([0-9.eE+-]+)", s).group(1))
+dt_ = float(re.search(r"erro relativo max do tempo = ([0-9.eE+-]+)", s).group(1))
+inc = float(re.search(r"inclinacao no log-log = ([-0-9.eE+]+)", s).group(1))
+check("Feynman-Kac: na zona de perigo a EDP e o Monte Carlo concordam", sig < 4, f"{sig:.2f} sigmas")
+check("Feynman-Kac: a chance de sair por L e x/L", du < 0.01, f"erro={du:.4f}")
+check("Feynman-Kac: o tempo medio de saida e x(L-x)/2D", dt_ < 0.03, f"erro relativo={dt_:.4f}")
+check("Feynman-Kac: o erro do Monte Carlo cai como 1/raiz(N)", abs(inc + 0.5) < 0.08, f"inclinacao={inc}")
+
 s, _ = rodar("burgers_viscosa_solucao.py")
 difs = [float(m) for m in re.findall(r"Cole-Hopf = ([0-9.eE+-]+)", s)]
 check("Burgers viscosa: pseudoespectral = Cole-Hopf (dois métodos independentes)", difs and max(difs) < 1e-5, f"máx={max(difs):.1e}")
@@ -118,6 +128,11 @@ check("Burgers viscosa: pseudoespectral = Cole-Hopf (dois métodos independentes
 # versões com lacunas: devem rodar (sem explodir erro) mesmo incompletas
 s, _ = rodar("cfl_lacunas.py")
 check("cfl_lacunas roda com o código incompleto", True)
+
+# sem o peso de Feynman-Kac o Monte Carlo responde OUTRA pergunta, e a discordância tem que gritar
+s, _ = rodar("feynman_kac_lacunas.py")
+sig = float(re.search(r"pior discordancia = ([0-9.eE+-]+) sigmas", s).group(1))
+check("feynman_kac_lacunas roda incompleto e a falta do peso aparece", sig > 20, f"{sig:.0f} sigmas")
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

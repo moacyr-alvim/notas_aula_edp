@@ -50,6 +50,7 @@ jobs:
           node tests/tf-core.test.js
           node tests/cr-core.test.js
           node tests/eds-core.test.js
+          node tests/fk-core.test.js
           node tests/ma-core.test.js
           python3 tests/run_python_cells.py
           node tests/smoke_dom.js

@@ -55,6 +55,7 @@ py/                   os códigos Python das células (edite aqui; o site carreg
                       transformada_reta_*.py FFT contra as fórmulas fechadas, e o produto Δx·Δk
                       calor_reta_*.py o núcleo pela FFT, o colapso autossemelhante e reta contra círculo
                       eds_*.py Euler–Maruyama para quatro exemplos, e Itô contra Stratonovich medido
+                      feynman_kac_*.py a EDP para trás contra Monte Carlo, os problemas de saída e a lei 1/√N
                       passeio_aleatorio_*.py caminhantes na grade, gaussiana e a lei da raiz quadrada
                       fokker_planck_*.py poço duplo (Boltzmann) e D variável sem viés
 assets/
@@ -86,6 +87,8 @@ vendor/katex/         o KaTeX servido pelo próprio site (não vem de CDN); VERS
   cr-demo.js          demo da difusão na reta e do espectro, com a comparação opcional com o círculo
   eds-core.js         EDS: a família linear, a lognormal, Euler–Maruyama e o resíduo de Fokker–Planck; testável em Node
   eds-demo.js         demo do fio e da nuvem: caminhos à esquerda, densidade e histograma à direita
+  fk-core.js          Feynman–Kac: a equação para trás com desconto, Monte Carlo por peso e por morte; testável em Node
+  fk-demo.js          demo do prêmio virando valor: caminhos e mortes à esquerda, a curva da EDP e o ponto do Monte Carlo à direita
   fp-core.js          passeio aleatório: equação mestra, gaussiana de Fokker–Planck e trajetórias; testável em Node
   fp-demo.js          demo do passeio, nas duas páginas da raia: os controles de viés, preguiça e zoom são opcionais
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
@@ -134,12 +137,28 @@ node tests/onda-core.test.js        # d'Alembert: dados iniciais, EDP por difere
 node tests/ma-core.test.js          # Monge–Ampère: det D²u = −1, área = |u|, gradiente, elipse = círculo transformado
 node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot (para a futura página de Hamilton–Jacobi)
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
+node tests/fk-core.test.js          # Feynman–Kac: EDP contra fórmula fechada, EDP contra Monte Carlo, peso contra morte, adjunção e a lei 1/√N
 node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
 ```
 
-O que **não** é coberto por esses testes: a renderização real no navegador (aparência, canvas) e o carregamento
-do Pyodide pelo CDN. Vale abrir cada página uma vez em um navegador depois de publicar.
+Mais um, que precisa de navegador e por isso **não** roda no GitHub Actions:
+
+```
+npm i -D playwright && npx playwright install chromium   # uma vez
+node tests/render_navegador.js                 # todas as páginas, a 1100 px e a 400 px
+node tests/render_navegador.js feynman-kac     # só uma
+```
+
+Ele serve o próprio repositório e abre cada página de verdade, sem desviar requisição nenhuma. Pega o que
+nenhum outro teste pega: fórmula que o KaTeX não renderizou, cifrão solto na tela, a versão de KaTeX que o
+navegador realmente carregou, erro de JavaScript, arquivo faltando, âncora do índice lateral apontando para
+um id inexistente, e página transbordando a largura de um telefone. Esse último já pegou um `<select>` largo
+demais e uma fórmula em linha gigante no meio de uma frase, os dois empurrando a página inteira para fora da
+tela — coisas invisíveis em qualquer teste sem navegador. Rode-o antes de publicar.
+
+O que **ainda** não é coberto: a aparência (se o desenho do canvas ficou bonito, se a cor está legível) e o
+carregamento do Pyodide pelo CDN. Vale abrir cada página uma vez em um navegador depois de publicar.
 
 ## Sobre os códigos Python
 

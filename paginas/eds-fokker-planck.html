@@ -220,7 +220,7 @@
           <p>(a) Porque ela depende da trajetória inteira, e não da posição num instante: duas trajetórias podem estar no mesmo lugar em $t$ e ter históricos diferentes quanto a já terem tocado a borda. Perguntas assim vivem do lado do fio.</p>
           <p>(b) Condicionando num tempinho $dt$ e usando que o incremento é simétrico, $u$ é a média dos valores vizinhos — a mesma propriedade do valor médio do <a href="principio-maximo.html">princípio do máximo</a> —, o que no limite dá $u''=0$. Com $u(0)=0$ e $u(L)=1$: $u(x)=x/L$. Note que a resposta não depende de $\sigma$: sacudir mais rápido não muda a chance, só o tempo.</p>
           <p>(c) Contando o tempo gasto, $T(x)=dt+\mathbb E[T(X_{dt})]$, o que dá $\tfrac{\sigma^2}2T''=-1$, e com $T(0)=T(L)=0$ sai $T(x)=\dfrac{x(L-x)}{\sigma^2}$, máximo no meio, $L^2/4\sigma^2$. De novo o quadrado da distância.</p>
-          <p>(d) Da <b>equação para trás</b>, a adjunta de Fokker–Planck, que a <a href="fokker-planck.html">caixinha anterior</a> deduziu. É ela que calcula esperanças de coisas que acontecem no futuro, resolvendo de trás para a frente — e é por isso que questões de trajetória, apesar de não serem perguntas sobre $\rho$, ainda assim viram EDPs. A fórmula de Feynman–Kac é a forma geral desse truque.</p>
+          <p>(d) Da <b>equação para trás</b>, a adjunta de Fokker–Planck, que a <a href="fokker-planck.html">caixinha anterior</a> deduziu. É ela que calcula esperanças de coisas que acontecem no futuro, resolvendo de trás para a frente — e é por isso que questões de trajetória, apesar de não serem perguntas sobre $\rho$, ainda assim viram EDPs. A <a href="feynman-kac.html">fórmula de Feynman–Kac</a> é a forma geral desse truque.</p>
         </div>
       </details>
 
@@ -236,8 +236,8 @@
         <div>
           <h4>Para onde ir depois</h4>
           <ul>
+            <li><a href="feynman-kac.html">A fórmula de Feynman–Kac</a></li>
             <li><a href="equacao-transporte.html">Equação de transporte</a></li>
-            <li><a href="leis-conservacao.html">Leis de conservação</a></li>
             <li><a href="principio-maximo.html">O princípio do máximo</a></li>
           </ul>
         </div>
