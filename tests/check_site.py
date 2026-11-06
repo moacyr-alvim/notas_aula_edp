@@ -9,10 +9,12 @@ from html.parser import HTMLParser
 
 root = pathlib.Path(__file__).resolve().parent.parent
 
-# A versão de KaTeX que o CDN serve. Mudar aqui é uma decisão deliberada — e conferir
-# fórmula localmente com OUTRA versão instalada não vale como conferência: foi assim que
-# um apóstrofo sem base (\widehat g\,') passou batido, renderizando no 0.16.47 e falhando no 0.16.11.
-KATEX = "0.16.11"
+# O KaTeX mora DENTRO do repositório, em vendor/katex/. Antes vinha de um CDN, e a versão
+# pedida lá (0.16.11) não era a instalada aqui (0.16.47): conferir fórmula localmente não valia
+# como conferência, e foi assim que um apóstrofo sem base (\widehat g\,') passou batido —
+# renderizava aqui e falhava no ar. Agora é um arquivo só, o mesmo nos dois lados.
+KATEX = "0.16.47"
+KATEX_ARQUIVOS = ("katex.min.css", "katex.min.js", "auto-render.min.js")
 
 fails = 0
 def check(name, ok, info=""):
@@ -127,11 +129,24 @@ for path in sorted(parsed):
     check(f"{path.relative_to(root)}: sem cifrão de moeda (usar 'reais')", not moeda, moeda.group(0) if moeda else "")
     check(f"{path.relative_to(root)}: número par de cifrões", corpo.count("$") % 2 == 0, f"{corpo.count('$')} cifrões")
 
-# todas as páginas têm que pedir a MESMA versão de KaTeX, e a declarada lá em cima
+# KaTeX: a cópia no repositório é a versão declarada, tem as fontes que o CSS pede, e
+# nenhuma página volta a buscar KaTeX em CDN (senão a versão conferida aqui não é a do ar)
+vend = root / "vendor" / "katex"
+check("vendor/katex: versão bate com a declarada",
+      (vend / "VERSAO.txt").read_text(encoding="utf-8").strip() == KATEX,
+      (vend / "VERSAO.txt").read_text(encoding="utf-8").strip())
+for nome in KATEX_ARQUIVOS:
+    check(f"vendor/katex/{nome} existe", (vend / nome).exists())
+css = (vend / "katex.min.css").read_text(encoding="utf-8")
+faltam = [f for f in sorted(set(re.findall(r"fonts/[A-Za-z_-]+\.woff2", css))) if not (vend / f).exists()]
+check("vendor/katex: todas as fontes woff2 do CSS estão no repositório", not faltam, str(faltam))
 for path in sorted(parsed):
-    pedidas = set(re.findall(r"katex@([0-9.]+)", path.read_text(encoding="utf-8")))
-    if pedidas:
-        check(f"{path.relative_to(root)}: pede KaTeX {KATEX}", pedidas == {KATEX}, f"pediu {sorted(pedidas)}")
+    txt = path.read_text(encoding="utf-8")
+    pre = "../" if path.parent.name == "paginas" else ""
+    usa = [n for n in KATEX_ARQUIVOS if f'"{pre}vendor/katex/{n}"' in txt]
+    check(f"{path.relative_to(root)}: usa o KaTeX do repositório", len(usa) == len(KATEX_ARQUIVOS),
+          f"só achei {usa}")
+    check(f"{path.relative_to(root)}: sem KaTeX de CDN", "jsdelivr" not in txt and "cdnjs" not in txt)
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

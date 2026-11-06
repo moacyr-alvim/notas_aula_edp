@@ -33,8 +33,16 @@ python3 -m http.server 8000
 3. O endereço fica `https://SEU-USUARIO.github.io/SEU-REPOSITORIO/`.
 
 O site é 100% estático. A primeira execução de Python em cada visita baixa o Pyodide
-(cerca de 10 a 20 MB, depois fica no cache do navegador). Fórmulas (KaTeX) e Pyodide vêm do CDN jsDelivr;
-sem internet, nem fórmulas nem Python aparecem.
+(cerca de 10 a 20 MB, depois fica no cache do navegador), que vem do CDN jsDelivr; sem internet,
+Python não aparece. As **fórmulas**, ao contrário, não dependem de CDN nenhum: o KaTeX mora dentro
+do repositório, em `vendor/katex/` (CSS, JS, auto-render e as fontes `woff2` — cerca de 600 KB).
+
+A razão é conferência. Enquanto o KaTeX vinha do CDN, a versão pedida lá (0.16.11) não era a
+instalada aqui para os testes (0.16.47), e um apóstrofo sem base (`\widehat g\,'`) renderizou nos
+testes e falhou no ar. Agora é o mesmo arquivo nos dois lados, e `tests/check_site.py` confere que
+nenhuma página voltou a buscar KaTeX fora. Para atualizar a versão: troque os arquivos em
+`vendor/katex/`, escreva a versão nova em `vendor/katex/VERSAO.txt` e na constante `KATEX` de
+`tests/check_site.py` — os testes acusam qualquer um dos três fora de lugar.
 
 ## Estrutura
 
@@ -55,6 +63,7 @@ assets/
   mapa.js             dados e desenho do mapa (nós, setas, percursos)
   pyrunner.js         células de Python editáveis
   pyworker.js         Web Worker com Pyodide (versão do Pyodide definida aqui)
+vendor/katex/         o KaTeX servido pelo próprio site (não vem de CDN); VERSAO.txt diz qual é
   burgers-core.js     matemática da demo de Burgers (Hopf–Lax), testável em Node
   burgers-demo.js     desenho da demo de Burgers
   cfl-demo.js         demo dos cones de dependência
