@@ -110,9 +110,11 @@
         <p class="tag">A gaussiana é a sua própria transformada</p>
         <p>Tome $g(x)=e^{-x^2/2}$. A graça é que dá para achar $\widehat g$ sem calcular integral nenhuma, só com duas linhas da tabela. Comece pela EDO que $g$ satisfaz:
         $$g'(x)=-x\,g(x).$$
-        Transforme os dois lados. À esquerda, pela regra da derivada, $ik\,\widehat g$. À direita, pela regra de multiplicar por $x$, $-i\,\widehat g\,'(k)$. Igualando,
-        $$ik\,\widehat g=-i\,\widehat g\,'\quad\Longrightarrow\quad \widehat g\,'=-k\,\widehat g.$$
-        <b>É a mesma EDO</b>, agora na variável $k$. Logo $\widehat g(k)=\widehat g(0)\,e^{-k^2/2}$, e $\widehat g(0)=\int e^{-x^2/2}dx=\sqrt{2\pi}$. Ou seja,
+        Transforme os dois lados. À esquerda, pela regra da derivada, $ik\,\widehat g$. À direita, pela regra de multiplicar por $x$, $-i\,d\widehat g/dk$. Igualando,
+        $$ik\,\widehat g=-i\,\frac{d\widehat g}{dk}\qquad\Longrightarrow\qquad \frac{d\widehat g}{dk}=-k\,\widehat g.$$
+        <b>É a mesma EDO</b>, agora na variável $k$: a derivada é menos a variável vezes a função. Logo
+        $$\widehat g(k)=\widehat g(0)\,e^{-k^2/2},\qquad\text{com}\quad\widehat g(0)=\int_{-\infty}^{\infty}e^{-x^2/2}\,dx=\sqrt{2\pi},$$
+        ou seja,
         $$\widehat g=\sqrt{2\pi}\;g.$$
         A gaussiana é autofunção da transformada de Fourier. Junte com a regra de escala e você tem todas as gaussianas: a estreita em $x$ vira larga em $k$, e vice-versa. Essa é a conta que a <a href="calor-reta.html">próxima caixinha</a> vai usar para inverter $e^{-Dk^2t}$ e achar o núcleo do calor.</p>
       </aside>
