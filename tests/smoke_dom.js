@@ -207,18 +207,31 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["qw-espelho"].fire("click"); await wait(40);
     check("qw-demo: o botão do espelho leva a t = π", rd().includes("espelho"), rd().slice(0, 160));
   }
-  /* ---- passeio aleatório e Fokker–Planck ---- */
+  /* ---- o passeio aleatório: a demo sem viés, com preguiça e zoom (página 1) ---- */
   {
-    const env = makeEnv(["demo-fp", "fp-h", "fp-a", "fp-av", "fp-s", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj"], []);
+    const env = makeEnv(["demo-fp", "fp-h", "fp-s", "fp-zoom", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj"], []);
     run(env, "fp-core.js"); env.sandbox.window.FPCore = env.sandbox.FPCore || vm.runInContext("FPCore", env.sandbox);
-    env.byId["fp-h"].value = "0.2"; env.byId["fp-a"].value = "0.5"; env.byId["fp-s"].value = "0.5"; env.byId["fp-t"].value = "1";
+    env.byId["fp-h"].value = "0.2"; env.byId["fp-s"].value = "0.5"; env.byId["fp-zoom"].value = "1"; env.byId["fp-t"].value = "1";
     let err = null; try { run(env, "fp-demo.js"); await wait(40); } catch (e) { err = e; }
-    check("fp-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    check("fp-demo (sem viés): carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
     const rd = () => env.byId["fp-readout"].innerHTML.replace(/<[^>]+>/g, "");
-    check("fp-demo: h = 0,2 e t = 1 dão 25 passos, média 0,500 e variância 0,490",
-          rd().includes("25") && rd().includes("0,500") && rd().includes("0,490"), rd().slice(0, 200));
-    env.byId["fp-s"].value = "1"; env.byId["fp-s"].fire("input"); await wait(40);
+    check("fp-demo: h = 0,2 e t = 1 dão 25 passos e variância 0,500",
+          rd().includes("25") && rd().includes("0,500") && !rd().includes("média"), rd().slice(0, 200));
+    env.byId["fp-zoom"].value = "64"; env.byId["fp-zoom"].fire("input"); await wait(40);
+    check("fp-demo: com zoom de 64×, avisa que a grade aparece", rd().includes("ver a grade"), rd().slice(0, 240));
+    env.byId["fp-zoom"].value = "1"; env.byId["fp-s"].value = "1"; env.byId["fp-s"].fire("input"); await wait(40);
     check("fp-demo: sem preguiça, avisa da paridade", rd().includes("paridade"), rd().slice(0, 200));
+  }
+  /* ---- Fokker–Planck: a mesma demo com o viés liberado (página 2) ---- */
+  {
+    const env = makeEnv(["demo-fp", "fp-h", "fp-a", "fp-av", "fp-t", "fp-tv", "fp-play", "fp-readout", "fp-dist", "fp-traj"], []);
+    run(env, "fp-core.js"); env.sandbox.window.FPCore = env.sandbox.FPCore || vm.runInContext("FPCore", env.sandbox);
+    env.byId["fp-h"].value = "0.2"; env.byId["fp-a"].value = "0.5"; env.byId["fp-t"].value = "1";
+    let err = null; try { run(env, "fp-demo.js"); await wait(40); } catch (e) { err = e; }
+    check("fp-demo (com viés): carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["fp-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("fp-demo: com viés 0,5 a média é 0,500 e a variância 0,490",
+          rd().includes("média") && rd().includes("0,500") && rd().includes("0,490"), rd().slice(0, 240));
   }
   /* ---- Hopf–Lax ---- */
   {
@@ -268,7 +281,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 34 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 34);
+    check("mapa: SVG gerado com os 35 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 35);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

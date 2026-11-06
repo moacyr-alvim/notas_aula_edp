@@ -24,25 +24,43 @@
     return { tau: tau, p: (s + dif) / 2, q: (s - dif) / 2, fica: 1 - s, s: s, D: D };
   }
 
-  /* distribuição exata depois de n passos (itera a equação mestra; nada de sorteio) */
-  function distribuicao(h, t, a, s, D) {
-    var P = parametros(h, a, s, D), n = Math.max(1, Math.round(t / P.tau)), m = 2 * n + 1;
-    var u = new Float64Array(m), v = new Float64Array(m), i, k;
-    u[n] = 1;
-    for (k = 0; k < n; k++) {
-      for (i = 0; i < m; i++) v[i] = 0;
-      for (i = 0; i < m; i++) {
-        var w = u[i]; if (!w) continue;
-        if (i + 1 < m) v[i + 1] += P.p * w;          /* chegou vindo da esquerda */
-        if (i - 1 >= 0) v[i - 1] += P.q * w;         /* chegou vindo da direita  */
-        v[i] += P.fica * w;
-      }
-      u.set(v);
-    }
+  /* Evolução exata da distribuição, iterando a equação mestra (nada de sorteio).
+   * A grade é cortada numa janela larga o bastante para nada escapar até tJan — e, como
+   * ela não muda com t, dá para avançar de onde parou em vez de recomeçar a cada quadro. */
+  function evolucao(h, a, s, D, tJan) {
+    var par = parametros(h, a, s, D);
+    var meia = Math.abs(a) * tJan + 9 * Math.sqrt(2 * par.D * tJan) + 10 * h;   /* 9 desvios: o que sobra fora é ~1e-19 */
+    var W = Math.ceil(meia / h), m = 2 * W + 1, i;
+    var u = new Float64Array(m), v = new Float64Array(m), feitos = 0;
     var xs = new Float64Array(m);
-    for (i = 0; i < m; i++) xs[i] = (i - n) * h;
-    return { xs: xs, P: u, n: n, tau: P.tau, t: n * P.tau, p: P.p, q: P.q, fica: P.fica, h: h };
+    for (i = 0; i < m; i++) xs[i] = (i - W) * h;
+    u[W] = 1;
+    /* alguns retratos pelo caminho, para quem arrastar o tempo para trás não recomeçar do zero */
+    var nMax = Math.max(1, Math.round(tJan / par.tau)), passoCk = Math.max(1, Math.floor(nMax / 8));
+    var retratos = [{ n: 0, u: u.slice() }];
+    function ate(t) {
+      var n = Math.max(1, Math.round(t / par.tau)), k, r;
+      if (n < feitos) {
+        for (r = retratos.length - 1; r > 0 && retratos[r].n > n; r--) { /* o mais recente que serve */ }
+        u.set(retratos[r].u); feitos = retratos[r].n;
+      }
+      for (k = feitos; k < n; k++) {
+        v.fill(0);
+        for (i = 0; i < m; i++) {
+          var w = u[i]; if (!w) continue;
+          if (i + 1 < m) v[i + 1] += par.p * w;        /* chegou vindo da esquerda */
+          if (i - 1 >= 0) v[i - 1] += par.q * w;       /* chegou vindo da direita  */
+          v[i] += par.fica * w;
+        }
+        u.set(v);
+        if ((k + 1) % passoCk === 0 && retratos[retratos.length - 1].n < k + 1) retratos.push({ n: k + 1, u: u.slice() });
+      }
+      feitos = n;
+      return { xs: xs, P: u, n: n, tau: par.tau, t: n * par.tau, p: par.p, q: par.q, fica: par.fica, h: h };
+    }
+    return { ate: ate, tau: par.tau };
   }
+  function distribuicao(h, t, a, s, D) { return evolucao(h, a, s, D, t).ate(t); }
 
   /* a solução contínua: gaussiana de média a t e variância 2 D t */
   function gaussiana(x, t, a, D) {
@@ -92,6 +110,6 @@
     return { caminhos: fora, n: n, tau: P.tau };
   }
 
-  return { D0: D0, parametros: parametros, distribuicao: distribuicao, gaussiana: gaussiana,
+  return { D0: D0, parametros: parametros, evolucao: evolucao, distribuicao: distribuicao, gaussiana: gaussiana,
            momentos: momentos, erroDensidade: erroDensidade, trajetorias: trajetorias, rng: rng };
 });

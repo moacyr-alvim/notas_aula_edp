@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O passeio aleatório e o movimento browniano — Método das características</title>
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script src="../assets/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="../index.html">← Mapa de conceitos</a>
+    <span class="spacer"></span>
+    <button id="tema" type="button">Tema escuro</button>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Nesta página"></nav>
+    <main>
+      <header>
+        <h1>O passeio aleatório e o movimento browniano</h1>
+        <p class="lede">Um bêbado numa grade, sorteando o passo sem preferência por lado nenhum. Encolhendo o passo e o relógio — o relógio com o quadrado do passo —, a distribuição das posições resolve a equação do calor, e a trajetória vira uma curva contínua que não tem derivada em ponto algum.</p>
+        <p class="meta">Ajuda ler antes: <a href="difusao-grafos.html">Difusão em grafos</a> e <a href="principio-maximo.html">O princípio do máximo</a>. Leitura de uns 20 minutos.</p>
+      </header>
+
+
+      <h2 id="caminhante" data-toc="O caminhante">Um caminhante numa grade</h2>
+      <p>Um bêbado sai de um poste. A cada segundo ele dá um passo para a direita, um passo para a esquerda, ou fica onde está — e sorteia qual a cada vez, sem nenhuma preferência por um lado. A pergunta é sempre a mesma: <b>onde ele está depois de muito tempo?</b> Não a posição exata, que é aleatória e ninguém pode prever, mas a <em>distribuição</em> das posições — e essa é uma quantidade determinística, que obedece a uma equação.</p>
+      <p>Vamos montar o modelo com cuidado, porque é dos detalhes que a EDP sai. O espaço é uma grade de pontos
+      $$x_j=j\,h,\qquad j\in\mathbb Z,$$
+      e o tempo anda de $\tau$ em $\tau$. A cada tique do relógio, o caminhante</p>
+      <ul>
+        <li>pula para $x+h$ com probabilidade $s/2$;</li>
+        <li>pula para $x-h$ com probabilidade $s/2$;</li>
+        <li>fica parado com a probabilidade que sobra, $1-s$.</li>
+      </ul>
+      <p>As três somam $1$, como têm que somar. O número $s$ entre $0$ e $1$ é a <b>agilidade</b>: com $s=1$ ele anda sempre, com $s=\tfrac12$ ele fica parado metade das vezes — um detalhe que parece inútil e que a demo vai mostrar que não é. E repare que não há viés nenhum: mesma chance para cada lado, e as mesmas chances em todos os sítios. Deriva e ruído desigual ficam para a <a href="fokker-planck.html">próxima caixinha</a>; aqui o caminhante é perfeitamente imparcial, e mesmo assim vai acontecer bastante coisa.</p>
+
+      <p>A quantidade que vamos acompanhar é
+      $$P_j(t)=\text{probabilidade de o caminhante estar em }x_j\text{ no instante }t.$$
+      Se preferir pensar em muita gente em vez de um sorteio só, pense em $N$ caminhantes independentes soltos ao mesmo tempo: $P_j$ é então a <em>fração</em> deles que está em $x_j$. As duas leituras dão a mesma conta, e a segunda é a que explica o nome "densidade".</p>
+
+      <aside class="box atencao">
+        <p class="tag">$P$ ou $\rho$?</p>
+        <p>Duas coisas parecidas que convém não confundir. $P_j$ é uma <b>probabilidade</b>: um número entre $0$ e $1$, e a soma sobre todos os sítios dá $1$. No limite contínuo quem sobrevive é a <b>densidade</b>
+        $$\rho(x,t)\approx\frac{P_j(t)}{h},$$
+        probabilidade <em>por unidade de comprimento</em>, cuja integral dá $1$. Dividir por $h$ é o que impede tudo de ir a zero quando a grade fica fina: cada sítio recebe menos, mas também ocupa menos espaço. Como a relação é linear, as duas satisfazem a mesma equação, e vamos escrever as contas com $P$ e ler o resultado como $\rho$.</p>
+      </aside>
+
+      <p>A <a href="difusao-grafos.html">difusão em grafos</a> já fez algo parecido, mas com o tempo <b>contínuo</b> e só o espaço discreto — um sistema de EDOs, $\dot u=-cLu$, o que se chama de modelo <em>semidiscreto</em>. Aqui tudo é discreto, e o que circula é probabilidade, não temperatura. As duas histórias vão terminar na mesma equação.</p>
+
+      <h2 id="mestra" data-toc="A equação mestra">A equação mestra e a matriz do passo</h2>
+      <p>Para estar em $x$ no instante $t+\tau$ só há três histórias possíveis, e elas são mutuamente exclusivas: ou o caminhante estava em $x-h$ e pulou para a direita, ou estava em $x+h$ e pulou para a esquerda, ou já estava em $x$ e não saiu. Somando as três probabilidades:
+      $$\boxed{\,P(x,t+\tau)=\tfrac s2\,P(x-h,t)+\tfrac s2\,P(x+h,t)+(1-s)\,P(x,t).\,}$$
+      É a <b>equação mestra</b> do passeio. Ela não tem nada de profundo: é contabilidade de chegadas.</p>
+      <p>Vale olhar para ela como uma matriz, porque a figura explica de graça duas coisas. Chamando de $M$ a matriz que leva a distribuição de um instante para o seguinte, $P(t+\tau)=M\,P(t)$, a entrada $M_{ij}$ é a probabilidade de ir do sítio $j$ para o sítio $i$. Só os vizinhos imediatos têm chance, então $M$ é tridiagonal, e esquematicamente ela é
+      $$M=\begin{pmatrix}
+      \ddots&\ddots& & &\\[1mm]
+      \tfrac s2&1-s&\tfrac s2& &\\[1mm]
+       &\tfrac s2&1-s&\tfrac s2&\\[1mm]
+       & &\tfrac s2&1-s&\tfrac s2\\[1mm]
+       & & &\ddots&\ddots
+      \end{pmatrix}$$
+      com todo o resto zero. Duas leituras, uma por cada direção:</p>
+      <ul>
+        <li><b>A coluna $j$</b> é a lista do que pode acontecer com quem está em $j$: subir, descer ou ficar. São as três probabilidades de um sorteio só, e por isso <b>toda coluna soma $1$</b> — é isso que garante que $\sum_jP_j$ nunca mude, porque cada sítio distribui exatamente o que tem.</li>
+        <li><b>A linha $i$</b> é a lista de onde pode vir quem chega em $i$. Aqui as linhas <em>também</em> somam $1$ (a matriz é <b>duplamente estocástica</b>), mas só porque todos os sítios são iguais. Quando as probabilidades variarem de lugar para lugar, as colunas continuarão somando $1$ e as linhas não — e é dessa assimetria que a próxima caixinha vai tirar a forma da equação.</li>
+      </ul>
+      <p>E tem mais: essa matriz você já viu. Com $s=2r$, ela é exatamente o passo $u^{n+1}=(I-rL)u^n$ do esquema explícito do calor, com $L$ a laplaciana do grafo, que a <a href="principio-maximo.html">página do princípio do máximo</a> leu como média ponderada. <b>O esquema explícito do calor é um passeio aleatório</b>, e a condição de estabilidade $r\le\tfrac12$ é "a probabilidade de ficar parado não pode ser negativa". O exercício 4 fecha essa conta.</p>
+
+      <h2 id="limite" data-toc="O limite h → 0">Encolhendo o passo</h2>
+      <p>Agora o limite. Subtraia $P(x,t)$ dos dois lados da equação mestra e repare no que sobra do lado direito:
+      $$P(x,t+\tau)-P(x,t)=\frac s2\Big[P(x+h,t)-2P(x,t)+P(x-h,t)\Big].$$
+      Aquele colchete é a <b>diferença segunda</b>, velha conhecida: é a laplaciana do grafo, e é a aproximação de $h^2P_{xx}$. Mais precisamente, por Taylor,
+      $$P(x+h)-2P(x)+P(x-h)=h^2P_{xx}+\frac{h^4}{12}P_{xxxx}+O(h^6),$$
+      com só potências pares, porque os termos ímpares de um lado cancelam com os do outro. Do lado esquerdo, $P(x,t+\tau)-P(x,t)=\tau P_t+O(\tau^2)$. Igualando e dividindo por $\tau$:
+      $$P_t=\frac{h^2s}{2\tau}\,P_{xx}+O\!\left(\frac{h^4}\tau\right).$$</p>
+      <p>Tudo depende, agora, do prefator. Dê nome a ele:
+      $$D=\frac{h^2s}{2\tau}\qquad\text{(a \textbf{difusão})}.$$
+      Para a equação limite existir e não ser trivial, esse número tem que se acomodar num valor finito e não nulo quando $h\to0$. Isso <b>amarra</b> a relação entre o passo e o relógio: $\tau$ tem que encolher como $h^2$. E aí o termo de erro, $h^4/\tau\sim h^2$, vai a zero, e o que sobra é</p>
+      $$\boxed{\;\rho_t=D\,\rho_{xx}.\;}$$
+      <p>A <b>equação do calor</b>. Ela já apareceu aqui de três outros jeitos — como limite da <a href="calor-grafo-anel.html">difusão num grafo em anel</a>, resolvida por <a href="calor-circulo.html">Fourier no círculo</a>, e como a equação que não deixa ninguém criar um máximo novo. Agora ela aparece como <b>a lei de um sorteio repetido</b>, e de brinde ganhamos o significado probabilístico do núcleo gaussiano: ele é a distribuição de onde o bêbado está.</p>
+
+      <aside class="box">
+        <p class="tag">A escala difusiva: por que $\tau\sim h^2$</p>
+        <p>Da definição de $D$ sai $\tau=\dfrac{h^2s}{2D}$: o relógio precisa encolher com o <b>quadrado</b> do passo. Isso não é um truque para a conta fechar — é a única escala em que o passeio tem o que mostrar, e a raiz quadrada explica por quê.</p>
+        <p>Em $n$ passos de tamanho $h$ com sinais sorteados, as idas e vindas se cancelam em grande parte: o caminhante se afasta tipicamente $\sqrt n\,h$, e não $nh$. (Se ele andasse sempre para o mesmo lado seriam $nh$; o sorteio cobra a raiz.) Para percorrer uma distância fixa $L$ ele precisa, então, de $n\approx(L/h)^2$ passos, e o relógio tem que ser $\tau\approx t/n\sim h^2$ para que isso leve um tempo fixo.</p>
+        <p>Escolher outra escala dá outra coisa, ou coisa nenhuma. Com $\tau=\lambda h$, temos $D=h/2\lambda\to0$: o caminhante dá poucos passos por unidade de tempo e, no limite, não sai do lugar — a densidade fica congelada. Com $\tau=h^3$, $D\to\infty$ e qualquer concentração se espalha instantaneamente pela reta inteira. Esse par de escalas, $\Delta t\sim h$ e $\Delta t\sim h^2$, é a mesma dicotomia hiperbólico <em>versus</em> parabólico que aparece na <a href="cfl.html">condição CFL</a>. Agora com um motivo probabilístico por trás: $\Delta t\sim h^2$ é o relógio do acaso.</p>
+      </aside>
+
+      <aside class="box">
+        <p class="tag">O núcleo do calor é o teorema central do limite</p>
+        <p>Depois de $n$ passos, a posição do caminhante é uma soma de $n$ parcelas independentes, cada uma valendo $+h$, $-h$ ou $0$. Média zero, e variância $h^2s$ cada uma. Logo
+        $$\mathbb E[X_n]=0,\qquad \operatorname{Var}(X_n)=n\,h^2s=\frac t\tau\,h^2s=2Dt,$$
+        usando $D=h^2s/2\tau$ — e repare que essa igualdade é <em>exata</em>, não aproximada. O teorema central do limite diz que uma soma de muitas parcelas independentes tende a uma gaussiana; a gaussiana de média $0$ e variância $2Dt$ é
+        $$\rho(x,t)=\frac1{\sqrt{4\pi Dt}}\,e^{-x^2/4Dt},$$
+        que é exatamente o núcleo da equação do calor. <b>O núcleo do calor é o teorema central do limite.</b> Não é uma analogia: é a mesma afirmação, dita uma vez em probabilidade e outra em EDP.</p>
+        <p>E há um terceiro caminho, pela <a href="convolucao.html">convolução</a>: a distribuição depois de $n$ passos é a convolução $n$ vezes da de um passo, e convolução vira produto do lado de Fourier. Sai $\cos^n(kh)\to e^{-Dk^2t}$, que é o fator com que cada modo decai na <a href="calor-circulo.html">solução por Fourier</a> — a conta é o exercício 3.</p>
+      </aside>
+
+      <h2 id="browniano" data-toc="Movimento browniano">O que sobra da trajetória: o movimento browniano</h2>
+      <p>Até aqui olhamos para a <em>distribuição</em>. Mas há um segundo limite acontecendo ao mesmo tempo, e ele é mais estranho: a <b>trajetória</b> também converge para alguma coisa. Fixe uma realização do sorteio, refine a grade mantendo $D$ fixo, e a linha quebrada que o caminhante desenha vai se acomodando numa curva aleatória contínua. Essa curva é o <b>movimento browniano</b>, e chamamos de $B(t)$ a posição no instante $t$.</p>
+      <p>Três propriedades, todas lidas diretamente do passeio:</p>
+      <ul>
+        <li><b>Ele é contínuo.</b> Num intervalo de tempo $\Delta$, o caminhante dá $\Delta/\tau$ passos e se desloca tipicamente $\sqrt{2D\Delta}$. Quando $\Delta\to0$ isso vai a zero: não há saltos. A curva pode ser desenhada sem tirar o lápis do papel.</li>
+        <li><b>Ele não tem derivada em lugar nenhum.</b> A velocidade média nesse mesmo intervalo é
+        $$\frac{\sqrt{2D\Delta}}{\Delta}=\sqrt{\frac{2D}{\Delta}}\xrightarrow[\Delta\to0]{}\infty.$$
+        Contínuo e, em nenhum ponto, derivável. Quando isso foi construído, em 1923, por Norbert Wiener, era um bicho que a maioria dos matemáticos considerava patológico — e é o objeto mais comum da natureza.</li>
+        <li><b>Ele é autossemelhante.</b> Como a variância é $2Dt$, encolher o tempo por um fator $\lambda^2$ e o espaço por $\lambda$ devolve exatamente a mesma lei:
+        $$B(\lambda^2t)\ \text{tem a mesma distribuição que}\ \lambda\,B(t).$$
+        Dar zoom de $4$ vezes no tempo e de $2$ no espaço produz uma figura estatisticamente idêntica à original. Não há escala privilegiada; um pedacinho da trajetória, ampliado do jeito certo, é indistinguível da trajetória inteira.</li>
+      </ul>
+      <p>A terceira propriedade é a resposta definitiva para "por que $\tau\sim h^2$": essa é a escala do próprio objeto-limite. Qualquer outra relação entre passo e relógio está vendo o browniano com uma lente torta — ou colada demais, e nada se move, ou longe demais, e tudo já se espalhou.</p>
+
+      <aside class="box">
+        <p class="tag">Brown, Einstein e o número de Avogadro</p>
+        <p>Em 1827 o botânico Robert Brown viu, ao microscópio, grãos de pólen suspensos em água se sacudindo sem parar, e sem causa visível. A explicação demorou quase oitenta anos: em 1905, no mesmo ano dos outros três artigos famosos, Einstein mostrou que o bombardeio das moléculas de água produz exatamente este passeio, e que o deslocamento típico de um grão cresce como $\sqrt{2Dt}$ — não como $t$.</p>
+        <p>A previsão era testável e continha uma constante do mundo microscópico dentro dela. Jean Perrin mediu os deslocamentos de milhares de grãos ao microscópio, comparou com a fórmula e extraiu o número de Avogadro, encerrando de vez a dúvida sobre a existência dos átomos; ganhou o Nobel de 1926 por isso. Vale guardar a sequência: um bêbado numa grade, uma raiz quadrada, e a contagem das moléculas num copo d'água.</p>
+      </aside>
+
+      <h2 id="demo" data-toc="Veja o limite">Veja o limite acontecer</h2>
+      <p>À esquerda, a distribuição <em>exata</em> do passeio depois de $n$ passos — as barras saem de iterar a equação mestra, sem sorteio nenhum — e, por cima, a gaussiana de variância $2Dt$. À direita, sete trajetórias sorteadas de verdade, a faixa $\pm\sqrt{2Dt}$ (um desvio padrão) e, em vermelho, o instante que o painel da esquerda está mostrando: <b>o histograma é o corte vertical do feixe de trajetórias</b>. A difusão está fixa em $D=0{,}25$.</p>
+
+      <div class="demo" id="demo-fp">
+        <div class="controls">
+          <label>Passo da grade
+            <select id="fp-h" aria-label="Tamanho do passo h">
+              <option value="0.4">h = 0,4</option>
+              <option value="0.2" selected>h = 0,2</option>
+              <option value="0.1">h = 0,1</option>
+              <option value="0.05">h = 0,05</option>
+              <option value="0.025">h = 0,025</option>
+              <option value="0.0125">h = 0,0125</option>
+            </select>
+          </label>
+          <label>Preguiça
+            <select id="fp-s" aria-label="Probabilidade de andar">
+              <option value="0.5" selected>fica parado metade das vezes</option>
+              <option value="1">anda sempre</option>
+            </select>
+          </label>
+          <label>t
+            <input type="range" id="fp-t" min="0.05" max="2" step="0.01" value="1" aria-label="Tempo">
+            <output id="fp-tv">1,00</output>
+          </label>
+          <label>Zoom nas trajetórias
+            <select id="fp-zoom" aria-label="Zoom no feixe de trajetórias">
+              <option value="1" selected>sem zoom</option>
+              <option value="4">4× no tempo, 2× no espaço</option>
+              <option value="16">16× no tempo, 4× no espaço</option>
+              <option value="64">64× no tempo, 8× no espaço</option>
+            </select>
+          </label>
+          <button id="fp-play" type="button">▶ Animar</button>
+        </div>
+        <div class="panels two">
+          <canvas id="fp-dist" role="img" aria-label="Distribuição do passeio em barras e a gaussiana"></canvas>
+          <canvas id="fp-traj" role="img" aria-label="Trajetórias sorteadas do caminhante e a faixa de um desvio padrão"></canvas>
+        </div>
+        <div class="readout" id="fp-readout" aria-live="polite"></div>
+        <div class="legend">
+          <span><i style="border-color:var(--carac);border-top-width:7px"></i>distribuição exata do passeio</span>
+          <span><i style="border-color:var(--ink)"></i>gaussiana de variância 2Dt</span>
+          <span><i style="border-color:var(--ink-soft)"></i>trajetórias sorteadas</span>
+          <span><i style="border-top-style:dashed;border-color:var(--carac)"></i>faixa ± √(2Dt)</span>
+        </div>
+      </div>
+
+      <p>Quatro coisas para tentar:</p>
+      <ol>
+        <li><b>Refine a grade.</b> Divida $h$ por dois e olhe o "erro máx. na densidade": ele cai cerca de <b>quatro vezes</b> a cada refinamento, porque a diferença segunda erra em $h^2$. Já a variância bate com $2Dt$ em todas as casas, sempre — essa parte não é aproximação.</li>
+        <li><b>Anime.</b> A largura cresce como $\sqrt t$, não como $t$: a faixa à direita é uma parábola deitada. Difundir é muito mais lento do que andar, e é por isso que a fumaça do outro lado da sala demora tanto a chegar (exercício 1).</li>
+        <li><b>Dê zoom nas trajetórias.</b> Ponha $h=0{,}0125$ e vá aumentando o zoom: a janela encolhe $4$ vezes no tempo e $2$ no espaço a cada degrau, e <em>a figura não muda</em>. É a autossemelhança acontecendo na sua frente. Agora, com o zoom no máximo, volte o passo para $h=0{,}2$: aparece uma escadinha, porque você chegou na escala da grade, onde o passeio ainda é um passeio. Refinar é o que empurra essa escada para baixo de qualquer zoom — e no browniano de verdade ela não existe, por mais que se amplie.</li>
+        <li><b>Tire a preguiça.</b> Com "anda sempre" ($s=1$), as barras viram um pente: metade dos sítios fica com probabilidade <em>exatamente</em> zero, porque depois de $n$ passos o caminhante só pode estar num sítio de mesma paridade que $n$. Refinar não conserta — a distribuição continua certa "no atacado", mas não converge ponto a ponto. A preguiça é o que quebra essa periodicidade, e é a mesma observação que, na página do princípio do máximo, aparece como aperiodicidade em Perron–Frobenius.</li>
+      </ol>
+
+      <h2 id="python" data-toc="Rode você mesmo">Rode você mesmo</h2>
+      <p>O programa solta vinte mil caminhantes na grade, compara o histograma com a gaussiana e confere a lei $\sqrt t$ medindo a largura em vários instantes. A lacuna é a mais importante da página: dado o passo $h$ e a difusão $D$ desejada, qual tem que ser o relógio $\tau$? Deixei um palpite errado no lugar de propósito — rode antes de corrigir, para ver o estrago.</p>
+      <div class="pycell" data-title="Caminhantes, gaussiana e a lei da raiz quadrada"
+           data-starter="../py/passeio_aleatorio_lacunas.py"
+           data-solution="../py/passeio_aleatorio_solucao.py"></div>
+      <p>Na terceira figura, em log-log, a largura vira uma reta de inclinação $\tfrac12$ — a assinatura da difusão, e o jeito como se mede $D$ num experimento, do pólen de Perrin ao rastreamento de uma proteína dentro de uma célula. Com o relógio errado da lacuna, repare que a inclinação continua $\tfrac12$ (o passeio não deixa de ser um passeio), mas o $D$ medido sai dez vezes menor: é o relógio que fixa a difusão.</p>
+
+      <h2 id="exercicios">Exercícios</h2>
+
+      <aside class="box exercicio">
+        <p class="tag">1. Por que o cheiro demora tanto a atravessar a sala</p>
+        <p>(a) Mostre que a variância do passeio depois de $n$ passos é <em>exatamente</em> $2Dt$, sem erro nenhum, e explique por que a densidade, mesmo assim, só se aproxima da gaussiana. (b) Use $\sqrt{2Dt}\approx L$ para estimar o tempo que uma molécula de perfume leva para atravessar, <b>só por difusão</b>, uma sala de $5$ metros, sabendo que $D\approx0{,}2\ \mathrm{cm^2/s}$ no ar. (c) O resultado bate com a sua experiência? O que está faltando no modelo?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Cada passo tem média zero e variância $\mathbb E[X^2]=h^2\cdot\tfrac s2+h^2\cdot\tfrac s2=h^2s$. Como os passos são independentes, as variâncias somam: $n\,h^2s=(t/\tau)h^2s=2Dt$, usando a definição de $D$. A distribuição, porém, é binomial, e só os dois primeiros momentos coincidem com os da gaussiana — os momentos mais altos têm correções de ordem $h^2$, e é por isso que a densidade converge, mas não é igual.</p>
+          <p>(b) $t\approx L^2/(2D)=(500\ \mathrm{cm})^2/(2\cdot0{,}2\ \mathrm{cm^2/s})=6{,}25\times10^5$ s, ou cerca de <b>uma semana</b>.</p>
+          <p>(c) Não bate: o cheiro atravessa a sala em segundos. O que falta é a <b>convecção</b> — correntes de ar, que transportam em linha reta e são incomparavelmente mais rápidas que a difusão em escalas grandes. A difusão é imbatível no micrômetro (uma molécula atravessa uma célula em milissegundos) e desesperadamente lenta no metro, justamente porque o tempo cresce com o <em>quadrado</em> da distância. É o mesmo motivo pelo qual nossos pulmões têm alvéolos minúsculos em vez de um saco só.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">2. Autossemelhança</p>
+        <p>(a) Supondo que $B(t)$ é gaussiana de média $0$ e variância $2Dt$, mostre que $B(\lambda^2 t)$ e $\lambda B(t)$ têm a mesma distribuição. (b) Mostre que a "velocidade média" $\big(B(t+\Delta)-B(t)\big)/\Delta$ tem desvio padrão $\sqrt{2D/\Delta}$, e conclua que ela não converge quando $\Delta\to0$. (c) No passeio, até que escala vale a autossemelhança, e o que se vê abaixo dela?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $B(\lambda^2t)$ é gaussiana de variância $2D\lambda^2t$; $\lambda B(t)$ é gaussiana de variância $\lambda^2\cdot2Dt$. São a mesma. (Para a igualdade como processos é preciso também checar os incrementos, que são independentes nos dois casos — mas a conta das variâncias é o coração.)</p>
+          <p>(b) O incremento tem desvio padrão $\sqrt{2D\Delta}$, logo o quociente tem $\sqrt{2D\Delta}/\Delta=\sqrt{2D/\Delta}$, que explode. Não só o limite não existe: os quocientes ficam cada vez <em>maiores</em>, com probabilidade cada vez maior. A trajetória não tem velocidade em instante nenhum.</p>
+          <p>(c) Vale enquanto a janela ainda contiver muitos passos. Abaixo de $h$ no espaço e $\tau$ no tempo não há nada: aparece a escadinha da grade, com segmentos retos e saltos de tamanho $h$. O passeio imita o browniano só acima da sua própria granulação — e o limite $h\to0$ é justamente o que empurra essa granulação para baixo de qualquer zoom.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">3. O núcleo do calor pela convolução</p>
+        <p>Passeio sem preguiça, $s=1$. (a) Explique por que a distribuição depois de $n$ passos é a convolução $n$ vezes da distribuição de um passo. (b) Mostre que a transformada de Fourier de um passo é $\widehat\mu(k)=\cos(kh)$. (c) Tome o limite de $\widehat\mu(k)^n$ com $n=t/\tau$ e $\tau=h^2/2D$, e reconheça o resultado.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) A posição depois de $n$ passos é a soma de $n$ incrementos independentes, e a densidade de uma soma de variáveis independentes é a convolução das densidades — foi exatamente esse o exemplo probabilístico da <a href="convolucao.html">página da convolução</a>.</p>
+          <p>(b) Um passo vale $+h$ ou $-h$ com probabilidade $\tfrac12$; sua transformada é $\tfrac12e^{ikh}+\tfrac12e^{-ikh}=\cos(kh)$.</p>
+          <p>(c) Convolução vira produto, então a transformada depois de $n$ passos é $\cos^n(kh)$. Tomando logaritmo,
+          $$n\ln\cos(kh)=n\ln\Big(1-\tfrac{k^2h^2}2+O(h^4)\Big)=-n\,\tfrac{k^2h^2}2+O(nh^4)=-\frac t\tau\cdot\frac{k^2h^2}2+O(th^2)\longrightarrow-Dk^2t,$$
+          porque $h^2/2\tau=D$ quando $s=1$. Logo $\widehat\rho(k,t)=e^{-Dk^2t}$, que é precisamente o fator de decaimento de cada modo na solução do calor — e sua transformada inversa é a gaussiana de variância $2Dt$. Três caminhos (equação mestra, teorema central do limite, Fourier) para o mesmo núcleo.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">4. O esquema explícito era um passeio</p>
+        <p>Tome o esquema explícito do calor, $u^{n+1}_j=(1-2r)u^n_j+r\,u^n_{j+1}+r\,u^n_{j-1}$ com $r=\Delta t/h^2$. (a) Para que $s$ ele é exatamente a equação mestra deste passeio? (b) Que valor de $D$ ele produz, com $\tau=\Delta t$? (c) Traduza a condição $r\le\tfrac12$ para a linguagem do passeio. (d) E $r=\tfrac12$, o que é?</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) $s=2r$: pular para cada lado com probabilidade $r$ e ficar parado com $1-2r$.</p>
+          <p>(b) $D=\dfrac{h^2s}{2\tau}=\dfrac{h^2\cdot2r}{2\Delta t}=\dfrac{h^2r}{\Delta t}=1$, já que $r=\Delta t/h^2$ — o que era de esperar, porque o esquema aproxima $u_t=u_{xx}$.</p>
+          <p>(c) É "as três probabilidades têm que ser não negativas": $1-2r\ge0$. Passar de $\tfrac12$ é pedir uma probabilidade negativa de ficar parado, o que não quer dizer nada — e o esquema responde fabricando valores fora da faixa inicial, como a <a href="principio-maximo.html">página do princípio do máximo</a> mostrou. A condição de estabilidade e a de ser uma distribuição de probabilidade são a mesma desigualdade.</p>
+          <p>(d) É o passeio sem preguiça nenhuma, $s=1$. Ele é estável, mas tem o problema de paridade que a demo mostra: o modo serrilhado não decai (seu fator é $1-4r=-1$), e as duas sub-redes evoluem sem nunca conversar. Estabilidade não é tudo; um pouco de preguiça faz bem ao esquema e ao caminhante.</p>
+        </div>
+      </details>
+
+      <aside class="box exercicio">
+        <p class="tag">5. O caminhante entre duas paredes</p>
+        <p>O caminhante começa em $x$ dentro do intervalo $(0,L)$ e para assim que toca uma das pontas. Seja $u(x)$ a probabilidade de ele parar em $L$, e não em $0$. (a) Convença-se de que $u$ satisfaz $u(x)=\tfrac12u(x+h)+\tfrac12u(x-h)$ nos pontos interiores, e que no limite isso é $u''=0$. (b) Com $u(0)=0$ e $u(L)=1$, ache $u$. (c) Seja $T(x)$ o tempo médio até parar: ele satisfaz $D\,T''=-1$ com $T(0)=T(L)=0$. Ache $T$ e diga quanto vale no meio.</p>
+      </aside>
+      <details>
+        <summary>Solução</summary>
+        <div class="body">
+          <p>(a) Condicione no primeiro passo: com chance $\tfrac12$ ele vai para $x+h$, e dali a probabilidade de terminar em $L$ é $u(x+h)$; idem para a esquerda. Isso é dizer que $u$ é igual à <b>média dos vizinhos</b> — exatamente a propriedade do valor médio da <a href="principio-maximo.html">página do princípio do máximo</a>. Dividindo por $h^2$ a identidade $u(x+h)-2u(x)+u(x-h)=0$ e fazendo $h\to0$, sai $u''=0$. Com preguiça a conta é a mesma: o termo $(1-s)u(x)$ aparece dos dois lados e cancela.</p>
+          <p>(b) Funções harmônicas em uma dimensão são retas: $u(x)=x/L$. Começando no meio, a chance é $\tfrac12$ — como se esperava por simetria; começando a um décimo do caminho, é $10\%$. Nenhuma surpresa, mas repare que a resposta não depende de $D$: a chance de ganhar não muda se você sacudir mais rápido, só o <em>tempo</em> muda.</p>
+          <p>(c) A equação sai do mesmo condicionamento, agora contando o tempo gasto: $T(x)=\tau+\tfrac s2T(x+h)+\tfrac s2T(x-h)+(1-s)T(x)$, ou seja $0=\tau+\tfrac s2h^2T''$, que é $D\,T''=-1$. Integrando duas vezes, $T(x)=\dfrac{x(L-x)}{2D}$, que no meio vale $L^2/(8D)$. De novo o quadrado da distância — e de novo a mesma moral do exercício 2. Esses dois resultados são a porta de entrada da fórmula de Feynman–Kac, que resolve esperanças desse tipo com EDPs, e com ela a gente volta mais adiante.</p>
+        </div>
+      </details>
+
+      <nav class="nextprev" aria-label="Navegação">
+        <div>
+          <h4>Ajuda ler antes</h4>
+          <ul>
+            <li><a href="difusao-grafos.html">Difusão em grafos</a></li>
+            <li><a href="principio-maximo.html">O princípio do máximo</a></li>
+            <li><a href="calor-grafo-anel.html">O grafo em anel e o limite contínuo</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Para onde ir depois</h4>
+          <ul>
+            <li><a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a></li>
+            <li class="soon">Calor na reta: Fourier e núcleo (em breve)</li>
+            <li><a href="cfl.html">Condição CFL</a></li>
+          </ul>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  <script src="../assets/fp-core.js"></script>
+  <script src="../assets/fp-demo.js"></script>
+  <script src="../assets/pyrunner.js"></script>
+</body>
+</html>

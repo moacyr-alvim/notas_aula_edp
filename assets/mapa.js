@@ -15,7 +15,7 @@
     { id: "num",     label: "Métodos\nnuméricos" },
     { id: "calor",   label: "Calor e\ndifusão" },
     { id: "disc",    label: "Fourier" },
-    { id: "acaso",   label: "Acaso e\ndifusão" },
+    { id: "estoc",   label: "Processos\nestocásticos" },
     { id: "seg",     label: "Segunda\nordem" },
     { id: "listas",  label: "Listas de\nexercícios" }
   ];
@@ -83,8 +83,10 @@
       desc: "Exercícios resolvidos: transporte, calor com fonte e reação, a corda de comprimento ℓ, onda amortecida, Hadamard, e Burgers viscosa por Cole–Hopf." },
     { id: "poco", lane: "disc", col: 6, label: "Schrödinger no\npoço infinito", href: "paginas/poco-infinito.html", trails: ["fdiscreto"],
       desc: "Os níveis de energia como autovalores do laplaciano com pontas presas, ocupações constantes, dispersão n² e o ressurgimento quântico. Com demo." },
-    { id: "fp", lane: "acaso", col: 2, label: "Passeio aleatório\ne Fokker–Planck", href: "paginas/fokker-planck.html", trails: ["estocastico", "calor"],
-      desc: "O caminhante que sorteia o passo: a equação mestra, a escala τ ~ h², a EDP que transporta e espalha, e o equilíbrio de Boltzmann. Com demo e Python." },
+    { id: "passeio", lane: "estoc", col: 2, label: "Passeio aleatório\ne browniano", href: "paginas/passeio-aleatorio.html", trails: ["estocastico", "calor"],
+      desc: "O bêbado na grade: a equação mestra, a escala τ ~ h², a equação do calor como lei de um sorteio e o movimento browniano, contínuo e sem derivada em ponto algum." },
+    { id: "fp", lane: "estoc", col: 3, label: "Deriva, ruído\ne Fokker–Planck", href: "paginas/fokker-planck.html", trails: ["estocastico"],
+      desc: "O caminhante parcial: viés e ruído desigual, a forma divergente, o equilíbrio de Boltzmann e o acúmulo onde se anda devagar." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -116,7 +118,8 @@
     ["serief", "edpsf"], ["calorcirc", "edpsf"],
     ["edpsf", "poco"],
     ["calorcirc", "maxp"],
-    ["grafo", "fp"],
+    ["grafo", "passeio"],
+    ["passeio", "fp"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 
