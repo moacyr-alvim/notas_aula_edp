@@ -234,6 +234,22 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["fk-desc"].value = "constante"; env.byId["fk-desc"].fire("input"); await wait(120);
     check("fk-demo: com r constante aparece a fórmula fechada", rd().includes("fórmula fechada:"), rd().slice(0, 240));
   }
+  /* ---- Black–Scholes: a réplica acompanhando a opção ---- */
+  {
+    const env = makeEnv(["demo-bs", "bs-n", "bs-nv", "bs-mu", "bs-muv", "bs-sortear", "bs-play", "bs-readout", "bs-acao", "bs-carteira"], []);
+    run(env, "bs-core.js"); env.sandbox.window.BSCore = env.sandbox.BSCore || vm.runInContext("BSCore", env.sandbox);
+    env.byId["bs-n"].value = "6"; env.byId["bs-mu"].value = "0.1";
+    let err = null; try { run(env, "bs-demo.js"); await wait(150); } catch (e) { err = e; }
+    check("bs-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["bs-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    check("bs-demo: cobra o prêmio de 10,45", /prêmio cobrado: 10,45/.test(rd()), rd().slice(0, 160));
+    check("bs-demo: mostra opção e carteira", /opção vale/.test(rd()) && /carteira vale/.test(rd()), rd().slice(0, 200));
+    const sobra = (s) => parseFloat((s.match(/sobra típica é (−?[0-9,]+)/) || [0, "9"])[1].replace("−", "-").replace(",", "."));
+    const poucos = sobra(rd());
+    env.byId["bs-n"].value = "9"; env.byId["bs-n"].fire("input"); await wait(200);   /* 480 rebalanceamentos */
+    const muitos = sobra(rd());
+    check("bs-demo: mais rebalanceamentos, menos sobra", muitos < poucos / 2, `48 -> ${poucos}, 480 -> ${muitos}`);
+  }
   /* ---- transformada de Fourier na reta ---- */
   {
     const env = makeEnv(["demo-tf", "tf-forma", "tf-w", "tf-wv", "tf-readout", "tf-f", "tf-k"], []);
@@ -335,7 +351,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 38 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 38);
+    check("mapa: SVG gerado com os 39 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 39);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

@@ -56,6 +56,7 @@ py/                   os códigos Python das células (edite aqui; o site carreg
                       calor_reta_*.py o núcleo pela FFT, o colapso autossemelhante e reta contra círculo
                       eds_*.py Euler–Maruyama para quatro exemplos, e Itô contra Stratonovich medido
                       feynman_kac_*.py a EDP para trás contra Monte Carlo, os problemas de saída e a lei 1/√N
+                      black_scholes_*.py a árvore convergindo para a fórmula, o erro do hedge e a deriva que não importa
                       passeio_aleatorio_*.py caminhantes na grade, gaussiana e a lei da raiz quadrada
                       fokker_planck_*.py poço duplo (Boltzmann) e D variável sem viés
 assets/
@@ -89,6 +90,8 @@ vendor/katex/         o KaTeX servido pelo próprio site (não vem de CDN); VERS
   eds-demo.js         demo do fio e da nuvem: caminhos à esquerda, densidade e histograma à direita
   fk-core.js          Feynman–Kac: a equação para trás com desconto, Monte Carlo por peso e por morte; testável em Node
   fk-demo.js          demo do prêmio virando valor: caminhos e mortes à esquerda, a curva da EDP e o ponto do Monte Carlo à direita
+  bs-core.js          Black–Scholes: fórmula e gregas, árvore binomial, réplica de um passo e hedge dinâmico; testável em Node
+  bs-demo.js          demo da réplica: a ação à esquerda, a opção e a carteira replicante sobrepostas à direita
   fp-core.js          passeio aleatório: equação mestra, gaussiana de Fokker–Planck e trajetórias; testável em Node
   fp-demo.js          demo do passeio, nas duas páginas da raia: os controles de viés, preguiça e zoom são opcionais
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
@@ -100,6 +103,7 @@ vendor/katex/         o KaTeX servido pelo próprio site (não vem de CDN); VERS
   ma-demo.js          demo de Monge–Ampère: P₂ arrastável, características, gradiente e área
   conv-demo.js        demo da convolução: zeros fora da janela × cópias periódicas
 rascunhos/            material guardado para páginas futuras (não está ligado ao mapa)
+gen/                  o gerador das páginas: tpl.py tem o esqueleto, pXX.py tem o corpo de cada página
 tests/                testes (veja abaixo)
 ```
 
@@ -119,8 +123,20 @@ tests/                testes (veja abaixo)
 figura embaixo da célula. Outros pacotes do Pyodide podem ser acrescentados em `assets/pyworker.js`
 (`pyodide.loadPackage([...])`).
 
-**Uma página nova**: copie uma página de `paginas/`, escreva, e no `assets/mapa.js` troque `href: null`
-do nó correspondente pelo caminho da página. O índice lateral é gerado dos `<h2 id="...">`.
+**Uma página nova**: escreva o corpo num gerador `gen/pXX.py` e rode-o:
+
+```
+cd gen && python3 pBS.py        # escreve ../paginas/black-scholes.html
+```
+
+`gen/tpl.py` põe o cabeçalho, a barra de tema, o índice lateral e o rodapé de navegação; o gerador só
+carrega o corpo, os links de "ajuda ler antes" e "para onde ir depois", e os `<script>` da página. Depois,
+no `assets/mapa.js`, acrescente o nó com o `href` e as arestas. O índice lateral é gerado dos
+`<h2 id="...">`, e o `data-toc` encurta o texto que aparece nele.
+
+Algumas páginas antigas foram editadas à mão e **não podem ser regeradas** — burgers, dft, solucao-fraca,
+leis-conservacao, convolucao, difusao-grafos, upwind e caracteristicas-1a-ordem. Para essas, edite o HTML
+direto. A lista está também no topo de `gen/tpl.py`.
 
 **Fórmulas**: `$...$` (na linha) e `$$...$$` (em bloco). Dentro do HTML, escreva `&lt;` no lugar de `<` nas fórmulas
 (`$t &lt; 2$`), senão o navegador entende como início de tag.
@@ -138,6 +154,7 @@ node tests/ma-core.test.js          # Monge–Ampère: det D²u = −1, área = 
 node tests/lei-core.test.js         # problema de Riemann: solver exato contra Godunov, Lax e Rankine–Hugoniot (para a futura página de Hamilton–Jacobi)
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
 node tests/fk-core.test.js          # Feynman–Kac: EDP contra fórmula fechada, EDP contra Monte Carlo, peso contra morte, adjunção e a lei 1/√N
+node tests/bs-core.test.js          # Black–Scholes: paridade put-call, árvore contra fórmula, resíduo da EDP, gregas como derivadas, e o hedge que não depende de μ
 node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
 ```

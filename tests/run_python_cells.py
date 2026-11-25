@@ -121,6 +121,19 @@ check("Feynman-Kac: a chance de sair por L e x/L", du < 0.01, f"erro={du:.4f}")
 check("Feynman-Kac: o tempo medio de saida e x(L-x)/2D", dt_ < 0.03, f"erro relativo={dt_:.4f}")
 check("Feynman-Kac: o erro do Monte Carlo cai como 1/raiz(N)", abs(inc + 0.5) < 0.08, f"inclinacao={inc}")
 
+s, _ = rodar("black_scholes_solucao.py")
+erf_ = float(re.search(r"contra math.erf: ([0-9.eE+-]+)", s).group(1))
+arv = float(re.search(r"erro maximo da arvore em n = 5000: ([0-9.eE+-]+)", s).group(1))
+inc = float(re.search(r"inclinacao no log-log = ([-0-9.eE+]+)", s).group(1))
+razao = float(re.search(r"razao = ([0-9.eE+-]+) vezes", s).group(1))
+rep = float(re.search(r"custo da receita = ([0-9.eE+-]+)", s).group(1))
+esp = float(re.search(r"esperanca descontada com q = [0-9.]+: ([0-9.eE+-]+)", s).group(1))
+check("Black-Scholes: a funcao erro vetorizada bate com math.erf", erf_ < 1e-14, f"erro={erf_:.1e}")
+check("Black-Scholes: custo da replica = esperanca descontada com q", abs(rep - esp) < 1e-4, f"{rep} vs {esp}")
+check("Black-Scholes: a arvore converge para a formula", arv < 1e-3, f"erro={arv:.5f}")
+check("Black-Scholes: o erro do hedge cai como 1/raiz(n)", abs(inc + 0.5) < 0.08, f"inclinacao={inc}")
+check("Black-Scholes: coberto, mu nao importa (razao > 100)", razao > 100, f"razao={razao:.0f}")
+
 s, _ = rodar("burgers_viscosa_solucao.py")
 difs = [float(m) for m in re.findall(r"Cole-Hopf = ([0-9.eE+-]+)", s)]
 check("Burgers viscosa: pseudoespectral = Cole-Hopf (dois métodos independentes)", difs and max(difs) < 1e-5, f"máx={max(difs):.1e}")
@@ -133,6 +146,13 @@ check("cfl_lacunas roda com o código incompleto", True)
 s, _ = rodar("feynman_kac_lacunas.py")
 sig = float(re.search(r"pior discordancia = ([0-9.eE+-]+) sigmas", s).group(1))
 check("feynman_kac_lacunas roda incompleto e a falta do peso aparece", sig > 20, f"{sig:.0f} sigmas")
+
+# sem recalcular o delta o hedge vira estático: o erro deixa de encolher e mu volta a importar
+s, _ = rodar("black_scholes_lacunas.py")
+inc = float(re.search(r"inclinacao no log-log = ([-0-9.eE+]+)", s).group(1))
+razao = float(re.search(r"razao = ([0-9.eE+-]+) vezes", s).group(1))
+check("black_scholes_lacunas roda incompleto e a falta da receita aparece",
+      abs(inc) < 0.1 and razao < 50, f"inclinacao={inc}, razao={razao:.0f}")
 
 print("\nfalhas:", fails)
 sys.exit(1 if fails else 0)

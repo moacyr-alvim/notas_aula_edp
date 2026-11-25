@@ -93,6 +93,8 @@
       desc: "O fio e a nuvem: o dicionário entre a equação diferencial estocástica e a EDP da densidade, desmontado em transporte mais calor, com Ornstein–Uhlenbeck, browniano geométrico e o dilema de Itô." },
     { id: "fkac", lane: "estoc", col: 5, label: "Fórmula de\nFeynman–Kac", href: "paginas/feynman-kac.html", trails: ["estocastico"],
       desc: "Esperança de um lado, EDP do outro: prêmio no fim, pagamento no caminho e desconto viram três termos da equação para trás. O desconto como taxa de morte, os problemas de saída numa tabela, e Monte Carlo como o único método que sobrevive à dimensão alta. Com demo e Python editável." },
+    { id: "bs", lane: "estoc", col: 6, label: "Black–Scholes", href: "paginas/black-scholes.html", trails: ["estocastico"],
+      desc: "O preço de uma opção é o custo de fabricá-la com ações e dinheiro — e a deriva real some da conta. Da árvore de um passo, onde a réplica é duas equações e duas incógnitas, até a fórmula, a EDP e o hedge dinâmico medido. Termina com as hipóteses furadas e o sorriso de volatilidade. Com demo e Python editável." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -126,7 +128,7 @@
     ["edpsf", "poco"],
     ["calorcirc", "maxp"],
     ["grafo", "passeio"],
-    ["passeio", "fp"], ["fp", "eds"], ["eds", "fkac"], ["maxp", "fkac"],
+    ["passeio", "fp"], ["fp", "eds"], ["eds", "fkac"], ["maxp", "fkac"], ["fkac", "bs"], ["fourier", "bs"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 
