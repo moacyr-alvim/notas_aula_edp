@@ -95,6 +95,8 @@
       desc: "Esperança de um lado, EDP do outro: prêmio no fim, pagamento no caminho e desconto viram três termos da equação para trás. O desconto como taxa de morte, os problemas de saída numa tabela, e Monte Carlo como o único método que sobrevive à dimensão alta. Com demo e Python editável." },
     { id: "bs", lane: "estoc", col: 6, label: "Black–Scholes", href: "paginas/black-scholes.html", trails: ["estocastico"],
       desc: "O preço de uma opção é o custo de fabricá-la com ações e dinheiro — e a deriva real some da conta. Da árvore de um passo, onde a réplica é duas equações e duas incógnitas, até a fórmula, a EDP e o hedge dinâmico medido. Termina com as hipóteses furadas e o sorriso de volatilidade. Com demo e Python editável." },
+    { id: "ger", lane: "estoc", col: 7, label: "O gerador\ninfinitesimal", href: "paginas/gerador-infinitesimal.html", trails: ["estocastico"],
+      desc: "A derivada, no instante zero, da média do futuro — e o operador que seis caixinhas deste livro vinham escrevendo sem dar o nome. O gerador do browniano é meio laplaciano; em espaço finito é uma matriz cujas linhas somam zero; com um potencial vira Feynman–Kac, e com um i vira Schrödinger. Com demo e Python editável." },
     { id: "upwind", lane: "num", col: 2, label: "Upwind", href: "paginas/upwind.html", trails: ["numerico"],
       desc: "Diferenças finitas que olham para o lado de onde a informação vem. Com Python editável." },
     { id: "cfl", lane: "num", col: 3, label: "Condição CFL", href: "paginas/cfl.html", trails: ["numerico", "segunda"],
@@ -128,7 +130,7 @@
     ["edpsf", "poco"],
     ["calorcirc", "maxp"],
     ["grafo", "passeio"],
-    ["passeio", "fp"], ["fp", "eds"], ["eds", "fkac"], ["maxp", "fkac"], ["fkac", "bs"], ["fourier", "bs"],
+    ["passeio", "fp"], ["fp", "eds"], ["eds", "fkac"], ["maxp", "fkac"], ["fkac", "bs"], ["fourier", "bs"], ["bs", "ger"], ["fp", "ger"], ["grafo", "ger"], ["poco", "ger"],
     ["upwind", "cfl"], ["wave2", "cfl"]
   ];
 

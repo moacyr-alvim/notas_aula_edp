@@ -121,6 +121,22 @@ check("Feynman-Kac: a chance de sair por L e x/L", du < 0.01, f"erro={du:.4f}")
 check("Feynman-Kac: o tempo medio de saida e x(L-x)/2D", dt_ < 0.03, f"erro relativo={dt_:.4f}")
 check("Feynman-Kac: o erro do Monte Carlo cai como 1/raiz(N)", abs(inc + 0.5) < 0.08, f"inclinacao={inc}")
 
+s, _ = rodar("gerador_solucao.py")
+sl = float(re.search(r"maior \|soma de linha\| de L = ([0-9.eE+-]+)", s).group(1))
+exp1 = max(float(v) for v in re.findall(r"soma de linha de exp\(tL\) - 1\| = ([0-9.eE+-]+)", s))
+semi = float(re.search(r"max\|P\(0,7\)P\(1,3\) - P\(2,0\)\| = ([0-9.eE+-]+)", s).group(1))
+piL = float(re.search(r"maior \|pi L\| = ([0-9.eE+-]+)", s).group(1))
+adj = float(re.search(r"dif = ([0-9.eE+-]+)", s).group(1))
+melhor = float(re.search(r"melhor t = [0-9.eE+-]+, com erro ([0-9.eE+-]+)", s).group(1))
+cadeia = float(re.search(r"maior diferenca = ([0-9.eE+-]+)", s).group(1))
+check("gerador: as linhas de L somam zero", sl < 1e-14, f"{sl:.1e}")
+check("gerador: as linhas de exp(tL) somam um", exp1 < 1e-13, f"{exp1:.1e}")
+check("gerador: o semigrupo fecha, P(t)P(s) = P(t+s)", semi < 1e-13, f"{semi:.1e}")
+check("gerador: a estacionaria satisfaz pi L = 0", piL < 1e-13, f"{piL:.1e}")
+check("gerador: densidade para a frente = premio para tras", adj < 1e-12, f"{adj:.1e}")
+check("gerador: medido por Monte Carlo, o melhor t erra pouco", melhor < 0.01, f"erro={melhor:.5f}")
+check("gerador: a cadeia simulada bate com exp(tL)", cadeia < 0.02, f"dif={cadeia:.4f}")
+
 s, _ = rodar("black_scholes_solucao.py")
 erf_ = float(re.search(r"contra math.erf: ([0-9.eE+-]+)", s).group(1))
 arv = float(re.search(r"erro maximo da arvore em n = 5000: ([0-9.eE+-]+)", s).group(1))
@@ -146,6 +162,16 @@ check("cfl_lacunas roda com o código incompleto", True)
 s, _ = rodar("feynman_kac_lacunas.py")
 sig = float(re.search(r"pior discordancia = ([0-9.eE+-]+) sigmas", s).group(1))
 check("feynman_kac_lacunas roda incompleto e a falta do peso aparece", sig > 20, f"{sig:.0f} sigmas")
+
+# sem a diagonal, as linhas de L não somam zero e a probabilidade vaza; repare que o semigrupo
+# CONTINUA valendo (é identidade algébrica de qualquer matriz) — o que quebra é ser probabilidade
+s, _ = rodar("gerador_lacunas.py")
+sl = float(re.search(r"maior \|soma de linha\| de L = ([0-9.eE+-]+)", s).group(1))
+cadeia = float(re.search(r"maior diferenca = ([0-9.eE+-]+)", s).group(1))
+semi = float(re.search(r"max\|P\(0,7\)P\(1,3\) - P\(2,0\)\| = ([0-9.eE+-]+)", s).group(1))
+check("gerador_lacunas roda incompleto e a falta da diagonal aparece",
+      sl > 0.5 and cadeia > 0.5, f"soma de linha={sl:.2f}, dif da cadeia={cadeia:.2f}")
+check("gerador_lacunas: o semigrupo continua valendo mesmo assim", semi < 1e-12, f"{semi:.1e}")
 
 # sem recalcular o delta o hedge vira estático: o erro deixa de encolher e mu volta a importar
 s, _ = rodar("black_scholes_lacunas.py")

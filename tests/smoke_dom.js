@@ -234,6 +234,22 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     env.byId["fk-desc"].value = "constante"; env.byId["fk-desc"].fire("input"); await wait(120);
     check("fk-demo: com r constante aparece a fórmula fechada", rd().includes("fórmula fechada:"), rd().slice(0, 240));
   }
+  /* ---- o gerador infinitesimal: o quociente virando o operador ---- */
+  {
+    const env = makeEnv(["demo-ger", "ger-proc", "ger-func", "ger-t", "ger-tv", "ger-play", "ger-readout", "ger-media", "ger-quoc"], []);
+    run(env, "ger-core.js"); env.sandbox.window.GerCore = env.sandbox.GerCore || vm.runInContext("GerCore", env.sandbox);
+    env.byId["ger-t"].value = "-1"; env.byId["ger-t"].min = "-4"; env.byId["ger-t"].max = "-0.3";
+    let err = null; try { run(env, "ger-demo.js"); await wait(150); } catch (e) { err = e; }
+    check("ger-demo: carrega e desenha sem erro", !err, err && err.stack.split("\n")[0]);
+    const rd = () => env.byId["ger-readout"].innerHTML.replace(/<[^>]+>/g, "");
+    const dif = (s) => parseFloat((s.match(/maior diferença: (−?[0-9,]+)/) || [0, "9"])[1].replace("−", "-").replace(",", "."));
+    check("ger-demo: anuncia o gerador do processo", /o gerador:/.test(rd()), rd().slice(0, 170));
+    const grande = dif(rd());
+    env.byId["ger-t"].value = "-3"; env.byId["ger-t"].fire("input"); await wait(150);
+    const pequeno = dif(rd());
+    check("ger-demo: encolher t encolhe a diferença", pequeno < grande / 10,
+          `t=0,1 -> ${grande}, t=0,001 -> ${pequeno}`);
+  }
   /* ---- Black–Scholes: a réplica acompanhando a opção ---- */
   {
     const env = makeEnv(["demo-bs", "bs-n", "bs-nv", "bs-mu", "bs-muv", "bs-sortear", "bs-play", "bs-readout", "bs-acao", "bs-carteira"], []);
@@ -351,7 +367,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
     const env = makeEnv(["mapa", "chips", "info", "trail-list"], []);
     let err = null; try { run(env, "mapa.js"); vm.runInContext('Mapa.mount({map:"mapa",chips:"chips",info:"info",list:"trail-list"})', env.sandbox); } catch (e) { err = e; }
     check("mapa: monta sem erro", !err, err && err.stack.split("\n")[0]);
-    check("mapa: SVG gerado com os 39 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 39);
+    check("mapa: SVG gerado com os 40 nós", (env.byId["mapa"].innerHTML.match(/class="node /g) || []).length === 40);
     check("mapa: botões de trilha criados", env.byId["chips"].children.length === 9);
   }
   /* ---- executor de Python ---- */

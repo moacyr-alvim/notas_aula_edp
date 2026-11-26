@@ -57,6 +57,7 @@ py/                   os códigos Python das células (edite aqui; o site carreg
                       eds_*.py Euler–Maruyama para quatro exemplos, e Itô contra Stratonovich medido
                       feynman_kac_*.py a EDP para trás contra Monte Carlo, os problemas de saída e a lei 1/√N
                       black_scholes_*.py a árvore convergindo para a fórmula, o erro do hedge e a deriva que não importa
+                      gerador_*.py o gerador medido por Monte Carlo, a matriz cujas linhas somam zero, e a cadeia contra exp(tL)
                       passeio_aleatorio_*.py caminhantes na grade, gaussiana e a lei da raiz quadrada
                       fokker_planck_*.py poço duplo (Boltzmann) e D variável sem viés
 assets/
@@ -92,6 +93,8 @@ vendor/katex/         o KaTeX servido pelo próprio site (não vem de CDN); VERS
   fk-demo.js          demo do prêmio virando valor: caminhos e mortes à esquerda, a curva da EDP e o ponto do Monte Carlo à direita
   bs-core.js          Black–Scholes: fórmula e gregas, árvore binomial, réplica de um passo e hedge dinâmico; testável em Node
   bs-demo.js          demo da réplica: a ação à esquerda, a opção e a carteira replicante sobrepostas à direita
+  ger-core.js         o gerador infinitesimal: quatro processos com transição exata, o quociente de diferenças, e a parte de espaço finito (exp de matriz, estacionária); testável em Node
+  ger-demo.js         demo do gerador: a média do futuro à esquerda, o quociente virando o operador à direita
   fp-core.js          passeio aleatório: equação mestra, gaussiana de Fokker–Planck e trajetórias; testável em Node
   fp-demo.js          demo do passeio, nas duas páginas da raia: os controles de viés, preguiça e zoom são opcionais
   hl-core.js          fórmula de Hopf–Lax: mínimos de f(y) + (x−y)²/2t, choques e perfis, testável em Node
@@ -155,6 +158,7 @@ node tests/lei-core.test.js         # problema de Riemann: solver exato contra G
 python3 tests/run_python_cells.py   # roda todos os py/*.py como o worker faz (precisa de numpy e matplotlib)
 node tests/fk-core.test.js          # Feynman–Kac: EDP contra fórmula fechada, EDP contra Monte Carlo, peso contra morte, adjunção e a lei 1/√N
 node tests/bs-core.test.js          # Black–Scholes: paridade put-call, árvore contra fórmula, resíduo da EDP, gregas como derivadas, e o hedge que não depende de μ
+node tests/ger-core.test.js         # o gerador: o quociente convergindo como O(t), linhas somando zero, semigrupo, estacionária e adjunção
 node tests/smoke_dom.js             # scripts de tela e executor de Python com um DOM simulado
 python3 tests/check_site.py         # links, âncoras, ids, tags e fórmulas
 ```
