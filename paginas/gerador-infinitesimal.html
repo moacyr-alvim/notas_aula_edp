@@ -23,7 +23,7 @@
       <header>
         <h1>O gerador infinitesimal</h1>
         <p class="lede">Grafos, passeios, Fokker–Planck, Feynman–Kac, Black–Scholes e até o poço de potencial escreveram operadores de cara diferente. Eram o mesmo objeto visto de ângulos diferentes: a derivada, no instante zero, da média do futuro.</p>
-        <p class="meta">Ajuda ler antes: <a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a> e <a href="difusao-grafos.html">A EDP da difusão em grafos</a>. Leitura de uns 25 minutos.</p>
+        <p class="meta">Ajuda ler antes: <a href="fokker-planck.html">Deriva, ruído e Fokker–Planck</a> e <a href="difusao-grafos.html">A EDP da difusão em grafos</a>. Leitura de uns 30 minutos.</p>
       </header>
 
 
@@ -150,7 +150,8 @@
       <table class="tabela">
         <thead><tr><th>O processo</th><th>O gerador $\mathcal L$</th><th>Onde apareceu</th></tr></thead>
         <tbody>
-          <tr><td>andarilho num grafo</td><td>$-c\,L$, com $L=B^\top B$</td><td><a href="difusao-grafos.html">difusão em grafos</a></td></tr>
+          <tr><td>andarilho num grafo, relógio na <b>aresta</b></td><td>$-c\,L$, com $L=B^\top B$</td><td><a href="difusao-grafos.html">difusão em grafos</a></td></tr>
+          <tr><td>andarilho num grafo, relógio no <b>nó</b></td><td>$-D^{-1}L$</td><td>a caixa "qual laplaciano?", abaixo</td></tr>
           <tr><td>movimento browniano</td><td>$\tfrac12\,\partial_{xx}$</td><td><a href="calor-reta.html">o calor na reta</a></td></tr>
           <tr><td>deriva mais ruído</td><td>$a\,\partial_x+D\,\partial_{xx}$</td><td><a href="fokker-planck.html">Fokker–Planck</a></td></tr>
           <tr><td>Ornstein–Uhlenbeck</td><td>$-\gamma x\,\partial_x+D\,\partial_{xx}$</td><td><a href="eds-fokker-planck.html">EDS</a></td></tr>
@@ -163,8 +164,9 @@
       andarilho é $-c\,L$, com sinal trocado. É a mesma troca de sinal de sempre — o laplaciano do grafo é
       definido positivo, e difusão decai.</p>
 
-      <p>E repare na última linha da tabela: o gerador do processo de Poisson não tem derivada nenhuma. Ele é uma
-      <em>diferença</em>. Guardaremos isso para o fim.</p>
+      <p>E duas linhas da tabela pedem explicação. As <b>duas primeiras</b> são o mesmo grafo e dois geradores
+      diferentes, o que deveria incomodar; é o assunto da próxima seção. A <b>última</b> é um gerador sem
+      derivada nenhuma — uma diferença —, e isso fica para o fim.</p>
 
       <h2 id="matriz" data-toc="Em espaço finito é uma matriz">Em espaço finito é uma matriz, e as linhas somam zero</h2>
 
@@ -202,6 +204,67 @@
         de Markov — é a diagonal certa mais as taxas não negativas fora dela. Essas duas condições são
         exatamente a caracterização de Kolmogorov de um gerador.</p>
       </aside>
+
+      <h3 id="qual-laplaciano">Qual laplaciano? Ou: Itô e Stratonovich num grafo</h3>
+
+      <p>Agora dá para pagar a dívida da tabela. Ela tinha duas linhas para o mesmo grafo, e a razão é que
+      <b>"passeio aleatório num grafo" não é uma coisa só</b>. Depende de onde está o relógio.</p>
+
+      <table class="tabela">
+        <thead><tr><th>Onde está o relógio</th><th>Taxa de saída do nó $i$</th><th>Gerador</th><th>Estacionária</th></tr></thead>
+        <tbody>
+          <tr><td>em cada <b>aresta</b>, disparando a $c$</td><td>$c\,d_i$ — quem tem mais canos sai antes</td><td>$-c\,L$ &nbsp;(combinatório)</td><td>uniforme</td></tr>
+          <tr><td>em cada <b>nó</b>, que então sorteia um vizinho</td><td>$1$ — igual para todos</td><td>$-D^{-1}L$ &nbsp;(normalizado)</td><td>$\propto d_i$</td></tr>
+        </tbody>
+      </table>
+
+      <p>Os dois são passeios aleatórios honestos, e nenhum é "o certo". O primeiro é o que corresponde à física
+      de condutâncias de que a <a href="difusao-grafos.html">página de grafos</a> partiu — cano é cano, e cada um
+      conduz no seu ritmo. O segundo é o bêbado que a gente imagina ao ouvir a expressão: ele para, pensa, e
+      escolhe uma porta ao acaso.</p>
+
+      <p>A diferença aparece já no <b>caminho</b>, que este livro usa o tempo todo. Com sete nós, as pontas têm
+      grau $1$ e o miolo grau $2$, e as estacionárias são</p>
+
+      $$\underbrace{\big(\tfrac17,\tfrac17,\tfrac17,\tfrac17,\tfrac17,\tfrac17,\tfrac17\big)}_{\text{calor, relógio na aresta}}
+      \qquad\text{contra}\qquad
+      \underbrace{\big(\tfrac1{12},\tfrac16,\tfrac16,\tfrac16,\tfrac16,\tfrac16,\tfrac1{12}\big)}_{\text{bêbado, relógio no nó}}.$$
+
+      <p>O bêbado passa <b>metade</b> do tempo nas pontas que no miolo; o calor não liga para grau nenhum e
+      termina uniforme. A razão do primeiro caso é um cancelamento bonito: com relógio na aresta, um nó de grau
+      alto é <em>visitado</em> mais, mas também é <em>abandonado</em> mais depressa, e os dois efeitos se anulam
+      exatamente. Com relógio no nó, ele é visitado mais e abandonado no mesmo ritmo — então acumula.</p>
+
+      <aside class="box atencao">
+        <p class="tag">É a mesma pergunta de Itô e Stratonovich</p>
+        <p>Interpole os dois relógios: deixe o nó $i$ tocar à taxa $d_i^{\,\theta}$. O gerador vira
+        $\mathcal G_\theta=-D^{\theta-1}L$, e a estacionária é</p>
+        $$\pi\propto d^{\,1-\theta},$$
+        <p>com $\theta=1$ dando o relógio na aresta (uniforme) e $\theta=0$ o relógio no nó ($\propto$ grau). Os
+        testes que rodam junto com este site conferem isso num grafo irregular, para cinco valores de $\theta$,
+        com erro de $2\times10^{-13}$.</p>
+        <p>Essa família já apareceu. Na <a href="fokker-planck.html">caixinha de Fokker–Planck</a>, a dúvida era
+        onde pôr $D(x)$ em relação à derivada — dentro, fora, no meio —, cada escolha dando um processo
+        diferente com o mesmo tremor local, e a <a href="eds-fokker-planck.html">caixinha de EDS</a> mediu
+        $\rho_\infty\propto D^{-\alpha}$ ao longo dessa escolha. Aqui o grau faz o papel da taxa local de salto,
+        a dúvida é onde pôr $D$ em relação à <em>diferença</em>, e a lei da estacionária tem a mesma cara.
+        <b>"Combinatório ou normalizado?" é "Itô ou Stratonovich?" escrito num grafo.</b></p>
+        <p>Com uma vantagem pedagógica: na reta aquilo exigiu uma demo e Monte Carlo para ficar visível, porque
+        tudo era limite. Aqui é álgebra linear de matriz $6\times6$, exata, e dá para conferir no papel.</p>
+      </aside>
+
+      <p>Falta dizer por que nada disso apareceu antes neste livro. Em grafo <b>regular</b> — todo nó com o mesmo
+      grau $d$ — vale $D^{-1}L=L/d$, e os dois geradores diferem por uma constante, que só reescala o tempo. O
+      <a href="calor-grafo-anel.html">anel</a> é regular, e ali a escolha simplesmente não existe. O caminho é
+      regular no miolo e só deixa de ser nas duas pontas — e por isso a diferença entre os dois geradores
+      aparece <em>só nas pontas</em>, que é exatamente o que os dois vetores acima mostram. São justamente esses
+      os grafos em que o livro faz contas; a escolha começa a doer quando os graus variam de verdade.</p>
+
+      <p>Incomoda que $L$ seja simétrica e $D^{-1}L$ não seja, mas a assimetria é da lente. A matriz $D^{-1}L$ é
+      autoadjunta no produto interno <em>pesado pelo grau</em>, $\langle f,g\rangle_d=\sum_i d_i f_i g_i$, que é
+      outra maneira de dizer que o passeio é reversível em relação à sua própria estacionária. Conjugando,
+      $D^{-1/2}LD^{-1/2}$ exibe essa simetria sem mexer nos autovalores — e é por isso que o laplaciano
+      normalizado tem espectro em $[0,2]$, enquanto o de $L$ é outro. Em grafo regular, de novo, coincidem.</p>
 
       <h2 id="semigrupo" data-toc="Markov, semigrupo, gerador">Markov, semigrupo, gerador: três nomes para a mesma coisa</h2>
 
@@ -456,27 +519,32 @@
       </details>
 
       <aside class="box exercicio">
-        <p class="tag">6. Um gerador que você já resolveu</p>
-        <p>Considere o andarilho num grafo em caminho de três nós, com $L=B^\top B$ como na
-        <a href="difusao-grafos.html">caixinha de grafos</a>. (a) Escreva o gerador $\mathcal L=-L$ e confira que
-        as linhas somam zero. (b) Quais são as taxas de salto? (c) Ache $\pi$ resolvendo $\pi\mathcal L=0$. (d)
-        Explique, sem calcular, por que $\pi$ não é uniforme num grafo com graus diferentes — e por que é
-        uniforme neste.</p>
+        <p class="tag">6. Os dois andarilhos, na mão</p>
+        <p>Caminho de três nós, com $L=B^\top B$ como na <a href="difusao-grafos.html">caixinha de grafos</a>.
+        (a) Escreva os dois geradores, $-L$ e $-D^{-1}L$, e confira que as linhas de ambos somam zero. (b) Para
+        cada um, diga a taxa de saída de cada nó. (c) Ache as duas estacionárias resolvendo $\pi\mathcal L=0$.
+        (d) Um deles modela três tanques de água ligados por dois canos; o outro, um bêbado que a cada parada
+        sorteia uma porta. Qual é qual, e por quê? (e) O que mudaria se o grafo fosse o anel de três nós?</p>
       </aside>
       <details>
         <summary>Solução</summary>
         <div class="body">
-          <p>(a) $\mathcal L=-\begin{pmatrix}1&-1&0\\-1&2&-1\\0&-1&1\end{pmatrix}
-          =\begin{pmatrix}-1&1&0\\1&-2&1\\0&1&-1\end{pmatrix}$, e as linhas somam $0$, $0$ e $0$.</p>
-          <p>(b) Cada aresta dispara a taxa $1$: do nó $1$ só se vai ao $2$ (taxa $1$), do nó $2$ vai-se ao $1$
-          ou ao $3$ (taxa $1$ cada, daí o $-2$ na diagonal), e do $3$ só ao $2$.</p>
-          <p>(c) $\pi\mathcal L=0$ com $\sum\pi_i=1$ dá $\pi=(1/3,1/3,1/3)$.</p>
-          <p>(d) Com taxas iguais em cada aresta, o fluxo de $i$ para $j$ é $\pi_i$ e o de volta é $\pi_j$;
-          equilibrá-los aresta a aresta exige $\pi_i=\pi_j$ para todo par vizinho, e num grafo conexo isso força
-          $\pi$ uniforme — <em>independentemente</em> dos graus. (O que não é uniforme, e vale $\deg(i)$
-          normalizado, é a estacionária do passeio a tempo <b>discreto</b>, em que a cada passo se escolhe um
-          vizinho ao acaso: lá o nó de grau alto é visitado mais. Dois processos diferentes, dois geradores
-          diferentes, duas estacionárias diferentes — e a diferença mora inteira na diagonal.)</p>
+          <p>(a) Com $D=\operatorname{diag}(1,2,1)$,
+          $$-L=\begin{pmatrix}-1&1&0\\1&-2&1\\0&1&-1\end{pmatrix},\qquad
+          -D^{-1}L=\begin{pmatrix}-1&1&0\\ \tfrac12&-1&\tfrac12\\0&1&-1\end{pmatrix},$$
+          e toda linha soma zero nos dois.</p>
+          <p>(b) Em $-L$ as taxas de saída são $1,2,1$: o nó do meio, com dois canos, sai duas vezes mais
+          depressa. Em $-D^{-1}L$ são $1,1,1$ — todo mundo espera o mesmo e só então sorteia a porta.</p>
+          <p>(c) Para $-L$, $\pi=(1/3,1/3,1/3)$. Para $-D^{-1}L$, $\pi\propto d=(1,2,1)$, isto é
+          $\pi=(1/4,1/2,1/4)$. O bêbado passa metade do tempo no meio; a água se iguala nos três.</p>
+          <p>(d) Os tanques são $-L$: cano é cano, e cada um conduz no seu ritmo, não importa quantos outros
+          canos chegam ao mesmo tanque. O bêbado é $-D^{-1}L$: ele tem um relógio só, o dele, e o número de
+          portas decide <em>para onde</em> ele vai, não <em>quando</em> ele sai. Repare que a física escolhe a
+          aresta e a metáfora escolhe o nó — por isso a confusão é tão fácil de cometer.</p>
+          <p>(e) No anel de três nós todo grau é $2$, então $D^{-1}L=L/2$: os geradores passam a diferir só por
+          um fator, que é uma troca de unidade de tempo, e as duas estacionárias viram a mesma uniforme. Em
+          grafo regular a pergunta não existe — e é exatamente por isso que ela não tinha aparecido antes neste
+          livro, que só faz contas no caminho e no anel.</p>
         </div>
       </details>
 

@@ -121,5 +121,75 @@ for (const nomeP of Object.keys(G.PROCESSOS)) {
         `${frente.toFixed(12)} vs ${tras.toFixed(12)}`);
 }
 
+/* 5. qual laplaciano? os dois relógios, e a família que os interpola */
+{
+  /* grafo propositalmente IRREGULAR, graus 1,3,2,2,3,1 */
+  const A = [
+    [0, 1, 0, 0, 0, 0],
+    [1, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1, 0],
+    [0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 1, 0]
+  ];
+  const { L, d } = G.laplaciano(A);
+  check("laplaciano: diagonal é o grau e fora dela é −1 onde há aresta",
+        d.join(",") === "1,3,2,2,3,1" && L[1][0] === -1 && L[1][1] === 3, `graus ${d}`);
+
+  const norm = (v) => { const s = v.reduce((a, b) => a + b, 0); return v.map((x) => x / s); };
+  const perto = (u, v, tol) => u.every((x, i) => Math.abs(x - v[i]) < tol);
+
+  for (const th of [0, 0.5, 1, 1.5, 2]) {
+    const pi = G.estacionaria(G.geradorGrafo(A, th), 900);
+    const prev = norm(d.map((x) => Math.pow(x, 1 - th)));
+    check(`θ=${th}: a estacionária é ∝ d^(1−θ)`, perto(pi, prev, 1e-9),
+          `π = [${pi.map((v) => v.toFixed(4)).join(", ")}]  previsto [${prev.map((v) => v.toFixed(4)).join(", ")}]`);
+  }
+
+  /* os dois casos com nome, no CAMINHO de 7 nós que o livro já usa */
+  const n = 7, P = Array.from({ length: n }, () => new Array(n).fill(0));
+  for (let i = 0; i < n - 1; i++) { P[i][i + 1] = 1; P[i + 1][i] = 1; }
+  const piAresta = G.estacionaria(G.geradorGrafo(P, 1), 900);     /* relógio na aresta: −L */
+  const piNo = G.estacionaria(G.geradorGrafo(P, 0), 900);         /* relógio no nó: −D^{-1}L */
+  check("caminho de 7: com relógio na aresta (calor) a estacionária é uniforme",
+        piAresta.every((v) => Math.abs(v - 1 / 7) < 1e-9), `[${piAresta.map((v) => v.toFixed(4)).join(", ")}]`);
+  check("caminho de 7: com relógio no nó (bêbado) as pontas valem 1/12 e o miolo 1/6",
+        Math.abs(piNo[0] - 1 / 12) < 1e-9 && Math.abs(piNo[3] - 1 / 6) < 1e-9,
+        `[${piNo.map((v) => v.toFixed(4)).join(", ")}]`);
+  check("e as pontas recebem metade do miolo", Math.abs(piNo[0] / piNo[3] - 0.5) < 1e-9);
+
+  /* Lsym = D^{1/2} Lrw D^{-1/2}: a semelhança que dá o MESMO espectro aos dois */
+  const Lrw = G.geradorGrafo(A, 0).map((lin) => lin.map((v) => -v));        /* = D^{-1} L */
+  const raiz = d.map(Math.sqrt), inv = d.map((x) => 1 / Math.sqrt(x));
+  const Lsym = G.conjuga(L, inv, inv);                                      /* D^{-1/2} L D^{-1/2} */
+  const semelhante = G.conjuga(Lrw, raiz, inv);                             /* D^{1/2} Lrw D^{-1/2} */
+  let pior = 0;
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 6; j++) pior = Math.max(pior, Math.abs(Lsym[i][j] - semelhante[i][j]));
+  check("Lsym = D^{1/2} Lrw D^{-1/2} (logo têm o mesmo espectro)", pior < 1e-14, `erro máx ${pior.toExponential(2)}`);
+  check("Lsym é simétrica", Lsym.every((lin, i) => lin.every((v, j) => Math.abs(v - Lsym[j][i]) < 1e-14)));
+  check("Lrw NÃO é simétrica (num grafo irregular)", Math.abs(Lrw[0][1] - Lrw[1][0]) > 0.1,
+        `${Lrw[0][1].toFixed(4)} vs ${Lrw[1][0].toFixed(4)}`);
+
+  /* mas Lrw é autoadjunta no produto interno pesado pelo grau: <Lrw f, g>_d = <f, Lrw g>_d */
+  const f = [1, -2, 0.5, 3, -1, 2], g2 = [0, 1, -1, 2, 0.5, -3];
+  const prodD = (u, v) => u.reduce((s, x, i) => s + d[i] * x * v[i], 0);
+  const esq = prodD(G.matrizVezes(Lrw, f), g2), dir = prodD(f, G.matrizVezes(Lrw, g2));
+  check("Lrw é autoadjunta no produto interno pesado pelo grau (reversibilidade)",
+        Math.abs(esq - dir) < 1e-12, `${esq.toFixed(10)} vs ${dir.toFixed(10)}`);
+  const esq0 = G.matrizVezes(Lrw, f).reduce((s, x, i) => s + x * g2[i], 0);
+  const dir0 = f.reduce((s, x, i) => s + x * G.matrizVezes(Lrw, g2)[i], 0);
+  check("e NÃO é autoadjunta no produto interno simples", Math.abs(esq0 - dir0) > 0.1,
+        `${esq0.toFixed(4)} vs ${dir0.toFixed(4)}`);
+
+  /* em grafo REGULAR a distinção some: é por isso que o anel do livro nunca precisou escolher */
+  const m = 6, R = Array.from({ length: m }, () => new Array(m).fill(0));
+  for (let i = 0; i < m; i++) { R[i][(i + 1) % m] = 1; R[(i + 1) % m][i] = 1; }   /* anel NÃO orientado */
+  const Ga = G.geradorGrafo(R, 1), Gn = G.geradorGrafo(R, 0);
+  let piorR = 0;
+  for (let i = 0; i < m; i++) for (let j = 0; j < m; j++) piorR = Math.max(piorR, Math.abs(Ga[i][j] - 2 * Gn[i][j]));
+  check("no anel (regular, grau 2) os dois geradores diferem só pelo fator 2", piorR < 1e-14,
+        `erro máx ${piorR.toExponential(2)}`);
+}
+
 console.log("\nfalhas:", fails);
 process.exit(fails ? 1 : 0);

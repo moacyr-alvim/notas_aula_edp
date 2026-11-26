@@ -203,6 +203,44 @@
     }
     return pi;
   }
+  /* ------------------- qual laplaciano? os dois relógios de um andarilho ------------------- */
+  /* De uma matriz de adjacência saem os três laplacianos usuais:
+       L      = D − A            combinatório (o B^T B da página de grafos)
+       Lrw    = D^{-1} L         do passeio   (normalizado)
+       Lsym   = D^{-1/2} L D^{-1/2}
+     e a família que interpola os dois primeiros: se o nó i toca a uma taxa d_i^theta e então
+     sorteia um vizinho, o gerador é  G_theta = −D^{theta−1} L, com estacionária ∝ d^{1−theta}.
+     theta = 1 é o relógio na ARESTA (gerador −L, estacionária uniforme);
+     theta = 0 é o relógio no NÓ    (gerador −D^{-1}L, estacionária ∝ grau).
+     Em grafo regular os dois coincidem a menos de constante, e é por isso que o caminho e o
+     anel deste livro nunca precisaram escolher. */
+  function laplaciano(A) {
+    var n = A.length, d = [], L = [], i, j, s;
+    for (i = 0; i < n; i++) {
+      s = 0; for (j = 0; j < n; j++) s += A[i][j];
+      d.push(s);
+    }
+    for (i = 0; i < n; i++) {
+      L.push(new Array(n));
+      for (j = 0; j < n; j++) L[i][j] = (i === j ? d[i] : 0) - A[i][j];
+    }
+    return { L: L, d: d };
+  }
+  /* o gerador da família: G = −D^{theta−1} L */
+  function geradorGrafo(A, theta) {
+    var g = laplaciano(A), n = A.length, G = [], i, j, f;
+    for (i = 0; i < n; i++) {
+      G.push(new Array(n));
+      f = Math.pow(g.d[i], theta - 1);
+      for (j = 0; j < n; j++) G[i][j] = -f * g.L[i][j];
+    }
+    return G;
+  }
+  /* escala por uma matriz diagonal, dos dois lados: devolve diag(a) M diag(b) */
+  function conjuga(M, a, b) {
+    return M.map(function (lin, i) { return lin.map(function (v, j) { return a[i] * v * b[j]; }); });
+  }
+
   function vezesMatriz(v, A) {                       /* linha vezes matriz: densidade para a frente */
     var n = A.length, m = A[0].length, out = new Array(m).fill(0), i, j;
     for (j = 0; j < m; j++) for (i = 0; i < n; i++) out[j] += v[i] * A[i][j];
@@ -218,5 +256,6 @@
            gerador: gerador, esperanca: esperanca, quociente: quociente, erroMax: erroMax,
            geradorCadeia: geradorCadeia, somaLinhas: somaLinhas, expm: expm, mult: mult,
            identidade: identidade, estacionaria: estacionaria,
+           laplaciano: laplaciano, geradorGrafo: geradorGrafo, conjuga: conjuga,
            vezesMatriz: vezesMatriz, matrizVezes: matrizVezes };
 });
